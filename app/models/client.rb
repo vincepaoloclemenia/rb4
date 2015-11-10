@@ -5,6 +5,12 @@ class Client < ActiveRecord::Base
 	has_many :branches, through: :brands
 	has_many :roles
 
+	validates :name,
+						presence: true,
+						length: {
+							maximum: 50
+						}
+
 	after_create :create_initial_role
 
 	private

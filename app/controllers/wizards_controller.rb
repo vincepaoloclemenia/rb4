@@ -138,6 +138,7 @@ class WizardsController < ApplicationController
 	def setup_summary_complete
 		current_user.update(flag: 6)
 		current_user.client_user_access.update(role_id: current_user.client.roles.first.id)
+		#insert free trial subscription here
 		redirect_to dashboard_path
 	end
 

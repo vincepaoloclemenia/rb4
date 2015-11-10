@@ -21,6 +21,16 @@ class User < ActiveRecord::Base
   		:with => /\A[a-zA-Z0-9_\.]*\z/
   	}
   validate :validate_username
+  # validates :first_name,
+  #           presence: true,
+  #           length: {
+  #             maximum: 50
+  #           }
+  # validates :last_name,
+  #           presence: true,
+  #           length: {
+  #             maximum: 50
+  #           }
 
   after_create :create_client_user_access
 
