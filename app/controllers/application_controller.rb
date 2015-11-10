@@ -4,6 +4,26 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :find_wizard_flag
+
+  helper_method :current_client
+
+  def current_client
+    current_user.client
+  end
+
+  def find_wizard_flag
+    #find better fix for destroy_user_session_path with this method
+    after_in if user_signed_in? && params[:controller] != "devise/sessions" && params[:action] != "destroy"
+  end
+
+  private
+
+  def after_in
+    if current_user.flag >= 1 && current_user.flag < 6
+      redirect_to wizard_path
+    end
+  end
 
   protected
 

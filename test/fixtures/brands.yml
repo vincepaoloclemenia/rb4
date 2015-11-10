@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client_id: 
+  name: MyString
+  description: MyString
+  landline_no: MyString
+  mobile_no: MyString
+  fax_no: MyString
+  avatar_file_name: MyString
+  avatar_content_type: MyString
+  avatar_file_size: 1
+  avatar_update_at: 2015-11-06 10:35:08
+  website: MyString
+  is_deleted: false
+
+two:
+  client_id: 
+  name: MyString
+  description: MyString
+  landline_no: MyString
+  mobile_no: MyString
+  fax_no: MyString
+  avatar_file_name: MyString
+  avatar_content_type: MyString
+  avatar_file_size: 1
+  avatar_update_at: 2015-11-06 10:35:08
+  website: MyString
+  is_deleted: false

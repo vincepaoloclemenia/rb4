@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+
+  has_one :client_user_access
+  has_one :role, through: :client_user_access
+  has_one :client, through: :client_user_access
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -17,6 +21,12 @@ class User < ActiveRecord::Base
   		:with => /\A[a-zA-Z0-9_\.]*\z/
   	}
   validate :validate_username
+
+  after_create :create_client_user_access
+
+  def create_client_user_access
+    ClientUserAccess.create user_id: id
+  end
 
   def validate_username
   	if User.where(email: username).exists?

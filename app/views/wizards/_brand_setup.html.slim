@@ -1,0 +1,16 @@
+#brand-setup-form
+	h1 Brand Setup
+	- if current_user.client.brands.present?
+		- @brand = current_user.client.brands.first
+	- else
+		- @brand = Brand.new
+	= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
+		= f.label :name
+		| &nbsp;
+		= f.text_field :name
+		br
+		= f.label :website
+		| &nbsp;
+		= f.text_field :website
+		br
+		= f.submit "Save"

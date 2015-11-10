@@ -1,0 +1,16 @@
+h1 Wizard
+.wizard-area
+	- case current_user.flag
+	- when 1
+		= render "user_setup"
+	- when 2
+		= render "company_setup"
+	- when 3
+		= render "brand_setup"
+	- when 4
+		= render "branch_setup"
+	- when 5
+		= render "setup_summary"
+	- else
+		h2 
+			= "Current user flag: #{current_user.flag}"

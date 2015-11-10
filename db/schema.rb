@@ -11,10 +11,98 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106005358) do
+ActiveRecord::Schema.define(version: 20151109030608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "branches", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.string   "name"
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "city"
+    t.integer  "zip"
+    t.string   "province_state"
+    t.string   "country"
+    t.string   "status"
+    t.string   "landline_no"
+    t.string   "mobile_no"
+    t.string   "fax_no"
+    t.boolean  "is_franchise"
+    t.string   "email_address"
+    t.boolean  "breadcrumbs"
+    t.boolean  "is_deleted",     default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "branches", ["brand_id"], name: "index_branches_on_brand_id", using: :btree
+
+  create_table "brands", force: :cascade do |t|
+    t.integer  "client_id"
+    t.string   "name"
+    t.string   "description"
+    t.string   "landline_no"
+    t.string   "mobile_no"
+    t.string   "fax_no"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_update_at"
+    t.string   "website"
+    t.boolean  "is_deleted",          default: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "brands", ["client_id"], name: "index_brands_on_client_id", using: :btree
+
+  create_table "client_user_accesses", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "client_id"
+    t.integer  "role_id"
+    t.integer  "brand_id"
+    t.integer  "branch_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "client_user_accesses", ["branch_id"], name: "index_client_user_accesses_on_branch_id", using: :btree
+  add_index "client_user_accesses", ["brand_id"], name: "index_client_user_accesses_on_brand_id", using: :btree
+  add_index "client_user_accesses", ["client_id"], name: "index_client_user_accesses_on_client_id", using: :btree
+  add_index "client_user_accesses", ["role_id"], name: "index_client_user_accesses_on_role_id", using: :btree
+  add_index "client_user_accesses", ["user_id"], name: "index_client_user_accesses_on_user_id", using: :btree
+
+  create_table "clients", force: :cascade do |t|
+    t.string   "name"
+    t.string   "landline"
+    t.string   "mobile"
+    t.string   "fax"
+    t.string   "website"
+    t.string   "email"
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "contact"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_uploaded_at"
+    t.integer  "flag",                default: 1
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.integer  "client_id"
+    t.string   "name"
+    t.text     "description"
+    t.string   "role_level"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "roles", ["client_id"], name: "index_roles_on_client_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
@@ -45,6 +133,7 @@ ActiveRecord::Schema.define(version: 20151106005358) do
     t.boolean  "daily_sales_recipient",  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "flag",                   default: 6
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -52,4 +141,12 @@ ActiveRecord::Schema.define(version: 20151106005358) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  add_foreign_key "branches", "brands"
+  add_foreign_key "brands", "clients"
+  add_foreign_key "client_user_accesses", "branches"
+  add_foreign_key "client_user_accesses", "brands"
+  add_foreign_key "client_user_accesses", "clients"
+  add_foreign_key "client_user_accesses", "roles"
+  add_foreign_key "client_user_accesses", "users"
+  add_foreign_key "roles", "clients"
 end

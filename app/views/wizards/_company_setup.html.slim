@@ -1,0 +1,24 @@
+#company-setup-form
+	h1 Company Setup
+	- if current_user.client
+		- @client = current_user.client
+	-	else
+		- @client = Client.new
+	= form_for @client, url: company_setup_complete_wizard_path, method: :put, remote: true do |f|
+		= f.label :name
+		| &nbsp;
+		= f.text_field :name
+		br
+		= f.label :address1, "Main address"
+		| &nbsp;
+		= f.text_field :address1
+		br
+		= f.label :contact, "Contact no."
+		| &nbsp;
+		= f.text_field :contact
+		br
+		= f.label :email, "Company email"
+		| &nbsp;
+		= f.text_field :email
+		br
+		= f.submit "Save"

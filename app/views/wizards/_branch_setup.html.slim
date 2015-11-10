@@ -1,0 +1,58 @@
+#branch-setup-form
+	h1 Branch Setup
+	- @brand = current_user.client.brands.first
+	- if @brand.branches.empty?
+		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true do |f|
+			= f.fields_for :branch1 do |b|
+				= b.label :name
+				| &nbsp;
+				= b.text_field :name
+				br
+				= b.label :address1, "Address"
+				| &nbsp;
+				= b.text_field :address1
+				br
+			= f.fields_for :branch2 do |b|
+				= b.label :name
+				| &nbsp;
+				= b.text_field :name
+				br
+				= b.label :address1, "Address"
+				| &nbsp;
+				= b.text_field :address1
+				br
+			= f.fields_for :branch3 do |b|
+				= b.label :name
+				| &nbsp;
+				= b.text_field :name
+				br
+				= b.label :address1, "Address"
+				| &nbsp;
+				= b.text_field :address1
+				br
+			= f.submit "Save"
+	- else
+		- branch_count = @brand.branches.count
+		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true do |f|
+			- branches = @brand.branches.order('id asc')
+			- branches.each_with_index do |branch, index|
+				= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
+					= b.label :name
+					| &nbsp;
+					= b.text_field :name
+					br
+					= b.label :address1, "Address"
+					| &nbsp;
+					= b.text_field :address1
+					br
+			- (3 - branch_count).times do |branch|
+				= f.fields_for "branch#{branch + 1}".to_sym do |b|
+					= b.label :name
+					| &nbsp;
+					= b.text_field :name
+					br
+					= b.label :address1, "Address"
+					| &nbsp;
+					= b.text_field :address1
+					br
+			= f.submit "Save"

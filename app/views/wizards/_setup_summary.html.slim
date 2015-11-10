@@ -1,0 +1,57 @@
+#setup-summary-form
+	h1 Setup Summary
+
+	section
+		h3 User Info
+		p 
+			| First name:
+			| &nbsp;
+			= current_user.first_name
+		p 
+			| Last name:
+			| &nbsp;
+			= current_user.last_name
+
+	section
+		h3 Company Info
+		p
+			| Name:
+			| &nbsp;
+			= current_user.client.name
+		p
+			| Address:
+			| &nbsp;
+			= current_user.client.address1
+		p
+			| Contact:
+			| &nbsp;
+			= current_user.client.contact
+		p
+			| Email:
+			| &nbsp;
+			= current_user.client.email
+
+	section
+		h3 Brand Info
+		p
+			| Name:
+			| &nbsp;
+			= current_user.client.brands.first.name
+		p
+			| Website:
+			| &nbsp;
+			= current_user.client.brands.first.website
+
+	section
+		h3 Branch Info
+		- current_user.client.brands.first.branches.order('id asc').each do |branch|
+			p
+				| Name:
+				| &nbsp;
+				= branch.name
+			p
+				| Address:
+				| &nbsp;
+				= branch.address1
+	
+	= link_to "DONE", setup_summary_complete_wizard_path, method: :put
