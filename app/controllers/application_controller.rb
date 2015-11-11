@@ -6,10 +6,14 @@ class ApplicationController < ActionController::Base
 	before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :find_wizard_flag
 
-  helper_method :current_client
+  helper_method :current_client, :current_brand
 
   def current_client
     current_user.client
+  end
+
+  def current_brand
+    current_user.role.role_level.eql?("client") ? current_client.brands.first : current_user.brand
   end
 
   def find_wizard_flag

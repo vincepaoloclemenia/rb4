@@ -1,6 +1,6 @@
 class Client < ActiveRecord::Base
-	has_many :client_user_accessses
-	has_many :users, through: :client_user_accessses
+	has_many :client_user_accesses
+	has_many :users, through: :client_user_accesses
 	has_many :brands
 	has_many :branches, through: :brands
 	has_many :roles

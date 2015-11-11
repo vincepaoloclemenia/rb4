@@ -1,0 +1,19 @@
+h1 Company Info
+p 
+	| Name:
+	| &nbsp;
+	= current_client.name
+p 
+	| Email:
+	| &nbsp;
+	= current_client.email
+p 
+	| Address:
+	| &nbsp;
+	= current_client.address1
+p 
+	| Contact:
+	| &nbsp;
+	= current_client.contact
+
+= link_to "Edit", edit_client_path

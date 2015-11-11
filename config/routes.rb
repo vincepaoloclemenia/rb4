@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "registrations" }
   root 'pages#index'
   get 'dashboard' => 'pages#dashboard'
+  resource :client, only: [:show, :edit, :update]
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'
