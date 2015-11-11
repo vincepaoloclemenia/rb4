@@ -54,4 +54,14 @@
 				| &nbsp;
 				= branch.address1
 	
+	= link_to "Back", "#", id: "back-btn"
+	| &nbsp;
 	= link_to "DONE", setup_summary_complete_wizard_path, method: :put
+
+javascript:
+	$(document).ready(function (){
+		$('#back-btn').on("click", function (e) {
+			e.preventDefault();
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('branch_setup'))}</div>");	
+		});
+	});

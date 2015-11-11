@@ -21,4 +21,18 @@
 		| &nbsp;
 		= f.text_field :email
 		br
+		= link_to "Back", "#", id: "back-btn"
+		| &nbsp;
 		= f.submit "Save"
+
+javascript:
+	$(document).ready(function () {
+		$('#new_client').on("ajax:error", function ( e, xhr, status, error) {
+			$('p.alert').remove();
+			$('#new_client').prepend("<p class='alert'>" + xhr.responseText + "</p>");
+		});
+		$('#back-btn').on("click", function (e) {
+			e.preventDefault();
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('user_setup'))}</div>");	
+		});
+	});

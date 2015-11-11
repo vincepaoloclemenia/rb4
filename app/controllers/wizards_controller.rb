@@ -17,7 +17,7 @@ class WizardsController < ApplicationController
 				@user.update(flag: 2)
 				format.js
 			else
-				format.js { render status: "500" }
+				format.json { render json: @user.errors.full_messages.join(", "), status: :unprocessable_entity }
 			end
 		end
 	end
@@ -33,7 +33,7 @@ class WizardsController < ApplicationController
 			if client_create_or_update
 				format.js
 			else
-				format.js { render status: "500" }
+				format.json { render json: @client.errors.full_messages.join(", "), status: :unprocessable_entity }
 			end
 		end
 	end
@@ -47,8 +47,7 @@ class WizardsController < ApplicationController
 				current_user.client_user_access.update(client_id: @client.id)
 				current_user.update(flag: 3)
 			end
-		end
-		@client		
+		end		
 	end
 
 	def brand_setup
@@ -62,7 +61,7 @@ class WizardsController < ApplicationController
 			if brand_create_or_update
 				format.js
 			else
-				format.js { render status: "500" }
+				format.json { render json: @brand.errors.full_messages.join(", "), status: :unprocessable_entity }
 			end
 		end
 	end
@@ -76,7 +75,6 @@ class WizardsController < ApplicationController
 				current_user.update(flag: 4)
 			end
 		end
-		@brand
 	end
 
 	def branch_setup
@@ -86,23 +84,27 @@ class WizardsController < ApplicationController
 	def branch_setup_complete
 		#current_client.update flag: 4
 		#redirect_to setup_summary_wizard_path
-
+		
 		respond_to do |format|
-			if branch_create_or_update
+			branch_create_or_update
+			if @errors.empty?
 				format.js
 			else
-				format.js { render status: "500" }
+				format.json { render json: @errors.join(", "), status: :unprocessable_entity }
 			end
 		end
 	end
 
 	def branch_create_or_update
 		brand = current_user.client.brands.first
+		@errors = []
+		branch_created_count = 0
 
 		if brand.branches.empty?
 			params[:branches].each_value do |value|
 				if value[:name].present?
 					brand.branches.create(name: value[:name], address1: value[:address1])
+					branch_created_count += 1
 				end
 			end
 			current_user.update(flag: 5)
@@ -110,7 +112,7 @@ class WizardsController < ApplicationController
 			existing_branch = []
 			branch = []
 			params[:branches].each do |key,value|
-				if key.gsub(key.last, "") == "existing_branch"
+				if key.gsub(/([0-9])/, "") == "existing_branch"
 					value[:id] = key.gsub("existing_branch","")
 					existing_branch << value
 				else
@@ -121,14 +123,21 @@ class WizardsController < ApplicationController
 			branch.each do |b|
 				if b[:name].present?
 					brand.branches.create(name: b[:name], address1: b[:address1])
+					branch_created_count += 1
 				end
 			end
 
 			existing_branch.each do |eb|
 				b = Branch.find(eb[:id])
-				b.update(name: eb[:name], address1: eb[:address1])
+				if eb[:name].present?
+					b.update(name: eb[:name], address1: eb[:address1])
+					branch_created_count += 1
+				else
+					b.destroy
+				end
 			end
 		end
+		@errors << "Please input at least 1 branch" if branch_created_count == 0
 	end
 
 	def setup_summary

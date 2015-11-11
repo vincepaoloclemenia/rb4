@@ -11,3 +11,11 @@
 		= f.text_field :last_name
 		br
 		= f.submit "Save"
+
+javascript:
+	$(document).ready(function () {
+		$('.edit_user').on("ajax:error", function ( e, xhr, status, error) {
+			$('p.alert').remove();
+			$('.edit_user').prepend("<p class='alert'>" + xhr.responseText + "</p>");
+		});
+	});

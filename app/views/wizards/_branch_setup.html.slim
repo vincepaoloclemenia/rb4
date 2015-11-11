@@ -1,8 +1,8 @@
 #branch-setup-form
 	h1 Branch Setup
-	- @brand = current_user.client.brands.first
-	- if @brand.branches.empty?
-		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true do |f|
+	- @brand = current_user.client.brands.first if current_user.client.brands.present?
+	- if @brand.branches.empty? ||  @brand.nil?
+		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
 			= f.fields_for :branch1 do |b|
 				= b.label :name
 				| &nbsp;
@@ -30,10 +30,12 @@
 				| &nbsp;
 				= b.text_field :address1
 				br
+			= link_to "Back", "#", id: "back-btn"
+			| &nbsp;
 			= f.submit "Save"
 	- else
 		- branch_count = @brand.branches.count
-		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true do |f|
+		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
 			- branches = @brand.branches.order('id asc')
 			- branches.each_with_index do |branch, index|
 				= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
@@ -55,4 +57,18 @@
 					| &nbsp;
 					= b.text_field :address1
 					br
+			= link_to "Back", "#", id: "back-btn"
+			| &nbsp;
 			= f.submit "Save"
+
+javascript:
+	$(document).ready(function () {
+		$('#new_branches').on("ajax:error", function ( e, xhr, status, error) {
+			$('p.alert').remove();
+			$('#new_branches').prepend("<p class='alert'>" + xhr.responseText + "</p>");
+		});
+		$('#back-btn').on("click", function (e) {
+			e.preventDefault();
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('brand_setup'))}</div>");	
+		});
+	});

@@ -1,6 +1,8 @@
 #brand-setup-form
 	h1 Brand Setup
-	- if current_user.client.brands.present?
+	- if current_user.client.nil? 
+		- @brand = Brand.new
+	- elsif current_user.client.brands.present?
 		- @brand = current_user.client.brands.first
 	- else
 		- @brand = Brand.new
@@ -13,4 +15,18 @@
 		| &nbsp;
 		= f.text_field :website
 		br
+		= link_to "Back", "#", id: "back-btn"
+		| &nbsp;
 		= f.submit "Save"
+
+javascript:
+	$(document).ready(function () {
+		$('#new_brand').on("ajax:error", function ( e, xhr, status, error) {
+			$('p.alert').remove();
+			$('#new_brand').prepend("<p class='alert'>" + xhr.responseText + "</p>");
+		});
+		$('#back-btn').on("click", function (e) {
+			e.preventDefault();
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('company_setup'))}</div>");	
+		});
+	});
