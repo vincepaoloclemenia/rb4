@@ -1,0 +1,15 @@
+h1 Edit brand
+= form_for @brand do |f|
+	p
+		= f.label :name
+		| &nbsp;
+		= f.text_field :name
+	p
+		= f.label :website
+		| &nbsp;
+		= f.text_field :website
+
+	p
+		= link_to "Back", brands_path
+		| -
+		= f.submit "Save"

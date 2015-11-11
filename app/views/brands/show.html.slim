@@ -1,0 +1,12 @@
+h1
+	= @brand.name
+p
+	| Website: 
+	= @brand.website
+
+p
+	= link_to "Back", brands_path
+	| -
+	= link_to "Edit", edit_brand_path(@brand)
+	| -
+	= link_to "Delete", brand_path(@brand), method: :delete

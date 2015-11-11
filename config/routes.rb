@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   root 'pages#index'
   get 'dashboard' => 'pages#dashboard'
   resource :client, only: [:show, :edit, :update]
+  resources :brands
+  resources :branches
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'
