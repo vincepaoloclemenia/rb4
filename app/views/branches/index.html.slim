@@ -1,0 +1,21 @@
+h1 Branches
+= link_to "New branch", new_branch_path
+table
+	thead
+		tr
+			th Name
+			th Address
+			th Actions
+	tbody
+		- @branches.each do |branch|
+			tr
+				td 
+					= branch.name
+				td
+					= branch.address1
+				td
+					= link_to "Show", branch_path(branch)
+					| -
+					= link_to "Edit", edit_branch_path(branch)
+					| -
+					= link_to "Delete", branch_path(branch), method: :delete

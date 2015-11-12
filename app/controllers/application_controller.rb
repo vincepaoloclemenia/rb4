@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
       if current_user.role.role_level.eql?("client")
         session[:current_brand_id] = current_client.brands.first.id
       else
-        session[:current_brand_id] = current_user.brand
+        session[:current_brand_id] = current_user.brand.id
       end
     end
     @current_brand = Brand.find(session[:current_brand_id])
@@ -28,6 +28,7 @@ class ApplicationController < ActionController::Base
     after_in if user_signed_in? && params[:controller] != "devise/sessions" && params[:action] != "destroy"
   end
 
+  # => Rescue when deleting associated records ( brand & branch ).
   rescue_from 'ActiveRecord::InvalidForeignKey' do
     if params[:controller] == "brands"
       flash[:alert] = "This brand have Brand administrators please change their respective brands then delete"

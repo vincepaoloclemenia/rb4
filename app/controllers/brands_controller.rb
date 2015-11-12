@@ -16,7 +16,7 @@ class BrandsController < ApplicationController
 	def create
 		@brand = current_client.brands.new(brand_params)
 		if @brand.save
-			redirect_to brands_path, notice: "Brand sucessfully created"
+			redirect_to brand_path(@brand), notice: "Brand sucessfully created"
 		else
 			flash[:alert] = @brand.errors.full_messages.join(", ")
 			render 'new'
@@ -28,7 +28,7 @@ class BrandsController < ApplicationController
 
 	def update
 		if @brand.update(brand_params)
-			redirect_to brands_path, notice: "Brand successfully updated"
+			redirect_to brand_path(@brand), notice: "Brand successfully updated"
 		else
 			flash[:alert] = @brand.errors.full_messages.join(", ")
 			render 'edit'

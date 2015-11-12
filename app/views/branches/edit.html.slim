@@ -1,0 +1,15 @@
+h1 Edit branch
+= form_for @branch do |f|
+	p
+		= f.label :name
+		| &nbsp;
+		= f.text_field :name
+	p
+		= f.label :address1, "Address"
+		| &nbsp;
+		= f.text_field :address1
+
+	p
+		= link_to "Back", branches_path
+		| -
+		= f.submit "Save"
