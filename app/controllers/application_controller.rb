@@ -13,7 +13,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_brand
-    current_user.role.role_level.eql?("client") ? current_client.brands.first : current_user.brand
+    unless session[:current_brand_id]
+      if current_user.role.role_level.eql?("client")
+        session[:current_brand_id] = current_client.brands.first.id
+      else
+        session[:current_brand_id] = current_user.brand
+      end
+    end
+    @current_brand = Brand.find(session[:current_brand_id])
   end
 
   def find_wizard_flag
