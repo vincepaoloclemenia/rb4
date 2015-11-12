@@ -40,7 +40,10 @@ class BranchesController < ApplicationController
 			@branch.destroy
 			redirect_to branches_path, notice: "Branch successfully deleted"
 		rescue ActiveRecord::InvalidForeignKey => e
-      redirect_to brands_path, alert: "Rescued from error"
+			errors = []
+			errors << "An unkonwn reason ( please kindly report to the developers for immediate fixing )" if errors.empty?
+			puts e if errors.empty?
+      redirect_to brands_path, alert: "You cannot delete #{@branch.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
     end
 	end
 
