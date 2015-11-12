@@ -36,8 +36,12 @@ class BranchesController < ApplicationController
 	end
 
 	def destroy
-		@branch.destroy
-		redirect_to branches_path, notice: "Branch successfully deleted"
+		begin
+			@branch.destroy
+			redirect_to branches_path, notice: "Branch successfully deleted"
+		rescue ActiveRecord::InvalidForeignKey => e
+      redirect_to brands_path, alert: "Rescued from error"
+    end
 	end
 
 	private

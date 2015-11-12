@@ -29,21 +29,21 @@ class ApplicationController < ActionController::Base
   end
 
   # => Rescue when deleting associated records ( brand & branch ).
-  rescue_from 'ActiveRecord::InvalidForeignKey' do
-    if params[:controller] == "brands"
-      flash[:alert] = "This brand have Brand administrators please change their respective brands then delete"
-      redirect_to brands_path
-    elsif params[:controller] == "branches"
-      flash[:alert] = "This branch have Branch administrators please change their respective branches then delete"
-      redirect_to branches_path
-    else
-      flash[:alert] = "Something went wrong, your request is not processed"
-      puts "======= rescue InvalidForeignKey else ========"
-      puts params
-      puts "======= rescue end ========"
-      redirect_to dashboard_path
-    end
-  end
+  # rescue_from 'ActiveRecord::InvalidForeignKey' do |e|
+  #   if params[:controller] == "brands"
+  #     flash[:alert] = "You cannot delete #{@branch.name} because it have branches"
+  #     redirect_to brands_path
+  #   elsif params[:controller] == "branches"
+  #     flash[:alert] = "This branch have Branch administrators please change their respective branches then delete"
+  #     redirect_to branches_path
+  #   else
+  #     flash[:alert] = "Something went wrong, your request is not processed"
+  #     puts "======= rescue InvalidForeignKey else ========"
+  #     puts params
+  #     puts "======= rescue end ========"
+  #     redirect_to dashboard_path
+  #   end
+  # end
 
   private
 

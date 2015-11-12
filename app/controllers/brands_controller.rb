@@ -36,8 +36,15 @@ class BrandsController < ApplicationController
 	end
 
 	def destroy
-		@brand.destroy
-		redirect_to brands_path, notice: "Brand successfully deleted"
+		begin
+			@brand.destroy
+			redirect_to brands_path, notice: "Brand successfully deleted"
+		rescue ActiveRecord::InvalidForeignKey => e
+			errors = []
+			errors << "#{'Branch'.pluralize(@brand.branches.count)}(#{@brand.branches.pluck(:name).join(', ')}) belongs to this brand" if @brand.branches.present?
+			errors << "#{'Role'.pluralize(@brand.roles.count)}(#{@brand.roles.pluck(:name).join(', ')}) manages this brand" if @brand.roles.present?
+      redirect_to brands_path, alert: "You cannot delete brand #{@brand.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
+    end
 	end
 
 	private
