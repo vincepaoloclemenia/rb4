@@ -1,0 +1,27 @@
+h1 Users
+= link_to "New user", new_company_user_path
+table
+	thead
+		tr
+			th Name
+			th Email
+			th Username
+			th Role
+			th Actions
+	tbody
+		- @users.each do |user|
+			tr
+				td 
+					= user.full_name
+				td
+					= user.email
+				td
+					= user.username
+				td
+					= user.role.name
+				td
+					= link_to "Show", company_user_path(user)
+					| -
+					= link_to "Edit", edit_company_user_path(user)
+					| -
+					= link_to "Delete", company_user_path(user), method: :delete

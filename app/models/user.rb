@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-  has_one :client_user_access
+  has_one :client_user_access, dependent: :destroy
   has_one :role, through: :client_user_access
   has_one :client, through: :client_user_access
   has_one :brand, through: :client_user_access
@@ -15,14 +15,16 @@ class User < ActiveRecord::Base
   attr_accessor :login
 
   validates :username,
-  	:presence => true,
-  	:uniqueness => {
-  		:case_sensitive => false
-  	},
-  	:format => {
-  		:with => /\A[a-zA-Z0-9_\.]*\z/
-  	}
+            presence: true,
+            uniqueness: {
+              case_sensitive: false
+            },
+            format: {
+              with: /\A[a-zA-Z0-9_\.]*\z/
+            }
   validate :validate_username
+  validates :email,
+            presence: true
   # validates :first_name,
   #           presence: true,
   #           length: {
@@ -35,6 +37,10 @@ class User < ActiveRecord::Base
   #           }
 
   after_create :create_client_user_access
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 
   def create_client_user_access
     ClientUserAccess.create user_id: id

@@ -62,12 +62,15 @@ class ApplicationController < ActionController::Base
   end
 
   def access_control
-    if ["show","update","create","destroy"].include?(params[:action])
-      action = params[:action].eql?('show') ? "is_read" : "is_#{params[:action]}"
-      section = Section.find_by_name(params[:controller])
-      permission = current_user.role.permissions.find_by_section_id(section.id)
-      unless permission.send(action.to_sym)
-        redirect_to dashboard_path, alert: "Access denied"
+    section = Section.find_by_name(params[:controller])
+    if section
+      if ["show","update","create","destroy"].include?(params[:action])
+        action = params[:action].eql?('show') ? "is_read" : "is_#{params[:action]}"
+        
+        permission = current_user.role.permissions.find_by_section_id(section.id)
+        unless permission.send(action.to_sym)
+          redirect_to dashboard_path, alert: "Access denied"
+        end
       end
     end
   end
