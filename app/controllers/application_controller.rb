@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 	before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :find_wizard_flag
 
-  helper_method :current_client, :current_brand
+  helper_method :current_client, :current_brand, :view_access_control
 
   def current_client
     current_user.client
@@ -26,6 +26,20 @@ class ApplicationController < ActionController::Base
   def find_wizard_flag
     #find better fix for destroy_user_session_path with this method
     after_in if user_signed_in? && params[:controller] != "devise/sessions" && params[:action] != "destroy"
+  end
+
+  def view_access_control(controller, action)
+    section = Section.find_by_name(controller)
+    if section
+      if ["show","update","create","destroy"].include?(action)
+        action = action.eql?('show') ? "is_read" : "is_#{action}"
+        
+        permission = current_user.role.permissions.find_by_section_id(section.id)
+        return permission.send(action.to_sym)
+      end
+    else
+      return false
+    end
   end
 
   # => Rescue when deleting associated records ( brand & branch ).

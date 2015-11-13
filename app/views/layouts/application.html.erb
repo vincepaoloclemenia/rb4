@@ -2,16 +2,26 @@
 <html>
 <head>
   <title>RestobotV4</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <title>Restobot v4</title>
 </head>
 <body>
-	<div class="container">
-		<%= render "layouts/header" %>
+	<%= render "layouts/header" if user_signed_in? %>
+	<%= link_to "Login", new_user_session_path, data: { keybinding: "i n" } unless user_signed_in? %>
+	<main class="cd-main-content">
+		<%#= render "layouts/header" %>
 		<%= render "layouts/nav" if user_signed_in? %>
-		<%= render "partials/flash" if flash %>
-		<%= yield %>
-	</div>
+		<div class="content-wrapper">
+			<%= render "partials/flash" if flash %>
+			<%= yield %>
+		</div>
+	</main>
+
+	<script>
+		$(document).foundation();
+	</script>
 </body>
 </html>

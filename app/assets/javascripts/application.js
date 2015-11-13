@@ -10,9 +10,12 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require modernizr
 //= require jquery
 //= require jquery_ujs
+//= require jquery.menu-aim
+//= require main
 //= require mousetrap
-//= require bootstrap-sprockets
+//=	require foundation.min
 //= require turbolinks
 //= require_tree .

@@ -1,5 +1,6 @@
 class	PermissionsController < ApplicationController
 	before_action :authenticate_user!
+	before_action :access_control
 
 	def index
 		@role = current_client.roles.find(params[:role_id])
