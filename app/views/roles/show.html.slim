@@ -7,8 +7,32 @@ p
 	| Description: 
 	= @role.description
 
+table
+	thead
+		tr
+			th Section
+			th Read
+			th Create
+			th Edit
+			th Delete
+	tbody
+		- @role.permissions.each do |p|
+			tr
+				td
+					= p.section.name
+				td
+					= p.is_read ? "O" : "X"
+				td
+					= p.is_create ? "O" : "X"
+				td
+					= p.is_update ? "O" : "X"
+				td
+					= p.is_destroy ? "O" : "X"
+
 p
 	= link_to "Back", roles_path
+	| -
+	= link_to "Manage Permissions", role_manage_permissions_path(role_id: @role.id)
 	| -
 	= link_to "Edit", edit_role_path(@role)
 	| -

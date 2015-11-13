@@ -17,6 +17,8 @@ table
 				td
 					= role.description
 				td
+					= link_to "Manage Permissions", role_manage_permissions_path(role_id: role.id)
+					| -
 					= link_to "Show", role_path(role)
 					| -
 					= link_to "Edit", edit_role_path(role)

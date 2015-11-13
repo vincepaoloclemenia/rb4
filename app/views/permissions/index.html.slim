@@ -1,0 +1,27 @@
+h1
+	= @role.name
+
+= form_for @role, url: role_manage_permissions_path(role_id: @role.id), method: :put do |f|
+	table
+		thead
+			tr
+				th Section
+				th Read
+				th Create
+				th Edit
+				th Delete
+		tbody
+			= f.fields_for :permissions do |p|
+				tr
+					td
+						= p.instance_values['object'].section.page
+					td
+						= p.check_box :is_read
+					td
+						= p.check_box :is_create
+					td
+						= p.check_box :is_update
+					td
+						= p.check_box :is_destroy
+
+	= f.submit "Save"

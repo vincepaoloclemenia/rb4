@@ -1,5 +1,6 @@
 class ClientsController < ApplicationController
 	before_action :authenticate_user!
+	before_action :access_control
 
 	def show
 	end

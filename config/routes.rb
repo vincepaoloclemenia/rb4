@@ -5,7 +5,10 @@ Rails.application.routes.draw do
   resource :client, only: [:show, :edit, :update]
   resources :brands
   resources :branches
-  resources :roles
+  resources :roles do
+    get 'manage_permissions' => 'permissions#index'
+    put 'manage_permissions' => 'permissions#update'
+  end
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

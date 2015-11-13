@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109030608) do
+ActiveRecord::Schema.define(version: 20151112031837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,22 @@ ActiveRecord::Schema.define(version: 20151109030608) do
     t.datetime "updated_at",                      null: false
   end
 
+  create_table "permissions", force: :cascade do |t|
+    t.integer  "role_id"
+    t.integer  "section_id"
+    t.integer  "client_id"
+    t.boolean  "is_create"
+    t.boolean  "is_read"
+    t.boolean  "is_update"
+    t.boolean  "is_destroy"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "permissions", ["client_id"], name: "index_permissions_on_client_id", using: :btree
+  add_index "permissions", ["role_id"], name: "index_permissions_on_role_id", using: :btree
+  add_index "permissions", ["section_id"], name: "index_permissions_on_section_id", using: :btree
+
   create_table "roles", force: :cascade do |t|
     t.integer  "client_id"
     t.string   "name"
@@ -103,6 +119,13 @@ ActiveRecord::Schema.define(version: 20151109030608) do
   end
 
   add_index "roles", ["client_id"], name: "index_roles_on_client_id", using: :btree
+
+  create_table "sections", force: :cascade do |t|
+    t.string   "page"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "name"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
@@ -148,5 +171,8 @@ ActiveRecord::Schema.define(version: 20151109030608) do
   add_foreign_key "client_user_accesses", "clients"
   add_foreign_key "client_user_accesses", "roles"
   add_foreign_key "client_user_accesses", "users"
+  add_foreign_key "permissions", "clients"
+  add_foreign_key "permissions", "roles"
+  add_foreign_key "permissions", "sections"
   add_foreign_key "roles", "clients"
 end

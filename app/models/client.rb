@@ -14,6 +14,7 @@ class Client < ActiveRecord::Base
 	after_create :create_initial_role
 
 	private
+
 	def create_initial_role
 		roles.create(name: "Company Administrator", description: "Client Administrators have the full access to the whole company", role_level: "client")
 		roles.create(name: "Brand Administrator", description: "Brand Administrators can manage the only brand assigned to them", role_level: "brand")

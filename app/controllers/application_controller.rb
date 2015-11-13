@@ -60,4 +60,15 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
   end
+
+  def access_control
+    if ["show","update","create","destroy"].include?(params[:action])
+      action = params[:action].eql?('show') ? "is_read" : "is_#{params[:action]}"
+      section = Section.find_by_name(params[:controller])
+      permission = current_user.role.permissions.find_by_section_id(section.id)
+      unless permission.send(action.to_sym)
+        redirect_to dashboard_path, alert: "Access denied"
+      end
+    end
+  end
 end
