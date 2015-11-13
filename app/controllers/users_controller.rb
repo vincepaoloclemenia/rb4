@@ -17,6 +17,7 @@ class UsersController < ApplicationController
 		@user = current_client.users.new(user_params)
 		if @user.save
 			@user.client_user_access.update(role_id: params[:user][:role])
+			@user.confirm!
 			redirect_to company_user_path(@user), notice: "User successfully created"
 		else
 			flash[:alert] = @user.errors.full_messages.join(", ")
