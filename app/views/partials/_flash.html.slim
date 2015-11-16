@@ -1,4 +1,10 @@
-p.notice
-	= notice
-p.alert
-	= alert
+- if notice
+	.alert-box.success data-alert=''
+		= notice
+		a.close href="#"
+		 | &times;
+- if alert
+	.alert-box.alert data-alert=''
+		= alert
+		a.close href="#"
+		 | &times;
