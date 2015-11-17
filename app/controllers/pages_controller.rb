@@ -7,4 +7,15 @@ class PagesController < ApplicationController
 
 	def dashboard
 	end
+
+	def update_role
+		@role = Role.find(params[:role_id])
+		unless @role.role_level == "client"
+			@brand = Brand.find(params[:brand_id])
+		end
+	end
+
+	def update_branch
+		@brand = Brand.find(params[:brand_id])
+	end
 end

@@ -15,6 +15,7 @@ class WizardsController < ApplicationController
 		respond_to do |format|
 			if @user.update(user_params)
 				@user.update(flag: 2)
+				ClientUserAccess.create user_id: @user.id
 				format.js
 			else
 				format.json { render json: @user.errors.full_messages.join(", "), status: :unprocessable_entity }

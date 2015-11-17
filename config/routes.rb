@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "registrations" }
   resources :company_users, controller: "users"
+  get 'update_role' => 'pages#update_role'
+  get 'update_branch' => 'pages#update_branch'
   root 'pages#index'
   get 'dashboard' => 'pages#dashboard'
   resource :client, only: [:show, :edit, :update]

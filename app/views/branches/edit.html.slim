@@ -1,5 +1,10 @@
 h1 Edit branch
 = form_for @branch do |f|
+	- if current_user.role.role_level == "client"
+		p
+			= f.label :brand_id, "Brand"
+			| &nbsp;
+			= f.select :brand_id, current_client.brands.pluck(:name, :id)
 	p
 		= f.label :name
 		| &nbsp;

@@ -1,5 +1,6 @@
 h1 New user
 = form_for @user, url: company_users_path, method: :post do |f|
+	= f.hidden_field :confirmed_at, value: DateTime.now
 	p
 		= f.label :first_name
 		| &nbsp;
@@ -24,12 +25,43 @@ h1 New user
 		= f.label :password_confirmation, "Confirm password"
 		| &nbsp;
 		= f.password_field :password_confirmation
-	p
-		= f.label :role
-		| &nbsp;
-		= f.select :role, current_client.roles.pluck(:name, :id)
+	= f.fields_for :client_user_access, @user.client_user_access do |cua|
+		p
+			= cua.label :role_id, "Role"
+			| &nbsp;
+			= cua.select :role_id, current_client.roles.pluck(:name, :id), selected: current_client.roles.find_by_role_level('client').id
 
+		p.p_brand_field style="display: none;"
+			= cua.label :brand_id, "Brand"
+			| &nbsp;
+			= cua.select :brand_id, current_client.brands.pluck(:name, :id)
+
+		p.p_branch_field style="display: none;"
+			= cua.label :branch_id, "Branch"
+			| &nbsp;
+			= cua.select :branch_id, []
 	p
 		= link_to "Back", company_users_path
 		| -
 		= f.submit "Create"
+
+javascript:
+	$(document).ready(function () {
+		$('#user_client_user_access_attributes_role_id').on('change', function(){
+			$.ajax({
+				url: "#{update_role_path}",
+				data: {
+					role_id: $('#user_client_user_access_attributes_role_id').val(),
+					brand_id: $('#user_client_user_access_attributes_brand_id').val()
+				}
+			});
+		});
+		$('#user_client_user_access_attributes_brand_id').on('change', function(){
+			$.ajax({
+				url: "#{update_branch_path}",
+				data: {
+					brand_id: $('#user_client_user_access_attributes_brand_id').val()
+				}
+			});
+		});
+	});

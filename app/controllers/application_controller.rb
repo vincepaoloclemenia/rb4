@@ -67,6 +67,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_sign_out_path_for(resource)
+    flash[:notice] = "Logged out successfully"
+    new_user_session_path
+  end
+
   protected
 
   def configure_permitted_parameters

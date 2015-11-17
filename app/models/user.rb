@@ -36,14 +36,10 @@ class User < ActiveRecord::Base
   #             maximum: 50
   #           }
 
-  after_create :create_client_user_access
+  accepts_nested_attributes_for :client_user_access
 
   def full_name
     "#{first_name} #{last_name}"
-  end
-
-  def create_client_user_access
-    ClientUserAccess.create user_id: id
   end
 
   def validate_username

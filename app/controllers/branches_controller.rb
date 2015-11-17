@@ -4,7 +4,11 @@ class BranchesController < ApplicationController
 	before_action :set_branch, only: [:show, :edit, :update, :destroy]
 
 	def index
-		@branches = current_brand.branches
+		if current_user.role.role_level == "client"
+			@branches = current_client.branches
+		else
+			@branches = current_brand.branches
+		end
 	end
 
 	def show
@@ -15,7 +19,7 @@ class BranchesController < ApplicationController
 	end
 
 	def create
-		@branch = current_brand.branches.new(branch_params)
+		@branch = Branch.new(branch_params)
 		if @branch.save
 			redirect_to branch_path(@branch), notice: "Branch successfully created"
 		else
@@ -51,10 +55,10 @@ class BranchesController < ApplicationController
 	private
 
 	def set_branch
-		@branch = current_brand.branches.find(params[:id])
+		@branch = current_client.branches.find(params[:id])
 	end
 
 	def branch_params
-		params.require(:branch).permit(:name, :address1)
+		params.require(:branch).permit(:name, :address1, :brand_id)
 	end
 end

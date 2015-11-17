@@ -11,14 +11,13 @@ class UsersController < ApplicationController
 	end
 
 	def new
-		@user = User.new
+		@user = current_client.users.new
 	end
 
 	def create
 		@user = current_client.users.new(user_params)
-		if @user.save
+		if @user.save!
 			@user.client_user_access.update(role_id: params[:user][:role])
-			@user.confirm!
 			redirect_to company_user_path(@user), notice: "User successfully created"
 		else
 			flash[:alert] = @user.errors.full_messages.join(", ")
@@ -31,7 +30,6 @@ class UsersController < ApplicationController
 
 	def update
 		if @user.update(user_params)
-			@user.client_user_access.update(role_id: params[:user][:role])
 			redirect_to company_user_path(@user), notice: "User successfully updated"
 		else
 			flash[:alert] = @user.errors.full_messages.join(", ")
@@ -51,6 +49,14 @@ class UsersController < ApplicationController
 	end
 
 	def user_params
-		params.require(:user).permit(:email, :username, :first_name, :last_name, :password, :password_confirmation)
+		role = Role.find(params[:user][:client_user_access_attributes][:role_id])
+		if role.role_level == 'client'
+			params[:user][:client_user_access_attributes].delete(:brand_id)
+			params[:user][:client_user_access_attributes].delete(:branch_id)
+		elsif role.role_level == 'brand'
+			params[:user][:client_user_access_attributes].delete(:branch_id)
+		else
+		end
+		params.require(:user).permit(:email, :username, :first_name, :last_name, :password, :password_confirmation, :confirmed_at, client_user_access_attributes: [:id, :role_id, :client_id, :brand_id, :branch_id])
 	end
 end
