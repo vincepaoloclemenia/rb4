@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'update_branch' => 'pages#update_branch'
   root 'pages#index'
   get 'dashboard' => 'pages#dashboard'
+  put 'change_brand' => 'pages#change_brand'
   resource :client, only: [:show, :edit, :update]
   resources :brands
   resources :branches

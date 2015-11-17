@@ -1,6 +1,21 @@
 nav.cd-side-nav
 	ul
 		li.cd-label
+			= current_client.name
+		- if current_user.role.role_level == 'client'
+			li.has-children.setup
+				= link_to current_brand.name, '#0'
+				ul.menu-child-link
+					- current_client.brands.each do |brand|
+						li
+							= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
+		- else
+			ul
+				li.cd-label
+					= current_brand.name
+
+	ul
+		li.cd-label
 			| Main
 		li.has-children.overview
 			= link_to "Dashboard", dashboard_path, data: { keybinding: "h o m e" }

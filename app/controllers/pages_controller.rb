@@ -15,6 +15,12 @@ class PagesController < ApplicationController
 		end
 	end
 
+	def change_brand
+		brand = current_client.brands.find(params[:brand_id])
+		session[:current_brand_id] = brand.id
+		redirect_to dashboard_path, notice: "You are now on #{brand.name}"
+	end
+
 	def update_branch
 		@brand = Brand.find(params[:brand_id])
 	end
