@@ -5,9 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Section.create name: "clients", page: "Company"
-Section.create name: "brands", page: "Brands"
-Section.create name: "branches", page: "Branches"
-Section.create name: "permissions", page: "Permissions"
-Section.create name: "roles", page: "Roles"
-Section.create name: "users", page: "Users"
+Section.find_or_create_by name: "clients", page: "Company"
+Section.find_or_create_by name: "brands", page: "Brands"
+Section.find_or_create_by name: "branches", page: "Branches"
+Section.find_or_create_by name: "permissions", page: "Permissions"
+Section.find_or_create_by name: "roles", page: "Roles"
+Section.find_or_create_by name: "users", page: "Users"
