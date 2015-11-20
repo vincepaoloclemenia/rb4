@@ -16,8 +16,8 @@ class UsersController < ApplicationController
 
 	def create
 		@user = current_client.users.new(user_params)
-		if @user.save!
-			@user.client_user_access.update(role_id: params[:user][:role])
+		if @user.save
+			@user.client_user_access.update(client_user_access_params)
 			redirect_to company_user_path(@user), notice: "User successfully created"
 		else
 			flash[:alert] = @user.errors.full_messages.join(", ")
@@ -58,5 +58,9 @@ class UsersController < ApplicationController
 		else
 		end
 		params.require(:user).permit(:email, :username, :first_name, :last_name, :password, :password_confirmation, :confirmed_at, client_user_access_attributes: [:id, :role_id, :client_id, :brand_id, :branch_id])
+	end
+
+	def client_user_access_params
+		params.require(:user).require(:client_user_access_attributes).permit(:role_id, :client_id, :brand_id, :branch_id)
 	end
 end

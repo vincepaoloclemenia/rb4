@@ -11,13 +11,18 @@
 <body>
 	<%= render "layouts/header" if user_signed_in? %>
 	<%= link_to "Login", new_user_session_path, data: { keybinding: "i n" } unless user_signed_in? %>
-	<main class="cd-main-content">
-		<%= render "layouts/nav" if user_signed_in? %>
-		<div class="content-wrapper">
-			<%= render "partials/flash" if flash %>
-			<%= yield %>
-		</div>
-	</main>
+	<% if user_signed_in? %>
+		<main class="cd-main-content">
+			<%= render "layouts/nav" if user_signed_in? && wizard_done? %>
+			<div class="content-wrapper">
+				<%= render "partials/flash" if flash %>
+				<%= yield %>
+			</div>
+		</main>
+	<% else %>
+		<%= render "partials/flash" if flash %>
+		<%= yield %>
+	<% end %>
 
 	<script>
 		$(document).foundation();
