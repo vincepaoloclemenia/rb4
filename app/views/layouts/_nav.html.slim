@@ -70,10 +70,12 @@ nav.cd-side-nav
 		li.has-children.bookmarks
 			= link_to "Account Management", '#0'
 			ul.menu-child-link
-				li
-					= link_to "Users", company_users_path, data: { keybinding: "u s e r s" }
-				li
-					= link_to "Roles", roles_path, data: { keybinding: "r o l e s" }
+				- if view_access_control("users","show")
+					li
+						= link_to "Users", company_users_path, data: { keybinding: "u s e r s" }
+				- if view_access_control("roles","show")
+					li
+						= link_to "Roles", roles_path, data: { keybinding: "r o l e s" }
 		li.has-children.setup
 			= link_to "Company Setup", '#0'
 			ul.menu-child-link
@@ -128,3 +130,15 @@ nav.cd-side-nav
 			= link_to "My Subscriptions", '#0'
 		li.bills
 			= link_to "Billing", '#0'
+
+
+javascript:
+	$(document).ready(function () {
+		$('ul.menu-child-link').each(function() {
+			var childrenCount = $(this).children().length;
+
+			if(childrenCount == 0){
+				$(this).parent().css("display", "none");
+			}
+		});
+	});

@@ -31,9 +31,12 @@ table
 
 p
 	= link_to "Back", roles_path
-	| -
-	= link_to "Manage Permissions", role_manage_permissions_path(role_id: @role.id)
-	| -
-	= link_to "Edit", edit_role_path(@role)
-	| -
-	= link_to "Delete", role_path(@role), method: :delete
+	- if view_access_control "roles", "update"
+		| -
+		= link_to "Manage Permissions", role_manage_permissions_path(role_id: @role.id)
+	- if view_access_control "roles", "update"
+		| -
+		= link_to "Edit", edit_role_path(@role)
+	- if view_access_control "roles", "destroy"
+		| -
+		= link_to "Delete", role_path(@role), method: :delete

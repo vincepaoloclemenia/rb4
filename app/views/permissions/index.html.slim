@@ -16,12 +16,44 @@ h1
 					td
 						= p.instance_values['object'].section.page
 					td
-						= p.check_box :is_read
+						= p.check_box :is_read, class: "read-checkbox"
 					td
-						= p.check_box :is_create
+						= p.check_box :is_create, class: "create-checkbox"
 					td
-						= p.check_box :is_update
+						= p.check_box :is_update, class: "update-checkbox"
 					td
-						= p.check_box :is_destroy
+						= p.check_box :is_destroy, class: "destroy-checkbox"
 
 	= f.submit "Save"
+
+javascript:
+	$(document).ready(function () {
+		$('.read-checkbox').on("click", function () {
+			var isChecked = $(this).is(':checked');
+			if(isChecked){
+			}
+			else{
+				$(this).parent().parent().find('input.create-checkbox').prop("checked",false);
+				$(this).parent().parent().find('input.update-checkbox').prop("checked",false);
+				$(this).parent().parent().find('input.destroy-checkbox').prop("checked",false);
+			}
+		});
+		$('.create-checkbox').on("click", function () {
+			var isChecked = $(this).is(':checked');
+			if(isChecked){
+				$(this).parent().parent().find('input.read-checkbox').prop("checked",true);
+			}
+		});
+		$('.update-checkbox').on("click", function () {
+			var isChecked = $(this).is(':checked');
+			if(isChecked){
+				$(this).parent().parent().find('input.read-checkbox').prop("checked",true);
+			}
+		});
+		$('.destroy-checkbox').on("click", function () {
+			var isChecked = $(this).is(':checked');
+			if(isChecked){
+				$(this).parent().parent().find('input.read-checkbox').prop("checked",true);
+			}
+		});
+	});
