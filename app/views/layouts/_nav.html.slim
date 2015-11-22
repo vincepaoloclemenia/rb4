@@ -7,8 +7,9 @@ nav.cd-side-nav
 				= link_to current_brand.name, '#0'
 				ul.menu-child-link
 					- current_client.brands.each do |brand|
-						li
-							= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
+						- unless brand.id == current_brand.id
+							li
+								= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
 		- else
 			ul
 				li.cd-label
