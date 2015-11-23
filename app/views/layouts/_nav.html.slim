@@ -5,11 +5,12 @@ nav.cd-side-nav
 		- if current_user.role.role_level == 'client'
 			li.has-children.setup
 				= link_to current_brand.name, '#0'
-				ul.menu-child-link
-					- current_client.brands.each do |brand|
-						- unless brand.id == current_brand.id
-							li
-								= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
+				- if current_client.brands.count > 1
+					ul.menu-child-link
+						- current_client.brands.each do |brand|
+							- unless brand.id == current_brand.id
+								li
+									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
 		- else
 			ul
 				li.cd-label
