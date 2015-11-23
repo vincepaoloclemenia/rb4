@@ -23,5 +23,14 @@
 		<%= render "partials/flash" if flash %>
 		<%= yield %>
 	<% end %>
+
+	<script>
+		$(document).ready(function(){
+			recordLength = $('tbody').children().length;
+			if(recordLength == 0){
+				$('table').replaceWith("<h5>No records found</h5>");
+			}
+		});
+	</script>
 </body>
 </html>
