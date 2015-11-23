@@ -17,5 +17,7 @@
 //= require main
 //= require mousetrap
 //=	require foundation.min
-//= require turbolinks
 //= require_tree .
+
+
+$(document).foundation();

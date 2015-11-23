@@ -4,7 +4,7 @@
   <title>RestobotV4</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
   <title>Restobot v4</title>
 </head>
@@ -23,9 +23,5 @@
 		<%= render "partials/flash" if flash %>
 		<%= yield %>
 	<% end %>
-
-	<script>
-		$(document).foundation();
-	</script>
 </body>
 </html>
