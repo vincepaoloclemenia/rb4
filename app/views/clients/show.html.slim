@@ -15,5 +15,5 @@ p
 	| Contact:
 	| &nbsp;
 	= current_client.contact
-
-= link_to "Edit", edit_client_path
+- if view_access_control('clients','update')
+	= link_to "Edit", edit_client_path

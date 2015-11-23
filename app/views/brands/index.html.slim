@@ -1,5 +1,6 @@
 h1 Brands
-= link_to "New brand", new_brand_path
+- if view_access_control('brands','create')
+	= link_to "New brand", new_brand_path
 table
 	thead
 		tr
@@ -15,7 +16,9 @@ table
 					= brand.website
 				td
 					= link_to "Show", brand_path(brand)
-					| -
-					= link_to "Edit", edit_brand_path(brand)
-					| -
-					= link_to "Delete", brand_path(brand), method: :delete
+					- if view_access_control('brands','update')
+						| -
+						= link_to "Edit", edit_brand_path(brand)
+					- if view_access_control('brands','destroy')
+						| -
+						= link_to "Delete", brand_path(brand), method: :delete

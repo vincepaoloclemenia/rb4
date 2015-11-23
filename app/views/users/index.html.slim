@@ -1,5 +1,6 @@
 h1 Users
-= link_to "New user", new_company_user_path
+- if view_access_control('users','create')
+	= link_to "New user", new_company_user_path
 table
 	thead
 		tr
@@ -21,7 +22,9 @@ table
 					= user.role.name
 				td
 					= link_to "Show", company_user_path(user)
-					| -
-					= link_to "Edit", edit_company_user_path(user)
-					| -
-					= link_to "Delete", company_user_path(user), method: :delete
+					- if view_access_control('users','update')
+						| -
+						= link_to "Edit", edit_company_user_path(user)
+					- if view_access_control('users','destroy')
+						| -
+						= link_to "Delete", company_user_path(user), method: :delete
