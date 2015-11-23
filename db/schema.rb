@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112031837) do
+ActiveRecord::Schema.define(version: 20151123021250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,6 +127,19 @@ ActiveRecord::Schema.define(version: 20151112031837) do
     t.string   "name"
   end
 
+  create_table "settlements", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "is_complimentary"
+    t.integer  "client_id"
+    t.string   "description"
+    t.boolean  "is_active"
+    t.boolean  "breadcrumbs"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "settlements", ["client_id"], name: "index_settlements_on_client_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -175,4 +188,5 @@ ActiveRecord::Schema.define(version: 20151112031837) do
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
   add_foreign_key "roles", "clients"
+  add_foreign_key "settlements", "clients"
 end

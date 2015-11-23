@@ -4,6 +4,7 @@ class Client < ActiveRecord::Base
 	has_many :brands
 	has_many :branches, through: :brands
 	has_many :roles
+	has_many :settlements
 
 	validates :name,
 						presence: true,

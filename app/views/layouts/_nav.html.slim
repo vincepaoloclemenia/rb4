@@ -106,8 +106,9 @@ nav.cd-side-nav
 					= link_to "Sales Statistics", '#0'
 				li
 					= link_to "Revenues", '#0'
-				li
-					= link_to "Settlements", '#0'
+				- if view_access_control('settlements','show')
+					li
+						= link_to "Settlements", settlements_path, data: { keybinding: "s e t" }
 				li
 					= link_to "Shift", '#0'
 		li.has-children.setup

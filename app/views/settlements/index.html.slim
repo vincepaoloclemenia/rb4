@@ -1,0 +1,28 @@
+h1 Settlements
+- if view_access_control "settlements", "create"
+	= link_to "New settlement", new_settlement_path
+table
+	thead
+		tr
+			th Name
+			th Description
+			th Complimentary
+			th Active
+			th Action
+	tbody
+		- @settlements.each do |settlement|
+			tr
+				td 
+					= settlement.name
+				td
+					= settlement.description
+				td
+					= settlement.is_complimentary ? "Yes" : "No"
+				td
+					= settlement.is_active ? "Yes" : "No"
+				td
+					- if view_access_control("settlements", "update")
+						= link_to "Edit", edit_settlement_path(settlement)
+					- if view_access_control("settlements", "destroy")
+						| - 
+						= link_to "Delete", settlement_path(settlement), method: :delete
