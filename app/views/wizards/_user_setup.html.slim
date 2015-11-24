@@ -1,5 +1,5 @@
 #user-setup-form
-	h1 User Setup
+	h2 User Setup
 	- @user = current_user
 	= form_for @user, url: user_setup_complete_wizard_path, method: :put, remote: true do |f|
 		= f.label :first_name

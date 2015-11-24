@@ -1,5 +1,5 @@
 #brand-setup-form
-	h1 Brand Setup
+	h2 Brand Setup
 	- if current_user.client.nil? 
 		- @brand = Brand.new
 	- elsif current_user.client.brands.present?
