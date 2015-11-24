@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112031837) do
+ActiveRecord::Schema.define(version: 20151123050013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,19 @@ ActiveRecord::Schema.define(version: 20151112031837) do
 
   add_index "brands", ["client_id"], name: "index_brands_on_client_id", using: :btree
 
+  create_table "categories", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.string   "name"
+    t.string   "description"
+    t.boolean  "is_active"
+    t.boolean  "track_as_sales"
+    t.integer  "parent_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "categories", ["brand_id"], name: "index_categories_on_brand_id", using: :btree
+
   create_table "client_user_accesses", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "client_id"
@@ -92,6 +105,39 @@ ActiveRecord::Schema.define(version: 20151112031837) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
+
+  create_table "employee_types", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "dividend_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.integer  "employee_type_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.date     "date_employed"
+    t.integer  "job_id"
+    t.date     "birthdate"
+    t.string   "contact_no"
+    t.string   "sss"
+    t.string   "tin"
+    t.text     "address"
+    t.string   "hdmf"
+    t.integer  "age"
+    t.string   "philhealth"
+    t.string   "position"
+    t.string   "position_type"
+    t.date     "end_date"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "employees", ["branch_id"], name: "index_employees_on_branch_id", using: :btree
+  add_index "employees", ["employee_type_id"], name: "index_employees_on_employee_type_id", using: :btree
 
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
@@ -166,11 +212,14 @@ ActiveRecord::Schema.define(version: 20151112031837) do
 
   add_foreign_key "branches", "brands"
   add_foreign_key "brands", "clients"
+  add_foreign_key "categories", "brands"
   add_foreign_key "client_user_accesses", "branches"
   add_foreign_key "client_user_accesses", "brands"
   add_foreign_key "client_user_accesses", "clients"
   add_foreign_key "client_user_accesses", "roles"
   add_foreign_key "client_user_accesses", "users"
+  add_foreign_key "employees", "branches"
+  add_foreign_key "employees", "employee_types"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"

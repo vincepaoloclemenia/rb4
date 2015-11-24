@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  branch_id: 
+  employee_type_id: 
+  first_name: MyString
+  last_name: MyString
+  date_employed: 2015-11-23
+  job_id: 1
+  birthdate: 2015-11-23
+  contact_no: MyString
+  sss: MyString
+  tin: MyString
+  address: MyText
+  hdmf: MyString
+  age: 1
+  philhealth: MyString
+  position: MyString
+  position_type: MyString
+  end_date: 2015-11-23
+
+two:
+  branch_id: 
+  employee_type_id: 
+  first_name: MyString
+  last_name: MyString
+  date_employed: 2015-11-23
+  job_id: 1
+  birthdate: 2015-11-23
+  contact_no: MyString
+  sss: MyString
+  tin: MyString
+  address: MyText
+  hdmf: MyString
+  age: 1
+  philhealth: MyString
+  position: MyString
+  position_type: MyString
+  end_date: 2015-11-23

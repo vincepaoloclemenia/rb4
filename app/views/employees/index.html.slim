@@ -1,0 +1,31 @@
+h1 Employees
+= link_to "Add Employee", new_employee_path()
+table
+	thead
+		tr
+			th Name
+			th Branch
+			th Date Employed
+			th Contact Number
+			th SSS
+			th TIN
+			th HDMF
+			th Philhealth
+			th Type
+			th Action
+	tbody
+		- @employees.each do |employee|
+			tr
+				td = employee.full_name
+				td
+				td = employee.date_employed
+				td = employee.contact_no
+				td = employee.sss
+				td = employee.tin
+				td = employee.hdmf
+				td = employee.philhealth
+				td = employee.employee_type_id
+				td
+					= link_to "edit", edit_employee_path(employee)
+					= link_to "delete", employee_path(employee), method: :delete
+

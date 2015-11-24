@@ -1,0 +1,32 @@
+h1 New Employee
+.small-4
+	= form_for @employee do |f|
+		p Branch
+		= f.text_field :branch_id
+		
+		p First Name
+		= f.text_field :first_name
+		
+		p Last Name
+		= f.text_field :last_name
+		
+		p Date Employed
+		= f.text_field :date_employed
+		
+		p Contact No
+		= f.number_field :contact_no
+
+		p SSS
+		= f.text_field :sss
+
+		p HMDF
+		= f.text_field :hdmf
+
+		p Philhealth
+		= f.text_field :philhealth
+
+		p Type
+		= f.text_field :employee_type_id
+
+		= f.submit "Save", class: 'button'
+

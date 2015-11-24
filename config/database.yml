@@ -13,8 +13,6 @@ default: &default
 development:
   <<: *default
   database: restobot-v4_development
-  username: jmunts
-  password:
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
