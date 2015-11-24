@@ -116,8 +116,9 @@ nav.cd-side-nav
 			ul.menu-child-link
 				li
 					= link_to "Units", '#0'
-				li
-					= link_to "Categories", '#0'
+				- if view_access_control('categories','show')
+					li
+						= link_to "Categories", categories_path, data: { keybinding: "c a t" }
 				li
 					= link_to "Items", '#0'
 				li

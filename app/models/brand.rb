@@ -3,6 +3,7 @@ class Brand < ActiveRecord::Base
   has_many :branches
   has_many :client_user_accesses										# => for rescue purposes, associated roles and branches
   has_many :roles, through: :client_user_accesses		# => for rescue purposes, associated roles and branches
+  has_many :categories
 
 	validates :name,
 						presence: true,

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     put 'manage_permissions' => 'permissions#update'
   end
   resources :settlements
+  resources :categories
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

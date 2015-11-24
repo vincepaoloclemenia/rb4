@@ -90,7 +90,7 @@ jQuery(document).ready(function(){
 
 	function moveNavigation(){
   		var mq = checkMQ();
-        
+
         if ( mq == 'mobile' && topNavigation.parents('.cd-side-nav').length == 0 ) {
         	detachElements();
 			topNavigation.appendTo(sidebar);
@@ -116,7 +116,7 @@ jQuery(document).ready(function(){
 
 	function checkScrollbarPosition() {
 		var mq = checkMQ();
-		
+
 		if( mq != 'mobile' ) {
 			var sidebarHeight = sidebar.outerHeight(),
 				windowHeight = $(window).height(),
@@ -127,4 +127,19 @@ jQuery(document).ready(function(){
 		}
 		scrolling = false;
 	}
+
 });
+
+// Animation for Accordion
+$(".accordion li").on("click", "a:eq(0)", function (event)
+	{
+		var dd_parent = $(this).parent();
+
+		if(dd_parent.hasClass('active'))
+			$(".accordion li div.content:visible").slideToggle("normal");
+		else
+		{
+			$(".accordion li div.content:visible").slideToggle("normal");
+			$(this).parent().find(".content").slideToggle("normal");
+		}
+	});

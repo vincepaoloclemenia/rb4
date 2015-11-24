@@ -17,7 +17,7 @@
 			<div class="content-wrapper">
 				<%= render "partials/flash" if flash %>
 				<%= yield %>
-			</div>
+			</div>	
 		</main>
 	<% else %>
 		<%= render "partials/flash" if flash %>
@@ -25,6 +25,7 @@
 	<% end %>
 
 	<script>
+		$(document).foundation();
 		$(document).ready(function(){
 			recordLength = $('tbody').children().length;
 			if(recordLength == 0){
