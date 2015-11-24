@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   end
   resources :settlements
   resources :categories
+  resources :shifts, only: [:index,:create,:update,:destroy]
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

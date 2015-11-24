@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123032729) do
+ActiveRecord::Schema.define(version: 20151124054151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,6 +155,15 @@ ActiveRecord::Schema.define(version: 20151123032729) do
 
   add_index "settlements", ["client_id"], name: "index_settlements_on_client_id", using: :btree
 
+  create_table "shifts", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "brand_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "shifts", ["brand_id"], name: "index_shifts_on_brand_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -205,4 +214,5 @@ ActiveRecord::Schema.define(version: 20151123032729) do
   add_foreign_key "permissions", "sections"
   add_foreign_key "roles", "clients"
   add_foreign_key "settlements", "clients"
+  add_foreign_key "shifts", "brands"
 end

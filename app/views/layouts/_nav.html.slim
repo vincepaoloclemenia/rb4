@@ -109,8 +109,9 @@ nav.cd-side-nav
 				- if view_access_control('settlements','show')
 					li
 						= link_to "Settlements", settlements_path, data: { keybinding: "s e t" }
-				li
-					= link_to "Shift", '#0'
+				- if view_access_control('shifts','show')
+					li
+						= link_to "Shift", shifts_path, data: { keybinding: "s h i f t s" }
 		li.has-children.setup
 			= link_to "Purchase Setup", '#0'
 			ul.menu-child-link
