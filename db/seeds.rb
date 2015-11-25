@@ -11,4 +11,11 @@ Section.find_or_create_by name: "branches", page: "Branches"
 Section.find_or_create_by name: "permissions", page: "Permissions"
 Section.find_or_create_by name: "roles", page: "Roles"
 Section.find_or_create_by name: "users", page: "Users"
+<<<<<<< HEAD
 Section.find_or_create_by name: "employees" page: "Employees"
+=======
+Section.find_or_create_by name: "settlements", page: "Settlements"
+Section.find_or_create_by name: "categories", page: "Categories"
+Section.find_or_create_by name: "subcategories", page: "Subcategories"
+Section.find_or_create_by name: "shifts", page: "Shifts"
+>>>>>>> master

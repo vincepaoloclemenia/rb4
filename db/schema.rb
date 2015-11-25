@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20151123050013) do
+=======
+ActiveRecord::Schema.define(version: 20151124054151) do
+>>>>>>> master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +66,7 @@ ActiveRecord::Schema.define(version: 20151123050013) do
     t.integer  "brand_id"
     t.string   "name"
     t.string   "description"
+<<<<<<< HEAD
     t.boolean  "is_active"
     t.boolean  "track_as_sales"
     t.integer  "parent_id"
@@ -70,6 +75,18 @@ ActiveRecord::Schema.define(version: 20151123050013) do
   end
 
   add_index "categories", ["brand_id"], name: "index_categories_on_brand_id", using: :btree
+=======
+    t.boolean  "is_active",      default: true
+    t.boolean  "track_as_sales"
+    t.boolean  "is_deleted",     default: false
+    t.integer  "parent_id"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "categories", ["brand_id"], name: "index_categories_on_brand_id", using: :btree
+  add_index "categories", ["parent_id"], name: "index_categories_on_parent_id", using: :btree
+>>>>>>> master
 
   create_table "client_user_accesses", force: :cascade do |t|
     t.integer  "user_id"
@@ -173,6 +190,28 @@ ActiveRecord::Schema.define(version: 20151123050013) do
     t.string   "name"
   end
 
+  create_table "settlements", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "is_complimentary"
+    t.integer  "client_id"
+    t.string   "description"
+    t.boolean  "is_active"
+    t.boolean  "breadcrumbs"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "settlements", ["client_id"], name: "index_settlements_on_client_id", using: :btree
+
+  create_table "shifts", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "brand_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "shifts", ["brand_id"], name: "index_shifts_on_brand_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -224,4 +263,6 @@ ActiveRecord::Schema.define(version: 20151123050013) do
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
   add_foreign_key "roles", "clients"
+  add_foreign_key "settlements", "clients"
+  add_foreign_key "shifts", "brands"
 end

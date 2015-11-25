@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  brand_id: 
+  name: MyString
+  description: MyString
+  is_active: false
+  track_as_sales: false
+  is_deleted: false
+  parent_id: 1
+
+two:
+  brand_id: 
+  name: MyString
+  description: MyString
+  is_active: false
+  track_as_sales: false
+  is_deleted: false
+  parent_id: 1

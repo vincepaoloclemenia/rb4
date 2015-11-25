@@ -14,10 +14,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.menu-aim
-//= require main
 //= require mousetrap
 //=	require foundation.min
+//= require main
 //= require_tree .
-
-
-$(document).foundation();

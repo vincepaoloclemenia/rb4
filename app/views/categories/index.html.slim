@@ -1,0 +1,73 @@
+- if view_access_control('categories','create')
+	.large-12.columns
+		span.inline.float-right
+			= link_to "Create Category", '#', data: { "reveal-id" => "create_category", "reveal" => true }, class: "button tiny width-160 bottom-10"
+.large-12.columns
+	table.responsive.large-12
+		thead
+			tr.bg-fff
+				th Name
+				th Description
+				th Subcategories
+				th width="120" Actions
+		tbody
+			- @categories.each do |category|
+				tr
+					td 
+						= category.name
+					td
+						= category.description
+					td
+						ul
+							- if category.subcategories.empty?
+								| No subcategories found
+							- category.subcategories.each do |subcategory|
+								li
+									= subcategory.name
+									= " - #{subcategory.description}" if subcategory.description
+									- if view_access_control('categories','update')
+										= link_to "Edit", edit_category_path(subcategory)
+									- if view_access_control('categories','destroy')
+										| -
+										= link_to "Delete", category_path(subcategory), method: :delete
+					td
+						- if view_access_control('subcategories','create')
+							= link_to "Add Subcategory", new_category_path(parent_id: category.id)
+						- if view_access_control('categories','update')
+							| -
+							= link_to "Edit", edit_category_path(category)
+						- if view_access_control('categories','destroy')
+							| -
+							= link_to "Delete", category_path(category), method: :delete
+
+.reveal-modal.small#create_category data-reveal="true" aria-labelledby="CreateCategory" aria-hidden="true" role="dialog"
+	h6.modal-header#create_category style="font-weight:700;text-transform:uppercase"
+		| Create Category
+	.top-15
+		= form_for @category do |f|
+			.row
+				.large-12.columns
+					= f.label :name
+					= f.text_field :name
+			.row
+				.large-12.columns
+					= f.label :description
+					= f.text_field :description
+			.row
+				.large-6.columns
+					= f.label :is_active
+					= f.check_box :is_active
+				- unless params[:parent_id]
+					.large-6.columns
+						= f.label :track_as_sales
+						= f.check_box :track_as_sales
+					= f.hidden_field :parent_id, value: params[:parent_id]
+			.row
+				.top-15
+					.large-12.columns
+						span.inline.float-right
+							= f.submit "Create", class: "button tiny"
+							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
+
+	a.close-reveal-modal.close-x-btn aria-label="Close"
+		| &times;

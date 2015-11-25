@@ -17,11 +17,21 @@
 			<div class="content-wrapper">
 				<%= render "partials/flash" if flash %>
 				<%= yield %>
-			</div>
+			</div>	
 		</main>
 	<% else %>
 		<%= render "partials/flash" if flash %>
 		<%= yield %>
 	<% end %>
+
+	<script>
+		$(document).foundation();
+		$(document).ready(function(){
+			recordLength = $('tbody').children().length;
+			if(recordLength == 0){
+				$('table').replaceWith("<h5>No records found</h5>");
+			}
+		});
+	</script>
 </body>
 </html>

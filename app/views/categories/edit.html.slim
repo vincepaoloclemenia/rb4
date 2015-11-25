@@ -1,0 +1,25 @@
+h1 Edit Category
+= form_for @category do |f|
+	p
+		= f.label :name
+		| &nbsp;
+		= f.text_field :name
+	p
+		= f.label :descrpition
+		| &nbsp;
+		= f.text_field :description
+	p
+		= f.label :is_active
+		| &nbsp;
+		= f.check_box :is_active
+	- unless @category.parent
+		p
+			= f.label :track_as_sales
+			| &nbsp;
+			= f.check_box :track_as_sales
+	= f.hidden_field :parent_id
+
+	p
+		= link_to "Back", categories_path
+		| -
+		= f.submit "Save"

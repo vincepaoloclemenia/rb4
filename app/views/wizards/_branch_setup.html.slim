@@ -1,5 +1,5 @@
 #branch-setup-form
-	h1 Branch Setup
+	h2 Branch Setup
 	- @brand = current_user.client.brands.first if current_user.client.brands.present?
 	- if @brand.branches.empty? ||  @brand.nil?
 		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
