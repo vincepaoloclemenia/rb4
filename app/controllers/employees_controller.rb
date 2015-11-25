@@ -26,6 +26,12 @@ class EmployeesController < ApplicationController
   end
 
   def update
+    if @employee.update(employee_params)
+      redirect_to employees_path(), notice: 'Edit Successful'
+    else
+      flash[:alert] = @employee.errors.full_messages.join(', ')
+      render 'edit'
+    end
   end
 
   private
@@ -34,6 +40,6 @@ class EmployeesController < ApplicationController
     end
 
     def employee_params
-      params.require(:employee).permit(:name, :date_employed, :contact_no, :sss, :tin, :hdmf, :philhealth, :type)
+      params.require(:employee).permit(:branch_id, :first_name, :last_name, :address, :birthdate, :age, :contact_no, :position, :employee_type_id, :position_type, :date_employed, :end_date, :tin, :sss, :hdmf, :philhealth)
     end
 end

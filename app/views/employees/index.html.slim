@@ -1,5 +1,5 @@
 h1 Employees
-= link_to "Add Employee", new_employee_path()
+= link_to "Add Employee", new_employee_path(), class: 'small button'
 table
 	thead
 		tr
@@ -17,7 +17,7 @@ table
 		- @employees.each do |employee|
 			tr
 				td = employee.full_name
-				td
+				td = employee.branch.name
 				td = employee.date_employed
 				td = employee.contact_no
 				td = employee.sss
@@ -27,5 +27,6 @@ table
 				td = employee.employee_type_id
 				td
 					= link_to "edit", edit_employee_path(employee)
+					| &nbsp;
 					= link_to "delete", employee_path(employee), method: :delete
-
+					| &nbsp;

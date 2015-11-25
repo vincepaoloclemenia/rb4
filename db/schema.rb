@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20151123050013) do
-=======
 ActiveRecord::Schema.define(version: 20151124054151) do
->>>>>>> master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,16 +62,6 @@ ActiveRecord::Schema.define(version: 20151124054151) do
     t.integer  "brand_id"
     t.string   "name"
     t.string   "description"
-<<<<<<< HEAD
-    t.boolean  "is_active"
-    t.boolean  "track_as_sales"
-    t.integer  "parent_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
-  add_index "categories", ["brand_id"], name: "index_categories_on_brand_id", using: :btree
-=======
     t.boolean  "is_active",      default: true
     t.boolean  "track_as_sales"
     t.boolean  "is_deleted",     default: false
@@ -86,7 +72,6 @@ ActiveRecord::Schema.define(version: 20151124054151) do
 
   add_index "categories", ["brand_id"], name: "index_categories_on_brand_id", using: :btree
   add_index "categories", ["parent_id"], name: "index_categories_on_parent_id", using: :btree
->>>>>>> master
 
   create_table "client_user_accesses", force: :cascade do |t|
     t.integer  "user_id"
