@@ -1,0 +1,62 @@
+.small-4
+	= form_for @employee do |f|
+		p Branch
+		= f.select :branch_id, current_brand.branches.order(:name).pluck(:name, :id), {include_blank: true}
+		
+		p First Name
+		= f.text_field :first_name
+		
+		p Last Name
+		= f.text_field :last_name
+		
+		p Address
+		= f.text_field :address
+
+		p Date of Birth
+		= f.text_field :birthdate
+
+		p Age
+		= f.number_field :age
+		
+		p Contact No
+		= f.number_field :contact_no
+
+		p Position
+		= f.text_field :position
+
+		p Employee Type
+		= f.text_field :employee_type_id
+
+		p Position Type
+		= f.select :position, ["Contractual", "Regular"], {include_blank: true}, id: "position_type"
+
+		p Date Employed
+		= f.text_field :date_employed
+
+		#end_date_field
+			p End Date
+			= f.text_field :end_date
+
+		p Tin
+		= f.text_field :tin
+
+		p SSS
+		= f.text_field :sss
+
+		p HDMF
+		= f.text_field :hdmf
+
+		p Philhealth
+		= f.text_field :philhealth
+
+		= f.submit "Save", class: 'button'
+
+javascript:
+	$(document).change(function(){
+     if($('#position_type').val() == "Regular"){
+        $("#end_date_field").hide();
+     }
+     else{
+        $("#end_date_field").show();
+     }
+  });

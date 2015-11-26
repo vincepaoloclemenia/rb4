@@ -108,6 +108,39 @@ ActiveRecord::Schema.define(version: 20151124075440) do
     t.datetime "updated_at",                      null: false
   end
 
+  create_table "employee_types", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "dividend_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.integer  "employee_type_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.date     "date_employed"
+    t.integer  "job_id"
+    t.date     "birthdate"
+    t.string   "contact_no"
+    t.string   "sss"
+    t.string   "tin"
+    t.text     "address"
+    t.string   "hdmf"
+    t.integer  "age"
+    t.string   "philhealth"
+    t.string   "position"
+    t.string   "position_type"
+    t.date     "end_date"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "employees", ["branch_id"], name: "index_employees_on_branch_id", using: :btree
+  add_index "employees", ["employee_type_id"], name: "index_employees_on_employee_type_id", using: :btree
+
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
     t.integer  "section_id"
@@ -268,6 +301,8 @@ ActiveRecord::Schema.define(version: 20151124075440) do
   add_foreign_key "client_user_accesses", "clients"
   add_foreign_key "client_user_accesses", "roles"
   add_foreign_key "client_user_accesses", "users"
+  add_foreign_key "employees", "branches"
+  add_foreign_key "employees", "employee_types"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
