@@ -1,0 +1,107 @@
+.large-12.columns
+	h3.page-header Sales
+.large-12.columns
+	= form_for @sale do |f|
+		.panel.radius
+			h6.panel-header Details
+		.panel.white style="margin-top:-21px"
+			ul.small-block-grid-1.medium-block-grid-3.large-block-grid-3
+				li
+					= f.label :branch_id, "Branch"
+					= f.select :branch_id, current_brand.branches.pluck(:name, :id)
+				li
+					= f.label :sale_date, "Date"
+					= f.text_field :sale_date, id: "sale_date_datepicker", readonly: true, placeholder: "mm/dd/yyyy"
+				li
+					= f.label :shift_id, "Shift"
+					= f.select :shift_id, current_brand.shifts.pluck(:name, :id)
+
+		.panel.radius
+			h6.panel-header Statistics
+		.panel.white style="margin-top:-21px"
+			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
+				li
+					= f.label :customer_count
+					= f.number_field :customer_count, placeholder: "#"
+				li
+					= f.label :transaction_count
+					= f.number_field :transaction_count, placeholder: "#"
+				li
+					= f.label :delivery_transaction_count
+					= f.number_field :delivery_transaction_count, placeholder: "#"
+				li
+					= f.label :credit_card_transaction_count
+					= f.number_field :credit_card_transaction_count, placeholder: "#"
+				li
+					= f.label :first_time_guest
+					= f.number_field :first_time_guest, placeholder: "#"
+				li
+					= f.label :repeat_guest
+					= f.number_field :repeat_guest, placeholder: "#"
+
+		.panel.radius
+			h6.panel-header None Sales Miscellaneous
+		.panel.white style="margin-top:-21px"
+			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
+				li
+					= f.label :vat
+					= f.number_field :vat, placeholder: "#"
+				li
+					= f.label :service_charge
+					= f.number_field :service_charge, placeholder: "#"
+
+		.panel.radius
+			h6.panel-header Sales by Settlements
+		.panel.white style="margin-top:-21px"
+			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
+				li
+					= f.label :credit_card_sales
+					= f.number_field :credit_card_sales, placeholder: "#"
+				li
+					= f.label :cash_in_drawer
+					= f.number_field :cash_in_drawer, placeholder: "#"
+				li
+					= f.label :gc_redeemed
+					= f.number_field :gc_redeemed, placeholder: "#"
+				li
+					= f.label :delivery_sales
+					= f.number_field :delivery_sales, placeholder: "#"
+			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-6
+				- @settlements.each do |settlement|
+					= f.fields_for :sale_by_settlement_entries do |sbse|
+						= sbse.hidden_field :settlement_id, value: settlement.id
+						li
+							= sbse.label :amount, "#{settlement.name}"
+							= sbse.number_field :amount, placeholder: "#"
+
+		.panel.radius
+			h6.panel-header Cash for Deposit
+		.panel.white style="margin-top:-21px"
+			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
+				li
+					= f.label :gc_sales
+					= f.number_field :gc_sales, placeholder: "#"
+				li
+					= f.label :other_income
+					= f.number_field :other_income, placeholder: "#"
+
+		.panel.radius
+			h6.panel-header Sales by Category
+		.panel.white style="margin-top:-21px"
+			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
+				- @categories.each do |category|
+					= f.fields_for :sale_by_category_entries do |sbce|
+						= sbce.hidden_field :category_id, value: category.id
+						li
+							= sbce.label :amount, "#{category.name}"
+							= sbce.number_field :amount, placeholder: "#"
+
+		.top-15
+			.large-12.columns
+				span.inline.float-right.right-neg-16
+					= f.submit "Save", class: "button expand width-160"
+
+javascript:
+	$(document).ready(function (){
+		$("#sale_date_datepicker").fdatepicker();
+	});	

@@ -3,4 +3,6 @@ class Settlement < ActiveRecord::Base
 
 	validates :name, length: { maximum: 50 }
 	validates :name, :client_id, presence: true
+
+	scope :saleable, -> { where(is_active: true) }
 end

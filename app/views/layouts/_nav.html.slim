@@ -26,8 +26,9 @@ nav.cd-side-nav
 			ul.menu-child-link
 				li
 					= link_to "Purchases", '#0'
-				li
-					= link_to "Sales", '#0'
+				- if view_access_control("sales","show")
+					li
+						= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s" }
 				li
 					= link_to "Inventories", '#0'
 		li.has-children.reports
@@ -49,8 +50,9 @@ nav.cd-side-nav
 		li.has-children.sales
 			= link_to "Sales Report", '#0'
 			ul.menu-child-link
-				li
-					= link_to "Daily Sales Reports", '#0'
+				- if view_access_control("sales","show")
+					li
+						= link_to "Daily Sales Reports", sales_path, data: { keybinding: "s a l e s" }
 				li
 					= link_to "POS Reports", '#0'
 		li.has-children.reports

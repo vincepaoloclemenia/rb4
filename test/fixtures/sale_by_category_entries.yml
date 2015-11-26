@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sale_id: 
+  category_id: 
+  amount: 9.99
+  date_created: 2015-11-24 15:37:33
+  client_id: 1
+  brand_id: 1
+  branch_id: 1
+  subcategory_category_id: 1
+  subcategory_id: 1
+
+two:
+  sale_id: 
+  category_id: 
+  amount: 9.99
+  date_created: 2015-11-24 15:37:33
+  client_id: 1
+  brand_id: 1
+  branch_id: 1
+  subcategory_category_id: 1
+  subcategory_id: 1

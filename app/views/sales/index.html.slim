@@ -1,0 +1,26 @@
+.large-12.columns
+	h3.page-header Sales
+.large-12.columns
+	table.responsive.large-12
+		thead
+			tr.bg-fff
+				th Date
+				th Branch
+				th Net Sales
+				th VAT
+				th Settlement Type Sales
+				th Cash for deposits
+				th Action
+		tbody
+			- @sales.each do |sale|
+				tr
+					td = sale.sale_date.strftime("%b %d %Y")
+					td = sale.branch.name
+					td = to_peso(sale.net_sales)
+					td = to_peso(sale.vat)
+					td = to_peso(sale.total_settlement_sales)
+					td = to_peso(sale.cash_in_drawer)
+					td
+						= link_to "Show", sale_path(sale)
+						- if view_access_control("sales","destroy")
+							= link_to "Delete", sale_path(sale), method: :delete

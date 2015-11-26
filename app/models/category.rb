@@ -9,4 +9,5 @@ class Category < ActiveRecord::Base
   validates :description,    length: { maximum: 250 }
 
   scope :main, -> { where(parent_id: nil) }
+  scope :saleable, -> { where(is_active: true, track_as_sales: true) }
 end

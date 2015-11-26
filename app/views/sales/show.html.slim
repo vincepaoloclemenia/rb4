@@ -1,0 +1,107 @@
+.large-12.columns
+	h3.page-header Sales
+.large-12.columns
+	fieldset
+		legend Sales Information
+		.large-4.columns
+			| Brand: 
+			= @sale.branch.brand.name
+		.large-4.columns
+			| Branch: 
+			= @sale.branch.name
+		.large-4.columns
+			| Sale Date: 
+			= @sale.sale_date.strftime("%b %d %Y")
+
+	fieldset
+		legend Daily Sales Report
+		table.responsive.large-12
+			thead
+				tr.bg-fff
+					th 
+					th width="25%" Amount(PhP)
+					th width="25%" Percentage
+			tbody
+				tr style="background-color: #6f6f6f"
+					td colspan="3" Sales by Category
+				- @sale.sale_by_category_entries.each do |sbce|		
+					tr
+						td = sbce.category.name
+						td = to_peso(sbce.amount)
+						td = number_to_percentage(sbce.amount.to_f / @sale.net_sales.to_f * 100.0, precision: 2)
+				tr
+					td Net Sales
+					td = to_peso(@sale.net_sales)
+					td 100%
+				tr
+					td VAT
+					td = to_peso(@sale.vat)
+					- vat_percentage = ((@sale.vat / (@sale.net_sales + @sale.vat + @sale.service_charge)) * 100.0)
+					td = number_to_percentage(vat_percentage, precision: 2)
+				tr
+					td Service Charge
+					td = to_peso(@sale.service_charge)
+					- service_charge_percentage = ((@sale.service_charge / (@sale.net_sales + @sale.vat + @sale.service_charge)) * 100.0)
+					td = number_to_percentage(service_charge_percentage, precision: 2)
+				tr
+					td
+						strong
+							| TOTAL REVENUES
+					td = to_peso((@sale.net_sales + @sale.vat + @sale.service_charge))
+					- total_revenues = vat_percentage + service_charge_percentage
+					td = number_to_percentage(total_revenues, precision: 2)
+				tr style="background-color: #6f6f6f"
+					td colspan="3" Sales by Settlement Type
+				- @sale.sale_by_settlement_entries.each do |sbse|
+					tr
+						td = sbse.settlement.name
+						td = to_peso(sbse.amount)
+						td = number_to_percentage(sbse.amount.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+				tr
+					td Credit Card Sales
+					td = to_peso(@sale.credit_card_sales)
+					td = number_to_percentage(@sale.credit_card_sales.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+				tr
+					td Cash in Drawer
+					td = to_peso(@sale.cash_in_drawer)
+					td = number_to_percentage(@sale.cash_in_drawer.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+				tr
+					td GC Redeemed
+					td = to_peso(@sale.gc_redeemed)
+					td = number_to_percentage(@sale.gc_redeemed.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+				tr
+					td Delivery Sales
+					td = to_peso(@sale.delivery_sales)
+					td = number_to_percentage(@sale.delivery_sales.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+				tr
+					td
+						strong
+							| TOTAL
+					td = to_peso(@sale.total_sales_by_settlement_type)
+					td 100%
+				tr style="background-color: #6f6f6f"
+					td colspan="3" Statistics
+				tr
+					td colspan="2" Customer Count
+					td = @sale.customer_count
+				tr
+					td colspan="2" Per Person Average
+					td = to_peso(@sale.sale_per_person_average(@sale.customer_count).to_f)
+				tr
+					td colspan="2" Transaction Count
+					td = @sale.transaction_count
+				tr
+					td colspan="2" Per Transaction Average
+					td = to_peso(@sale.sale_per_person_average(@sale.transaction_count).to_f)
+				tr
+					td colspan="2" Delivery Transaction Count
+					td = @sale.delivery_transaction_count
+				tr
+					td colspan="2" Per Delivery Transaction Average
+					td = to_peso(@sale.sale_per_person_average(@sale.delivery_transaction_count).to_f)
+				tr
+					td colspan="2" Credit Card Count
+					td = @sale.credit_card_transaction_count
+				tr
+					td colspan="2" Per Credit Card Transaction Average
+					td = to_peso(@sale.sale_per_person_average(@sale.credit_card_transaction_count).to_f)
