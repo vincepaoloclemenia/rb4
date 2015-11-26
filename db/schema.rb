@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124054151) do
+ActiveRecord::Schema.define(version: 20151124075440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,6 +135,65 @@ ActiveRecord::Schema.define(version: 20151124054151) do
 
   add_index "roles", ["client_id"], name: "index_roles_on_client_id", using: :btree
 
+  create_table "sale_by_category_entries", force: :cascade do |t|
+    t.integer  "sale_id"
+    t.integer  "category_id"
+    t.decimal  "amount",                  precision: 16, scale: 2, default: 0.0
+    t.datetime "date_created"
+    t.integer  "client_id"
+    t.integer  "brand_id"
+    t.integer  "branch_id"
+    t.integer  "subcategory_category_id"
+    t.integer  "subcategory_id"
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
+  end
+
+  add_index "sale_by_category_entries", ["category_id"], name: "index_sale_by_category_entries_on_category_id", using: :btree
+  add_index "sale_by_category_entries", ["sale_id"], name: "index_sale_by_category_entries_on_sale_id", using: :btree
+
+  create_table "sale_by_settlement_entries", force: :cascade do |t|
+    t.integer  "settlement_id"
+    t.integer  "sale_id"
+    t.integer  "brand_id"
+    t.integer  "branch_id"
+    t.date     "date_created"
+    t.integer  "client_id"
+    t.decimal  "amount"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "sale_by_settlement_entries", ["sale_id"], name: "index_sale_by_settlement_entries_on_sale_id", using: :btree
+  add_index "sale_by_settlement_entries", ["settlement_id"], name: "index_sale_by_settlement_entries_on_settlement_id", using: :btree
+
+  create_table "sales", force: :cascade do |t|
+    t.integer  "customer_count"
+    t.integer  "transaction_count"
+    t.integer  "branch_id"
+    t.integer  "created_by_id"
+    t.integer  "first_time_guest"
+    t.integer  "repeat_guest"
+    t.integer  "brand_id"
+    t.integer  "delivery_transaction_count"
+    t.integer  "credit_card_transaction_count"
+    t.integer  "client_id"
+    t.date     "sale_date"
+    t.integer  "delivery_sales"
+    t.integer  "credit_card_sales"
+    t.integer  "service_charge"
+    t.integer  "gc_redeemed"
+    t.integer  "cash_in_drawer"
+    t.integer  "gc_sales"
+    t.integer  "other_income"
+    t.integer  "vat"
+    t.integer  "shift_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "sales", ["branch_id"], name: "index_sales_on_branch_id", using: :btree
+
   create_table "sections", force: :cascade do |t|
     t.string   "page"
     t.datetime "created_at", null: false
@@ -213,6 +272,11 @@ ActiveRecord::Schema.define(version: 20151124054151) do
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
   add_foreign_key "roles", "clients"
+  add_foreign_key "sale_by_category_entries", "categories"
+  add_foreign_key "sale_by_category_entries", "sales"
+  add_foreign_key "sale_by_settlement_entries", "sales"
+  add_foreign_key "sale_by_settlement_entries", "settlements"
+  add_foreign_key "sales", "branches"
   add_foreign_key "settlements", "clients"
   add_foreign_key "shifts", "brands"
 end

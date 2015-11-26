@@ -16,5 +16,6 @@
 //= require jquery.menu-aim
 //= require mousetrap
 //=	require foundation.min
+//= require foundation-datepicker.min
 //= require main
 //= require_tree .

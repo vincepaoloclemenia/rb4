@@ -9,6 +9,8 @@
 				th Name
 				th Description
 				th Subcategories
+				th Track as sales
+				th Status
 				th width="120" Actions
 		tbody
 			- @categories.each do |category|
@@ -30,6 +32,10 @@
 									- if view_access_control('categories','destroy')
 										| -
 										= link_to "Delete", category_path(subcategory), method: :delete
+					td
+						= category.track_as_sales ? "Yes" : "No"
+					td
+						= category.is_active ? "Active" : "Inactive"
 					td
 						- if view_access_control('subcategories','create')
 							= link_to "Add Subcategory", new_category_path(parent_id: category.id)

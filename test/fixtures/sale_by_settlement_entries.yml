@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  settlement_id: 
+  sale_id: 
+  brand_id: 1
+  branch_id: 1
+  date_created: 2015-11-24
+  client_id: 1
+  amount: 9.99
+
+two:
+  settlement_id: 
+  sale_id: 
+  brand_id: 1
+  branch_id: 1
+  date_created: 2015-11-24
+  client_id: 1
+  amount: 9.99

@@ -1,0 +1,45 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer_count: 1
+  transaction_count: 1
+  branch_id: 
+  created_by_id: 1
+  first_time_guest: 1
+  repeat_guest: 1
+  brand_id: 1
+  delivery_transaction_count: 1
+  credit_card_transaction_count: 1
+  client_id: 1
+  sale_date: 2015-11-24
+  delivery_sales: 1
+  credit_card_sales: 1
+  service_charge: 1
+  gc_redeemed: 1
+  cash_in_drawer: 1
+  gc_sales: 1
+  other_income: 1
+  vat: 1
+  shift_id: 1
+
+two:
+  customer_count: 1
+  transaction_count: 1
+  branch_id: 
+  created_by_id: 1
+  first_time_guest: 1
+  repeat_guest: 1
+  brand_id: 1
+  delivery_transaction_count: 1
+  credit_card_transaction_count: 1
+  client_id: 1
+  sale_date: 2015-11-24
+  delivery_sales: 1
+  credit_card_sales: 1
+  service_charge: 1
+  gc_redeemed: 1
+  cash_in_drawer: 1
+  gc_sales: 1
+  other_income: 1
+  vat: 1
+  shift_id: 1
