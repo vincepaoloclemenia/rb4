@@ -1,0 +1,9 @@
+h1 Labor Hours
+= form_for @labor_hour do |f|
+	thead
+		tr
+			th Head
+	tbody
+		tr
+			td head name
+	= link_to_add_association 'Create New', f, :labor_hours_entries, :"data-association-insertion-node" => "#labor_hour_entry tbody", :"data-association-insertion-method" => "append" 

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  
   devise_for :users, controllers: { registrations: "registrations" }
   resources :company_users, controller: "users"
   get 'update_role' => 'pages#update_role'
@@ -14,9 +15,14 @@ Rails.application.routes.draw do
     get 'manage_permissions' => 'permissions#index'
     put 'manage_permissions' => 'permissions#update'
   end
-  resources :employees
+  resources :employees do
+    get 'labor_hours_list' => 'employees#labor_hours_list'
+    get 'labor_hours' => 'employees#labor_hours'
+  end
+  resources :labor_hours
   resources :settlements
   resources :categories
+  resources :labor_hours_entries
   resources :shifts, only: [:index,:create,:update,:destroy]
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124054151) do
+ActiveRecord::Schema.define(version: 20151125055110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,30 @@ ActiveRecord::Schema.define(version: 20151124054151) do
   add_index "employees", ["branch_id"], name: "index_employees_on_branch_id", using: :btree
   add_index "employees", ["employee_type_id"], name: "index_employees_on_employee_type_id", using: :btree
 
+  create_table "labor_hours", force: :cascade do |t|
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "labor_hours", ["employee_id"], name: "index_labor_hours_on_employee_id", using: :btree
+
+  create_table "labor_hours_entries", force: :cascade do |t|
+    t.integer  "labor_hour_id"
+    t.date     "working_date"
+    t.integer  "branch_id"
+    t.decimal  "regular"
+    t.decimal  "overtime"
+    t.decimal  "night_differential"
+    t.decimal  "legal_holiday"
+    t.decimal  "special_holiday"
+    t.decimal  "absent"
+    t.decimal  "late"
+    t.decimal  "rest_day"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
     t.integer  "section_id"
@@ -244,6 +268,7 @@ ActiveRecord::Schema.define(version: 20151124054151) do
   add_foreign_key "client_user_accesses", "users"
   add_foreign_key "employees", "branches"
   add_foreign_key "employees", "employee_types"
+  add_foreign_key "labor_hours", "employees"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"

@@ -18,3 +18,4 @@
 //=	require foundation.min
 //= require main
 //= require_tree .
+//= require cocoon
