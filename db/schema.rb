@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124075440) do
+ActiveRecord::Schema.define(version: 20151127010348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -256,6 +256,20 @@ ActiveRecord::Schema.define(version: 20151124075440) do
 
   add_index "shifts", ["brand_id"], name: "index_shifts_on_brand_id", using: :btree
 
+  create_table "units", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.string   "name"
+    t.string   "symbol"
+    t.string   "remarks"
+    t.boolean  "is_active",      default: true
+    t.boolean  "track_as_sales"
+    t.boolean  "is_deleted",     default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "units", ["brand_id"], name: "index_units_on_brand_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -314,4 +328,5 @@ ActiveRecord::Schema.define(version: 20151124075440) do
   add_foreign_key "sales", "branches"
   add_foreign_key "settlements", "clients"
   add_foreign_key "shifts", "brands"
+  add_foreign_key "units", "brands"
 end

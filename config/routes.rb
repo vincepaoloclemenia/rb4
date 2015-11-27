@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :categories
   resources :shifts, only: [:index,:create,:update,:destroy]
   resources :sales
+  resources :units
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

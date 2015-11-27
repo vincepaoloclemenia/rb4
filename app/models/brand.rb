@@ -6,6 +6,7 @@ class Brand < ActiveRecord::Base
   has_many :categories
   has_many :shifts
   has_many :sales, through: :branches
+  has_many :units
 
 	validates :name,
 						presence: true,
