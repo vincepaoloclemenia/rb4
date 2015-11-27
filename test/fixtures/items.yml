@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  brand_id: 
+  unit_id: 
+  category_id: 
+  name: MyString
+  item_type: MyString
+  is_active: false
+  track_as_sales: false
+  is_deleted: false
+  item_value: 9.99
+  item_code: MyString
+
+two:
+  brand_id: 
+  unit_id: 
+  category_id: 
+  name: MyString
+  item_type: MyString
+  is_active: false
+  track_as_sales: false
+  is_deleted: false
+  item_value: 9.99
+  item_code: MyString

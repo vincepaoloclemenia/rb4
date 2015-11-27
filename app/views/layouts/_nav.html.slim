@@ -117,13 +117,15 @@ nav.cd-side-nav
 		li.has-children.setup
 			= link_to "Purchase Setup", '#0'
 			ul.menu-child-link
-				li
-					= link_to "Units", '#0'
+				- if view_access_control('units','show')
+					li
+						= link_to "Units", units_path, data: { keybinding: "u n i t s" }
 				- if view_access_control('categories','show')
 					li
 						= link_to "Categories", categories_path, data: { keybinding: "c a t" }
-				li
-					= link_to "Items", '#0'
+				- if view_access_control('items','show')
+					li
+						= link_to "Items", items_path, data: { keybinding: "i t e m s" }
 				li
 					= link_to "Conversions", '#0'
 				li

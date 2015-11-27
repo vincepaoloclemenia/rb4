@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151125055110) do
+ActiveRecord::Schema.define(version: 20151127015407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,25 @@ ActiveRecord::Schema.define(version: 20151125055110) do
     t.datetime "updated_at",         null: false
   end
 
+  create_table "items", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.integer  "unit_id"
+    t.integer  "category_id"
+    t.string   "name"
+    t.string   "item_type"
+    t.boolean  "is_active",      default: true
+    t.boolean  "track_as_sales"
+    t.boolean  "is_deleted",     default: false
+    t.decimal  "item_value"
+    t.string   "item_code"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "items", ["brand_id"], name: "index_items_on_brand_id", using: :btree
+  add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
+  add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
+
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
     t.integer  "section_id"
@@ -280,6 +299,20 @@ ActiveRecord::Schema.define(version: 20151125055110) do
 
   add_index "shifts", ["brand_id"], name: "index_shifts_on_brand_id", using: :btree
 
+  create_table "units", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.string   "name"
+    t.string   "symbol"
+    t.string   "remarks"
+    t.boolean  "is_active",      default: true
+    t.boolean  "track_as_sales"
+    t.boolean  "is_deleted",     default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "units", ["brand_id"], name: "index_units_on_brand_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -328,6 +361,9 @@ ActiveRecord::Schema.define(version: 20151125055110) do
   add_foreign_key "employees", "branches"
   add_foreign_key "employees", "employee_types"
   add_foreign_key "labor_hours", "employees"
+  add_foreign_key "items", "brands"
+  add_foreign_key "items", "categories"
+  add_foreign_key "items", "units"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
@@ -339,4 +375,5 @@ ActiveRecord::Schema.define(version: 20151125055110) do
   add_foreign_key "sales", "branches"
   add_foreign_key "settlements", "clients"
   add_foreign_key "shifts", "brands"
+  add_foreign_key "units", "brands"
 end

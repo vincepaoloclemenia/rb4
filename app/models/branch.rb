@@ -1,7 +1,7 @@
 class Branch < ActiveRecord::Base
   belongs_to :brand
-  has_many :employees
   has_many :sales
+  has_many :employees
 
 	validates :name,
 						presence: true,
