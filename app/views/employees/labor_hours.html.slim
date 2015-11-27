@@ -1,9 +1,22 @@
 h1 Labor Hours
-= form_for @labor_hour do |f|
-	thead
-		tr
-			th Head
-	tbody
-		tr
-			td head name
-	= link_to_add_association 'Create New', f, :labor_hours_entries, :"data-association-insertion-node" => "#labor_hour_entry tbody", :"data-association-insertion-method" => "append" 
+=  form_for @labor_hour do |f|
+	= f.submit 'Submit'
+	table#labor_entry_fields
+		thead
+			tr
+				th Working Date
+				th Regular
+				th Overtime
+				th Night Differential
+				th Legal Holiday
+				th Special Holiday
+				th Absent
+				th Late
+				th Rest Day
+				th Action
+		tbody
+			tr
+				= f.hidden_field :employee_id, value: params[:employee_id], class: "form-control input-sm"
+				= f.fields_for :labor_hours_entries do |labor|
+					= render 'labor_hours_entry_fields', :f=> labor
+	= link_to_add_association 'Create New', f, :labor_hours_entries, :'data-association-insertion-method' => "append", :"data-association-insertion-node" => "#labor_entry_fields tbody", class: 'button small'

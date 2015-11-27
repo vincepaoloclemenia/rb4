@@ -18,5 +18,5 @@
 //=	require foundation.min
 //= require foundation-datepicker.min
 //= require main
-//= require_tree .
-//= require cocoon
+// = require cocoon
+// = require_tree .

@@ -34,12 +34,6 @@ class EmployeesController < ApplicationController
     end
   end
 
-  def labor_hours_list
-    labor_hour = LaborHour.where(employee_id: params[:employee_id])
-    labor_hours_entries = LaborHoursEntry.all
-    # .where(labor_hours_id: labor_hour.id)
-  end
-
   def labor_hours
     @labor_hour = LaborHour.new
     @labor_hour.labor_hours_entries.build

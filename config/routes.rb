@@ -16,13 +16,13 @@ Rails.application.routes.draw do
     put 'manage_permissions' => 'permissions#update'
   end
   resources :employees do
-    get 'labor_hours_list' => 'employees#labor_hours_list'
     get 'labor_hours' => 'employees#labor_hours'
   end
-  resources :labor_hours
+  resources :labor_hours do
+    get 'work_hours_list' => 'labor_hours#work_hours_list'
+  end
   resources :settlements
   resources :categories
-  resources :labor_hours_entries
   resources :shifts, only: [:index,:create,:update,:destroy]
   resources :sales
   resource :wizard, only: [:show] do

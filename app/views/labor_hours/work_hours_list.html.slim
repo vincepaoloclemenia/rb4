@@ -1,0 +1,26 @@
+h1 Labor Hour
+table 
+	thead
+		tr
+			th Working Date
+			th Regular
+			th Overtime
+			th Night Differential
+			th Legal Holiday
+			th Special Holiday
+			th Absent
+			th Late
+			th Rest Day
+	tbody
+		- @labor_hours.each do |labor_hour|
+			- @labor_work = LaborHoursEntry.find_by_labor_hour_id(labor_hour.id)
+			tr
+				th = @labor_work.working_date
+				th = @labor_work.regular.to_i
+				th = @labor_work.overtime.to_i
+				th = @labor_work.night_differential.to_i
+				th = @labor_work.legal_holiday.to_i
+				th = @labor_work.special_holiday.to_i
+				th = @labor_work.absent.to_i
+				th = @labor_work.late.to_i
+				th = @labor_work.rest_day.to_i
