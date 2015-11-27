@@ -28,7 +28,7 @@
 						- if view_access_control("units", "destroy")
 							| - 
 							= link_to "Delete", unit_path(unit), method: :delete
-				.reveal-modal.small id="update_unit_#{unit.id}" data-reveal="true" aria-labelledby="CreateUnit" aria-hidden="true" role="dialog"
+				.reveal-modal.small id="update_unit_#{unit.id}" data-reveal="true" aria-labelledby="UpdateUnit" aria-hidden="true" role="dialog"
 					h6.modal-header id="update_unit_#{unit.id}" style="font-weight:700;text-transform:uppercase"
 						| Edit Unit
 					.top-15

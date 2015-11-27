@@ -1,0 +1,152 @@
+.large-12.columns
+	h2.page-header Items
+.large-12.columns
+	- if view_access_control "items", "create"
+		.large-12.columns
+			span.inline.float-right
+				= link_to "Create item", '#', data: { "reveal-id" => "create_item", "reveal" => true }, class: "button tiny width-160 bottom-10"
+.large-12.columns
+	table.responsive.large-12
+		thead
+			tr
+				th Category
+				th Name
+				th Unit
+				th Type
+				th Action
+		tbody
+			- @items.each do |item|
+				tr
+					td = item.category.name
+					td = item.name
+					td = item.unit.name
+					td = item.item_type
+					td
+						- if view_access_control("items", "update")
+							= link_to "Edit", '#', data: { "reveal-id" => "update_item_#{item.id}", "reveal" => true }
+						- if view_access_control("items", "destroy")
+							| - 
+							= link_to "Delete", item_path(item), method: :delete
+				.reveal-modal.small id="update_item_#{item.id}" data-reveal="true" aria-labelledby="UpdateItem" aria-hidden="true" role="dialog"
+					h6.modal-header id="update_item_#{item.id}" style="font-weight:700;text-transform:uppercase"
+						| Edit item
+					.top-15
+						= form_for item do |f|
+							.row
+								.large-12.columns
+									= f.label :category_id, "Category"
+									= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name
+							.row
+								.large-12.columns
+									= f.label :unit_id, "Unit"
+									= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id)
+							.row
+								.large-12.columns
+									= f.label :name
+									= f.text_field :name
+							.row
+								.large-12.columns
+									= f.label :item_type
+									= f.select :item_type, @item_types
+							.unit_cost_div
+								.row
+									.large-12.columns
+										= f.label :item_value
+										= f.text_field :item_value
+							.row
+								.large-12.columns
+									= f.label :item_code
+									= f.text_field :item_code
+							.row
+								.large-6.columns
+									= f.label :is_active
+									= f.check_box :is_active
+								.large-6.columns
+									= f.label :track_as_sales
+									= f.check_box :track_as_sales
+							.row
+								.top-15
+									.large-12.columns
+										span.inline.float-right
+											= f.submit "Create", class: "button tiny"
+											= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
+
+					a.close-reveal-modal.close-x-btn aria-label="Close"
+						| &times;
+
+.reveal-modal.small#create_item data-reveal="true" aria-labelledby="CreateItem" aria-hidden="true" role="dialog"
+	h6.modal-header#create_item style="font-weight:700;text-transform:uppercase"
+		| Create item
+	.top-15
+		= form_for @item do |f|
+			.row
+				.large-12.columns
+					= f.label :category_id, "Category"
+					= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, html: { class: "item_item_type" }
+			.row
+				.large-12.columns
+					= f.label :unit_id, "Unit"
+					= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id)
+			.row
+				.large-12.columns
+					= f.label :name
+					= f.text_field :name
+			.row
+				.large-12.columns
+					= f.label :item_type
+					= f.select :item_type, @item_types
+			.unit_cost_div
+				.row
+					.large-12.columns
+						= f.label :item_value
+						= f.text_field :item_value
+			.row
+				.large-12.columns
+					= f.label :item_code
+					= f.text_field :item_code
+			.row
+				.large-6.columns
+					= f.label :is_active
+					= f.check_box :is_active
+				.large-6.columns
+					= f.label :track_as_sales
+					= f.check_box :track_as_sales
+			.row
+				.top-15
+					.large-12.columns
+						span.inline.float-right
+							= f.submit "Create", class: "button tiny"
+							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
+
+	a.close-reveal-modal.close-x-btn aria-label="Close"
+		| &times;
+
+javascript:
+	$(document).ready(function () {
+	  $('#item_category_id').children().each(function(){ 
+	    var optgroupChildrenCount = $(this).children().length;
+	    if(optgroupChildrenCount == 0){
+	      $(this).remove();    
+	    }
+	  });
+
+	  $('.unit_cost_div').each(function(){
+		  if($(this).parent().find('#item_item_type').val() == "Prepared"){
+	      $(this).removeClass('hide');
+		  }
+		  else{
+	      $(this).addClass('hide');
+		  }
+		});
+
+		$('select[id=item_item_type]').on("change", function(){
+	    if($(this).val() == "Prepared"){
+	      $(this).parent().parent().parent().find('.unit_cost_div').slideDown();
+	      $(this).parent().parent().parent().find('#item_item_value').val("");
+	    }
+	    else{
+	      $(this).parent().parent().parent().find('.unit_cost_div').slideUp();
+	      $(this).parent().parent().parent().find('#item_item_value').val("");
+	    }
+	  });
+	});

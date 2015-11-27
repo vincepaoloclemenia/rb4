@@ -123,8 +123,9 @@ nav.cd-side-nav
 				- if view_access_control('categories','show')
 					li
 						= link_to "Categories", categories_path, data: { keybinding: "c a t" }
-				li
-					= link_to "Items", '#0'
+				- if view_access_control('items','show')
+					li
+						= link_to "Items", items_path, data: { keybinding: "i t e m s" }
 				li
 					= link_to "Conversions", '#0'
 				li
