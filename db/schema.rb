@@ -141,6 +141,25 @@ ActiveRecord::Schema.define(version: 20151127015407) do
   add_index "employees", ["branch_id"], name: "index_employees_on_branch_id", using: :btree
   add_index "employees", ["employee_type_id"], name: "index_employees_on_employee_type_id", using: :btree
 
+  create_table "items", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.integer  "unit_id"
+    t.integer  "category_id"
+    t.string   "name"
+    t.string   "item_type"
+    t.boolean  "is_active",      default: true
+    t.boolean  "track_as_sales"
+    t.boolean  "is_deleted",     default: false
+    t.decimal  "item_value"
+    t.string   "item_code"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "items", ["brand_id"], name: "index_items_on_brand_id", using: :btree
+  add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
+  add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
+
   create_table "labor_hours", force: :cascade do |t|
     t.integer  "employee_id"
     t.datetime "created_at",  null: false
@@ -164,25 +183,6 @@ ActiveRecord::Schema.define(version: 20151127015407) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
-
-  create_table "items", force: :cascade do |t|
-    t.integer  "brand_id"
-    t.integer  "unit_id"
-    t.integer  "category_id"
-    t.string   "name"
-    t.string   "item_type"
-    t.boolean  "is_active",      default: true
-    t.boolean  "track_as_sales"
-    t.boolean  "is_deleted",     default: false
-    t.decimal  "item_value"
-    t.string   "item_code"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
-  add_index "items", ["brand_id"], name: "index_items_on_brand_id", using: :btree
-  add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
-  add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
 
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
@@ -360,10 +360,10 @@ ActiveRecord::Schema.define(version: 20151127015407) do
   add_foreign_key "client_user_accesses", "users"
   add_foreign_key "employees", "branches"
   add_foreign_key "employees", "employee_types"
-  add_foreign_key "labor_hours", "employees"
   add_foreign_key "items", "brands"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "units"
+  add_foreign_key "labor_hours", "employees"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
