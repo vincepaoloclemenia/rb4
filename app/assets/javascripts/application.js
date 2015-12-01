@@ -17,6 +17,7 @@
 //= require mousetrap
 //=	require foundation.min
 //= require foundation-datepicker.min
+//= require chosen.jquery
 //= require main
 // = require cocoon
 // = require_tree .

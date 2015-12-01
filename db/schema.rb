@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127015407) do
+ActiveRecord::Schema.define(version: 20151127044008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,28 @@ ActiveRecord::Schema.define(version: 20151127015407) do
 
   add_index "employees", ["branch_id"], name: "index_employees_on_branch_id", using: :btree
   add_index "employees", ["employee_type_id"], name: "index_employees_on_employee_type_id", using: :btree
+
+  create_table "inventories", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.integer  "user_id"
+    t.datetime "entry_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "inventories", ["branch_id"], name: "index_inventories_on_branch_id", using: :btree
+  add_index "inventories", ["user_id"], name: "index_inventories_on_user_id", using: :btree
+
+  create_table "inventory_items", force: :cascade do |t|
+    t.integer  "inventory_id"
+    t.integer  "item_id"
+    t.integer  "stock_count"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "inventory_items", ["inventory_id"], name: "index_inventory_items_on_inventory_id", using: :btree
+  add_index "inventory_items", ["item_id"], name: "index_inventory_items_on_item_id", using: :btree
 
   create_table "items", force: :cascade do |t|
     t.integer  "brand_id"
@@ -360,6 +382,10 @@ ActiveRecord::Schema.define(version: 20151127015407) do
   add_foreign_key "client_user_accesses", "users"
   add_foreign_key "employees", "branches"
   add_foreign_key "employees", "employee_types"
+  add_foreign_key "inventories", "branches"
+  add_foreign_key "inventories", "users"
+  add_foreign_key "inventory_items", "inventories"
+  add_foreign_key "inventory_items", "items"
   add_foreign_key "items", "brands"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "units"

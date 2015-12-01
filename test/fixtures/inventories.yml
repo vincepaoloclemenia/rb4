@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  branch_id: 
+  user_id: 
+  entry_date: 2015-11-27 12:39:44
+
+two:
+  branch_id: 
+  user_id: 
+  entry_date: 2015-11-27 12:39:44

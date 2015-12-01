@@ -1,0 +1,37 @@
+.large-12.columns
+	h2.page-header Inventory
+.large-12.columns
+	table.responsive.large-12
+		thead
+			tr
+				th Branch
+				th Creator
+				th Entry Date
+		tbody
+			tr
+				td = @inventory.branch.name
+				td = @inventory.user.full_name
+				td = @inventory.entry_date.strftime("%b %d %Y")
+
+.large-12.columns
+	h3 Inventory Items
+	table.responsive.large-12
+		thead
+			tr
+				th Item Name
+				th Category
+				th Unit
+				th Stock Count
+		tbody
+			- @inventory.inventory_items.each do |ii|
+				tr
+					td = ii.item.name
+					td = ii.item.category.name
+					td = ii.item.unit.name
+					td = ii.stock_count
+
+.large-12.columns
+	span.inline.float-right
+		= link_to "Back", inventories_path, class: "button tiny"
+		- if view_access_control("inventories", "update")
+			= link_to "Edit", edit_inventory_path(@inventory), class: "button tiny success"
