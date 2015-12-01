@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   resources :sales
   resources :units
   resources :items
+  resources :inventories
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'
