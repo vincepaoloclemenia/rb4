@@ -34,6 +34,11 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def labor_hours
+    @labor_hour = LaborHour.new
+    @labor_hour.labor_hours_entries.build
+  end
+
   private
     def set_employee
       @employee = Employee.find(params[:id])

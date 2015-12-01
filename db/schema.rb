@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127015407) do
+ActiveRecord::Schema.define(version: 20151127044008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,28 @@ ActiveRecord::Schema.define(version: 20151127015407) do
   add_index "employees", ["branch_id"], name: "index_employees_on_branch_id", using: :btree
   add_index "employees", ["employee_type_id"], name: "index_employees_on_employee_type_id", using: :btree
 
+  create_table "inventories", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.integer  "user_id"
+    t.datetime "entry_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "inventories", ["branch_id"], name: "index_inventories_on_branch_id", using: :btree
+  add_index "inventories", ["user_id"], name: "index_inventories_on_user_id", using: :btree
+
+  create_table "inventory_items", force: :cascade do |t|
+    t.integer  "inventory_id"
+    t.integer  "item_id"
+    t.integer  "stock_count"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "inventory_items", ["inventory_id"], name: "index_inventory_items_on_inventory_id", using: :btree
+  add_index "inventory_items", ["item_id"], name: "index_inventory_items_on_item_id", using: :btree
+
   create_table "items", force: :cascade do |t|
     t.integer  "brand_id"
     t.integer  "unit_id"
@@ -159,6 +181,30 @@ ActiveRecord::Schema.define(version: 20151127015407) do
   add_index "items", ["brand_id"], name: "index_items_on_brand_id", using: :btree
   add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
   add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
+
+  create_table "labor_hours", force: :cascade do |t|
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "labor_hours", ["employee_id"], name: "index_labor_hours_on_employee_id", using: :btree
+
+  create_table "labor_hours_entries", force: :cascade do |t|
+    t.integer  "labor_hour_id"
+    t.date     "working_date"
+    t.integer  "branch_id"
+    t.decimal  "regular"
+    t.decimal  "overtime"
+    t.decimal  "night_differential"
+    t.decimal  "legal_holiday"
+    t.decimal  "special_holiday"
+    t.decimal  "absent"
+    t.decimal  "late"
+    t.decimal  "rest_day"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
 
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
@@ -336,9 +382,14 @@ ActiveRecord::Schema.define(version: 20151127015407) do
   add_foreign_key "client_user_accesses", "users"
   add_foreign_key "employees", "branches"
   add_foreign_key "employees", "employee_types"
+  add_foreign_key "inventories", "branches"
+  add_foreign_key "inventories", "users"
+  add_foreign_key "inventory_items", "inventories"
+  add_foreign_key "inventory_items", "items"
   add_foreign_key "items", "brands"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "units"
+  add_foreign_key "labor_hours", "employees"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"

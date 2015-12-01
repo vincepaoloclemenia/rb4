@@ -1,0 +1,50 @@
+.large-12.columns
+	h2.page-header New Inventory
+.large-12.columns
+	= form_for @inventory do |f|
+		= f.hidden_field :user_id, value: current_user.id
+		.large-6.columns
+			= f.label :branch_id, "Branch"
+			= f.select :branch_id, current_brand.branches.pluck(:name, :id)
+		.large-6.columns
+			= f.label :entry_date
+			= f.text_field :entry_date, readonly: true, value: "#{f.object.entry_date.strftime("%m/%d/%Y")}"
+		- if current_brand.categories.main.empty?
+			.large-12.columns
+				| No categories yet. Please create one 
+				= link_to "here", categories_path
+		- current_brand.categories.main.each do |category|
+			- unless category.subcategories.empty?
+				.large-12.columns
+					fieldset
+						legend = category.name
+						- category.subcategories.each do |subcategory|
+							- unless subcategory.items.empty?
+								.large-12.columns
+									fieldset
+										legend = subcategory.name
+										table.responsive.large-12
+											thead
+												tr
+													th width="40%" Item name
+													th width="30%" Unit
+													th width="30%" Update Count
+											tbody
+												- subcategory.items.for_inventory.each do |item|
+													tr
+														td = item.name
+														td = item.unit.name
+														td 
+															= f.fields_for :inventory_items do |ii|
+																- if subcategory.items.for_inventory.pluck(:id).include?(ii.object.item_id)
+																	= ii.hidden_field :item_id
+																	= ii.number_field :stock_count
+		.top-15
+		.large-12.columns
+			span.inline.float-right.right-neg-16
+				= link_to "Cancel", inventories_path, class: "button secondary expand width-160"
+				|  
+				= f.submit "Save", class: "button expand width-160"
+
+javascript:
+	$('#inventory_entry_date').fdatepicker();

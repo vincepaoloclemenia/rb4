@@ -26,11 +26,12 @@ nav.cd-side-nav
 			ul.menu-child-link
 				li
 					= link_to "Purchases", '#0'
-				- if view_access_control("sales","show")
+				- if view_access_control('sales','show')
 					li
 						= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s" }
-				li
-					= link_to "Inventories", '#0'
+				- if view_access_control('inventories','show')
+					li
+						= link_to "Inventories", inventories_path, data: { keybinding: "i n v" }
 		li.has-children.reports
 			= link_to "Purchase Reports", '#0'
 			ul.menu-child-link
@@ -44,7 +45,7 @@ nav.cd-side-nav
 			= link_to "Labor Report", '#0'
 			ul.menu-child-link
 				li
-					= link_to "Labor Hours Listing", '#0'
+					= link_to "Labor Hours Listing", labor_hours_path()
 				li
 					= link_to "Man Hours Report", '#0'
 		li.has-children.sales
@@ -98,7 +99,7 @@ nav.cd-side-nav
 				li
 					= link_to "Employee List", employees_path
 				li
-					= link_to "Employee Types", '#0'
+					= link_to "Employee Types", employee_types_path
 		li.has-children.setup
 			= link_to "Sales Setup", '#0'
 			ul.menu-child-link

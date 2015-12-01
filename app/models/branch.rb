@@ -2,6 +2,7 @@ class Branch < ActiveRecord::Base
   belongs_to :brand
   has_many :sales
   has_many :employees
+  has_many :inventories, dependent: :restrict_with_error
 
 	validates :name,
 						presence: true,
