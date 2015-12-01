@@ -14,7 +14,12 @@ Rails.application.routes.draw do
     get 'manage_permissions' => 'permissions#index'
     put 'manage_permissions' => 'permissions#update'
   end
-  resources :employees
+  resources :employees do
+    get 'labor_hours' => 'employees#labor_hours'
+  end
+  resources :labor_hours do
+    get 'work_hours_list' => 'labor_hours#work_hours_list'
+  end
   resources :settlements
   resources :categories
   resources :shifts, only: [:index,:create,:update,:destroy]
@@ -22,6 +27,7 @@ Rails.application.routes.draw do
   resources :units
   resources :items
   resources :inventories
+  resources :employee_types
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

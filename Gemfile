@@ -14,6 +14,7 @@ gem 'devise', '~> 3.4.1'
 gem 'slim-rails'
 gem 'prawn', :git => "https://github.com/prawnpdf/prawn.git"
 gem 'prawn-table'
+gem 'cocoon'
 
 group :development, :test do
   gem 'byebug'

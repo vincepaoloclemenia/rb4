@@ -182,6 +182,30 @@ ActiveRecord::Schema.define(version: 20151127044008) do
   add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
   add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
 
+  create_table "labor_hours", force: :cascade do |t|
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "labor_hours", ["employee_id"], name: "index_labor_hours_on_employee_id", using: :btree
+
+  create_table "labor_hours_entries", force: :cascade do |t|
+    t.integer  "labor_hour_id"
+    t.date     "working_date"
+    t.integer  "branch_id"
+    t.decimal  "regular"
+    t.decimal  "overtime"
+    t.decimal  "night_differential"
+    t.decimal  "legal_holiday"
+    t.decimal  "special_holiday"
+    t.decimal  "absent"
+    t.decimal  "late"
+    t.decimal  "rest_day"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
     t.integer  "section_id"
@@ -365,6 +389,7 @@ ActiveRecord::Schema.define(version: 20151127044008) do
   add_foreign_key "items", "brands"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "units"
+  add_foreign_key "labor_hours", "employees"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"

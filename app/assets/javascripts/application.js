@@ -19,4 +19,5 @@
 //= require foundation-datepicker.min
 //= require chosen.jquery
 //= require main
-//= require_tree .
+// = require cocoon
+// = require_tree .
