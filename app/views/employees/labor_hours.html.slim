@@ -1,6 +1,6 @@
-h1 Labor Hours
+h2 Labor Hours
 =  form_for @labor_hour do |f|
-	= f.submit 'Submit'
+	= f.submit 'Submit', class: 'button tiny success'
 	table#labor_entry_fields
 		thead
 			tr
@@ -19,4 +19,4 @@ h1 Labor Hours
 				= f.hidden_field :employee_id, value: params[:employee_id], class: "form-control input-sm"
 				= f.fields_for :labor_hours_entries do |labor|
 					= render 'labor_hours_entry_fields', :f=> labor
-	= link_to_add_association 'Create New', f, :labor_hours_entries, :'data-association-insertion-method' => "append", :"data-association-insertion-node" => "#labor_entry_fields tbody", class: 'button small'
+	= link_to_add_association 'Create New', f, :labor_hours_entries, :'data-association-insertion-method' => "append", :"data-association-insertion-node" => "#labor_entry_fields tbody", class: 'button tiny'

@@ -25,7 +25,7 @@
 		= f.text_field :position
 
 		p Employee Type
-		= f.text_field :employee_type_id
+		= f.select :employee_type_id, EmployeeType.pluck(:name, :id)
 
 		p Position Type
 		= f.select :position, ["Contractual", "Regular"], {include_blank: true}, id: "position_type"
