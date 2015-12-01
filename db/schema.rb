@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127044008) do
+ActiveRecord::Schema.define(version: 20151201052037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,19 @@ ActiveRecord::Schema.define(version: 20151127044008) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
+
+  create_table "conversions", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.integer  "from_unit_id"
+    t.integer  "to_unit_id"
+    t.decimal  "factor"
+    t.boolean  "is_active",    default: true
+    t.boolean  "is_deleted",   default: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "conversions", ["brand_id"], name: "index_conversions_on_brand_id", using: :btree
 
   create_table "employee_types", force: :cascade do |t|
     t.string   "name"
@@ -380,6 +393,7 @@ ActiveRecord::Schema.define(version: 20151127044008) do
   add_foreign_key "client_user_accesses", "clients"
   add_foreign_key "client_user_accesses", "roles"
   add_foreign_key "client_user_accesses", "users"
+  add_foreign_key "conversions", "brands"
   add_foreign_key "employees", "branches"
   add_foreign_key "employees", "employee_types"
   add_foreign_key "inventories", "branches"

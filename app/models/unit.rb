@@ -1,6 +1,7 @@
 class Unit < ActiveRecord::Base
   belongs_to :brand
   has_many :items
+  has_many :conversions
 
  	scope :not_deleted, -> { where(is_deleted: false) }
 

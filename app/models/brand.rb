@@ -10,6 +10,7 @@ class Brand < ActiveRecord::Base
   has_many :units
   has_many :items
   has_many :inventories, through: :branches, dependent: :restrict_with_error
+  has_many :conversions
 
 	validates :name,
 						presence: true,

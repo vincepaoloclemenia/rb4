@@ -1,0 +1,70 @@
+.large-12.columns
+	h2.page-header Conversions
+- if view_access_control('conversions','create')	
+	.large-12.columns
+		span.inline.float-right
+			= link_to "Create Conversion", '#', data: { "reveal-id" => "create_conversion", "reveal" => true }, class: "button tiny width-160 bottom-10"
+.large-12.columns
+	table.responsive.large-12
+		thead
+			tr.bg-fff
+				th From Unit
+				th To Unit
+				th Factor
+				th Action
+		tbody
+			- @conversions.each do |conversion|
+				tr
+					td = conversion.from.name
+					td = conversion.to.name
+					td = conversion.factor.to_s
+					td
+						- if view_access_control('conversions','update')
+							= link_to "Edit", '#', data: { "reveal_id" => "edit_conversion_#{conversion.id}", "reveal" => true }
+						- if view_access_control('conversions','destroy')
+							= link_to "Delete", conversion_path(conversion), method: :delete, data: { confirm: "Are you sure?" }
+				.reveal-modal.small id="edit_conversion_#{conversion.id}" data-reveal="true" aria-labelledby="EditConversion" aria-hidden="true" role="dialog"
+					h6.modal-header id="edit_conversion_#{conversion.id}" style="font-weight:700;text-transform:uppercase" Edit Conversion
+					.top-15
+						= form_for conversion do |f|
+							.large-12.columns
+								= f.label :from_unit_id, "From"
+								= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
+							.large-12.columns
+								= f.label :to_unit_id, "To"
+								= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
+							.large-12.columns
+								= f.label :factor
+								= f.text_field :factor
+							.large-12.columns
+								= f.label :is_active, "Is active?"
+								= f.check_box :is_active
+
+							.large.12.columns
+								span.inline.float-right
+									= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
+									|  
+									= f.submit "Update", class: "button tiny"
+
+.reveal-modal.small#create_conversion data-reveal="true" aria-labelledby="CreateConversion" aria-hidden="true" role="dialog"
+	h6.modal-header#create_conversion style="font-weight:700;text-transform:uppercase" Create Conversion
+	.top-15
+		= form_for @conversion do |f|
+			.large-12.columns
+				= f.label :from_unit_id, "From"
+				= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
+			.large-12.columns
+				= f.label :to_unit_id, "To"
+				= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
+			.large-12.columns
+				= f.label :factor
+				= f.text_field :factor
+			.large-12.columns
+				= f.label :is_active, "Is active?"
+				= f.check_box :is_active
+
+			.large.12.columns
+				span.inline.float-right
+					= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
+					|  
+					= f.submit "Create", class: "button tiny"
