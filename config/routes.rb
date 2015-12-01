@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  
   devise_for :users, controllers: { registrations: "registrations" }
   resources :company_users, controller: "users"
   get 'update_role' => 'pages#update_role'
@@ -27,6 +26,7 @@ Rails.application.routes.draw do
   resources :sales
   resources :units
   resources :items
+  resources :employee_types
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

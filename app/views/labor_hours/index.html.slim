@@ -1,21 +1,20 @@
 h1 Labor Hours
-.large-12
-	table
-		thead
-			tr
-				th Employee Name
-				th Branch
-				th Date Employed
-				th Contact Number
-				th Actions
-		tbody
-			- @employees.each do |employee|
-				tr 
-					td = employee.full_name
-					td = employee.branch.name
-					td = employee.date_employed
-					td = employee.contact_no
-					td
-						= link_to "work hours", labor_hour_work_hours_list_path(employee)
+table { width = "100%"}
+	thead
+		tr
+			th Employee Name
+			th Branch
+			th Date Employed
+			th Contact Number
+			th Actions
+	tbody
+		- @employees.each do |employee|
+			tr 
+				td = employee.full_name
+				td = employee.branch.name
+				td = employee.date_employed
+				td = employee.contact_no
+				td
+					= link_to "work hours", labor_hour_work_hours_list_path(employee), class: 'button tiny'
 
 			

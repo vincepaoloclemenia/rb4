@@ -6,12 +6,9 @@ class Brand < ActiveRecord::Base
   has_many :categories
   has_many :shifts
   has_many :sales, through: :branches
-<<<<<<< HEAD
   has_many :employees
-=======
   has_many :units
   has_many :items
->>>>>>> master
 
 	validates :name,
 						presence: true,
