@@ -130,8 +130,9 @@ nav.cd-side-nav
 				- if view_access_control('conversions','show')
 					li
 						= link_to "Conversions", conversions_path, data: { keybinding: "c o n v" }
-				li
-					= link_to "Suppliers", '#0'
+				- if view_access_control('suppliers','show')
+					li
+						= link_to "Suppliers", suppliers_path, data: { keybinding: "s u p p" }
 	//ul
 	//	li.cd-label
 	//		| Trial Version

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151201052037) do
+ActiveRecord::Schema.define(version: 20151201072731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -334,6 +334,30 @@ ActiveRecord::Schema.define(version: 20151201052037) do
 
   add_index "shifts", ["brand_id"], name: "index_shifts_on_brand_id", using: :btree
 
+  create_table "suppliers", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.integer  "client_id"
+    t.integer  "branch_id"
+    t.string   "name"
+    t.text     "address"
+    t.string   "email"
+    t.string   "contact_person"
+    t.string   "contact_title"
+    t.string   "tin"
+    t.string   "mobile_no"
+    t.string   "fax_no"
+    t.string   "landline_no"
+    t.boolean  "is_active"
+    t.integer  "assigned_to",    default: 1
+    t.boolean  "is_deleted",     default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "suppliers", ["branch_id"], name: "index_suppliers_on_branch_id", using: :btree
+  add_index "suppliers", ["brand_id"], name: "index_suppliers_on_brand_id", using: :btree
+  add_index "suppliers", ["client_id"], name: "index_suppliers_on_client_id", using: :btree
+
   create_table "units", force: :cascade do |t|
     t.integer  "brand_id"
     t.string   "name"
@@ -415,5 +439,8 @@ ActiveRecord::Schema.define(version: 20151201052037) do
   add_foreign_key "sales", "branches"
   add_foreign_key "settlements", "clients"
   add_foreign_key "shifts", "brands"
+  add_foreign_key "suppliers", "branches"
+  add_foreign_key "suppliers", "brands"
+  add_foreign_key "suppliers", "clients"
   add_foreign_key "units", "brands"
 end

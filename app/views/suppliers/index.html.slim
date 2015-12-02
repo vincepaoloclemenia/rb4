@@ -1,0 +1,163 @@
+.large-12.columns
+	h2.page-header Suppliers
+- if view_access_control('suppliers','create')	
+	.large-12.columns
+		span.inline.float-right
+			= link_to "Create Supplier", '#', data: { "reveal-id" => "create_supplier", "reveal" => true }, class: "button tiny width-160 bottom-10"
+.large-12.columns
+	table.responsive.large-12
+		thead
+			tr.bg-fff
+				th Name
+				th Contact
+				th Mobile #
+				th Action
+		tbody
+			- @suppliers.each do |supplier|
+				tr
+					td = supplier.name
+					td = supplier.contact_person
+					td = supplier.mobile_no
+					td
+						- if view_access_control('suppliers','update')
+							= link_to "Edit", '#', data: { "reveal_id" => "edit_supplier_#{supplier.id}", "reveal" => true }
+						- if view_access_control('suppliers','destroy')
+							= link_to "Delete", supplier_path(supplier), method: :delete, data: { confirm: "Are you sure?" }
+				.reveal-modal.small id="edit_supplier_#{supplier.id}" data-reveal="true" aria-labelledby="EditSupplier" aria-hidden="true" role="dialog"
+					h6.modal-header id="edit_supplier_#{supplier.id}" style="font-weight:700;text-transform:uppercase" Edit Supplier
+					.top-15
+						= form_for supplier, data: { abide: true } do |f|
+							.large-12.columns
+								= f.label :assigned_to, "Assigned to"
+								= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]]
+							.large-12.columns.p_brand_field
+								= f.label :brand_id, "Brand"
+								= f.select :brand_id, current_client.brands.pluck(:name,:id)
+							- branches = supplier.assigned_to.eql?(1) ? [] : supplier.brand.branches.pluck(:name,:id)
+							.large-12.columns.p_branch_field
+								= f.label :branch_id, "Branch"
+								= f.select :branch_id, branches
+							.large-12.columns
+								= f.label :name
+								= f.text_field :name, required: true
+							.large-12.columns
+								= f.label :address
+								= f.text_area :address
+							.large-12.columns
+								= f.label :contact_person
+								= f.text_field :contact_person
+							.large-12.columns
+								= f.label :contact_title
+								= f.text_field :contact_title
+							.large-12.columns
+								= f.label :tin, "TIN"
+								= f.text_field :tin
+							.large-12.columns
+								= f.label :landline_no
+								= f.text_field :landline_no
+							.large-12.columns
+								= f.label :mobile_no
+								= f.text_field :mobile_no
+							.large-12.columns
+								= f.label :fax_no
+								= f.text_field :fax_no
+
+							.large.12.columns
+								span.inline.float-right
+									= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
+									|  
+									= f.submit "Update", class: "button tiny"
+
+.reveal-modal.small#create_supplier data-reveal="true" aria-labelledby="CreateSupplier" aria-hidden="true" role="dialog"
+	h6.modal-header#create_supplier style="font-weight:700;text-transform:uppercase" Create Supplier
+	.top-15
+		= form_for @supplier, data: { abide: true } do |f|
+			.large-12.columns
+				= f.label :assigned_to, "Assigned to"
+				= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]]
+			.large-12.columns.p_brand_field
+				= f.label :brand_id, "Brand"
+				= f.select :brand_id, current_client.brands.pluck(:name,:id), include_blank: true
+			.large-12.columns.p_branch_field
+				= f.label :branch_id, "Branch"
+				= f.select :branch_id, []
+			.large-12.columns
+				= f.label :name
+				= f.text_field :name, required: true
+			.large-12.columns
+				= f.label :address
+				= f.text_area :address
+			.large-12.columns
+				= f.label :contact_person
+				= f.text_field :contact_person
+			.large-12.columns
+				= f.label :contact_title
+				= f.text_field :contact_title
+			.large-12.columns
+				= f.label :tin, "TIN"
+				= f.text_field :tin
+			.large-12.columns
+				= f.label :landline_no
+				= f.text_field :landline_no
+			.large-12.columns
+				= f.label :mobile_no
+				= f.text_field :mobile_no
+			.large-12.columns
+				= f.label :fax_no
+				= f.text_field :fax_no
+
+			.large.12.columns
+				span.inline.float-right
+					= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
+					|  
+					= f.submit "Create", class: "button tiny"
+
+javascript:
+	$(document).ready(function (){
+		$("select#supplier_assigned_to").each(function(){
+			var assignedToValue = $(this).val();	// 1 - Client; 2 - Brand; 3 - Branch;
+			if(assignedToValue == 2){
+				$(this).parent().parent().find(".p_brand_field").show();
+				$(this).parent().parent().find(".p_branch_field").hide();
+			}
+			else if(assignedToValue == 3){
+				$(this).parent().parent().find(".p_brand_field").show();
+				$(this).parent().parent().find(".p_branch_field").show();
+			}
+			else{
+				$(this).parent().parent().find(".p_brand_field").hide();
+				$(this).parent().parent().find(".p_branch_field").hide();
+			}
+		});
+
+		$("select#supplier_assigned_to").on("change", function(){
+			var assignedToValue = $(this).val();	// 1 - Client; 2 - Brand; 3 - Branch;
+			if(assignedToValue == 2){
+				$(this).parent().parent().find(".p_brand_field").slideDown();
+				$(this).parent().parent().find(".p_branch_field").slideUp();
+				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",true);
+				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",false);
+			}
+			else if(assignedToValue == 3){
+				$(this).parent().parent().find(".p_brand_field").slideDown();
+				$(this).parent().parent().find(".p_branch_field").slideDown();
+				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",true);
+				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",true);
+			}
+			else{
+				$(this).parent().parent().find(".p_brand_field").slideUp();
+				$(this).parent().parent().find(".p_branch_field").slideUp();
+				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",false);
+				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",false);
+			}
+		});
+
+		$("select#supplier_brand_id").on("change", function(){
+			$.ajax({
+				url: "#{update_branch_path}",
+				data: {
+					brand_id: $(this).val()
+				}
+			});
+		});
+	});
