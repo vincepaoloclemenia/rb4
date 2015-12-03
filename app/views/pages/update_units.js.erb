@@ -1,0 +1,5 @@
+var select = $('#purchase_item_unit_id');
+select.empty();
+<% @units.each do |unit| %>
+	select.append("<option value='<%= unit.id %>'><%= unit.name %></option>");
+<% end %>

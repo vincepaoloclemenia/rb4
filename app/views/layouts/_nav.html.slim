@@ -24,8 +24,9 @@ nav.cd-side-nav
 		li.has-children.folder
 			= link_to "Data Entry", '#0'
 			ul.menu-child-link
-				li
-					= link_to "Purchases", '#0'
+				- if view_access_control('purchases','show')
+					li
+						= link_to "Purchases", purchases_path, data: { keybinding: "p u r c h" }
 				- if view_access_control('sales','show')
 					li
 						= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s" }
@@ -35,8 +36,9 @@ nav.cd-side-nav
 		li.has-children.reports
 			= link_to "Purchase Reports", '#0'
 			ul.menu-child-link
-				li
-					= link_to "Purchase List", '#0'
+				- if view_access_control('purchases','show')
+					li
+						= link_to "Purchase List", purchase_listings_path
 				li
 					= link_to "Purchase Summary", '#0'
 				li

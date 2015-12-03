@@ -1,0 +1,126 @@
+.large-12.columns
+	h2.page-header Purchase Items
+.large-12.columns
+	span.inline.float-right
+		= link_to "Back to Purchases", purchases_path, class: "button tiny secondary"
+		- if view_access_control('purchase_items','create')
+			|  
+			= link_to "Add Purchase Item", '#', data: { "reveal-id" => "add_purchase_item", "reveal" => true }, class: "button tiny"
+.large-12.columns
+	table.responsive.large-12
+		thead
+			tr
+				th Transaction Date
+				th Invoice Number
+				th Branch
+				th Supplier
+				th Brand
+				th Created by
+				th Updated by
+		tbody
+			tr
+				td = @purchase.purchase_date.strftime("%b %d %Y")
+				td = @purchase.invoice_number
+				td = @purchase.branch.name
+				td = @purchase.supplier.name
+				td = @purchase.brand.name
+				td = @purchase.created_by.full_name
+				td = @purchase.modified_by.full_name if @purchase.modified_by.present?
+.large-12.columns
+	- if @purchase_items.empty?
+		p No purchase items found. Please add purchase items
+	- else
+		.large-12.columns
+		h4 Purchased Items
+		table.responsive.large-12
+			thead
+				tr
+					th Item Name
+					th Remarks
+					th Quantity
+					th Unit
+					th Unit Price
+					th VAT Type
+					th Total Amount
+					th Action
+			tbody	
+				- @purchase_items.each do |pi|
+					tr
+						td = pi.item.name
+						td = pi.remarks
+						td = pi.quantity.to_s
+						td = pi.unit.name
+						td = to_peso(pi.purchase_item_amount)
+						td = pi.vat_type
+						td = to_peso(pi.purchase_item_total_amount)
+						td 
+							- if view_access_control('purchase_items','destroy')
+								= link_to "Delete", purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete
+
+.reveal-modal.small#add_purchase_item data-reveal="true" aria-labelledby="AddPurchaseItem" aria-hidden="true" role="dialog"
+	h6.modal-header#add_purchase_item style="font-weight:700;text-transform:uppercase" Add Purchase Item
+	.top-15
+		= form_for [@purchase, @purchase_item] do |f|
+			.large-12.columns
+				= f.label :item_id, "Item"
+				= f.select :item_id, current_brand.items.pluck(:name,:id), include_blank: "Select an Item"
+			.large-12.columns
+				= f.label :unit_id, "Unit"
+				= f.select :unit_id, [], prompt: "Select a Unit"
+			.large-12.columns
+				= f.label :quantity
+				= f.number_field :quantity
+			.large-12.columns
+				= f.label :purchase_item_amount, "Unit Price"
+				= f.number_field :purchase_item_amount, readonly: true
+			.large-12.columns
+				= f.label :purchase_item_total_amount, "Total Amount"
+				= f.number_field :purchase_item_total_amount, readonly: true
+			.large-12.columns
+				= f.label :vat_type, "VAT Type"
+				= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']]
+			.large-12.columns
+				= f.label :remarks
+				= f.text_area :remarks
+
+			.large.12.columns
+				span.inline.float-right
+					= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
+					|  
+					= f.submit "Create", class: "button tiny"
+
+javascript:
+	$('#purchase_item_quantity').on("keyup",function(){
+		if($(this).val() > 0){
+			$('#purchase_item_purchase_item_amount').prop('readonly',false);
+			$('#purchase_item_purchase_item_total_amount').prop('readonly',false);			
+			var qty = $('#purchase_item_quantity').val();
+			var itemAmount = $('#purchase_item_purchase_item_amount').val();
+			$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
+		}
+	});
+	$('#purchase_item_purchase_item_amount').on("keyup",function(){
+		if($(this).val().length > 0){
+			$('#purchase_item_purchase_item_total_amount').prop('readonly',true);
+			var qty = $('#purchase_item_quantity').val();
+			var itemAmount = $('#purchase_item_purchase_item_amount').val();
+			$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
+		}
+	});
+	$('#purchase_item_purchase_item_total_amount').on("keyup",function(){
+		if($(this).val().length > 0){
+			$('#purchase_item_purchase_item_amount').prop('readonly',true);
+			var qty = $('#purchase_item_quantity').val();
+			var totalItemAmount = $('#purchase_item_purchase_item_total_amount').val();
+			$('#purchase_item_purchase_item_amount').prop('value',totalItemAmount / qty);
+		}
+	});
+	$('#purchase_item_item_id').chosen({width: "100%"});
+	$('#purchase_item_item_id').change(function(){
+		$.ajax({
+	    url: "#{update_units_path}",
+	    data: {
+	      item_id : $('#purchase_item_item_id').val()
+	    }
+	  });
+	});

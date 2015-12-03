@@ -4,9 +4,11 @@ Rails.application.routes.draw do
   resources :company_users, controller: "users"
   get 'update_role' => 'pages#update_role'
   get 'update_branch' => 'pages#update_branch'
+  get 'update_units' => 'pages#update_units'
   root 'pages#index'
   get 'dashboard' => 'pages#dashboard'
   put 'change_brand' => 'pages#change_brand'
+  get 'purchase_listings' => 'reports#purchase_listings'
   resource :client, only: [:show, :edit, :update]
   resources :brands
   resources :branches
@@ -30,6 +32,9 @@ Rails.application.routes.draw do
   resources :employee_types
   resources :conversions
   resources :suppliers
+  resources :purchases do
+    resources :purchase_items
+  end
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

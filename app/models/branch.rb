@@ -3,6 +3,7 @@ class Branch < ActiveRecord::Base
   has_many :sales
   has_many :employees
   has_many :inventories, dependent: :restrict_with_error
+  has_many :purchases
 
 	validates :name,
 						presence: true,

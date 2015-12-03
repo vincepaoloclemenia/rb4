@@ -7,6 +7,8 @@ class Client < ActiveRecord::Base
 	has_many :settlements
 	has_many :employees, through: :branches
 	has_many :suppliers
+	has_many :purchases
+	has_many :purchase_items, through: :purchases
 
 	validates :name,
 						presence: true,

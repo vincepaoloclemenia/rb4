@@ -27,10 +27,12 @@
 	<script>
 		$(document).foundation();
 		$(document).ready(function(){
-			recordLength = $('tbody').children().length;
-			if(recordLength == 0){
-				$('table').replaceWith("<h5>No records found</h5>");
-			}
+			$('tbody').each(function(){
+				recordLength = $(this).children().length;
+				if(recordLength == 0){
+					$(this).parent().replaceWith("<h5>No records found</h5>");
+				}
+			});
 		});
 	</script>
 </body>

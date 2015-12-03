@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151201072731) do
+ActiveRecord::Schema.define(version: 20151202011043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -235,6 +235,42 @@ ActiveRecord::Schema.define(version: 20151201072731) do
   add_index "permissions", ["role_id"], name: "index_permissions_on_role_id", using: :btree
   add_index "permissions", ["section_id"], name: "index_permissions_on_section_id", using: :btree
 
+  create_table "purchase_items", force: :cascade do |t|
+    t.integer  "item_id"
+    t.integer  "unit_id"
+    t.integer  "purchase_id"
+    t.decimal  "quantity"
+    t.decimal  "purchase_item_amount",       precision: 16, scale: 2
+    t.string   "remarks"
+    t.string   "vat_type"
+    t.decimal  "purchase_item_total_amount"
+    t.integer  "borrowed_from_id"
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
+  end
+
+  add_index "purchase_items", ["item_id"], name: "index_purchase_items_on_item_id", using: :btree
+  add_index "purchase_items", ["purchase_id"], name: "index_purchase_items_on_purchase_id", using: :btree
+  add_index "purchase_items", ["unit_id"], name: "index_purchase_items_on_unit_id", using: :btree
+
+  create_table "purchases", force: :cascade do |t|
+    t.integer  "client_id"
+    t.integer  "brand_id"
+    t.integer  "branch_id"
+    t.integer  "supplier_id"
+    t.date     "purchase_date"
+    t.string   "invoice_number"
+    t.integer  "user_created_by_id"
+    t.integer  "user_modified_by_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "purchases", ["branch_id"], name: "index_purchases_on_branch_id", using: :btree
+  add_index "purchases", ["brand_id"], name: "index_purchases_on_brand_id", using: :btree
+  add_index "purchases", ["client_id"], name: "index_purchases_on_client_id", using: :btree
+  add_index "purchases", ["supplier_id"], name: "index_purchases_on_supplier_id", using: :btree
+
   create_table "roles", force: :cascade do |t|
     t.integer  "client_id"
     t.string   "name"
@@ -431,6 +467,13 @@ ActiveRecord::Schema.define(version: 20151201072731) do
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
+  add_foreign_key "purchase_items", "items"
+  add_foreign_key "purchase_items", "purchases"
+  add_foreign_key "purchase_items", "units"
+  add_foreign_key "purchases", "branches"
+  add_foreign_key "purchases", "brands"
+  add_foreign_key "purchases", "clients"
+  add_foreign_key "purchases", "suppliers"
   add_foreign_key "roles", "clients"
   add_foreign_key "sale_by_category_entries", "categories"
   add_foreign_key "sale_by_category_entries", "sales"

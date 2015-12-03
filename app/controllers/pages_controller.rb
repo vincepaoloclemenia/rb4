@@ -24,4 +24,18 @@ class PagesController < ApplicationController
 	def update_branch
 		@brand = Brand.find(params[:brand_id])
 	end
+
+	def update_units
+		if params[:item_id].empty?
+			@units = current_brand.units.none
+		else
+			item = current_brand.items.find(params[:item_id])
+			conversions = current_brand.conversions.where("from_unit_id = ? OR to_unit_id = ?", item.unit_id, item.unit_id)
+
+			@units = current_brand.units.find(conversions.pluck(:from_unit_id, :to_unit_id).flatten.uniq)
+			if @units.empty?
+				@units << item.unit
+			end
+		end
+	end
 end
