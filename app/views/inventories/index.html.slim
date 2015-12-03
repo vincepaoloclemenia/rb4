@@ -28,7 +28,7 @@
 						= link_to "Show", inventory_path(inventory)
 						- if view_access_control("inventories", "destroy")
 							| - 
-							= link_to "Delete", inventory_path(inventory), method: :delete
+							= link_to "Delete", new_inventory_path(inventory), method: :delete
 
 .reveal-modal.small#generate_pdf data-reveal="true" aria-labelledby="GeneratePdf" aria-hidden="true" role="dialog"
 	h6.modal-header#generate_pdf style="font-weight:700;text-transform:uppercase"

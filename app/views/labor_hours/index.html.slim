@@ -1,4 +1,5 @@
-h2 Labor Hours
+h2 Labor Hours  
+= link_to "Generate (PDF)", labor_hours_path(format: 'pdf'), class: "button tiny right", target: "_blank"
 table { width = "100%"}
 	thead
 		tr
@@ -16,5 +17,53 @@ table { width = "100%"}
 				td = employee.contact_no
 				td
 					= link_to "work hours", labor_hour_work_hours_list_path(employee), class: 'button tiny'
+					| &nbsp;
+					= link_to "Generate (PDF)", labor_hour_work_hours_list_path(employee, format: 'pdf'), class: 'button success tiny', target: "_blank"
+.reveal-modal.small#generate_pdf data-reveal="true" aria-labelledby="GeneratePdf" aria-hidden="true" role="dialog"
+	h6.modal-header#generate_pdf style="font-weight:700;text-transform:uppercase"
+		| Generate PDF
+	.top-15
+		= form_tag({action: 'index', format: :pdf}, method: :get)
+			.row
+				.large-12.columns
+					= label_tag :branch_id, "Branch"
+					= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id))
+			br
+			.row
+				.large-12.columns
+					label Date Range
+					span.inline
+						= text_field :date_employed, '', value:'From', id: 'from_date_employed', readonly: true
+						= text_field :date_employed, '', value:'To', id: 'to_date_employed', readonly: true
+			.row
+				.top-15
+					.large-12.columns
+						span.inline.float-right
+							= submit_tag "Generate PDF", class: "button tiny"
+							| &nbsp;
+							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
 
-			
+javascript:
+	var nowTemp = new Date();
+	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+	var checkin = $('#from_date_employed').fdatepicker({
+		onRender: function (date) {
+			return
+			//return date.valueOf() < now.valueOf() ? 'disabled' : '';
+		}
+	}).on('changeDate', function (ev) {
+		if (ev.date.valueOf() > checkout.date.valueOf()) {
+			var newDate = new Date(ev.date)
+			newDate.setDate(newDate.getDate() + 1);
+			checkout.update(newDate);
+		}
+		checkin.hide();
+		$('#to_date_employed')[0].focus();
+	}).data('datepicker');
+	var checkout = $('#to_date_employed').fdatepicker({
+		onRender: function (date) {
+			return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+		}
+	}).on('changeDate', function (ev) {
+		checkout.hide();
+	}).data('datepicker');

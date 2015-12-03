@@ -1,6 +1,5 @@
 h2 EmployeeTypes
 = link_to "Create Employee Type", '#', data: { "reveal-id" => "create_employee_type", "reveal" => true }, class: "button tiny width-200 bottom-10"
-/ = link_to 'Create Employee Type', new_employee_type_path()
 table { width="100%" }
 	thead
 		tr
@@ -13,11 +12,16 @@ table { width="100%" }
 			tr
 				td = employee_type.name
 				td = employee_type.description
-				td = employee_type.dividend.name
+				td 
+					- if employee_type.dividend_id == 0
+						= "Total Sales" + " " + " / # of total hours of work"
+					- else
+						= employee_type.dividend.name + " " + " / # of total hours of work" unless employee_type.dividend.nil?
 				td
 					= link_to "edit", edit_employee_type_path(employee_type), class: 'button tiny'
 					| &nbsp;
 					= link_to "destroy", employee_type_path(employee_type), method: :delete, class: 'button alert tiny'
+
 .reveal-modal.small#create_employee_type data-reveal="true" aria-labelledby="CreateEmployeeType" aria-hidden="true" role="dialog"
 	h6.modal-header#create_employee_type style="font-weight:700;text-transform:uppercase"
 		| Create Employee Type
