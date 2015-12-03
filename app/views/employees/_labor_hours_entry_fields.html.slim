@@ -1,5 +1,5 @@
 tr.nested-fields
-  td = f.text_field :working_date
+  td = f.text_field :working_date, id: 'date_field'
   td = f.number_field :regular
   td = f.text_field :overtime
   td = f.text_field :night_differential
@@ -9,3 +9,6 @@ tr.nested-fields
   td = f.text_field :absent
   td = f.text_field :rest_day
   td = link_to_remove_association 'Remove', f
+  
+javascript:
+  $('#date_field').fdatepicker();

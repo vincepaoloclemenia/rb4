@@ -1,4 +1,6 @@
-h3 Labor Hour Entries
+= wicked_pdf_stylesheet_link_tag "application"
+h2 Labor Work Hours
+h3 = @employee.full_name
 table { width = "100%"} 
 	thead
 		tr
@@ -17,7 +19,7 @@ table { width = "100%"}
 			- @labor_work.each do |lw|
 				tr
 					th = lw.working_date
-					th = lw.regular.to_ichr
+					th = lw.regular.to_i
 					th = lw.overtime.to_i
 					th = lw.night_differential.to_i
 					th = lw.legal_holiday.to_i

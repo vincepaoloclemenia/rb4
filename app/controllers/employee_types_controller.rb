@@ -1,4 +1,5 @@
 class EmployeeTypesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_employee_type, only: [:edit, :update, :destroy]
   
   def index

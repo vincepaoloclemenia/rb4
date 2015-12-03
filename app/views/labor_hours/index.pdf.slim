@@ -1,0 +1,48 @@
+= wicked_pdf_stylesheet_link_tag "application"
+h2 Labor Work Hours
+br
+- @employees.each do |employee|
+	br
+	table {width = "100%"}
+		thead 
+			tr 
+				th Employee Name
+				th Company Name
+				th Brand Name
+				th Branch Name
+				th Date Employed
+		tbody
+			tr
+				td = employee.full_name
+				td = employee.brand.client.name
+				td = employee.brand.name
+				td = employee.branch.name
+				td = employee.date_employed
+
+	table { width = "100%"} 
+		thead
+			tr
+				th Working Date
+				th Regular
+				th Overtime
+				th Night Differential
+				th Legal Holiday
+				th Special Holiday
+				th Absent
+				th Late
+				th Rest Day
+		tbody
+			- @labor_hour = LaborHour.where(employee_id: employee.id)
+			- @labor_hour.each do |labor_hour|
+				- @labor_work = LaborHoursEntry.where(labor_hour_id: labor_hour.id)
+				- @labor_work.each do |lw|
+					tr
+						td = lw.working_date
+						td = lw.regular.to_i
+						td = lw.overtime.to_i
+						td = lw.night_differential.to_i
+						td = lw.legal_holiday.to_i
+						td = lw.special_holiday.to_i
+						td = lw.absent.to_i
+						td = lw.late.to_i
+						td = lw.rest_day.to_i

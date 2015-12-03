@@ -1,6 +1,7 @@
-h1 Employees
-= link_to "Add Employee", new_employee_path(), class: 'small button'
-table
+h2 Employees
+- if view_access_control('employees','create')
+	= link_to "Add Employee", new_employee_path(), class: 'button tiny right'
+table {width="100%"}
 	thead
 		tr
 			th Name
@@ -24,10 +25,10 @@ table
 				td = employee.tin
 				td = employee.hdmf
 				td = employee.philhealth
-				td = employee.employee_type_id
+				td = employee.employee_type.name
 				td
-					= link_to "edit", edit_employee_path(employee)
+					= link_to "edit", edit_employee_path(employee), class: "button tiny"
 					| &nbsp;
-					= link_to "delete", employee_path(employee), method: :delete
+					= link_to "delete", employee_path(employee), method: :delete, class: 'button tiny alert'
 					| &nbsp;
-					= link_to "work hours", employee_labor_hours_path(employee)
+					= link_to "work hours", employee_labor_hours_path(employee), class: 'button tiny success'
