@@ -41,8 +41,8 @@
 					= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id))
 			.row
 				.large-12.columns
-					= label_tag :category_id, "Category"
-					= select_tag :category_id, option_groups_from_collection_for_select(current_brand.categories.main, :subcategories, :name, :id, :name), id: "chosen-select", multiple: true, "data-placeholder"=>"Select All or Choose from List"
+					= label_tag :subcategory_id, "Category"
+					= select_tag :subcategory_id, option_groups_from_collection_for_select(current_brand.categories.main, :subcategories, :name, :id, :name), id: "chosen-select", multiple: true, "data-placeholder"=>"Select All or Choose from List"
 			.row
 				.top-15
 					.large-12.columns

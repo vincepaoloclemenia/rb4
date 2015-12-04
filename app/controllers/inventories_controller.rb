@@ -6,21 +6,38 @@ class InventoriesController < ApplicationController
 	def index
 		@inventories = current_brand.inventories
 
+		# respond_to do |format|
+		# 	format.pdf do
+		# 		branch = current_brand.branches.find(params[:branch_id])
+
+		# 		items = if params[:category_id].nil?
+		# 							current_brand.items.for_inventory
+		# 						else
+		# 							current_brand.items.for_inventory.where(category_id: params[:category_id])
+		# 						end
+
+		# 		pdf = InventoryPdf.new(items, current_brand, branch)
+		# 		send_data pdf.render, filename: "Inventory_Item_List_#{Date.today.to_s}.pdf",
+		# 													disposition: "inline"
+		# 	end
+		# 	format.html
+		# end
 		respond_to do |format|
-			format.pdf do
-				branch = current_brand.branches.find(params[:branch_id])
-
-				items = if params[:category_id].nil?
-									current_brand.items.for_inventory
-								else
-									current_brand.items.for_inventory.where(category_id: params[:category_id])
-								end
-
-				pdf = InventoryPdf.new(items, current_brand, branch)
-				send_data pdf.render, filename: "Inventory_Item_List_#{Date.today.to_s}.pdf",
-															disposition: "inline"
-			end
 			format.html
+			format.pdf do
+				@branch = current_brand.branches.find(params[:branch_id])
+				@categories = current_brand.categories.main
+				@subcategories = current_brand.categories.where.not(parent_id: nil)
+				if params[:subcategory_id].nil? || params[:subcategory_id].empty?
+					@subcategory_ids = @subcategories.pluck(:id)
+				else
+					@subcategory_ids = params[:subcategory_id].map {|id| id.to_i }
+				end
+				render pdf: "Inventory Item List",
+							orientation: "Portrait",
+							page_width: "13in",
+							margin: { top: 1, bottom: 1 }
+			end
 		end
 	end
 

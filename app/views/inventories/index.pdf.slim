@@ -1,0 +1,43 @@
+h2 Inventory Item List
+
+table width="100%"
+	thead
+		tr
+			th
+			th
+			th
+			th
+	tbody
+		tr
+			td Brand:
+			td = current_brand.name
+			td Branch:
+			td = @branch.name
+		tr
+			td Date:
+			td __________________
+			td Counted By:
+			td __________________
+
+- @subcategories.group_by(&:parent_id).each do |category_id, subcategories|
+	- if subcategories.present?
+		- category = current_brand.categories.find(category_id)
+		h4 = category.name
+		table border="1" width="100%"
+			thead
+				tr
+					th Sucategory
+					th Item
+					th Unit
+					th Quantity
+					th Count
+			tbody
+				- subcategories.each do |subcategory|
+					- if @subcategory_ids.include?(subcategory.id)
+						- subcategory.items.for_inventory.each do |item|
+							tr
+								td = subcategory.name
+								td = item.name
+								td = item.unit.name
+								td 
+								td 
