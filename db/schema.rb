@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202011043) do
+ActiveRecord::Schema.define(version: 20151204010355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,6 +218,17 @@ ActiveRecord::Schema.define(version: 20151202011043) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
+
+  create_table "manifolds", force: :cascade do |t|
+    t.integer  "client_id"
+    t.string   "name"
+    t.string   "description"
+    t.boolean  "is_active"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "manifolds", ["client_id"], name: "index_manifolds_on_client_id", using: :btree
 
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
@@ -464,6 +475,7 @@ ActiveRecord::Schema.define(version: 20151202011043) do
   add_foreign_key "items", "categories"
   add_foreign_key "items", "units"
   add_foreign_key "labor_hours", "employees"
+  add_foreign_key "manifolds", "clients"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"

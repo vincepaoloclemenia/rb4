@@ -1,0 +1,44 @@
+h3 Non Sales Miscellaneous
+= link_to "Create None Sales", '#', data: {"reveal-id" => "create_none_sales", "reveal" => true}, class: 'button tiny'
+
+table { width="100%"}
+	thead 
+		tr
+			th Name
+			th Description
+			th Status
+			th Action
+	tbody
+		- @manifolds.each do |manifold|
+			tr
+				td = manifold.name
+				td = manifold.description
+				td = manifold.is_active == true ? "Active" : "Inactive" 
+				td 
+					= link_to 'Edit', edit_manifold_path(manifold), class: 'button tiny'
+					| &nbsp;
+					= link_to 'Destroy', manifold_path(manifold), method: :delete, class: 'button alert tiny'
+
+.reveal-modal.small#create_none_sales data-reveal="true" aria-labelledby="CreateNoneSalesMiscellaneous" aria-hidden="true" role="dialog"
+	h6.modal-header#create_none_sales style="font-weight:700;text-transform:uppercase"
+		| Create None Sales Miscellaneous
+	.top-15
+		= form_for @manifold do |f|
+			.row
+				.large-12.columns
+					= f.label :name
+					= f.text_field :name
+			.row
+				.large-12.columns
+					= f.label :description
+					= f.text_area :description , rows: 3, resize: 'none'
+			.row
+				.large-12.columns
+					= f.label :is_active
+					= f.check_box :is_active
+			.row
+				.large-12.columns
+					= f.submit "Save", class: 'button tiny'
+					= link_to "Cancel", "#", class: 'button tiny secondary close-reveal-modal'
+	a.close-reveal-modal.close-x-btn aria-label="Close"
+		| &times;

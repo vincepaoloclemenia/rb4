@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   resources :employee_types
   resources :conversions
   resources :suppliers
+  resources :manifolds
+  resources :directionals
   resources :purchases do
     resources :purchase_items
   end
@@ -47,4 +49,6 @@ Rails.application.routes.draw do
     put 'branch_setup_complete' => 'wizards#branch_setup_complete'
     put 'setup_summary_complete' => 'wizards#setup_summary_complete'
   end
+
+  get 'directionals/search' => 'directionals#search_entry'
 end
