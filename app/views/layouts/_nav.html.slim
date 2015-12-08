@@ -1,161 +1,154 @@
-nav.cd-side-nav
-	ul
-		li.cd-label
-			= current_client.name
-		- if current_user.role.role_level == 'client'
-			li.has-children.setup
-				= link_to current_brand.name, '#0'
-				- if current_client.brands.count > 1
-					ul.menu-child-link
-						- current_client.brands.each do |brand|
-							- unless brand.id == current_brand.id
+.sidebar-panel.offscreen-left
+	.brand
+		.brand-logo
+			img src="/img/logo.png" height="15" alt=""
+		a.toggle-sidebar.hidden-xs.hamburger-icon.v3 data-toggle="layout-small-menu" href="javascript:;"
+			i.icon-maxicons2-menu
+
+	nav.ps-container role="navigation"
+		ul.nav
+			li
+				= link_to '<i class="fa icon-maxicons3-market"></i> <span>Dashboard</span>'.html_safe, dashboard_path, data: { keybinding: "h o m e" }
+			li.menu-accordion
+				= link_to '<i class="fa icon-maxicons2-wand"></i> <span>Data Entry</span>'.html_safe, 'javascript:;'
+				ul.sub-menu
+					- if view_access_control('purchases','show')
+						li
+							= link_to "Purchases", purchases_path, data: { keybinding: "p u r c h" }
+					- if view_access_control('sales','show')
+						li
+							= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s" }
+					- if view_access_control('inventories','show')
+						li
+							= link_to "Inventories", inventories_path, data: { keybinding: "i n v" }
+			li.menu-accordion
+				= link_to '<i class="fa icon-maxicons1-rounfgraph"></i> <span>Purchase Reports</span>'.html_safe, 'javascript:;'
+				ul.sub-menu
+					- if view_access_control('purchases','show')
+						li
+							= link_to "Purchase List", purchase_listings_path
+					li
+						= link_to "Purchase Summary", 'javascript:;'
+					li
+						= link_to "Purchase Item Detail", 'javascript:;'
+			li.menu-accordion
+				= link_to '<i class="fa icon-maxicons1-load-77"></i> <span>Labor Report</span>'.html_safe, 'javascript:;'
+				ul.sub-menu
+					li
+						= link_to "Labor Hours Listing", labor_hours_path()
+					li
+						= link_to "Man Hours Report", 'javascript:;'
+			li.menu-accordion
+				= link_to '<i class="fa icon-maxicons1-dollar"></i> <span>Sales Report</span>'.html_safe, 'javascript:;'
+				ul.sub-menu
+					- if view_access_control("sales","show")
+						li
+							= link_to "Daily Sales Reports", sales_path, data: { keybinding: "s a l e s" }
+					li
+						= link_to "POS Reports", 'javascript:;'
+			li.menu-accordion
+				= link_to '<i class="fa icon-maxicons1-presentation"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
+				ul.sub-menu
+					li
+						= link_to "Directionals", 'javascript:;'
+					li
+						= link_to "Item Cost Analysis", 'javascript:;'
+					li
+						= link_to "Invoice Entry", 'javascript:;'
+					li
+						= link_to "Price Movement", 'javascript:;'
+					li
+						= link_to "Profit and Loss", 'javascript:;'
+			li.menu-accordion
+				= link_to '<i class="fa icon-maxicons1-businessman"></i> <span>Accounts Management</span>'.html_safe, 'javascript:;'
+				ul.sub-menu
+					- if view_access_control("users","show")
+						li
+							= link_to "Users", company_users_path, data: { keybinding: "u s e r s" }
+					- if view_access_control("roles","show")
+						li
+							= link_to "Roles", roles_path, data: { keybinding: "r o l e s" }
+			li.menu-accordion
+				a href="javascript:;"
+					i.fa.icon-maxicons3-line
+					span Setup
+				ul.sub-menu
+					li.menu-accordion
+						= link_to '<i class="toggle-accordion"></i> <span>Company Setup</span>'.html_safe, 'javascript:;'
+						ul.sub-menu
+							- if view_access_control("clients","show")
 								li
-									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
-		- else
-			ul
-				li.cd-label
-					= current_brand.name
-
-	ul
-		li.cd-label
-			| Main
-		li.has-children.overview
-			= link_to "Dashboard", dashboard_path, data: { keybinding: "h o m e" }
-		li.has-children.folder
-			= link_to "Data Entry", '#0'
-			ul.menu-child-link
-				- if view_access_control('purchases','show')
+									= link_to "Company", client_path, data: { keybinding: "c o m p a n y" }
+							- if view_access_control("brands","show")
+								li
+									= link_to "Brands", brands_path, data: { keybinding: "b r a n d s" }
+							- if view_access_control("branches","show")
+								li
+									= link_to "Branches", branches_path, data: { keybinding: "b r a n c h e s" }
+					li.menu-accordion
+						= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
+						ul.sub-menu
+							li
+								= link_to "Employee List", employees_path
+							li
+								= link_to "Employee Types", employee_types_path
+					li.menu-accordion
+						= link_to '<i class="toggle-accordion"></i> <span>Sales Setup</span>'.html_safe, 'javascript:;'
+						ul.sub-menu
+							li
+								= link_to "Non Sales Misc", 'javascript:;'
+							li
+								= link_to "Sales Statistics", 'javascript:;'
+							li
+								= link_to "Revenues", 'javascript:;'
+							- if view_access_control('settlements','show')
+								li
+									= link_to "Settlements", settlements_path, data: { keybinding: "s e t" }
+							- if view_access_control('shifts','show')
+								li
+									= link_to "Shift", shifts_path, data: { keybinding: "s h i f t s" }
+					li.menu-accordion
+						= link_to '<i class="toggle-accordion"></i> <span>Purchase Setup</span>'.html_safe, 'javascript:;'
+						ul.sub-menu
+							- if view_access_control('units','show')
+								li
+									= link_to "Units", units_path, data: { keybinding: "u n i t s" }
+							- if view_access_control('categories','show')
+								li
+									= link_to "Categories", categories_path, data: { keybinding: "c a t" }
+							- if view_access_control('items','show')
+								li
+									= link_to "Items", items_path, data: { keybinding: "i t e m s" }
+							- if view_access_control('conversions','show')
+								li
+									= link_to "Conversions", conversions_path, data: { keybinding: "c o n v" }
+							- if view_access_control('suppliers','show')
+								li
+									= link_to "Suppliers", suppliers_path, data: { keybinding: "s u p p" }
+			li.menu-accordion
+				a href="javascript:;"
+					i.fa.icon-maxicons1-money
+					| Subscription
+				ul.sub-menu
 					li
-						= link_to "Purchases", purchases_path, data: { keybinding: "p u r c h" }
-				- if view_access_control('sales','show')
+						a href="javascript:;"
+							span Plan
 					li
-						= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s" }
-				- if view_access_control('inventories','show')
-					li
-						= link_to "Inventories", inventories_path, data: { keybinding: "i n v" }
-		li.has-children.reports
-			= link_to "Purchase Reports", '#0'
-			ul.menu-child-link
-				- if view_access_control('purchases','show')
-					li
-						= link_to "Purchase List", purchase_listings_path
-				li
-					= link_to "Purchase Summary", '#0'
-				li
-					= link_to "Purchase Item Detail", '#0'
-		li.has-children.users
-			= link_to "Labor Report", '#0'
-			ul.menu-child-link
-				li
-					= link_to "Labor Hours Listing", labor_hours_path()
-				li
-					= link_to "Man Hours Report", '#0'
-		li.has-children.sales
-			= link_to "Sales Report", '#0'
-			ul.menu-child-link
-				- if view_access_control("sales","show")
-					li
-						= link_to "Daily Sales Reports", sales_path, data: { keybinding: "s a l e s" }
-				li
-					= link_to "POS Reports", '#0'
-		li.has-children.reports
-			= link_to "Management Reports", '#0'
-			ul.menu-child-link
-				li
-					= link_to "Directionals", '#0'
-				li
-					= link_to "Item Cost Analysis", '#0'
-				li
-					= link_to "Invoice Entry", '#0'
-				li
-					= link_to "Price Movement", '#0'
-				li
-					= link_to "Profit and Loss", '#0'
-	ul
-		li.cd-label
-			| Setup
-		li.has-children.bookmarks
-			= link_to "Account Management", '#0'
-			ul.menu-child-link
-				- if view_access_control("users","show")
-					li
-						= link_to "Users", company_users_path, data: { keybinding: "u s e r s" }
-				- if view_access_control("roles","show")
-					li
-						= link_to "Roles", roles_path, data: { keybinding: "r o l e s" }
-		li.has-children.setup
-			= link_to "Company Setup", '#0'
-			ul.menu-child-link
-				- if view_access_control("clients","show")
-					li
-						= link_to "Company", client_path, data: { keybinding: "c o m p a n y" }
-				- if view_access_control("brands","show")
-					li
-						= link_to "Brands", brands_path, data: { keybinding: "b r a n d s" }
-				- if view_access_control("branches","show")
-					li
-						= link_to "Branches", branches_path, data: { keybinding: "b r a n c h e s" }
-		li.has-children.setup
-			= link_to "Labor Setup", '#0'
-			ul.menu-child-link
-				li
-					= link_to "Employee List", employees_path
-				li
-					= link_to "Employee Types", employee_types_path
-		li.has-children.setup
-			= link_to "Sales Setup", '#0'
-			ul.menu-child-link
-				li
-					= link_to "Non Sales Misc", '#0'
-				li
-					= link_to "Sales Statistics", '#0'
-				li
-					= link_to "Revenues", '#0'
-				- if view_access_control('settlements','show')
-					li
-						= link_to "Settlements", settlements_path, data: { keybinding: "s e t" }
-				- if view_access_control('shifts','show')
-					li
-						= link_to "Shift", shifts_path, data: { keybinding: "s h i f t s" }
-		li.has-children.setup
-			= link_to "Purchase Setup", '#0'
-			ul.menu-child-link
-				- if view_access_control('units','show')
-					li
-						= link_to "Units", units_path, data: { keybinding: "u n i t s" }
-				- if view_access_control('categories','show')
-					li
-						= link_to "Categories", categories_path, data: { keybinding: "c a t" }
-				- if view_access_control('items','show')
-					li
-						= link_to "Items", items_path, data: { keybinding: "i t e m s" }
-				- if view_access_control('conversions','show')
-					li
-						= link_to "Conversions", conversions_path, data: { keybinding: "c o n v" }
-				- if view_access_control('suppliers','show')
-					li
-						= link_to "Suppliers", suppliers_path, data: { keybinding: "s u p p" }
-	//ul
-	//	li.cd-label
-	//		| Trial Version
-	//	li.action-btn
-	//		= link_to "Buy Now", '#0'
-	ul
-		li.cd-label
-			| Subscription
-		li.plans
-			= link_to "My Subscriptions", '#0'
-		li.bills
-			= link_to "Billing", '#0'
+						a href="javascript:;"
+							span Billing
+			.pg-scrollbar-x-rail style="left: 0px; bottom: 3px; display: block;"
+				.ps-scrollbar-x style="left: 0px; width: 0px;"
+			.pg-scrollbar-y-rail style="top: 0px; height: 639px; right: 0px; display: block;"
+				.ps-scrollbar-y style="top: 0px; height: 0px;"
 
 
-javascript:
-	$(document).ready(function () {
-		$('ul.menu-child-link').each(function() {
-			var childrenCount = $(this).children().length;
+	javascript:
+		$(document).ready(function () {
+			$('ul.sub-menu').each(function() {
+				var childrenCount = $(this).children().length;
 
-			if(childrenCount == 0){
-				$(this).parent().css("display", "none");
-			}
+				if(childrenCount == 0){
+					$(this).parent().css("display", "none");
+				}
+			});
 		});
-	});

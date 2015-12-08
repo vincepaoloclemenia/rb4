@@ -1,11 +1,14 @@
-.large-12.columns
+.row
+	.col-xs-12
 	- if notice
-		.alert-box.success data-alert=''
+		.alert.alert-success role="alert"
 			= notice
-			a.close href="#"
-			 | &times;
+			button.close data-dismiss="alert" aria-label="Close"
+				span aria-hidden="true"
+			 		| &times;
 	- if alert
-		.alert-box.alert data-alert=''
+		.alert.alert-danger role="alert"
 			= alert
-			a.close href="#"
-			 | &times;
+			button.close data-dismiss="alert" aria-label="Close"
+				span aria-hidden="true"
+			 		| &times;

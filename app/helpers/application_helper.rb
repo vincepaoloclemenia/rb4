@@ -8,7 +8,7 @@ module ApplicationHelper
 		number_to_currency(num, unit: "PhP ")
 	end
 
-	def to_fdatepicker_format(date)
+	def to_datepicker_format(date)
 		date.strftime("%m/%d/%Y")
 	end
 
