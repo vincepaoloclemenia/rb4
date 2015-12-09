@@ -9,10 +9,13 @@ header.header.navbar
 	ul.nav.navbar-nav.hidden-xs
 		li
 			p.navbar-text
-				a.btn.btn-default.btn-round href="#"
-					span style="margin-top:-3px;"
-						i.icon-maxicons1-arrowleft.show-icon.mr5
-						| Back to Purchases
+				button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
+					span.show-ctrls
+						i.icon-maxicons1-arrowdown-01.show-icon.mr5 
+						| Show Search
+					span.hide-ctrls
+						i.icon-maxicons1-arrowdown-02.show-icon.mr5 
+						| Hide Search
 
 	ul.nav.navbar-nav.navbar-right.hidden-xs
 		li
