@@ -5,7 +5,7 @@ module ApplicationHelper
 
 	def to_peso(num)
 		num = 0 if num == 0 || num.nil?
-		number_to_currency(num, unit: "PhP ")
+		number_to_currency(num, unit: "₱ ")
 	end
 
 	def to_datepicker_format(date)

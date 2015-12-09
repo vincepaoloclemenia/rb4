@@ -3,18 +3,18 @@
 		.panel-body
 			= search_form_for @q do |f|
 				.row
-					.col-xs-6.col-xs-3
+					.col-xs-12.col-lg-3
 						= f.label :invoice_number_cont, "Invoice No."
-						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Select"
-					.col-xs-6.col-xs-3
+						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Search"
+					.col-xs-12.col-lg-3
 						= f.label :purchase_date_cont, "Purchase Date"
-						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", readonly: true
-					.col-xs-6.col-xs-3
+						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search", readonly: true
+					.col-xs-12.col-lg-3
 						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-					.col-xs-6.col-xs-3
+						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+					.col-xs-12.col-lg-3
 						= f.label :supplier_id_eq, "Supplier"
-						= f.select :supplier_id_eq, @suppliers, { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+						= f.select :supplier_id_eq, @suppliers, { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
 				.row.mt10
 					.col-xs-12
 						.pull-right
@@ -48,13 +48,13 @@
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="130" Invoice Number
-						th width="120" Purchase Date
+						th width="130" Invoice No.
+						th width="120" Date
 						th width="130" Branch
 						th width="160" Supplier
-						th width="110" Net Amount
-						th width="110" VAT Amount
-						th width="120" Total Amount
+						th width="110" Net<br>Amount
+						th width="110" VAT<br>Amount
+						th width="120" Total<br>Amount
 						th width="120" data-sortable="false" Action
 				tbody
 					- @purchases.each do |purchase|
@@ -68,11 +68,11 @@
 							td data-title="VAT Amount" = to_peso(nvt[:vat])
 							td data-title="Total Amount" = to_peso(nvt[:total])
 							td.action data-title="Action"
-								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
+								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
 								- if view_access_control('purchases','update')
-									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
 								- if view_access_control('purchases','destroy')
-									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
 			.align-center
 				p
@@ -84,84 +84,86 @@
 							.modal-dialog
 								.modal-content
 									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										button.close type="button" data-dismiss="modal" aria-hidden="true"
+											i.icon-maxicons1-exit
 										h4.modal-title Edit Purchase
 									.modal-body
 										= form_for purchase do |f|
 											.row.mb10
 												.col-xs-12
 													= f.label :branch_id
-														| Branch 
+														| Branch
 														small.field-req *
 													= f.select :branch_id, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 											.row.mb10
 												.col-xs-6
 													= f.label :invoice_number
-														| Invoice number 
+														| Invoice number
 														small.field-req *
 													= f.text_field :invoice_number, class: "form-control"
 												.col-xs-6
 													= f.label :purchase_date
-														| Purchase Date 
+														| Purchase Date
 														small.field-req *
 													= f.text_field :purchase_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, readonly: true, value: to_datepicker_format(f.object.purchase_date)
 											.row.mb10
 												.col-xs-12
 													= f.label :supplier_id, "Supplier"
-														| Supplier 
+														| Supplier
 														small.field-req *
 													= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 											.row.mb10
 												.col-xs-12.mt20
-													| ( 
+													| (
 													small.field-req *
-													|  ) 
+													|  )
 													i indicates field is required
 											.modal-footer.no-border
 												span.inline.float-right
 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-													|  
+													|
 													= f.submit "Update", class: "btn btn-primary"
 
 .modal.create-purchase-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog
 		.modal-content
 			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
 				h4.modal-title Create Purchase
 			.modal-body
 				= form_for @purchase do |f|
 					.row.mb10
 						.col-xs-12
 							= f.label :branch_id
-								| Branch 
-								small.field-req *
+								| Branch
+								small.field-req  *
 							= f.select :branch_id, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 					.row.mb10
 						.col-xs-6
 							= f.label :invoice_number
-								| Invoice number 
-								small.field-req *
+								| Invoice No.
+								small.field-req  *
 							= f.text_field :invoice_number, class: "form-control"
 						.col-xs-6
 							= f.label :purchase_date
-								| Purchase Date 
-								small.field-req *
+								| Purchase Date
+								small.field-req  *
 							= f.text_field :purchase_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
 					.row.mb10
 						.col-xs-12
 							= f.label :supplier_id, "Supplier"
-								| Supplier 
-								small.field-req *
+								| Supplier
+								small.field-req  *
 							= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 					.row.mb10
 						.col-xs-12.mt20
-							| ( 
-							small.field-req *
-							|  ) 
-							i indicates field is required
+							| (
+							small.field-req   *
+							|  )
+							i  indicates field is required
 					.modal-footer.no-border
 						span.inline.float-right
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|  
+							|
 							= f.submit "Create", class: "btn btn-primary"
