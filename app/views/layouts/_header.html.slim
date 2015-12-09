@@ -6,16 +6,17 @@ header.header.navbar
 				span
 				span
 
-	ul.nav.navbar-nav.hidden-xs
-		li
-			p.navbar-text
-				button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
-					span.show-ctrls
-						i.icon-maxicons1-arrowdown-01.show-icon.mr5 
-						| Show Search
-					span.hide-ctrls
-						i.icon-maxicons1-arrowdown-02.show-icon.mr5 
-						| Hide Search
+	- if params[:action] == "index"	
+		ul.nav.navbar-nav.hidden-xs
+			li
+				p.navbar-text
+					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
+						span.show-ctrls
+							i.icon-maxicons1-arrowdown-01.show-icon.mr5 
+							| Show Search
+						span.hide-ctrls
+							i.icon-maxicons1-arrowdown-02.show-icon.mr5 
+							| Hide Search
 
 	ul.nav.navbar-nav.navbar-right.hidden-xs
 		li
@@ -34,17 +35,18 @@ header.header.navbar
 		li
 			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Help"
 				i.fa.icon-maxicons3-lifebuoy
-		li
-			a href="javascript:;" data-toggle="dropdown"
-				img.header-avatar.img-circle src="/img/brand2.png" data-tt="tooltip" data-placement="bottom" data-original-title="My Brands"
-			- if current_user.role.role_level == 'client'
-				ul.dropdown-menu
-					- current_client.brands.each do |brand|
-						li
-							- if current_brand.name == brand.name
-								= link_to "#{brand.name}<i class='icon-maxicons1-check pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
-							- else
-								= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
+		- if wizard_done?
+			li
+				a href="javascript:;" data-toggle="dropdown"
+					img.header-avatar.img-circle src="/img/brand2.png" data-tt="tooltip" data-placement="bottom" data-original-title="My Brands"
+				- if current_user.role.role_level == 'client'
+					ul.dropdown-menu
+						- current_client.brands.each do |brand|
+							li
+								- if current_brand.name == brand.name
+									= link_to "#{brand.name}<i class='icon-maxicons1-check pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
+								- else
+									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
 		li
 			a href="javascript:;" data-toggle="dropdown"
 				img.header-avatar.img-circle src="/img/avatar-mummy.png" data-tt="tooltip" data-placement="bottom" data-original-title="My Account"
