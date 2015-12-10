@@ -1,0 +1,13 @@
+h2 Edit None Sales Miscellaneous
+= form_for @manifold do |f|
+	.row
+			= f.label :name
+			= f.text_field :name
+			= f.label :description
+			= f.text_area :description , rows: 3, resize: 'none'
+			= f.label :is_active
+			= f.check_box :is_active
+			br
+			= f.submit "Save", class: 'button tiny'
+			| &nbsp;
+			= link_to "Cancel", manifolds_path, class: 'button tiny alert	'

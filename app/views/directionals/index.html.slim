@@ -1,0 +1,68 @@
+h2 Directionals
+= form_for directionals_search_path, method: 'get' do
+	table {width='100%'}
+		thead
+			tr
+				th Branch
+				th Date
+				th
+		tbody
+			tr
+				td = select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), {include_blank: false}
+				td = text_field_tag :date_entry, params[:date_entry], id: "datePicker", readonly: true, required: true, value: Date.today
+				td = submit_tag 'Search', class: 'button tiny primary left'
+
+= link_to 'Export to PDF', directionals_path(format: 'pdf'), class: 'button tiny primary right', target: '_blank'
+= link_to 'Export to Excel', '#', class: 'button tiny success right'
+br
+br
+h4 Net Sales [Categories]
+table (width="100%")
+	thead 
+		tr
+			th
+			th MTD TOTALS
+			th PERCENTAGE
+	tbody
+		- @directional.sales_entries(@sale_by_category_entries).each do |category_name, amount|
+			tr
+				td = category_name
+				td = amount
+				td = @directional.sales_percentage(amount, @sale_by_category_entries)
+		tr
+			td Total
+			td = total = @directional.total_sales(@sale_by_category_entries)
+			td 
+br
+br
+h4 Net Sales
+table (width="100%")
+	thead
+		tr
+			th
+			th MTD TOTALS
+			th LAST YEAR
+	tbody
+		- @title_and_column_array.each do |title, column_name, act|
+			tr
+				td = title
+				td = @directional.resource_count(column_name, act, @sale_by_category_entries)
+				td 
+br
+br
+h4 Complimentary Analysis
+table (width="100%")
+	thead
+		tr
+			th
+			th MTD TOTALS
+			th PERCENTAGE
+	tbody
+		- @directional.sales_entries(@sale_by_settlement_entries).each do |settlement_name, amount|
+			tr
+				td = settlement_name
+				td = amount
+				td = @directional.sales_percentage(amount, @sale_by_settlement_entries)
+
+javascript:
+	$("#datePicker").fdatepicker({ dateFormat: 'MM-dd-YY'}).val();

@@ -1,0 +1,48 @@
+= wicked_pdf_stylesheet_link_tag "application"
+h4 Net Sales [Categories]
+table (width="100%")
+	thead 
+		tr
+			th
+			th MTD TOTALS
+			th PERCENTAGE
+	tbody
+		- @directional.sales_entries(@sale_by_category_entries).each do |category_name, amount|
+			tr
+				td = category_name
+				td = amount
+				td = @directional.sales_percentage(amount, @sale_by_category_entries)
+		tr
+			td Total
+			td = total = @directional.total_sales(@sale_by_category_entries)
+			td 
+br
+br
+h4 Net Sales
+table (width="100%")
+	thead
+		tr
+			th
+			th MTD TOTALS
+			th LAST YEAR
+	tbody
+		- @title_and_column_array.each do |title, column_name, act|
+			tr
+				td = title
+				td = @directional.resource_count(column_name, act, @sale_by_category_entries)
+				td 
+br
+br
+h4 Complimentary Analysis
+table (width="100%")
+	thead
+		tr
+			th
+			th MTD TOTALS
+			th PERCENTAGE
+	tbody
+		- @directional.sales_entries(@sale_by_settlement_entries).each do |settlement_name, amount|
+			tr
+				td = settlement_name
+				td = amount
+				td = @directional.sales_percentage(amount, @sale_by_settlement_entries)
