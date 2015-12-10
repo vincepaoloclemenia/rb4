@@ -6,17 +6,20 @@ header.header.navbar
 				span
 				span
 
-	- if params[:action] == "index"	&& ["purchases"].include?(params[:controller])
-		ul.nav.navbar-nav.hidden-xs
-			li
-				p.navbar-text
+	ul.nav.navbar-nav.hidden-xs
+		li
+			p.navbar-text
+				- if params[:action] == "index"	&& ["purchases","inventories"].include?(params[:controller])
 					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
 						span.show-ctrls
 							i.icon-maxicons1-arrowdown-01.show-icon.mr5 
 							| Show Search
 						span.hide-ctrls
-							i.icon-maxicons1-arrowdown-02.show-icon.mr5 
+							i.icon-maxicons1-arrowdown-02.show-icon.mr5
 							| Hide Search
+				- else
+					- if request.referer
+						= link_to "<span style='margin-top:-3px;'><i class='icon-maxicons1-arrowleft show-icon mr5'></i></span> Back".html_safe, "javascript: history.back()", class: "btn btn-default btn-round"
 
 	ul.nav.navbar-nav.navbar-right.hidden-xs
 		li

@@ -12,6 +12,10 @@ module ApplicationHelper
 		date.strftime("%m/%d/%Y")
 	end
 
+	def to_default_date_format(date)
+		date.strftime("%b %d, %Y")
+	end
+
 	def net_vat_total_computation(purchase_items)
 		nvt = []
 		vat_rate = 0.12 #12%

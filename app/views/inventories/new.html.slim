@@ -1,49 +1,64 @@
-.large-12.columns
-	h2.page-header New Inventory
-.large-12.columns
-	= form_for @inventory do |f|
-		= f.hidden_field :user_id, value: current_user.id
-		.large-6.columns
-			= f.label :branch_id, "Branch"
-			= f.select :branch_id, current_brand.branches.pluck(:name, :id)
-		.large-6.columns
-			= f.label :entry_date
-			= f.text_field :entry_date, readonly: true
-		- if current_brand.categories.main.empty?
-			.large-12.columns
-				| No categories yet. Please create one 
-				= link_to "here", categories_path
-		- current_brand.categories.main.each do |category|
-			- unless category.subcategories.empty?
-				.large-12.columns
-					fieldset
-						legend = category.name
-						- category.subcategories.each do |subcategory|
-							- unless subcategory.items.empty?
-								.large-12.columns
-									fieldset
-										legend = subcategory.name
-										table.responsive.large-12
-											thead
-												tr
-													th width="40%" Item name
-													th width="30%" Unit
-													th width="30%" Update Count
-											tbody
-												- subcategory.items.for_inventory.each do |item|
-													tr
-														td = item.name
-														td = item.unit.name
-														td 
-															= f.fields_for :inventory_items do |ii|
-																= ii.hidden_field :item_id, value: item.id
-																= ii.number_field :stock_count
-		.top-15
-		.large-12.columns
-			span.inline.float-right.right-neg-16
-				= link_to "Cancel", inventories_path, class: "button secondary expand width-160"
-				|  
-				= f.submit "Save", class: "button expand width-160"
-
-javascript:
-	$('#inventory_entry_date').fdatepicker();
+.panel
+	.panel-heading.border Create Inventory
+	.panel-body
+		= form_for @inventory do |f|
+			= f.hidden_field :user_id, value: current_user.id
+			.row.mb30
+				.col-xs-12.col-lg-4.mb5
+					= f.label :branch_id
+					small.field-req  *
+					= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+				.col-xs-12.col-lg-4.pull-right.mb5
+					= f.label :entry_date
+					small.field-req  *
+					- if params[:inventory].present? && params[:inventory][:entry_date].nil? && params[:inventory][:entry_date].empty?
+						= f.text_field :entry_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+					- else
+						= f.text_field :entry_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: Date.strptime(params[:inventory][:entry_date]).strftime("%m/%d/%Y")
+			.row.mb10
+				.col-xs-12
+					- if current_brand.categories.main.empty?
+						| No categories yet. Please create one
+						= link_to "here", categories_path
+					- else
+						.cf.nestable-lists
+							.dd#nestable
+								ol.dd-list
+									- current_brand.categories.main.each do |category|
+										- unless category.subcategories.empty?
+											li.dd-item
+												.dd-handle = category.name
+												ol.dd-list
+													- category.subcategories.each do |subcategory|
+														- unless subcategory.items.for_inventory.empty?
+															li.dd-item
+																.dd-handle = subcategory.name
+																ol.dd-list
+																	.row
+																		.col-xs-12
+																			.no-more-tables
+																				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+																					thead
+																						tr.bg-thead
+																							th width="400" Item Name
+																							th width="400" Unit
+																							th.numeric width="200" Stock Count
+																					tbody
+																						- subcategory.items.for_inventory.each do |item|
+																							tr
+																								td data-title="Item Name" = item.name
+																								td data-title="Unit" = item.unit.name
+																								td data-title="Stock Count"
+																									= f.fields_for :inventory_items do |ii|
+																										- if params[:inventory]
+																											- if item.id == ii.object.item_id
+																												= ii.hidden_field :item_id, value: item.id
+																												= ii.number_field :stock_count, class: "form-control", placeholder: "0"
+																										- else
+																											= ii.hidden_field :item_id, value: item.id
+																											= ii.number_field :stock_count, class: "form-control", placeholder: "0"
+			.row
+				.col-xs-12
+					/ .align-center.mt5
+					/ 	p Filter: Show all
+					= f.submit "Create", class: "btn btn-lg btn-primary btn-outline pull-right w180"

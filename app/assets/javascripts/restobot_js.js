@@ -5,4 +5,5 @@
 //= require moment.min
 //= require daterangepicker
 //= require bootstrap-datepicker
+//= require bootstrap-select
 //= require custom

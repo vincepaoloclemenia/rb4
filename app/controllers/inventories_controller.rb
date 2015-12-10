@@ -4,7 +4,12 @@ class InventoriesController < ApplicationController
 	before_action :set_inventory, only: [:show, :edit, :update, :destroy]
 
 	def index
-		@inventories = current_brand.inventories
+		@q = current_brand.inventories.ransack(params[:q])
+		@inventories = @q.result.paginate(page: params[:page], per_page: per_page)
+		@users = []
+		current_client.users.each do |user|
+			@users << [user.full_name, user.id]
+		end
 
 		# respond_to do |format|
 		# 	format.pdf do
@@ -51,9 +56,9 @@ class InventoriesController < ApplicationController
 		if @inventory.save
 			redirect_to inventories_path, notice: "Inventory successfully created"
 		else
-			# flash[:alert] = @inventory.errors.full_messages.join(", ")
-			# render 'new'
-			redirect_to new_inventory_path, alert: @inventory.errors.full_messages.join(", ")
+			flash[:alert] = @inventory.errors.full_messages.join(", ")
+			render 'new'
+			# redirect_to new_inventory_path, alert: @inventory.errors.full_messages.join(", ")
 		end
 	end
 
@@ -84,5 +89,10 @@ class InventoriesController < ApplicationController
 	def inventory_params
 		params[:inventory][:entry_date] = Date.strptime(params[:inventory][:entry_date], "%m/%d/%Y").to_s unless params[:inventory][:entry_date].blank?
 		params.require(:inventory).permit(:branch_id, :user_id, :entry_date, inventory_items_attributes: [:id, :inventory_id, :item_id, :stock_count])
+	end
+
+	def per_page
+		params[:show].eql?('all') ? current_brand.purchases.count : params[:show]
+		return 10 if params[:show].nil?
 	end
 end
