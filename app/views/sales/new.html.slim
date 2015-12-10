@@ -1,107 +1,118 @@
-.large-12.columns
-	h3.page-header Sales
-.large-12.columns
-	= form_for @sale do |f|
-		.panel.radius
-			h6.panel-header Details
-		.panel.white style="margin-top:-21px"
-			ul.small-block-grid-1.medium-block-grid-3.large-block-grid-3
-				li
-					= f.label :branch_id, "Branch"
-					= f.select :branch_id, current_brand.branches.pluck(:name, :id)
-				li
-					= f.label :sale_date, "Date"
-					= f.text_field :sale_date, id: "sale_date_datepicker", readonly: true, placeholder: "mm/dd/yyyy"
-				li
-					= f.label :shift_id, "Shift"
-					= f.select :shift_id, current_brand.shifts.pluck(:name, :id)
+= form_for @sale do |f|
+	.panel
+		.panel-heading.border Details
+		.panel-body
+			.row
+				.col-xs-12.col-lg-4.mb5
+					= f.label :branch_id, "Branch <small class='field-req'>*</small>".html_safe
+					= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+				.col-xs-12.col-lg-4.mb5
+					= f.label :sale_date, "Date <small class='field-req'>*</small>".html_safe
+					= f.text_field :sale_date, id: "sale_date_datepicker", readonly: true, placeholder: "mm/dd/yyyy", class: "form-control", data: { provide: "datepicker" }
+				.col-xs-12.col-lg-4.mb5
+					= f.label :shift_id, "Shift".html_safe
+					= f.select :shift_id, current_brand.shifts.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 
-		.panel.radius
-			h6.panel-header Statistics
-		.panel.white style="margin-top:-21px"
-			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
-				li
+	.panel
+		.panel-heading.border Statistics
+		.panel-body
+			.row
+				.col-xs-12.col-lg-3.mb5
 					= f.label :customer_count
-					= f.number_field :customer_count, placeholder: "#"
-				li
+					= f.number_field :customer_count, class: "form-control", placeholder: "0"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :transaction_count
-					= f.number_field :transaction_count, placeholder: "#"
-				li
+					= f.number_field :transaction_count, class: "form-control", placeholder: "0"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :delivery_transaction_count
-					= f.number_field :delivery_transaction_count, placeholder: "#"
-				li
+					= f.number_field :delivery_transaction_count, class: "form-control", placeholder: "0"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :credit_card_transaction_count
-					= f.number_field :credit_card_transaction_count, placeholder: "#"
-				li
+					= f.number_field :credit_card_transaction_count, class: "form-control", placeholder: "0"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :first_time_guest
-					= f.number_field :first_time_guest, placeholder: "#"
-				li
+					= f.number_field :first_time_guest, class: "form-control", placeholder: "0"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :repeat_guest
-					= f.number_field :repeat_guest, placeholder: "#"
+					= f.number_field :repeat_guest, class: "form-control", placeholder: "0"
 
-		.panel.radius
-			h6.panel-header None Sales Miscellaneous
-		.panel.white style="margin-top:-21px"
-			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
-				li
-					= f.label :vat
-					= f.number_field :vat, placeholder: "#"
-				li
-					= f.label :service_charge
-					= f.number_field :service_charge, placeholder: "#"
+	.panel
+		.panel-heading.border None Sales Miscellaneous
+		.panel-body
+			.row
+				.col-xs-12.col-lg-3.mb5
+					= f.label :vat, "VAT <small class='field-req'>*</small>".html_safe
+					.input-group
+						= f.number_field :vat, class: "form-control", placeholder: "0"
+						span.input-group-addon %
+				.col-xs-12.col-lg-3.mb5
+					= f.label :service_charge, "Service Charge <small class='field-req'>*</small>".html_safe
+					.input-group
+						span.input-group-addon PHP
+						= f.number_field :service_charge, class: "form-control", placeholder: "0.00"
 
-		.panel.radius
-			h6.panel-header Sales by Settlements
-		.panel.white style="margin-top:-21px"
-			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
-				li
+	.panel
+		.panel-heading.border Sale By Settlements
+		.panel-body
+			.row
+				.col-xs-12.col-lg-3.mb5
 					= f.label :credit_card_sales
-					= f.number_field :credit_card_sales, placeholder: "#"
-				li
+					.input-group
+						span.input-group-addon PHP
+						= f.number_field :credit_card_sales, class: "form-control", placeholder: "0.00"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :cash_in_drawer
-					= f.number_field :cash_in_drawer, placeholder: "#"
-				li
-					= f.label :gc_redeemed
-					= f.number_field :gc_redeemed, placeholder: "#"
-				li
+					.input-group
+						span.input-group-addon PHP
+						= f.number_field :cash_in_drawer, class: "form-control", placeholder: "0.00"
+				.col-xs-12.col-lg-3.mb5
+					= f.label :gc_redeemed, "GC Redeemed"
+					.input-group
+						span.input-group-addon PHP
+						= f.number_field :gc_redeemed, class: "form-control", placeholder: "0.00"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :delivery_sales
-					= f.number_field :delivery_sales, placeholder: "#"
-			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-6
+					.input-group
+						span.input-group-addon PHP
+						= f.number_field :delivery_sales, class: "form-control", placeholder: "0.00"
+			.row
 				- @settlements.each do |settlement|
 					= f.fields_for :sale_by_settlement_entries do |sbse|
 						= sbse.hidden_field :settlement_id, value: settlement.id
-						li
+						.col-xs-12.col-lg-2.mb5
 							= sbse.label :amount, "#{settlement.name}"
-							= sbse.number_field :amount, placeholder: "#"
+							.input-group
+								span.input-group-addon PHP
+								= sbse.number_field :amount, class: "form-control", placeholder: "0.00"
 
-		.panel.radius
-			h6.panel-header Cash for Deposit
-		.panel.white style="margin-top:-21px"
-			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
-				li
-					= f.label :gc_sales
-					= f.number_field :gc_sales, placeholder: "#"
-				li
+	.panel
+		.panel-heading.border Cash for Deposit
+		.panel-body
+			.row
+				.col-xs-12.col-lg-3.mb5
+					= f.label :gc_sales, "GC Sales <small class='field-req'>*</small>".html_safe
+					.input-group
+						span.input-group-addon PHP
+						= f.number_field :gc_sales, class: "form-control", placeholder: "0.00"
+				.col-xs-12.col-lg-3.mb5
 					= f.label :other_income
-					= f.number_field :other_income, placeholder: "#"
+					.input-group
+						span.input-group-addon PHP
+						= f.number_field :other_income, class: "form-control", placeholder: "0.00"
 
-		.panel.radius
-			h6.panel-header Sales by Category
-		.panel.white style="margin-top:-21px"
-			ul.small-block-grid-1.medium-block-grid-2.large-block-grid-4
+	.panel
+		.panel-heading.border Sales by Category
+		.panel-body
+			.row
 				- @categories.each do |category|
 					= f.fields_for :sale_by_category_entries do |sbce|
 						= sbce.hidden_field :category_id, value: category.id
-						li
+						.col-xs-12.col-lg-3.mb5
 							= sbce.label :amount, "#{category.name}"
-							= sbce.number_field :amount, placeholder: "#"
+							.input-group
+								span.input-group-addon PHP
+								= sbce.number_field :amount, class: "form-control", placeholder: "0.00"
 
-		.top-15
-			.large-12.columns
-				span.inline.float-right.right-neg-16
-					= f.submit "Save", class: "button expand width-160"
-
-javascript:
-	$(document).ready(function (){
-		$("#sale_date_datepicker").fdatepicker();
-	});	
+	.row
+		.col-xs-12
+			= f.submit "Add Sales", class: "btn btn-lg btn-primary btn-outline pull-right w180"
