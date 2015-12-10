@@ -19,13 +19,13 @@
 						th Updated by
 				tbody
 					tr
-						td = @purchase.purchase_date.strftime("%b %d %Y")
-						td = @purchase.invoice_number
-						td = @purchase.branch.name
-						td = @purchase.supplier.name
-						td = @purchase.brand.name
-						td = @purchase.created_by.full_name
-						td = @purchase.modified_by.full_name if @purchase.modified_by.present?
+						td data-title="Transaction Date" = @purchase.purchase_date.strftime("%b %d %Y")
+						td data-title="Invoice No." = @purchase.invoice_number
+						td data-title="Branch" = @purchase.branch.name
+						td data-title="Supplier" = @purchase.supplier.name
+						td data-title="Brand" = @purchase.brand.name
+						td data-title="Created by" = @purchase.created_by.full_name
+						td data-title="Updated by" = @purchase.modified_by.full_name if @purchase.modified_by.present?
 .panel
 	.panel-heading.border Purchase Items
 	.panel-body
@@ -49,19 +49,19 @@
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="125" Item Name
-						th width="150" data-sortable="false" Remarks
-						th width="120" Quantity
-						th width="125" Unit
-						th width="130" Unit Price
-						th width="150" VAT Type
-						th width="150" Total Amount
-						th width="50" data-sortable="false" Action
+						th width="145" Item Name
+						th width="160" data-sortable="false" Item Description
+						th width="110" Quantity
+						th width="115" Unit
+						th width="120" Unit Price
+						th width="140" VAT Type
+						th width="140" Total Amount
+						th width="60" data-sortable="false" Action
 				tbody
 					- @purchase_items.each do |pi|
 						tr
 							td data-title="Item Name" = pi.item.name
-							td data-title="Remarks" = pi.remarks
+							td data-title="Item Description" = pi.remarks
 							td data-title="Quantity" = pi.quantity.to_s
 							td data-title="Unit" = pi.unit.name
 							td data-title="Unit Price" = to_peso(pi.purchase_item_amount)
@@ -80,67 +80,70 @@
 	.modal-dialog
 		.modal-content
 			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
 				h4.modal-title Add Purchase Item
 			.modal-body
 				= form_for [@purchase, @purchase_item] do |f|
 					.row.mb10
 						.col-xs-12
 							= f.label :item_id
-								| Item 
-								small.field-req *
+								| Item
+								small.field-req  *
 							= f.select :item_id, current_brand.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
 					.row.mb10
 						.col-xs-12
 							= f.label :unit_id
-								| Unit 
-								small.field-req *
+								| Unit
+								small.field-req  *
 							= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
 					.row.mb10
-						.col-xs-12
+						.col-xs-12.col-lg-4.mt5
 							= f.label :quantity
-								| Quantity 
-								small.field-req *
+								| Quantity
+								small.field-req  *
 							= f.number_field :quantity, class: "form-control", placeholder: "0"
-					.row.mb10
-						.col-xs-12
+						.col-xs-6.col-lg-4.mt5
 							= f.label :purchase_item_amount
-								| Unit Price 
-								small.field-req *
-							= f.number_field :purchase_item_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
-					.row.mb10
-						.col-xs-12
+								| Unit Price
+								small.field-req  *
+							.input-group
+								span.input-group-addon PHP
+								= f.number_field :purchase_item_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
+						.col-xs-6.col-lg-4.mt5
 							= f.label :purchase_item_total_amount
-								| Total Amount 
-								small.field-req *
-							= f.number_field :purchase_item_total_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
+								| Total Amount
+								small.field-req  *
+							.input-group
+								span.input-group-addon PHP
+								= f.number_field :purchase_item_total_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
 					.row.mb10
 						.col-xs-12
 							= f.label :vat_type
-								| VAT Type 
-								small.field-req *
-							= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control" 
+								| VAT Type
+								small.field-req  *
+							= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control"
 					.row.mb10
 						.col-xs-12
 							= f.label :remarks
 							= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2
 					.row.mb10
 						.col-xs-12.mt20
-							| ( 
-							small.field-req *
-							|  ) 
-							i indicates field is required
+							| (
+							small.field-req   *
+							|  )
+							i  indicates field is required
 					.modal-footer.no-border
 						span.inline.float-right
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|  
+							|
 							= f.submit "Add", class: "btn btn-primary"
 
 javascript:
 	$('#purchase_item_quantity').on("keyup",function(){
 		if($(this).val() > 0){
 			$('#purchase_item_purchase_item_amount').prop('readonly',false);
-			$('#purchase_item_purchase_item_total_amount').prop('readonly',false);			
+			$('#purchase_item_purchase_item_total_amount').prop('readonly',false);
 			var qty = $('#purchase_item_quantity').val();
 			var itemAmount = $('#purchase_item_purchase_item_amount').val();
 			$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
