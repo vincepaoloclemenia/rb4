@@ -11,10 +11,11 @@
 				.col-xs-12.col-lg-4.pull-right.mb5
 					= f.label :entry_date
 					small.field-req  *
-					- if params[:inventory].present? && params[:inventory][:entry_date].nil? && params[:inventory][:entry_date].empty?
-						= f.text_field :entry_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
-					- else
+					- if params[:inventory].present? && params[:inventory][:entry_date].present?
 						= f.text_field :entry_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: Date.strptime(params[:inventory][:entry_date]).strftime("%m/%d/%Y")
+
+					- else
+						= f.text_field :entry_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
 			.row.mb10
 				.col-xs-12
 					- if current_brand.categories.main.empty?
