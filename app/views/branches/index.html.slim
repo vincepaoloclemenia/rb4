@@ -1,24 +1,94 @@
-h2 Branches
-- if view_access_control('branches','create')
-	= link_to "New branch", new_branch_path
-table
-	thead
-		tr
-			th Name
-			th Address
-			th Actions
-	tbody
-		- @branches.each do |branch|
-			tr
-				td 
-					= branch.name
-				td
-					= branch.address1
-				td
-					= link_to "Show", branch_path(branch)
-					- if view_access_control('branches','update')
-						| -
-						= link_to "Edit", edit_branch_path(branch)
-					- if view_access_control('branches','destroy')
-						| -
-						= link_to "Delete", branch_path(branch), method: :delete
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Branches
+		.pull-right
+			- if view_access_control('branches','create')
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Branch".html_safe, '#', data: { toggle: "modal", target: ".create-branch-modal" }, class: "btn btn-default btn-round btn-outline"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="425" Name
+						th width="425" Address
+						th width="150" data-sortable="false" Action
+				tbody
+					- @branches.each do |branch|
+						tr
+							td data-title="Name" = branch.name
+							td data-title="Address" = branch.address1
+							td.action data-title="Action"
+								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Show Branch", toggle: "modal", target: ".show-branch-#{branch.id}" }
+								- if view_access_control('branches','update')
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-branch-#{branch.id}" }
+								- if view_access_control('branches','destroy')
+									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, branch_path(branch), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+						.modal class="show-branch-#{branch.id}" tabindex="-1" role="dialog" aria-hidden="true"
+							.modal-dialog.modal-sm
+								.modal-content
+									.modal-header
+										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										h4.modal-title = branch.name
+									.modal-body
+										.row.mb10
+											.col-xs-12
+												| Address: 
+												= branch.address1
+
+						.modal class="edit-branch-#{branch.id}" tabindex="-1" role="dialog" aria-hidden="true"
+							.modal-dialog.modal-sm
+								.modal-content
+									.modal-header
+										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										h4.modal-title Edit Branch
+									.modal-body
+										= form_for branch do |f|
+											.row.mb10
+												.col-xs-12
+													= f.label :name
+														| Name 
+														small.field-req *
+													= f.text_field :name, class: "form-control"
+												.col-xs-12
+													= f.label :address1, "Address"
+													= f.text_field :address1, class: "form-control"
+											.row.mb10
+												.col-xs-12.mt20
+													| ( 
+													small.field-req *
+													|  ) 
+													i indicates field is required
+											.modal-footer.no-border
+												span.inline.float-right
+													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+													|  
+													= f.submit "Update", class: "btn btn-primary"
+
+.modal.create-branch-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				h4.modal-title Create Branch
+			.modal-body
+				= form_for @branch do |f|
+					.row.mb10
+						.col-xs-12
+							= f.label :name
+								| Name 
+								small.field-req *
+							= f.text_field :name, class: "form-control"
+						.col-xs-12
+							= f.label :address1, "Address"
+							= f.text_field :address1, class: "form-control"
+					.row.mb10
+						.col-xs-12.mt20
+							| ( 
+							small.field-req *
+							|  ) 
+							i indicates field is required
+					.modal-footer.no-border
+						span.inline.float-right
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							|  
+							= f.submit "Create", class: "btn btn-primary"

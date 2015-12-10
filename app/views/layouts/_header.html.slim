@@ -6,7 +6,7 @@ header.header.navbar
 				span
 				span
 
-	- if params[:action] == "index"	
+	- if params[:action] == "index"	&& ["purchases"].include?(params[:controller])
 		ul.nav.navbar-nav.hidden-xs
 			li
 				p.navbar-text

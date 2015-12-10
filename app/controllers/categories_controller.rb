@@ -8,33 +8,23 @@ class CategoriesController < ApplicationController
 		@category = current_brand.categories.new
 	end
 
-	def show
-	end
-
-	def new
-		@category = current_brand.categories.new
-	end
-
 	def create
 		@category = current_brand.categories.new(category_params)
 		if @category.save
-			redirect_to categories_path, notice: "Category successfully created"
+			flash[:notice] = "Category successfully created"
 		else
 			flash[:alert] = @category.errors.full_messages.join(", ")
-			render 'new'
 		end
-	end
-
-	def edit
+		redirect_to categories_path
 	end
 
 	def update
 		if @category.update(category_params)
-			redirect_to categories_path, notice: "Category successfully updated"
+			flash[:notice] = "Category successfully updated"
 		else
 			flash[:alert] = @category.errors.full_messages.join(", ")
-			render 'edit'
 		end
+		redirect_to categories_path
 	end
 
 	def destroy
