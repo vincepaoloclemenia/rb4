@@ -44,6 +44,8 @@ class DirectionalsController < ApplicationController
 								:margin => {top: 1,
 														bottom: 1}
 			end
+      format.csv { send_data @directional.to_csv}
+      format.xls { headers["Content-Disposition"] = "attachment; filename=\"DirectionalReports.xls\"" }
 			format.html
 		end
 	end

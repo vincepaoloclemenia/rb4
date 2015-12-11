@@ -11,9 +11,9 @@ h2 Directionals
 				td = select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), {include_blank: false}
 				td = text_field_tag :date_entry, params[:date_entry], id: "datePicker", readonly: true, required: true, value: Date.today
 				td = submit_tag 'Search', class: 'button tiny primary left'
-
+				
 = link_to 'Export to PDF', directionals_path(format: 'pdf'), class: 'button tiny primary right', target: '_blank'
-= link_to 'Export to Excel', '#', class: 'button tiny success right'
+= link_to 'Export to Excel', directionals_path(format: 'xls'), class: 'button tiny success right'
 br
 br
 h4 Net Sales [Categories]
@@ -48,6 +48,7 @@ table (width="100%")
 				td = title
 				td = @directional.resource_count(column_name, act, @sale_by_category_entries)
 				td 
+
 br
 br
 h4 Complimentary Analysis

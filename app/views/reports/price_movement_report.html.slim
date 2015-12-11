@@ -1,0 +1,64 @@
+h2 Price Movement Report
+br
+br
+h4 Search
+= form_for price_movement_report_path, method: 'get' do
+	table (width="100%")
+		thead 
+			tr
+				th Branch
+				th Category
+				th Item
+				th From(date)
+				th To(date)
+				th
+		tbody
+			tr
+				td = select_tag :branch_id, options_for_select(current_brand.branches.order(:name).pluck(:name, :id), params[:branch_id]), {include_blank: false}
+				td = select_tag :category_id, options_for_select(@categories.order(:name).pluck(:name, :id)), {include_blank: false}
+				td = select_tag :item_id, {}, {include_blank: false}
+				td = text_field_tag :from_date, params[:from_date], id: 'datePicker'
+				td = text_field_tag :to_date, params[:to_date], id: 'datePicker1'
+				td = submit_tag "Search", class: "button tiny"
+
+table (width="100%")
+	thead
+		tr
+			th Category
+			th Item
+			th Unit
+			th Previous
+			th Current
+			th Price Movement (PHP)
+			th Price Movement (%)
+			th Entered By
+			th Branch
+			th Entry Date
+	tbody
+		- @purchase_items.each do |purchase_item|
+			tr
+				td = purchase_item.item.category.name
+				td = purchase_item.item.name
+				td = purchase_item.unit.name
+				td
+				td
+				td
+				td
+				td = purchase_item.purchase.created_by.full_name
+				td = purchase_item.purchase.branch.name
+				td = purchase_item.purchase.purchase_date.strftime("%B %d %Y")
+javascript:
+	console.log
+	$("#datePicker").fdatepicker();
+	$("#datePicker1").fdatepicker();
+	
+	$(document).ready(function(){
+		$("#category_id").on('change', function(){
+			$.ajax({
+				url: "#{update_item_path}",
+				data: {
+					category_id: $("#category_id").val()
+				}
+			});
+		});
+	});

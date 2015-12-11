@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get 'dashboard' => 'pages#dashboard'
   put 'change_brand' => 'pages#change_brand'
   get 'purchase_listings' => 'reports#purchase_listings'
+  get 'price_movement_report' => 'reports#price_movement_report'
+  get 'update_item' => 'reports#update_item'
   resource :client, only: [:show, :edit, :update]
   resources :brands
   resources :branches
