@@ -61,7 +61,7 @@
 														= f.label :item_value
 															| Item Value
 															small.field-req *
-															= f.text_field :item_value, class: "form-control"
+														= f.text_field :item_value, class: "form-control"
 												.col-xs-12
 													= f.label :item_code
 													= f.text_field :item_code, class: "form-control"
@@ -117,7 +117,7 @@
 								= f.label :item_value
 									| Item Value
 									small.field-req *
-									= f.text_field :item_value, class: "form-control"
+								= f.text_field :item_value, class: "form-control"
 						.col-xs-12
 							= f.label :item_code
 							= f.text_field :item_code, class: "form-control"
@@ -151,21 +151,21 @@ javascript:
 
 	  $('.unit_cost_div').each(function(){
 		  if($(this).parent().find('#item_item_type').val() == "Prepared"){
-	      $(this).removeClass('hide');
+	      $(this).slideDown();
 		  }
 		  else{
-	      $(this).addClass('hide');
+	      $(this).slideUp();
 		  }
 		});
 
 		$('select[id=item_item_type]').on("change", function(){
 	    if($(this).val() == "Prepared"){
-	      $(this).parent().parent().parent().find('.unit_cost_div').slideDown();
-	      $(this).parent().parent().parent().find('#item_item_value').val("");
+	      $(this).parent().parent().find('.unit_cost_div').slideDown();
+	      $(this).parent().parent().find('#item_item_value').val("");
 	    }
 	    else{
-	      $(this).parent().parent().parent().find('.unit_cost_div').slideUp();
-	      $(this).parent().parent().parent().find('#item_item_value').val("");
+	      $(this).parent().parent().find('.unit_cost_div').slideUp();
+	      $(this).parent().parent().find('#item_item_value').val("");
 	    }
 	  });
 	});
