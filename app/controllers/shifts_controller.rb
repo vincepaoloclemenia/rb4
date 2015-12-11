@@ -10,19 +10,21 @@ class ShiftsController < ApplicationController
 	def create
 		@shift = current_brand.shifts.new(shift_params)
 		if @shift.save
-			redirect_to shifts_path, notice: "Shift successfully created"
+			flash[:notice] = "Shift successfully created"
 		else
-			redirect_to shifts_path, alert: @shift.errors.full_messages.join(", ")
+			flash[:alert] = @shift.errors.full_messages.join(", ")
 		end
+		redirect_to shifts_path
 	end
 
 	def update
 		@shift = current_brand.shifts.find(params[:id])
 		if @shift.update(shift_params)
-			redirect_to shifts_path, notice: "Shift successfully updated"
+			flash[:notice] = "Shift successfully updated"
 		else
-			redirect_to shifts_path, alert: @shift.errors.full_messages.join(", ")
+			flash[:alert] = @shift.errors.full_messages.join(", ")
 		end
+		redirect_to shifts_path
 	end
 
 	def destroy
