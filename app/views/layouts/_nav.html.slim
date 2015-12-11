@@ -7,9 +7,9 @@
 
 	nav.ps-container role="navigation"
 		ul.nav
-			li
+			li class="#{is_menu_open?('dashboard')}"
 				= link_to '<i class="fa icon-maxicons3-market"></i> <span>Dashboard</span>'.html_safe, dashboard_path, data: { keybinding: "h o m e" }
-			li.menu-accordion
+			li.menu-accordion class="#{is_menu_open?('data_entry')}"
 				= link_to '<i class="fa icon-maxicons2-wand"></i> <span>Data Entry</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					- if view_access_control('purchases','show')
@@ -21,7 +21,7 @@
 					- if view_access_control('inventories','show')
 						li
 							= link_to "Inventories", inventories_path, data: { keybinding: "i n v" }
-			li.menu-accordion
+			li.menu-accordion class="#{is_menu_open?('purchase_reports')}"
 				= link_to '<i class="fa icon-maxicons1-rounfgraph"></i> <span>Purchase Reports</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					- if view_access_control('purchases','show')
@@ -31,14 +31,14 @@
 						= link_to "Purchase Summary", 'javascript:;'
 					li
 						= link_to "Purchase Item Detail", 'javascript:;'
-			li.menu-accordion
+			li.menu-accordion class="#{is_menu_open?('labor_reports')}"
 				= link_to '<i class="fa icon-maxicons1-load-77"></i> <span>Labor Report</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					li
-						= link_to "Labor Hours Listing", labor_hours_path()
+						= link_to "Labor Hours Listing", labor_hours_path
 					li
 						= link_to "Man Hours Report", 'javascript:;'
-			li.menu-accordion
+			li.menu-accordion class="#{is_menu_open?('sales_reports')}"
 				= link_to '<i class="fa icon-maxicons1-dollar"></i> <span>Sales Report</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					- if view_access_control("sales","show")
@@ -46,7 +46,7 @@
 							= link_to "Daily Sales Reports", sales_path, data: { keybinding: "s a l e s" }
 					li
 						= link_to "POS Reports", 'javascript:;'
-			li.menu-accordion
+			li.menu-accordion class="#{is_menu_open?('management_reports')}"
 				= link_to '<i class="fa icon-maxicons1-presentation"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					li
@@ -59,7 +59,7 @@
 						= link_to "Price Movement", 'javascript:;'
 					li
 						= link_to "Profit and Loss", 'javascript:;'
-			li.menu-accordion
+			li.menu-accordion class="#{is_menu_open?('accounts_management')}"
 				= link_to '<i class="fa icon-maxicons1-businessman"></i> <span>Accounts Management</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					- if view_access_control("users","show")
@@ -68,12 +68,12 @@
 					- if view_access_control("roles","show")
 						li
 							= link_to "Roles", roles_path, data: { keybinding: "r o l e s" }
-			li.menu-accordion
+			li.menu-accordion class="#{is_menu_open?('setup')}"
 				a href="javascript:;"
 					i.fa.icon-maxicons3-line
 					span Setup
 				ul.sub-menu
-					li.menu-accordion
+					li.menu-accordion class="#{is_menu_open?('company_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Company Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
 							- if view_access_control("clients","show")
@@ -85,14 +85,14 @@
 							- if view_access_control("branches","show")
 								li
 									= link_to "Branches", branches_path, data: { keybinding: "b r a n c h e s" }
-					li.menu-accordion
+					li.menu-accordion class="#{is_menu_open?('labor_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
 							li
 								= link_to "Employee List", employees_path
 							li
 								= link_to "Employee Types", employee_types_path
-					li.menu-accordion
+					li.menu-accordion class="#{is_menu_open?('sales_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Sales Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
 							li
@@ -107,7 +107,7 @@
 							- if view_access_control('shifts','show')
 								li
 									= link_to "Shift", shifts_path, data: { keybinding: "s h i f t s" }
-					li.menu-accordion
+					li.menu-accordion class="#{is_menu_open?('purchase_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Purchase Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
 							- if view_access_control('units','show')
