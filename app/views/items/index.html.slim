@@ -1,125 +1,144 @@
-.large-12.columns
-	h2.page-header Items
-.large-12.columns
-	- if view_access_control "items", "create"
-		.large-12.columns
-			span.inline.float-right
-				= link_to "Create item", '#', data: { "reveal-id" => "create_item", "reveal" => true }, class: "button tiny width-160 bottom-10"
-.large-12.columns
-	table.responsive.large-12
-		thead
-			tr
-				th Category
-				th Name
-				th Unit
-				th Type
-				th Action
-		tbody
-			- @items.each do |item|
-				tr
-					td = item.category.name
-					td = item.name
-					td = item.unit.name
-					td = item.item_type
-					td
-						- if view_access_control("items", "update")
-							= link_to "Edit", '#', data: { "reveal-id" => "update_item_#{item.id}", "reveal" => true }
-						- if view_access_control("items", "destroy")
-							| - 
-							= link_to "Delete", item_path(item), method: :delete
-				.reveal-modal.small id="update_item_#{item.id}" data-reveal="true" aria-labelledby="UpdateItem" aria-hidden="true" role="dialog"
-					h6.modal-header id="update_item_#{item.id}" style="font-weight:700;text-transform:uppercase"
-						| Edit item
-					.top-15
-						= form_for item do |f|
-							.row
-								.large-12.columns
-									= f.label :category_id, "Category"
-									= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name
-							.row
-								.large-12.columns
-									= f.label :unit_id, "Unit"
-									= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id)
-							.row
-								.large-12.columns
-									= f.label :name
-									= f.text_field :name
-							.row
-								.large-12.columns
-									= f.label :item_type
-									= f.select :item_type, @item_types
-							.unit_cost_div
-								.row
-									.large-12.columns
-										= f.label :item_value
-										= f.text_field :item_value
-							.row
-								.large-12.columns
-									= f.label :item_code
-									= f.text_field :item_code
-							.row
-								.large-6.columns
-									= f.label :is_active
-									= f.check_box :is_active
-								.large-6.columns
-									= f.label :track_as_sales
-									= f.check_box :track_as_sales
-							.row
-								.top-15
-									.large-12.columns
-										span.inline.float-right
-											= f.submit "Create", class: "button tiny"
-											= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Items
+		.pull-right
+			- if view_access_control('items','create')
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Item".html_safe, '#', data: { toggle: "modal", target: ".create-item-modal" }, class: "btn btn-default btn-round btn-outline"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="200" Category
+						th width="200" Name
+						th width="200" Unit
+						th width="200" Type
+						th width="200" data-sortable="false" Action
+				tbody
+					- @items.each do |item|
+						tr
+							td data-title="Category" = item.category.name
+							td data-title="Name" = item.name
+							td data-title="Unit" = item.unit.name
+							td data-title="Typpe" = item.item_type
+							td.action data-title="Action"
+								- if view_access_control('items','update')
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-item-#{item.id}" }
+								- if view_access_control('items','destroy')
+									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, item_path(item), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-					a.close-reveal-modal.close-x-btn aria-label="Close"
-						| &times;
+						.modal class="edit-item-#{item.id}" tabindex="-1" role="dialog" aria-hidden="true"
+							.modal-dialog.modal-sm
+								.modal-content
+									.modal-header
+										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										h4.modal-title Edit Item
+									.modal-body
+										= form_for item do |f|
+											.row.mb10
+												.col-xs-12
+													= f.label :category_id
+														| Category 
+														small.field-req *
+													= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, { include_blank: true }, class: "chosen", style: "width: 100%; display: none;"
+												.col-xs-12
+													= f.label :unit_id
+														| Unit
+														small.field-req *
+													= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, class: "chosen", style: "width: 100%; display: none;"
+												.col-xs-12
+													= f.label :name
+														| Name 
+														small.field-req *
+													= f.text_field :name, class: "form-control"
+												.col-xs-12
+													= f.label :item_type
+														| Item Type 
+														small.field-req *
+													= f.select :item_type, @item_types, { include_blank: "Select" }, class: "form-control"
+												.unit_cost_div
+													.col-xs-12
+														= f.label :item_value
+															| Item Value
+															small.field-req *
+															= f.text_field :item_value, class: "form-control"
+												.col-xs-12
+													= f.label :item_code
+													= f.text_field :item_code, class: "form-control"
+												.col-xs-12
+													= f.label :is_active
+													= f.check_box :is_active, class: "form-control"
+												.col-xs-12
+													= f.label :track_as_sales
+													= f.check_box :track_as_sales, class: "form-control"																																		
+											.row.mb10
+												.col-xs-12.mt20
+													| ( 
+													small.field-req *
+													|  ) 
+													i indicates field is required
+											.modal-footer.no-border
+												span.inline.float-right
+													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+													|  
+													= f.submit "Update", class: "btn btn-primary"
 
-.reveal-modal.small#create_item data-reveal="true" aria-labelledby="CreateItem" aria-hidden="true" role="dialog"
-	h6.modal-header#create_item style="font-weight:700;text-transform:uppercase"
-		| Create item
-	.top-15
-		= form_for @item do |f|
-			.row
-				.large-12.columns
-					= f.label :category_id, "Category"
-					= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, html: { class: "item_item_type" }
-			.row
-				.large-12.columns
-					= f.label :unit_id, "Unit"
-					= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id)
-			.row
-				.large-12.columns
-					= f.label :name
-					= f.text_field :name
-			.row
-				.large-12.columns
-					= f.label :item_type
-					= f.select :item_type, @item_types
-			.unit_cost_div
-				.row
-					.large-12.columns
-						= f.label :item_value
-						= f.text_field :item_value
-			.row
-				.large-12.columns
-					= f.label :item_code
-					= f.text_field :item_code
-			.row
-				.large-6.columns
-					= f.label :is_active
-					= f.check_box :is_active
-				.large-6.columns
-					= f.label :track_as_sales
-					= f.check_box :track_as_sales
-			.row
-				.top-15
-					.large-12.columns
+.modal.create-item-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				h4.modal-title Create Item
+			.modal-body
+				= form_for @item do |f|
+					.row.mb10
+						.col-xs-12
+							= f.label :category_id
+								| Category 
+								small.field-req *
+							= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+						.col-xs-12
+							= f.label :unit_id
+								| Unit
+								small.field-req *
+							= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+						.col-xs-12
+							= f.label :name
+								| Name 
+								small.field-req *
+							= f.text_field :name, class: "form-control"
+						.col-xs-12
+							= f.label :item_type
+								| Item Type 
+								small.field-req *
+							= f.select :item_type, @item_types, { include_blank: "Select" }, class: "form-control"
+						.unit_cost_div
+							.col-xs-12
+								= f.label :item_value
+									| Item Value
+									small.field-req *
+									= f.text_field :item_value, class: "form-control"
+						.col-xs-12
+							= f.label :item_code
+							= f.text_field :item_code, class: "form-control"
+						.col-xs-12
+							= f.label :is_active
+							= f.check_box :is_active, class: "form-control"
+						.col-xs-12
+							= f.label :track_as_sales
+							= f.check_box :track_as_sales, class: "form-control"
+
+					.row.mb10
+						.col-xs-12.mt20
+							| ( 
+							small.field-req *
+							|  ) 
+							i indicates field is required
+					.modal-footer.no-border
 						span.inline.float-right
-							= f.submit "Create", class: "button tiny"
-							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
-
-	a.close-reveal-modal.close-x-btn aria-label="Close"
-		| &times;
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							|  
+							= f.submit "Create", class: "btn btn-primary"
 
 javascript:
 	$(document).ready(function () {
