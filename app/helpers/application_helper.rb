@@ -20,6 +20,8 @@ module ApplicationHelper
 		controller = params[:controller]
 		action = params[:action]
 		case menu_name
+		when "dashboard"
+			"open" if current_pages?(dashboard_path)
 		when "data_entry"
 			"open" if current_pages?(purchases_path, 
 															new_sale_path, 
