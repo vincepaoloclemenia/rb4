@@ -1,37 +1,33 @@
-.large-12.columns
-	h2.page-header Inventory
-.large-12.columns
-	table.responsive.large-12
-		thead
-			tr
-				th Branch
-				th Creator
-				th Entry Date
-		tbody
-			tr
-				td = @inventory.branch.name
-				td = @inventory.user.full_name
-				td = @inventory.entry_date.strftime("%b %d %Y")
+.panel.panel-primary
+	.panel-heading 
+		.pull-left.mt7 
+			| Inventory Items
+		.pull-right
+			= link_to "<i class='icon-maxicons2-editting mr5'></i> Edit Inventory Items".html_safe, edit_inventory_path(@inventory), class: "btn btn-default btn-round btn-outline"
+	.panel-body
+		.row.mb30
+			.col-xs-12.col-lg-4.mb5
+				= label_tag :branch
+				= text_field_tag :branch, @inventory.branch.name, class: "form-control", disabled: true
+			.col-xs-12.col-lg-4.mb5
+				= label_tag :creator
+				= text_field_tag :creator, @inventory.user.full_name, class: "form-control", disabled: true
+			.col-xs-12.col-lg-4.mb5
+				= label_tag :entry_date
+				= text_field_tag :entry_date, to_default_date_format(@inventory.entry_date), class: "form-control", disabled: true
 
-.large-12.columns
-	h3 Inventory Items
-	table.responsive.large-12
-		thead
-			tr
-				th Item Name
-				th Category
-				th Unit
-				th Stock Count
-		tbody
-			- @inventory.inventory_items.each do |ii|
-				tr
-					td = ii.item.name
-					td = ii.item.category.name
-					td = ii.item.unit.name
-					td = ii.stock_count
-
-.large-12.columns
-	span.inline.float-right
-		= link_to "Back", inventories_path, class: "button tiny"
-		- if view_access_control("inventories", "update")
-			= link_to "Edit", edit_inventory_path(@inventory), class: "button tiny success"
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="300" Item Name
+						th width="300" Category
+						th width="200" Unit
+						th width="200" Stock Count
+				tbody
+					- @inventory.inventory_items.each do |ii|
+						tr
+							td data-title="Item Name" = ii.item.name
+							td data-title="Category" = ii.item.category.name
+							td data-title="Unit" = ii.item.unit.name
+							td data-title="Stock Count" = ii.stock_count

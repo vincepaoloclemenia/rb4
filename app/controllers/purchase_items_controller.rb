@@ -4,7 +4,7 @@ class PurchaseItemsController < ApplicationController
 
 	def index
 		@purchase = current_brand.purchases.find(params[:purchase_id])
-		@purchase_items = @purchase.purchase_items
+		@purchase_items = @purchase.purchase_items.paginate(page: params[:page], per_page: per_page)
 		@purchase_item = PurchaseItem.new
 	end
 
@@ -27,6 +27,11 @@ class PurchaseItemsController < ApplicationController
 	end
 
 	private
+
+	def per_page
+		params[:show].eql?('all') ? current_brand.purchases.count : params[:show]
+		return 10 if params[:show].nil?
+	end
 
 	def purchase_item_params
 		params.require(:purchase_item).permit(:item_id, :unit_id, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 

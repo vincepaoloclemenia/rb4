@@ -1,63 +1,141 @@
-.large-12.columns
-	h2.page-header Purchase Listing
-.large-12.columns
-	table.responsive.large-12
-		thead
-			tr
-				th Invoice Number
-				th Transaction Date
-				th Branch
-				th Supplier
-				th Item Name
-				th Remarks
-				th VAT Type
-				th Category
-				th Qty
-				th Unit
-				th Unit Price
-				th VAT Amount
-				th Net Amount
-				th Total Amount
-		tbody
-			- if @purchases.empty?
-				tr
-					td colspan="14" No records found
-			- else
-				- total_purchases_net_amount = 0
-				- total_purchases_total_amount = 0
-				- @purchases.each do |purchase|
-					- purchase_net_amount = 0
-					- purchase_total_amount = 0
-					- purchase.purchase_items.each do |pi|
-						- nvt = net_vat_total_computation([pi])
-						tr
-							td = purchase.invoice_number
-							td = purchase.purchase_date.strftime("%b %d %Y")
-							td = purchase.branch.name
-							td = purchase.supplier.name
-							td = pi.item.name
-							td = pi.remarks
-							td = pi.vat_type
-							td = pi.item.category.name
-							td = pi.quantity
-							td = pi.unit.name
-							td = pi.purchase_item_amount
-							td = number_to_currency(nvt[:vat], unit: "")
-							td = number_to_currency(nvt[:net], unit: "")
-							td = number_to_currency(nvt[:total], unit: "")
-							- purchase_net_amount += nvt[:net]
-							- purchase_total_amount += nvt[:total]
+.collapse#show-search class="#{ 'in' if params[:q].present? }"
+	.panel
+		.panel-body
+			= search_form_for @q, url: purchase_listings_path do |f|
+				.row
+					.col-xs-6.col-xs-3
+						= f.label :invoice_number_cont, "Invoice No."
+						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Select"
+					.col-xs-6.col-xs-3
+						= f.label :purchase_date_cont, "Purchase Date"
+						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", readonly: true
+					.col-xs-6.col-xs-3
+						= f.label :branch_id_eq, "Branch"
+						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+					.col-xs-6.col-xs-3
+						= f.label :supplier_id_eq, "Supplier"
+						= f.select :supplier_id_eq, @suppliers, { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+				.row.mt10
+					.col-xs-12
+						.pull-right
+							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+								i.icon-maxicons2-search
+
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Purchase List
+		.pull-right
+			- if view_access_control('purchases','create')
+				button.btn.btn-default.btn-round.btn-outline.mr10
+					i.icon-maxicons1-download.mr5
+					| Download as Excel
+				button.btn.btn-default.btn-round.btn-outline
+					i.icon-maxicons1-download.mr5
+					| Download as PDF
+	.panel-body
+		/ | Show
+		/ .btn-group.mb10
+		/ 	- params[:show] = "10" if params[:show].nil?
+		/ 	= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
+		/ 	ul.dropdown-menu role="menu"
+		/ 		li
+		/ 			= link_to "10", purchase_listings_path(request.params.except(:action,:controller).merge(show: "10"))
+		/ 		li
+		/ 			= link_to "25", purchase_listings_path(request.params.except(:action,:controller).merge(show: "25"))
+		/ 		li
+		/ 			= link_to "50", purchase_listings_path(request.params.except(:action,:controller).merge(show: "50"))
+		/ 		li
+		/ 			= link_to "100", purchase_listings_path(request.params.except(:action,:controller).merge(show: "100"))
+		/ 		li.divider
+		/ 		li
+		/ 			= link_to "Show All", purchase_listings_path(request.params.except(:action,:controller).merge(show: "all"))
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="130" Invoice No.
+						th width="120" Date
+						th width="" Branch
+						th width="120" Supplier
+						th width="110" Item
+						th width="120" Category
+						th width="110" VAT Amount
+						th width="110" Net Amount
+						th width="110" Total Amount
+				tbody
+					- total_purchases_net_amount = 0
+					- total_purchases_total_amount = 0
+					- @purchases.each do |purchase|
+						- purchase_net_amount = 0
+						- purchase_total_amount = 0
+						- purchase.purchase_items.each do |pi|
+							- nvt = net_vat_total_computation([pi])
+							tr
+								td data-title="Invoice No." = purchase.invoice_number
+								td data-title="Date" = purchase.purchase_date.strftime("%b %d %Y")
+								td data-title="Branch" = purchase.branch.name
+								td data-title="Supplier" = purchase.supplier.name
+								td data-title="Item"
+									= link_to pi.item.name, 'javascript:;', class: "view-link", data: { toggle: "modal", target: ".purchase-item-info-#{pi.id}", tt: "tooltip", placement: "top", "original-title" => "More Info" }
+								td data-title="Category" = pi.item.category.name
+								td data-title="VAT Amount" = number_to_currency(nvt[:vat], unit: "")
+								td data-title="Net Amount" = number_to_currency(nvt[:net], unit: "")
+								td data-title="Total Amount" = number_to_currency(nvt[:total], unit: "")
+								- purchase_net_amount += nvt[:net]
+								- purchase_total_amount += nvt[:total]
+
+						- unless purchase.purchase_items.empty?
+							tr
+								td colspan="7"
+								td 
+									strong = number_to_currency(purchase_net_amount, unit: "")
+								td 
+									strong = number_to_currency(purchase_total_amount, unit: "")
+								- total_purchases_net_amount += purchase_net_amount
+								- total_purchases_total_amount += purchase_total_amount
 					tr
-						td colspan="12"
+						td colspan="7" style="text-align: right;" TOTAL:
+						td
+							strong = number_to_currency(total_purchases_net_amount, unit: "")
 						td 
-							strong = number_to_currency(purchase_net_amount, unit: "")
-						td 
-							strong = number_to_currency(purchase_total_amount, unit: "")
-						- total_purchases_net_amount += purchase_net_amount
-						- total_purchases_total_amount += purchase_total_amount
-				tr
-					td colspan="12" style="text-align: right;" TOTAL:
-					td
-						strong = number_to_currency(total_purchases_net_amount, unit: "")
-					td 
-						strong = number_to_currency(total_purchases_total_amount, unit: "")
+							strong = number_to_currency(total_purchases_total_amount, unit: "")
+
+- @purchases.each do |purchase|
+	- purchase.purchase_items.each do |pi|
+		.modal class="purchase-item-info-#{pi.id}" tabindex="-1" role="dialog" aria-hidden="true"
+			.modal-dialog.modal-lg
+				.modal-content
+					.modal-header
+						button.close type="button" data-dismiss="modal" aria-hidden="true" x
+						h4.modal-title Item
+					.modal-body
+						.row.mb10
+							.col-xs-12
+								.no-more-tables
+									table.table.table-bordered.table-striped.mb0
+										thead
+											tr.bg-thead
+												th width="180" Item
+												th width="160" Remarks
+												th width="130" Category
+												th width="140" VAT Type
+												th width="150" Quantiy
+												th width="100" Unit
+												th width="140" Unit Price
+										tbody
+											tr
+												td = pi.item.name
+												td = pi.remarks
+												td = pi.item.category.name
+												td = pi.vat_type
+												td = pi.quantity.to_s
+												td = pi.unit.name
+												td = pi.purchase_item_amount.to_s
+
+						.modal-footer.no-border
+							button.btn.btn-default type="button" data-dismiss="modal" Close
+
+			/.align-center
+			/	p
+			/		= page_entries_info @purchases, renderer: BootstrapPagination::Rails
+			/	= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"

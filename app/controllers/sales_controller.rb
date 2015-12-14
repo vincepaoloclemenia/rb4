@@ -22,7 +22,7 @@ class SalesController < ApplicationController
 
 	def create
 		@sale = current_brand.sales.new(sale_params)
-		@sale.sale_date = Date.strptime(params[:sale][:sale_date], "%m/%d/%Y").to_s
+		@sale.sale_date = Date.strptime(params[:sale][:sale_date], "%m/%d/%Y").to_s if params[:sale][:sale_date].present?
 		if @sale.save
 			redirect_to sales_path, notice: "Sale successfully created"
 		else

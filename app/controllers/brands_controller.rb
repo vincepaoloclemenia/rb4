@@ -1,39 +1,30 @@
 class BrandsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_brand, only: [:show, :edit, :update, :destroy]
+	before_action :set_brand, only: [:update, :destroy]
 
 	def index
 		@brands = current_client.brands
-	end
-
-	def show
-	end
-
-	def new
 		@brand = Brand.new
 	end
 
 	def create
 		@brand = current_client.brands.new(brand_params)
 		if @brand.save
-			redirect_to brand_path(@brand), notice: "Brand sucessfully created"
+			flash[:notice] = "Brand sucessfully created"
 		else
 			flash[:alert] = @brand.errors.full_messages.join(", ")
-			render 'new'
 		end
-	end
-
-	def edit
+		redirect_to brands_path
 	end
 
 	def update
 		if @brand.update(brand_params)
-			redirect_to brand_path(@brand), notice: "Brand successfully updated"
+			flash[:notice] = "Brand successfully updated"
 		else
 			flash[:alert] = @brand.errors.full_messages.join(", ")
-			render 'edit'
 		end
+		redirect_to brands_path
 	end
 
 	def destroy

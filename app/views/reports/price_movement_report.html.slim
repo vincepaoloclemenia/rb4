@@ -1,57 +1,67 @@
-h2 Price Movement Report
-br
-br
-h4 Search
-= form_for price_movement_report_path, method: 'get' do
-	table (width="100%")
-		thead 
-			tr
-				th Branch
-				th Category
-				th Item
-				th From(date)
-				th To(date)
-				th
-		tbody
-			tr
-				td = select_tag :branch_id, options_for_select(current_brand.branches.order(:name).pluck(:name, :id), params[:branch_id]), {include_blank: false}
-				td = select_tag :category_id, options_for_select(@categories.order(:name).pluck(:name, :id)), {include_blank: false}
-				td = select_tag :item_id, {}, {include_blank: false}
-				td = text_field_tag :from_date, params[:from_date], id: 'datePicker'
-				td = text_field_tag :to_date, params[:to_date], id: 'datePicker1'
-				td = submit_tag "Search", class: "button tiny"
+.collapse#show-search
+	.panel
+		.panel-body
+			= form_for price_movement_report_path, method: 'get' do
+				.row
+					.col-xs-12.col-lg-3
+						label Branch
+						br
+						= select_tag :branch_id, options_for_select(current_brand.branches.order(:name).pluck(:name, :id), params[:branch_id]), class: 'form-control'
+					.col-xs-12.col-lg-3
+						label Category
+						br
+						= select_tag :category_id, options_for_select(@categories.order(:name).pluck(:name, :id)), class: 'form-control', data: { placeholder: "Search" }
+					.col-xs-12.col-lg-3
+						label Item
+						br
+						= select_tag :item_id, {}, class: 'form-control'
+					.col-xs-12.col-lg-3
+						label Date Range
+						br
+						= text_field_tag :date_range, params[:date_range], class: 'form-control drp' 
+				.row.mt10
+					.col-xs-12
+						.pull-right
+							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+								i.icon-maxicons2-search
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Price Movement Report
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th Category
+						th Item
+						th Unit
+						th.hidden Prev
+						th.hidden Curr
+						th Price Movement (PHP)
+						th Price Movement (%)
+						th Entered By
+						th Branch
+						th Entry Date
+				tbody
+					-previous_amount = 0
+					- @purchase_items.each do |purchase_item|
+						- previous_amount == 0 ? previous_amount = 0 : previous_amount
+						tr
+							td = purchase_item.item.category.name
+							td = purchase_item.item.name
+							td = purchase_item.unit.name
+							td.hidden = previous_amount
+							td.hidden = current_amount = purchase_item.purchase_item_amount.to_f
+							- upper_amount = current_amount - previous_amount
+							td = previous_amount.zero? ? '-' : price_movement(previous_amount,current_amount)
+							- bottom_amount = (current_amount + previous_amount) / 2
+							td = previous_amount.zero? ? '-' : to_percentage(upper_amount,bottom_amount)
+							td = purchase_item.purchase.created_by.full_name
+							td = purchase_item.purchase.branch.name
+							td = purchase_item.created_at.strftime("%B %d %Y")
+							- previous_amount = purchase_item.purchase_item_amount.to_f
 
-table (width="100%")
-	thead
-		tr
-			th Category
-			th Item
-			th Unit
-			th Previous
-			th Current
-			th Price Movement (PHP)
-			th Price Movement (%)
-			th Entered By
-			th Branch
-			th Entry Date
-	tbody
-		- @purchase_items.each do |purchase_item|
-			tr
-				td = purchase_item.item.category.name
-				td = purchase_item.item.name
-				td = purchase_item.unit.name
-				td
-				td
-				td
-				td
-				td = purchase_item.purchase.created_by.full_name
-				td = purchase_item.purchase.branch.name
-				td = purchase_item.purchase.purchase_date.strftime("%B %d %Y")
 javascript:
-	console.log
-	$("#datePicker").fdatepicker();
-	$("#datePicker1").fdatepicker();
-	
 	$(document).ready(function(){
 		$("#category_id").on('change', function(){
 			$.ajax({

@@ -5,11 +5,60 @@ module ApplicationHelper
 
 	def to_peso(num)
 		num = 0 if num == 0 || num.nil?
-		number_to_currency(num, unit: "PhP ")
+		number_to_currency(num, unit: "₱ ")
 	end
 
-	def to_fdatepicker_format(date)
+	def to_datepicker_format(date)
 		date.strftime("%m/%d/%Y")
+	end
+
+	def to_default_date_format(date)
+		date.strftime("%b %d, %Y")
+	end
+
+	def is_menu_open?(menu_name)
+		controller = params[:controller]
+		action = params[:action]
+		case menu_name
+		when "data_entry"
+			"open" if current_pages?(purchases_path, 
+															new_sale_path, 
+															new_inventory_path, 
+															inventories_path) || 
+								(controller.eql?('purchase_items') && action.eql?('index')) ||
+								(controller.eql?('inventories') && ["show","edit"].include?(action))
+		when "purchase_reports"
+			"open" if current_pages?(purchase_listings_path)
+		when "labor_reports"
+			"open" if current_pages?(labor_hours_path)
+		when "sales_reports"
+			"open" if current_pages?(sales_path) ||
+								(controller.eql?('sales') && action.eql?('show'))
+		when "management_reports"
+		when "accounts_management"
+			"open" if current_pages?(company_users_path, roles_path) ||
+								(controller.eql?('roles') && action.eql?('manage_permissions'))
+		when "setup"
+			"open" if current_pages?(client_path, brands_path, branches_path, employees_path, employee_types_path, settlements_path,
+															shifts_path, units_path, categories_path, items_path, conversions_path, suppliers_path)
+		when "company_setup"
+			"open" if current_pages?(client_path, brands_path, branches_path)
+		when "labor_setup"
+			"open" if current_pages?(employees_path, employee_types_path)
+		when "sales_setup"
+			"open" if current_pages?(settlements_path, shifts_path)
+		when "purchase_setup"
+			"open" if current_pages?(units_path, categories_path, items_path, conversions_path, suppliers_path)
+		else
+		end	
+	end
+
+	def current_pages?(*pages)
+		arr = []
+		pages.each do |page|
+			arr << current_page?(page)
+		end
+		arr.include?(true)
 	end
 
 	def net_vat_total_computation(purchase_items)
@@ -43,4 +92,10 @@ module ApplicationHelper
 		end
 		return { net: total_net, vat: total_vat, total: total_amount }
 	end
+
+	def to_percentage(first_value, second_value)
+		val = ((first_value/second_value) * 100).round(2)
+		return val.to_s + '%'
+	end
+
 end

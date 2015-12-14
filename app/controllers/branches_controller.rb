@@ -1,43 +1,30 @@
 class BranchesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_branch, only: [:show, :edit, :update, :destroy]
+	before_action :set_branch, only: [:update, :destroy]
 
 	def index
-		if current_user.role.role_level == "client"
-			@branches = current_client.branches
-		else
-			@branches = current_brand.branches
-		end
-	end
-
-	def show
-	end
-
-	def new
+		@branches = current_brand.branches
 		@branch = Branch.new
 	end
 
 	def create
-		@branch = Branch.new(branch_params)
+		@branch = current_brand.branches.new(branch_params)
 		if @branch.save
-			redirect_to branch_path(@branch), notice: "Branch successfully created"
+			flash[:notice] = "Branch successfully created"
 		else
 			flash[:alert] = @branch.errors.full_messages.join(", ")
-			render 'new'
 		end
-	end
-
-	def edit
+		redirect_to branches_path
 	end
 
 	def update
 		if @branch.update(branch_params)
-			redirect_to branch_path(@branch), notice: "Branch successfully updated"
+			flash[:notice] = "Branch successfully updated"
 		else
 			flash[:alert] = @branch.errors.full_messages.join(", ")
-			render 'edit'
 		end
+		redirect_to branches_path
 	end
 
 	def destroy
@@ -48,14 +35,14 @@ class BranchesController < ApplicationController
 			errors = []
 			errors << "An unkonwn reason ( please kindly report to the developers for immediate fixing )" if errors.empty?
 			puts e if errors.empty?
-      redirect_to brands_path, alert: "You cannot delete #{@branch.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
+      redirect_to branches_path, alert: "You cannot delete #{@branch.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
     end
 	end
 
 	private
 
 	def set_branch
-		@branch = current_client.branches.find(params[:id])
+		@branch = current_brand.branches.find(params[:id])
 	end
 
 	def branch_params

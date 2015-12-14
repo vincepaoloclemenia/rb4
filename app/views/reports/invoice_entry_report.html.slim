@@ -1,0 +1,49 @@
+#collapse.show-search
+	.panel
+		.panel-body
+			= form_for invoice_entry_report_path, method: 'get' do
+				.row
+					.col-xs-12.col-lg-6
+						label Branch
+						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
+					.col-xs-12.col-lg-6
+						label Date
+						= text_field_tag :date_range, params[:date_range], readonly: true, class: 'form-control drp',  placeholder: "mm/dd/yyyy"
+				.row.mt10
+					.col-xs-12
+						.pull-right
+							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+								i.icon-maxicons2-search
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Invoice Entry Report
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="70" Invoice No.
+						th Supplier
+						th Vat Amount
+						th Total Amount
+						th Net Amount
+						th Invoice Date
+						th Entry Date
+						th Entered By
+						th Branch
+				tbody
+					- @purchases.each do |purchase|
+						- nvtc = net_vat_total_computation(purchase.purchase_items)
+						tr
+							td = purchase.invoice_number
+							td = purchase.supplier.name
+							td = to_peso(nvtc[:vat])
+							td = to_peso(nvtc[:total])
+							td = to_peso(nvtc[:net])
+							td = to_default_date_format(purchase.purchase_date)
+							td = to_default_date_format(purchase.created_at)
+							td = purchase.created_by.full_name
+							td = purchase.branch.name
+
+
+

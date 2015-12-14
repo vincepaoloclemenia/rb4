@@ -1,39 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html class="js no-touch csstransforms csstransforms3d svg">
 <head>
-  <title>RestobotV4</title>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application' %>
-  <%= csrf_meta_tags %>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
   <title>Restobot v4</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+
+  <link rel="shortcut icon" href="">
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
 </head>
-<body>
-	<%= render "layouts/header" if user_signed_in? %>
+<body cz-shortcut-listen="true">
 	<%= link_to "Login", new_user_session_path, data: { keybinding: "i n" } unless user_signed_in? %>
-	<% if user_signed_in? %>
-		<main class="cd-main-content">
+	<% if user_signed_in? %>		
+		<div class="app layout-fixed-header">
 			<%= render "layouts/nav" if user_signed_in? && wizard_done? %>
-			<div class="content-wrapper">
-				<%= render "partials/flash" if flash %>
-				<%= yield %>
-			</div>	
-		</main>
+			<div class="main-panel">
+				<%= render "layouts/header" if user_signed_in? %>
+				<div class="main-content">
+					<%= render "partials/flash" if flash %>
+					<%= yield %>
+				</div>
+			</div>
+		</div>
 	<% else %>
 		<%= render "partials/flash" if flash %>
 		<%= yield %>
 	<% end %>
 
+	<%= javascript_include_tag 'restobot_js', 'data-turbolinks-track' => true %>
+
 	<script>
-		$(document).foundation();
-		$(document).ready(function(){
-			$('tbody').each(function(){
-				recordLength = $(this).children().length;
-				if(recordLength == 0){
-					$(this).parent().replaceWith("<h5>No records found</h5>");
-				}
-			});
-		});
+		// $(document).ready(function(){
+		// 	$('tbody').each(function(){
+		// 		recordLength = $(this).children().length;
+		// 		if(recordLength == 0){
+		// 			$(this).parent().replaceWith("<h5>No records found</h5>");
+		// 		}
+		// 	});
+		// });
 	</script>
 </body>
 </html>

@@ -36,4 +36,5 @@ class Directional
       (total_sales(chosen_query).to_f / amount.to_f).round(2)
     end
   end
+  
 end
