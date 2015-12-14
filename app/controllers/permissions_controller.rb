@@ -10,7 +10,7 @@ class	PermissionsController < ApplicationController
 	def update
 		@role = current_client.roles.find(params[:role_id])
 		if @role.update(role_params)
-			redirect_to role_path(@role), notice: "Permissions successfully updated"
+			redirect_to roles_path, notice: "Permissions successfully updated"
 		else
 			redirect_to role_manage_permissions_path(role_id: @role.id), alert: @role.errors.full_messages.join(", ")
 		end

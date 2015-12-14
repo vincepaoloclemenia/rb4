@@ -1,70 +1,104 @@
-.large-12.columns
-	h2.page-header Conversions
-- if view_access_control('conversions','create')	
-	.large-12.columns
-		span.inline.float-right
-			= link_to "Create Conversion", '#', data: { "reveal-id" => "create_conversion", "reveal" => true }, class: "button tiny width-160 bottom-10"
-.large-12.columns
-	table.responsive.large-12
-		thead
-			tr.bg-fff
-				th From Unit
-				th To Unit
-				th Factor
-				th Action
-		tbody
-			- @conversions.each do |conversion|
-				tr
-					td = conversion.from.name
-					td = conversion.to.name
-					td = conversion.factor.to_s
-					td
-						- if view_access_control('conversions','update')
-							= link_to "Edit", '#', data: { "reveal_id" => "edit_conversion_#{conversion.id}", "reveal" => true }
-						- if view_access_control('conversions','destroy')
-							= link_to "Delete", conversion_path(conversion), method: :delete, data: { confirm: "Are you sure?" }
-				.reveal-modal.small id="edit_conversion_#{conversion.id}" data-reveal="true" aria-labelledby="EditConversion" aria-hidden="true" role="dialog"
-					h6.modal-header id="edit_conversion_#{conversion.id}" style="font-weight:700;text-transform:uppercase" Edit Conversion
-					.top-15
-						= form_for conversion do |f|
-							.large-12.columns
-								= f.label :from_unit_id, "From"
-								= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
-							.large-12.columns
-								= f.label :to_unit_id, "To"
-								= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
-							.large-12.columns
-								= f.label :factor
-								= f.text_field :factor
-							.large-12.columns
-								= f.label :is_active, "Is active?"
-								= f.check_box :is_active
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Conversions
+		.pull-right
+			- if view_access_control('conversions','create')
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Conversion".html_safe, '#', data: { toggle: "modal", target: ".create-conversion-modal" }, class: "btn btn-default btn-round btn-outline"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="300" From Unit
+						th width="300" To Unit
+						th width="300" Factor
+						th width="100" data-sortable="false" Action
+				tbody
+					- @conversions.each do |conversion|
+						tr
+							td data-title="From Unit" = conversion.from.name
+							td data-title="To Unit" = conversion.to.name
+							td data-title="Factor" = conversion.factor.to_s
+							td.action data-title="Action"
+								- if view_access_control('conversions','update')
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-conversion-#{conversion.id}" }
+								- if view_access_control('conversions','destroy')
+									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, conversion_path(conversion), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-							.large.12.columns
-								span.inline.float-right
-									= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
-									|  
-									= f.submit "Update", class: "button tiny"
+						.modal class="edit-conversion-#{conversion.id}" tabindex="-1" role="dialog" aria-hidden="true"
+							.modal-dialog.modal-sm
+								.modal-content
+									.modal-header
+										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										h4.modal-title Edit Conversion
+									.modal-body
+										= form_for conversion do |f|
+											.row.mb10
+												.col-xs-12
+													= f.label :from_unit_id
+														| From 
+														small.field-req *
+													= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+												.col-xs-12
+													= f.label :to_unit_id
+														| To 
+														small.field-req *
+													= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+												.col-xs-12
+													= f.label :factor
+														| Factor 
+														small.field-req *
+													= f.text_field :factor, class: "form-control"
+												.col-xs-12
+													= f.label :is_active, "Is Active?"
+													= f.check_box :is_active, class: "form-control"
+											.row.mb10
+												.col-xs-12.mt20
+													| ( 
+													small.field-req *
+													|  ) 
+													i indicates field is required
+											.modal-footer.no-border
+												span.inline.float-right
+													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+													|  
+													= f.submit "Update", class: "btn btn-primary"
 
-.reveal-modal.small#create_conversion data-reveal="true" aria-labelledby="CreateConversion" aria-hidden="true" role="dialog"
-	h6.modal-header#create_conversion style="font-weight:700;text-transform:uppercase" Create Conversion
-	.top-15
-		= form_for @conversion do |f|
-			.large-12.columns
-				= f.label :from_unit_id, "From"
-				= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
-			.large-12.columns
-				= f.label :to_unit_id, "To"
-				= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id)
-			.large-12.columns
-				= f.label :factor
-				= f.text_field :factor
-			.large-12.columns
-				= f.label :is_active, "Is active?"
-				= f.check_box :is_active
-
-			.large.12.columns
-				span.inline.float-right
-					= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
-					|  
-					= f.submit "Create", class: "button tiny"
+.modal.create-conversion-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				h4.modal-title Create Conversion
+			.modal-body
+				= form_for @conversion do |f|
+					.row.mb10
+						.col-xs-12
+							= f.label :from_unit_id
+								| From 
+								small.field-req *
+							= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+						.col-xs-12
+							= f.label :to_unit_id
+								| To 
+								small.field-req *
+							= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+						.col-xs-12
+							= f.label :factor
+								| Factor 
+								small.field-req *
+							= f.text_field :factor, class: "form-control"
+						.col-xs-12
+							= f.label :is_active, "Is Active?"
+							= f.check_box :is_active, class: "form-control"
+					.row.mb10
+						.col-xs-12.mt20
+							| ( 
+							small.field-req *
+							|  ) 
+							i indicates field is required
+					.modal-footer.no-border
+						span.inline.float-right
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							|  
+							= f.submit "Create", class: "btn btn-primary"

@@ -1,39 +1,30 @@
 class RolesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_role, only: [:show, :edit, :update, :destroy]
+	before_action :set_role, only: [:update, :destroy]
 
 	def index
 		@roles = current_client.roles.order('id asc')
-	end
-
-	def show
-	end
-
-	def new
 		@role = Role.new
 	end
 
 	def create
 		@role = current_client.roles.new(role_params)
 		if @role.save
-			redirect_to role_path(@role), notice: "Role successfully created"
+			flash[:notice] = "Role successfully created"
 		else
 			flash[:alert] = @role.errors.full_messages.join(", ")
-			render 'new'
 		end
-	end
-
-	def edit
+		redirect_to roles_path
 	end
 
 	def update
 		if @role.update(role_params)
-			redirect_to role_path(@role), notice: "Role successfully updated"
+			flash[:notice] = "Role successfully updated"
 		else
 			flash[:alert] = @role.errors.full_messages.join(", ")
-			render 'edit'
 		end
+		redirect_to roles_path
 	end
 
 	def destroy
