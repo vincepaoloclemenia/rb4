@@ -1,3 +1,33 @@
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Labor Hours
+		.pull-right
+			button.btn.btn-default.btn-round.btn-outline.mr10
+				i.icon-maxicons1-download.mr5
+				| Download as Excel
+				= link_to '', labor_hours_path(format: 'pdf')
+	.panel.body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th Employee Name
+						th Branch
+						th Date Employed
+						th Contact Number
+						th Actions
+				tbody
+					- @employees.each do |employee|
+						tr
+							td = employee.full_name
+							td = employee.branch.name
+							td = employee.date_employed
+							td = employee.contact_no
+							td
+								= link_to 'Download as PDF', labor_hour_work_hours_list_path(employee, format: 'pdf')
+								|  | &nbsp;
+								= link_to 'Work Hours', labor_hour_work_hours_list_path(employee)
+
 h2 Labor Hours  
 = link_to "Generate (PDF)", labor_hours_path(format: 'pdf'), class: "button tiny right", target: "_blank"
 table { width = "100%"}
