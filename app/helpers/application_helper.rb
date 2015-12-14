@@ -94,4 +94,10 @@ module ApplicationHelper
 		end
 		return { net: total_net, vat: total_vat, total: total_amount }
 	end
+
+	def to_percentage(first_value, second_value)
+		val = ((first_value/second_value) * 100).round(2)
+		return val.to_s + '%'
+	end
+
 end

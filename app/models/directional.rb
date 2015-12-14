@@ -3,10 +3,10 @@ class Directional
     @beginning_date = beginning_date
     @ending_date = ending_date
     @branch = branch
-
+		
     @sale = Sale.where(sale_date: @beginning_date..@ending_date, branch_id: @branch)
-  end
-
+	end
+  
   def sales_entries(chosen_query)
     hash_entries = Hash.new
     chosen_query.each do |name, amount|
@@ -36,4 +36,5 @@ class Directional
       (total_sales(chosen_query).to_f / amount.to_f).round(2)
     end
   end
+  
 end

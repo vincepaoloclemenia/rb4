@@ -17,7 +17,7 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 gem 'will_paginate-bootstrap'
 gem 'ransack'
-
+gem 'whenever', :require => false
 
 group :development, :test do
   gem 'byebug'

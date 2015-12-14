@@ -22,6 +22,7 @@ $('.chosen-select').chosen({
 $('.drp').daterangepicker({
 });
 
+
 //alert
 $('.swal-warning-confirm').on('click', function() {
   swal({

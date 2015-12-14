@@ -50,13 +50,13 @@
 				= link_to '<i class="fa icon-maxicons1-presentation"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					li
-						= link_to "Directionals", 'javascript:;'
+						= link_to "Directionals", directionals_path
 					li
 						= link_to "Item Cost Analysis", 'javascript:;'
 					li
-						= link_to "Invoice Entry", 'javascript:;'
+						= link_to "Invoice Entry", invoice_entry_report_path
 					li
-						= link_to "Price Movement", 'javascript:;'
+						= link_to "Price Movement", price_movement_report_path
 					li
 						= link_to "Profit and Loss", 'javascript:;'
 			li.menu-accordion class="#{is_menu_open?('accounts_management')}"

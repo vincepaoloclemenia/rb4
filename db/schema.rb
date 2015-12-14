@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151204010355) do
+ActiveRecord::Schema.define(version: 20151214015754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,20 @@ ActiveRecord::Schema.define(version: 20151204010355) do
   end
 
   add_index "conversions", ["brand_id"], name: "index_conversions_on_brand_id", using: :btree
+
+  create_table "dashboards", force: :cascade do |t|
+    t.integer  "client_id"
+    t.integer  "brand_id"
+    t.integer  "branch_id"
+    t.integer  "customer_count"
+    t.datetime "previous_date_entry"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "dashboards", ["branch_id"], name: "index_dashboards_on_branch_id", using: :btree
+  add_index "dashboards", ["brand_id"], name: "index_dashboards_on_brand_id", using: :btree
+  add_index "dashboards", ["client_id"], name: "index_dashboards_on_client_id", using: :btree
 
   create_table "employee_types", force: :cascade do |t|
     t.string   "name"
@@ -465,6 +479,9 @@ ActiveRecord::Schema.define(version: 20151204010355) do
   add_foreign_key "client_user_accesses", "roles"
   add_foreign_key "client_user_accesses", "users"
   add_foreign_key "conversions", "brands"
+  add_foreign_key "dashboards", "branches"
+  add_foreign_key "dashboards", "brands"
+  add_foreign_key "dashboards", "clients"
   add_foreign_key "employees", "branches"
   add_foreign_key "employees", "employee_types"
   add_foreign_key "inventories", "branches"
