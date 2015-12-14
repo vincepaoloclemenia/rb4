@@ -1,58 +1,74 @@
-h2 Shifts
-- if view_access_control "shifts", "create"
-	.large-12.columns
-		span.inline.float-right
-			= link_to "Create Shift", '#', data: { "reveal-id" => "create_shift", "reveal" => true }, class: "button tiny width-160 bottom-10"
-table
-	thead
-		tr
-			th Name
-			th Action
-	tbody
-		- @shifts.each do |shift|
-			tr
-				td 
-					= shift.name
-				td
-					- if view_access_control("shifts", "update")
-						= link_to "Edit", '#', data: { "reveal-id" => "update_shift_#{shift.id}", "reveal" => true }
-					- if view_access_control("shifts", "destroy")
-						| - 
-						= link_to "Delete", shift_path(shift), method: :delete
-			.reveal-modal.small id="update_shift_#{shift.id}" data-reveal="true" aria-labelledby="UpdateShift" aria-hidden="true" role="dialog"
-				h6.modal-header id="update_shift_#{shift.id}" style="font-weight:700;text-transform:uppercase"
-					| Edit Shift
-				.top-15
-					= form_for shift do |f|
-						.row
-							.large-12.columns
-								= f.label :name
-								= f.text_field :name
-						.row
-							.top-15
-								.large-12.columns
-									span.inline.float-right
-										= f.submit "Create", class: "button tiny"
-										= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Shifts
+		.pull-right
+			- if view_access_control('shifts','create')
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Shift".html_safe, '#', data: { toggle: "modal", target: ".create-shift-modal" }, class: "btn btn-default btn-round btn-outline"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="800" Name
+						th width="200" data-sortable="false" Action
+				tbody
+					- @shifts.each do |shift|
+						tr
+							td data-title="Name" = shift.name
+							td.action data-title="Action"
+								- if view_access_control('shifts','update')
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-shift-#{shift.id}" }
+								- if view_access_control('shifts','destroy')
+									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, shift_path(shift), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-				a.close-reveal-modal.close-x-btn aria-label="Close"
-					| &times;
+						.modal class="edit-shift-#{shift.id}" tabindex="-1" role="dialog" aria-hidden="true"
+							.modal-dialog.modal-sm
+								.modal-content
+									.modal-header
+										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										h4.modal-title Edit Shift
+									.modal-body
+										= form_for shift do |f|
+											.row.mb10
+												.col-xs-12
+													= f.label :name
+														| Name 
+														small.field-req *
+													= f.text_field :name, class: "form-control"
+											.row.mb10
+												.col-xs-12.mt20
+													| ( 
+													small.field-req *
+													|  ) 
+													i indicates field is required
+											.modal-footer.no-border
+												span.inline.float-right
+													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+													|  
+													= f.submit "Update", class: "btn btn-primary"
 
-.reveal-modal.small#create_shift data-reveal="true" aria-labelledby="CreateShift" aria-hidden="true" role="dialog"
-	h6.modal-header#create_shift style="font-weight:700;text-transform:uppercase"
-		| Create Shift
-	.top-15
-		= form_for @shift do |f|
-			.row
-				.large-12.columns
-					= f.label :name
-					= f.text_field :name
-			.row
-				.top-15
-					.large-12.columns
+.modal.create-shift-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				h4.modal-title Create Shift
+			.modal-body
+				= form_for @shift do |f|
+					.row.mb10
+						.col-xs-12
+							= f.label :name
+								| Name 
+								small.field-req *
+							= f.text_field :name, class: "form-control"
+					.row.mb10
+						.col-xs-12.mt20
+							| ( 
+							small.field-req *
+							|  ) 
+							i indicates field is required
+					.modal-footer.no-border
 						span.inline.float-right
-							= f.submit "Create", class: "button tiny"
-							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
-
-	a.close-reveal-modal.close-x-btn aria-label="Close"
-		| &times;
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							|  
+							= f.submit "Create", class: "btn btn-primary"

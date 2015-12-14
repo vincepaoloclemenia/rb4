@@ -1,121 +1,158 @@
-.large-12.columns
-	h2.page-header Suppliers
-- if view_access_control('suppliers','create')	
-	.large-12.columns
-		span.inline.float-right
-			= link_to "Create Supplier", '#', data: { "reveal-id" => "create_supplier", "reveal" => true }, class: "button tiny width-160 bottom-10"
-.large-12.columns
-	table.responsive.large-12
-		thead
-			tr.bg-fff
-				th Name
-				th Contact
-				th Mobile #
-				th Action
-		tbody
-			- @suppliers.each do |supplier|
-				tr
-					td = supplier.name
-					td = supplier.contact_person
-					td = supplier.mobile_no
-					td
-						- if view_access_control('suppliers','update')
-							= link_to "Edit", '#', data: { "reveal_id" => "edit_supplier_#{supplier.id}", "reveal" => true }
-						- if view_access_control('suppliers','destroy')
-							= link_to "Delete", supplier_path(supplier), method: :delete, data: { confirm: "Are you sure?" }
-				.reveal-modal.small id="edit_supplier_#{supplier.id}" data-reveal="true" aria-labelledby="EditSupplier" aria-hidden="true" role="dialog"
-					h6.modal-header id="edit_supplier_#{supplier.id}" style="font-weight:700;text-transform:uppercase" Edit Supplier
-					.top-15
-						= form_for supplier, data: { abide: true } do |f|
-							.large-12.columns
-								= f.label :assigned_to, "Assigned to"
-								= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]]
-							.large-12.columns.p_brand_field
-								= f.label :brand_id, "Brand"
-								= f.select :brand_id, current_client.brands.pluck(:name,:id)
-							- branches = supplier.assigned_to.eql?(1) ? [] : supplier.brand.branches.pluck(:name,:id)
-							.large-12.columns.p_branch_field
-								= f.label :branch_id, "Branch"
-								= f.select :branch_id, branches
-							.large-12.columns
-								= f.label :name
-								= f.text_field :name, required: true
-							.large-12.columns
-								= f.label :address
-								= f.text_area :address
-							.large-12.columns
-								= f.label :contact_person
-								= f.text_field :contact_person
-							.large-12.columns
-								= f.label :contact_title
-								= f.text_field :contact_title
-							.large-12.columns
-								= f.label :tin, "TIN"
-								= f.text_field :tin
-							.large-12.columns
-								= f.label :landline_no
-								= f.text_field :landline_no
-							.large-12.columns
-								= f.label :mobile_no
-								= f.text_field :mobile_no
-							.large-12.columns
-								= f.label :fax_no
-								= f.text_field :fax_no
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Suppliers
+		.pull-right
+			- if view_access_control('suppliers','create')
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Supplier".html_safe, '#', data: { toggle: "modal", target: ".create-supplier-modal" }, class: "btn btn-default btn-round btn-outline"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="280" Name
+						th width="280" Contact
+						th width="280" Mobile no
+						th width="160" data-sortable="false" Action
+				tbody
+					- @suppliers.each do |supplier|
+						tr
+							td data-title="Name" = supplier.name
+							td data-title="Contact" = supplier.contact_person
+							td data-title="Mobile No" = supplier.mobile_no
+							td.action data-title="Action"
+								- if view_access_control('suppliers','update')
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-supplier-#{supplier.id}" }
+								- if view_access_control('suppliers','destroy')
+									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, supplier_path(supplier), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-							.large.12.columns
-								span.inline.float-right
-									= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
-									|  
-									= f.submit "Update", class: "button tiny"
+						.modal class="edit-supplier-#{supplier.id}" tabindex="-1" role="dialog" aria-hidden="true"
+							.modal-dialog.modal-sm
+								.modal-content
+									.modal-header
+										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										h4.modal-title Edit Supplier
+									.modal-body
+										= form_for supplier do |f|
+											.row.mb10
+												.col-xs-12
+													= f.label :assigned_to
+														| Assigned to 
+														small.field-req *
+													= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]], {}, class: "form-control"
+												.col-xs-12.p_brand_field
+													= f.label :brand_id
+														| Brand 
+														small.field-req *
+													= f.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%, display: none;"
+												.col-xs-12.p_branch_field
+													= f.label :branch_id, "Branch"
+														| Branch 
+														small.field-req *
+													= f.select :branch_id, [], { include_blank: true }, data: { placeholder: "Select" }, class: "form-control"
+												.col-xs-12
+													= f.label :name
+														| Name 
+														small.field-req *
+													= f.text_field :name, required: true, class: "form-control"
+												.col-xs-12
+													= f.label :address
+													= f.text_area :address, class: "form-control"
+												.col-xs-12
+													= f.label :contact_person
+													= f.text_field :contact_person, class: "form-control"
+												.col-xs-12
+													= f.label :contact_title
+													= f.text_field :contact_title, class: "form-control"
+												.col-xs-12
+													= f.label :tin, "TIN"
+													= f.text_field :tin, class: "form-control"
+												.col-xs-12
+													= f.label :landline_no
+													= f.text_field :landline_no, class: "form-control"
+												.col-xs-12
+													= f.label :mobile_no
+													= f.text_field :mobile_no, class: "form-control"
+												.col-xs-12
+													= f.label :fax_no
+													= f.text_field :fax_no, class: "form-control"
+											.row.mb10
+												.col-xs-12.mt20
+													| ( 
+													small.field-req *
+													|  ) 
+													i indicates field is required
+											.modal-footer.no-border
+												span.inline.float-right
+													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+													|  
+													= f.submit "Update", class: "btn btn-primary"
 
-.reveal-modal.small#create_supplier data-reveal="true" aria-labelledby="CreateSupplier" aria-hidden="true" role="dialog"
-	h6.modal-header#create_supplier style="font-weight:700;text-transform:uppercase" Create Supplier
-	.top-15
-		= form_for @supplier, data: { abide: true } do |f|
-			.large-12.columns
-				= f.label :assigned_to, "Assigned to"
-				= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]]
-			.large-12.columns.p_brand_field
-				= f.label :brand_id, "Brand"
-				= f.select :brand_id, current_client.brands.pluck(:name,:id), include_blank: true
-			.large-12.columns.p_branch_field
-				= f.label :branch_id, "Branch"
-				= f.select :branch_id, []
-			.large-12.columns
-				= f.label :name
-				= f.text_field :name, required: true
-			.large-12.columns
-				= f.label :address
-				= f.text_area :address
-			.large-12.columns
-				= f.label :contact_person
-				= f.text_field :contact_person
-			.large-12.columns
-				= f.label :contact_title
-				= f.text_field :contact_title
-			.large-12.columns
-				= f.label :tin, "TIN"
-				= f.text_field :tin
-			.large-12.columns
-				= f.label :landline_no
-				= f.text_field :landline_no
-			.large-12.columns
-				= f.label :mobile_no
-				= f.text_field :mobile_no
-			.large-12.columns
-				= f.label :fax_no
-				= f.text_field :fax_no
-
-			.large.12.columns
-				span.inline.float-right
-					= link_to "Cancel", '#', class: "button tiny secondary close-reveal-modal"
-					|  
-					= f.submit "Create", class: "button tiny"
+.modal.create-supplier-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				h4.modal-title Create Supplier
+			.modal-body
+				= form_for @supplier do |f|
+					.row.mb10
+						.col-xs-12
+							= f.label :assigned_to
+								| Assigned to 
+								small.field-req *
+							= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]], {}, class: "form-control"
+						.col-xs-12.p_brand_field
+							= f.label :brand_id
+								| Brand 
+								small.field-req *
+							= f.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%, display: none;"
+						.col-xs-12.p_branch_field
+							= f.label :branch_id, "Branch"
+								| Branch 
+								small.field-req *
+							= f.select :branch_id, [], { include_blank: true }, data: { placeholder: "Select" }, class: "form-control"
+						.col-xs-12
+							= f.label :name
+								| Name 
+								small.field-req *
+							= f.text_field :name, required: true, class: "form-control"
+						.col-xs-12
+							= f.label :address
+							= f.text_area :address, class: "form-control"
+						.col-xs-12
+							= f.label :contact_person
+							= f.text_field :contact_person, class: "form-control"
+						.col-xs-12
+							= f.label :contact_title
+							= f.text_field :contact_title, class: "form-control"
+						.col-xs-12
+							= f.label :tin, "TIN"
+							= f.text_field :tin, class: "form-control"
+						.col-xs-12
+							= f.label :landline_no
+							= f.text_field :landline_no, class: "form-control"
+						.col-xs-12
+							= f.label :mobile_no
+							= f.text_field :mobile_no, class: "form-control"
+						.col-xs-12
+							= f.label :fax_no
+							= f.text_field :fax_no, class: "form-control"
+					.row.mb10
+						.col-xs-12.mt20
+							| ( 
+							small.field-req *
+							|  ) 
+							i indicates field is required
+					.modal-footer.no-border
+						span.inline.float-right
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							|  
+							= f.submit "Create", class: "btn btn-primary"
 
 javascript:
 	$(document).ready(function (){
 		$("select#supplier_assigned_to").each(function(){
-			var assignedToValue = $(this).val();	// 1 - Client; 2 - Brand; 3 - Branch;
+			var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
 			if(assignedToValue == 2){
 				$(this).parent().parent().find(".p_brand_field").show();
 				$(this).parent().parent().find(".p_branch_field").hide();
@@ -131,7 +168,7 @@ javascript:
 		});
 
 		$("select#supplier_assigned_to").on("change", function(){
-			var assignedToValue = $(this).val();	// 1 - Client; 2 - Brand; 3 - Branch;
+			var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
 			if(assignedToValue == 2){
 				$(this).parent().parent().find(".p_brand_field").slideDown();
 				$(this).parent().parent().find(".p_branch_field").slideUp();

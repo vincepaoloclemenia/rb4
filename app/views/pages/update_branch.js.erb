@@ -1,5 +1,10 @@
-var select = $('.p_branch_field').find('select');
+var select = $("<%= @brand_field_id %>").parent().parent().find(".branch_field_div select");
 select.empty();
 <% @brand.branches.each do |b| %>
-	select.append("<option value='<%= b.id %>'><%= b.name %></option>");
+	<% if b.id == params[:selected_brand_branch_id].to_i %>
+		select.append("<option value='<%= b.id %>' selected='selected'><%= b.name %></option>");
+	<% else %>
+		select.append("<option value='<%= b.id %>'><%= b.name %></option>");
+	<% end %>
 <% end %>
+select.trigger('chosen:updated');

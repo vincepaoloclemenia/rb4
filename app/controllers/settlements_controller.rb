@@ -1,39 +1,32 @@
 class SettlementsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_settlement, only: [:show, :edit, :update, :destroy]
+	before_action :set_settlement, only: [:update, :destroy]
 
 	def index
 		@settlements = current_client.settlements
-	end
-
-	def show
-	end
-
-	def new
-		@settlement = current_client.settlements.new
+		@settlement = Settlement.new
 	end
 
 	def create
 		@settlement = current_client.settlements.new(settlement_params)
 		if @settlement.save
-			redirect_to settlements_path, notice: "Settlement successfully created"
+			flash[:notice] = "Settlement successfully created"
 		else
 			flash[:alert] = @settlement.errors.full_messages.join(", ")
-			render 'new'
+			# render 'new'
 		end
-	end
-
-	def edit
+		redirect_to settlements_path
 	end
 
 	def update
 		if @settlement.update(settlement_params)
-			redirect_to settlements_path, notice: "Settlement successfully updated"
+			flash[:notice] = "Settlement successfully updated"
 		else
 			flash[:alert] = @settlement.errors.full_messages.join(", ")
-			render 'edit'
+			# render 'edit'
 		end
+		redirect_to settlements_path
 	end
 
 	def destroy
