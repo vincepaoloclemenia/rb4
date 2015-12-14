@@ -1,15 +1,10 @@
 <% if @role.role_level == "brand" %>
-	$('.p_brand_field').slideDown();
-	$('.p_branch_field').slideUp();
+	$("<%= @role_field_id %>").parent().parent().find('.brand_field_div').slideDown();
+	$("<%= @role_field_id %>").parent().parent().find('.branch_field_div').slideUp();
 <% elsif @role.role_level == "branch" %>
-	var select = $('.p_branch_field').find('select');
-	select.empty();
-	<% @brand.branches.each do |b| %>
-		select.append("<option value='<%= b.id %>'><%= b.name %></option>");
-	<% end %>
-	$('.p_brand_field').slideDown();
-	$('.p_branch_field').slideDown();
+	$("<%= @role_field_id %>").parent().parent().find('.brand_field_div').slideDown();
+	$("<%= @role_field_id %>").parent().parent().find('.branch_field_div').slideDown();
 <% else %>
-	$('.p_brand_field').slideUp();
-	$('.p_branch_field').slideUp();
+	$("<%= @role_field_id %>").parent().parent().find('.brand_field_div').slideUp();
+	$("<%= @role_field_id %>").parent().parent().find('.branch_field_div').slideUp();
 <% end %>

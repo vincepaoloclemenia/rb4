@@ -10,9 +10,11 @@ class PagesController < ApplicationController
 
 	def update_role
 		@role = Role.find(params[:role_id])
-		unless @role.role_level == "client"
-			@brand = Brand.find(params[:brand_id])
-		end
+		@role_field_id = "##{params[:role_field_id]}"
+		# unless @role.role_level == "client"
+		# 	@brand = Brand.find(params[:brand_id])
+		# end
+		#render json: { role_level: @role.role_level }
 	end
 
 	def change_brand
@@ -23,6 +25,7 @@ class PagesController < ApplicationController
 
 	def update_branch
 		@brand = Brand.find(params[:brand_id])
+		@brand_field_id = "##{params[:brand_field_id]}"
 	end
 
 	def update_units
