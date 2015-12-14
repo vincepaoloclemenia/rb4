@@ -25,7 +25,13 @@ group :development, :test do
   gem 'spring'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'capistrano', '~> 3.2.1'
+  gem 'capistrano-secrets-yml', '~> 1.0.0'
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano3-nginx_unicorn', require: false
 end
 
+gem 'unicorn'
 #hotkey
 gem 'mousetrap-rails'
