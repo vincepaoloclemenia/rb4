@@ -16,8 +16,11 @@
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"
 # end
-
 # Learn more: http://github.com/javan/whenever
-every 1.minute do 
-	runner 'update_customer_count'
+
+set :environment, :development
+set :output, "log/cron.log"
+
+every :day, at: '2am' do
+	runner 'Sale.update_customer_count'
 end
