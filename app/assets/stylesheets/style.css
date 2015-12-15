@@ -5707,11 +5707,6 @@ button.close {
     src: url(../fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
 }
 
-/*!
-Animate.css - http://daneden.me/animate
-Licensed under the MIT license - http://opensource.org/licenses/MIT
-
-*/
 
 @-webkit-keyframes bounce {
     0%,
@@ -8293,10 +8288,9 @@ Licensed under the MIT license - http://opensource.org/licenses/MIT
 /*!
 Animate.css - http://daneden.me/animate
 Licensed under the MIT license - http://opensource.org/licenses/MIT
-
 */
 
-*/.animated {
+.animated {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
