@@ -16,7 +16,7 @@
 								i.icon-maxicons2-search
 
 .panel.panel-primary
-	.panel-heading.border.pb45
+	.panel-heading
 		.pull-left.mt7 Inventories
 		.pull-right
 			- if view_access_control "inventories", "create"
@@ -54,7 +54,7 @@
 							td data-title="Created By" = inventory.user.full_name
 							td data-title="Entry Date" = to_default_date_format(inventory.entry_date)
 							td.action data-title="Action"
-								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, inventory_path(inventory), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "View Inventory" }
+								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, inventory_path(inventory), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Inventory" }
 								- if view_access_control('brands','destroy')
 									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, inventory_path(inventory), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 			.align-center
@@ -74,19 +74,19 @@
 					.row.mb10
 						.col-xs-12
 							= label_tag :brand_id
-								| Brand 
+								| Brand
 								small.field-req *
 							= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id)), class: "form-control"
 						.col-xs-12
 							= label_tag :subcategory_id
-								| Category 
+								| Category
 								small.field-req *
 						= select_tag :subcategory_id, option_groups_from_collection_for_select(current_brand.categories.main, :subcategories, :name, :id, :name), class: "selectpicker col-xs-12", multiple: true, data: { "live-search" => true, "live-search-placeholder" => "Search", "actions-box" => true }
 					.row.mb10
 						.col-xs-12.mt20
-							| ( 
+							| (
 							small.field-req *
-							|  ) 
+							|  )
 							i indicates field is required
 					.modal-footer.no-border
 						= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
