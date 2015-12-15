@@ -1,11 +1,14 @@
 class BrandsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_brand, only: [:update, :destroy]
+	before_action :set_brand, only: [:show, :update, :destroy]
 
 	def index
 		@brands = current_client.brands
 		@brand = Brand.new
+	end
+
+	def show
 	end
 
 	def create

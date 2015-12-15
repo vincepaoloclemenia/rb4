@@ -28,12 +28,12 @@
 									- current_brand.categories.main.each do |category|
 										- unless category.subcategories.empty?
 											li.dd-item
-												.dd-handle = category.name
+												.dd-new-handle = category.name
 												ol.dd-list
 													- category.subcategories.each do |subcategory|
 														- unless subcategory.items.for_inventory.empty?
 															li.dd-item
-																.dd-handle = subcategory.name
+																.dd-new-handle = subcategory.name
 																ol.dd-list
 																	.row
 																		.col-xs-12
@@ -59,7 +59,7 @@
 																											= ii.hidden_field :item_id, value: item.id
 																											= ii.number_field :stock_count, class: "form-control", placeholder: "0"
 			.row
-				.col-xs-12
+				.col-xs-12.mt20
 					/ .align-center.mt5
 					/ 	p Filter: Show all
 					= f.submit "Create", class: "btn btn-lg btn-primary btn-outline pull-right w180"

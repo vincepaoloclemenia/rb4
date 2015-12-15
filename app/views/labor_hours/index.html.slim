@@ -4,7 +4,7 @@
 		.pull-right
 			button.btn.btn-default.btn-round.btn-outline.mr10
 				i.icon-maxicons1-download.mr5
-				| Download as Excel
+				| Download as PDF
 				= link_to '', labor_hours_path(format: 'pdf')
 	.panel.body
 		.no-more-tables
@@ -28,7 +28,7 @@
 								|  | &nbsp;
 								= link_to 'Work Hours', labor_hour_work_hours_list_path(employee)
 
-h2 Labor Hours  
+h2 Labor Hours
 = link_to "Generate (PDF)", labor_hours_path(format: 'pdf'), class: "button tiny right", target: "_blank"
 table { width = "100%"}
 	thead
@@ -40,7 +40,7 @@ table { width = "100%"}
 			th Actions
 	tbody
 		- @employees.each do |employee|
-			tr 
+			tr
 				td = employee.full_name
 				td = employee.branch.name
 				td = employee.date_employed
