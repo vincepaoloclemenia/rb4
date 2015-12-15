@@ -1,0 +1,301 @@
+.col-xs-12
+  .box-tab
+    ul.nav.nav-tabs
+      li.active
+        a data-toggle="tab" href="#brand-info"  Brand Information
+      li
+        a data-toggle="tab" href="#branches-list"  Branches
+    .tab-content
+      #brand-info.tab-pane.active.in
+        .row.mt10
+          .col-xs-12.col-lg-2
+            .text-center
+              img.image-size-info.img-circle src="/img/brand2.png" /
+          .col-xs-12.col-lg-10
+            p
+            .text-light-grey
+              | Brand
+            label.text-dark-grey = @brand.name
+            p
+            .text-light-grey
+              | Website
+            label.text-dark-grey
+              a href="#0" target="_blank"  www.cbtl.com
+            p
+            .text-light-grey
+              | Description
+            label.text-dark-grey A Coffee Bean & Tea Leaf that offers a more delectable dining experience than the usual coffee and tea.
+            p
+            .text-light-grey
+              | Landline
+            label.text-dark-grey (02) 720 9558
+            p
+            .text-light-grey
+              | Mobile No.
+            label.text-dark-grey (+63) 0935 5700 000
+            p
+            .text-light-grey
+              | Fax No.
+            label.text-dark-grey (+63) 292 4251
+        .col-xs-12.mt10
+          .pull-right
+            a.btn.btn-sm.btn-success.btn-outline.mr5
+              i.icon-maxicons1-check.mr5
+              | Switch Brand
+            a.btn.btn-sm.btn-primary.btn-outline.mr5 data-target=".edit-brand" data-toggle="modal"
+              i.icon-maxicons2-editting.mr5
+              | Edit
+            a.btn.btn-sm.btn-danger.btn-outline.swal-warning-confirm
+              i.icon-maxicons2-login.mr5
+              | Delete Brand
+      #branches-list.tab-pane
+        | Show
+        .btn-group.mb10
+          button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+            span.mr5 10
+            span.caret
+          ul.dropdown-menu role="menu"
+            li
+              a href="javascript:;"  10
+            li
+              a href="javascript:;"  25
+            li
+              a href="javascript:;"  50
+            li
+              a href="javascript:;"  100
+            li.divider
+            li
+              a href="javascript:;"  Show All
+        .pull-right
+          a.btn.btn-sm.btn-primary.btn-outline data-target=".add-branch" data-toggle="modal"
+            i.icon-maxicons2-plus.mr5
+            | Add Branch
+        .no-more-tables
+          table.table.table-bordered.table-striped.mb0 data-sortable=""
+            thead
+              tr.bg-thead
+                th width="300"  Branch
+                th data-sortable="false" width="700"  Address
+            tbody
+              tr
+                td data-title=("Branch ")
+                  a.view-link data-original-title=("View Information") data-placement="top" data-target=".branch-info" data-toggle="modal" data-tt="tooltip"
+                    span.label.label-primary.coral-bg SM Mall of Asia
+                td data-title="Description"
+                  | SM Mall of Asia. DUH!... Kidding, Pasay City, JW Diokno Blvd.,
+        .align-center
+          p Showing 1 to 10 of 57 entries
+          ul.pagination
+            li
+              a href="javascript:;"  ←
+            li.active
+              a href="javascript:;"  1
+            li
+              a href="javascript:;"  2
+            li
+              a href="javascript:;"  3
+            li
+              a href="javascript:;"  4
+            li
+              a href="javascript:;"  5
+            li
+              a href="javascript:;"  6
+            li
+              a href="javascript:;"  7
+            li
+              a href="javascript:;"  →
+
+.modal.edit-brand aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        h4.modal-title Edit Brand
+      .modal-body
+        .row
+          .col-xs-12.col-md-4.col-lg-4
+            .col-xs-12
+              .show-image.mb5
+                img.image-size src="/img/brand2.png" /
+                a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
+                  i.icon-maxicons1-exit
+              input.mb10 type="file" /
+          .col-xs-12.col-md-8.col-lg-8
+            .col-xs-12.mb10
+              label
+                | Brand
+                small.field-req *
+              input.form-control placeholder="Name" /
+            .col-xs-12.mb10
+              label Description
+              textarea.form-control placeholder=("Description of Brand") rows="2"
+            .col-xs-12.col-lg-4.mb10
+              label Landline No
+              input.form-control placeholder="" type="number" /
+            .col-xs-12.col-lg-4.mb10
+              label Mobile No
+              input.form-control placeholder="" type="number" /
+            .col-xs-12.col-lg-4.mb10
+              label Fax No
+              input.form-control placeholder="" type="number" /
+            .col-xs-12
+              | (
+              small.field-req  *
+              |  )
+              i  indicates field is required
+        .modal-footer.no-border
+          button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+          button.btn.btn-primary type="button"  Save Changes
+
+.modal.add-branch aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        h4.modal-title Add Branch
+      .modal-body
+        .row
+          .col-xs-12.col-md-4.col-lg-4
+            .col-xs-12
+              .show-image.mb5
+                img.image-size src="/img/brand.png" /
+                a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
+                  i.icon-maxicons1-exit
+              input.mb10 type="file" /
+          .col-xs-12.col-md-8.col-lg-8
+            .col-xs-12.mb10
+              label
+                | Branch
+                small.field-req *
+              input.form-control placeholder="Name" /
+            .col-xs-12.mb10
+              label
+                | Color
+                small.field-req *
+                br/
+                select#init name="colorpicker-option-selected"
+                  option value="#60355B"  Eggplant
+                  option value="#E26A6A"  Coral
+                  option value="#FF4500"  Pumpkin
+                  option value="#DC143C"
+                  option value="#FF8C00"
+                  option value="#C71585"
+                  option value="#1E81B4"
+                  option value="#00A087"
+                  option value="#DD525B"
+                  option value="#8CAF41"
+                  option value="#8F7260"
+                  option value="#4F669D"
+                  option value="#646464"
+                  option value="#AAA786"
+                  option value="#6F9684"
+                  option value="#98ACD1"
+            .col-xs-12.mb10
+              label Address
+              textarea.form-control placeholder=("Address of Branch") rows="2"
+            .col-xs-6.mb10
+              label City
+              input.form-control placeholder=(" ") /
+            .col-xs-6.mb10
+              label
+                | Zip
+                a data-original-title=("What's my zip?") data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
+                  i.icon-maxicons2-question.f10.text-grey
+              input.form-control type="number" /
+            .col-xs-12.mb10
+              label
+                | E-mail Address
+                small.field-req *
+              input.form-control placeholder="" /
+            .col-xs-12.col-lg-4.mb10
+              label Landline No
+              input.form-control placeholder="" type="number" /
+            .col-xs-12.col-lg-4.mb10
+              label Mobile No
+              input.form-control placeholder="" type="number" /
+            .col-xs-12.col-lg-4.mb10
+              label Fax No
+              input.form-control placeholder="" type="number" /
+            .col-xs-12
+              | (
+              small.field-req  *
+              |  )
+              i  indicates field is required
+        .modal-footer.no-border
+          button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+          button.btn.btn-primary type="button"  Add Branch
+
+.modal.branch-info aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        h4.modal-title SM Mall of Asia
+      .modal-body
+        .row.mt10
+          .col-xs-12.col-lg-2
+            .text-center.mt20
+              img.image-size-info.img-circle src="/img/brand.png" /
+          .col-xs-12.col-lg-10
+            .row.mb10.mt10
+              .col-xs-6
+                .text-light-grey
+                  | Branch
+                label.text-dark-grey
+                  span.label.label-primary.coral-bg SM Mall of Asia
+              .col-xs-6
+                .text-light-grey
+                  | Landline
+                label.text-dark-grey (02) 720 9558
+            .row.mb10
+              .col-xs-6
+                .text-light-grey
+                  | Address
+                label.text-dark-grey
+                  | SM Mall of Asia. DUH!... Kidding, Pasay City, JW Diokno Blvd.,
+              .col-xs-6
+                .text-light-grey
+                  | Mobile No.
+                label.text-dark-grey (+63) 0935 5700 000
+            .row.mb10
+              .col-xs-6
+                .text-light-grey
+                  | City
+                label.text-dark-grey
+                  | Pasay City
+              .col-xs-6
+                .text-light-grey
+                  | Fax No.
+                label.text-dark-grey (+63) 292 4251
+            .row.mb10
+              .col-xs-6
+                .text-light-grey
+                  | Zip
+                label.text-dark-grey
+                  | 1300
+              .col-xs-6
+                .text-light-grey
+                  | E-mail Address
+                label.text-dark-grey cbtl.moa@company.com
+            .row.mb10
+              .col-xs-6
+                .text-light-grey
+                  | Status
+                label.text-dark-grey
+                  span.label.label-success Active
+        .modal-footer.no-border
+          a.btn.btn-default.pull-left data-dismiss="modal" type="button"  Cancel
+          a.btn.btn-sm.btn-primary.btn-outline
+            i.icon-maxicons2-editting.mr5
+            | Edit
+          a.btn.btn-sm.btn-danger.btn-outline
+            i.icon-maxicons2-login.mr5
+            | Delete Branch
+
+javascript:
+  $(document).ready(function() {
+      $('#init').on('click', function() {
+        $('select[name="colorpicker-option-selected"]').simplecolorpicker({theme: 'glyphicons'});
+      });
+      $('#init').trigger('click');
+  });

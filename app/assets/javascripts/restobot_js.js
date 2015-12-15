@@ -6,4 +6,5 @@
 //= require daterangepicker
 //= require bootstrap-datepicker
 //= require bootstrap-select
+//= require jquery.simplecolorpicker
 //= require custom

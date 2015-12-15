@@ -508,7 +508,7 @@ mark {
 }
 
 .text-right {
-    text-align: right !important
+    text-align: right
 }
 
 .text-center {
@@ -26883,11 +26883,8 @@ select.mobile-device {
     font-size: 10px !important;
 }
 /** Width **/
-.w180 {
+.w180{
     width: 180px
-}
-.w300 {
-    width: 300px
 }
 
 /** Tables **/
@@ -27160,12 +27157,12 @@ div.show-image a.delete {
 .coral-bg{
     background-color: #E26A6A !important
 }
-a.coral-bg:hover{
+.coral-bg:hover{
     background-color: #dd5454 !important
 }
 .eggplant-bg{
     background-color: #60355B !important
 }
-a.eggplant-bg:hover{
+.eggplant-bg:hover{
     background-color:   !important
 }
