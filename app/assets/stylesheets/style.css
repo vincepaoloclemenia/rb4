@@ -508,7 +508,7 @@ mark {
 }
 
 .text-right {
-    text-align: right
+    text-align: right !important
 }
 
 .text-center {
@@ -1869,6 +1869,7 @@ output {
     background-image: none;
     border: 1px solid #ccc
 }
+
 
 .form-control:focus {
     outline: 0
@@ -4574,7 +4575,7 @@ a.list-group-item:hover {
 
 .close {
     float: right;
-    font-size: 12px;
+    font-size: 21px;
     line-height: 1;
     color: #000;
     text-shadow: 0 1px 0 #fff;
@@ -12028,7 +12029,7 @@ blockquote p {
 
 .sidebar-panel,
 .sidebar-panel>.brand {
-    background-color: #4D5250
+    background-color: #434749
 }
 
 .sidebar-panel>.brand a {
@@ -12050,14 +12051,14 @@ blockquote p {
 }
 
 .sidebar-panel>nav>ul>li>ul {
-    background-color: #444A47
+    background-color: #3e4244
 }
 
 .sidebar-panel>nav>ul>li.open>a,
 .sidebar-panel>nav>ul>li.open>a:focus,
 .sidebar-panel>nav>ul>li.open>a:hover,
 .sidebar-panel>nav>ul>li>a:hover {
-    background-color: #414742
+    background-color: #3b4042
 }
 
 .sidebar-panel>nav li.active>a,
@@ -13962,6 +13963,7 @@ footer.content-footer li:hover {
     -webkit-backface-visibility: hidden
 }
 
+
 .btn::before {
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
@@ -14676,7 +14678,10 @@ fieldset[disabled] .btn-success:hover {
     background-color: transparent;
     background-image: none;
     border-color: #558b2f;
-    color: #558b2f
+    color: #558b2f;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600
 }
 
 .btn-success.btn-outline.active,
@@ -15845,7 +15850,7 @@ a.list-group-item-danger.active:hover {
 .pagination>li>a,
 .pagination>li>span {
     border-color: #e4e4e4;
-    color: #4d5250
+    color: #434749
 }
 
 .pagination>li:first-child>a,
@@ -16572,6 +16577,11 @@ a.bg-danger-light:hover {
     color: #616161;
     background-color: #fff
 }
+.bg-login {
+    background: url('/img/login-bg-2.png') no-repeat;
+    background-size: cover;
+
+}
 
 a.bg-white:hover {
     background-color: #e6e6e6
@@ -16991,6 +17001,13 @@ a.text-bluegrey:hover {
     color: #4b626d
 }
 
+.text-light-grey{
+  color:#9e9e9e
+}
+
+.text-dark-grey{
+  color:#424242
+}
 .well {
     border-color: #ddd;
     background-color: #E9E9ED;
@@ -25145,9 +25162,7 @@ fieldset[disabled] .btn-yahoo:hover {
 .m5 {
     margin: 5px
 }
-.mr2 {
-    margin-right: 2px
-}
+
 .mr5 {
     margin-right: 5px
 }
@@ -26857,24 +26872,27 @@ select.mobile-device {
 
 /** Icons **/
 .show-icon{
-  font-size:11px
+    font-size:11px
 }
 
 .green-color{
-  color:#2e7d32
+    color:#2e7d32
 }
 
 .f10{
-  font-size: 10px !important;
+    font-size: 10px !important;
 }
 /** Width **/
-.w180{
-width: 180px
+.w180 {
+    width: 180px
+}
+.w300 {
+    width: 300px
 }
 
 /** Tables **/
 .bg-thead{
-  background-color: #f3f3f3
+    background-color: #f3f3f3
 }
 .view-link{
     color: #424242 !important;
@@ -26882,16 +26900,131 @@ width: 180px
     border-bottom: 1px #bdbdbd dotted
 }
 .field-req{
-  font-weight:600;
-  color:#e53935
+    font-weight:600;
+    color:#e53935
+}
+.brand-avatar {
+    width: 50px;
+    margin-top:3px;
+    margin-bottom:3px;
+    margin-right: 5px
+ }
+
+
+ /*
+  * Very simple jQuery Color Picker
+  * https://github.com/tkrotoff/jquery-simplecolorpicker
+  *
+  * Copyright (C) 2012-2013 Tanguy Krotoff <tkrotoff@gmail.com>
+  *
+  * Licensed under the MIT license
+  */
+
+ /**
+  * Inspired by Bootstrap Twitter.
+  * See https://github.com/twbs/bootstrap/blob/master/less/navbar.less
+  * See https://github.com/twbs/bootstrap/blob/master/less/dropdowns.less
+  */
+.simplecolorpicker.glyphicons span.color[data-selected]:after {
+  position: relative;
+  font-family: 'maxicons';
+  /*line-height: .9;*/
+  -webkit-font-smoothing: antialiased;
+  content: 'd';
+  /*line-height: 20px;*/
+  font-size: 12px;
+  text-align: center;
+  margin-left: 5px;
+  top:2px;
+  -webkit-transform: scale(1.09);
+  -ms-transform: scale(1.09);
+  transform: scale(1.09);
+  outline: 0;
+}
+.simplecolorpicker.glyphicons span.color[data-selected]:active,
+.simplecolorpicker.glyphicons span.color[data-selected]:before,
+.simplecolorpicker.glyphicons span.color[data-selected]:focus{
+  outline: 0;
 }
 
-/** Branch Colors **/
-.coral-bg{
-    background-color: #CD5C5C !important
-}
+ .simplecolorpicker.picker {
+   position: absolute;
+   top: 100%;
+   left: 0;
+   z-index: 1051; /* Above Bootstrap modal (@zindex-modal = 1050) */
+   display: none;
+   float: left;
 
+   min-width: 160px;
+   max-width: 283px; /* @popover-max-width = 276px + 7 */
 
+   padding: 5px 0 0 5px;
+   margin: 2px 0 0;
+   list-style: none;
+   background-color: #fff; /* @dropdown-bg */
+
+   border: 1px solid #ccc; /* @dropdown-fallback-border */
+   border: 1px solid rgba(0, 0, 0, .15); /* @dropdown-border */
+
+   -webkit-border-radius: 4px; /* @border-radius-base */
+      -moz-border-radius: 4px;
+           border-radius: 4px;
+
+   -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+      -moz-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+           box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+
+   -webkit-background-clip: padding-box;
+      -moz-background-clip: padding;
+           background-clip: padding-box;
+ }
+
+ .simplecolorpicker.inline {
+   display: inline-block;
+   padding: 6px 0;
+ }
+
+ .simplecolorpicker span {
+   margin: 0 5px 5px 0;
+ }
+
+ .simplecolorpicker.icon,
+ .simplecolorpicker span.color {
+   display: inline-block;
+   width: 25px;
+   height: 25px;
+   cursor: pointer;
+   border: 1px solid transparent;
+ }
+
+ .simplecolorpicker.icon:after,
+ .simplecolorpicker span.color:after {
+   content: '\00a0\00a0\00a0\00a0'; /* Spaces */
+   outline: 0;
+ }
+
+ .simplecolorpicker span.color[data-disabled]:hover {
+   cursor: not-allowed;
+   border: 1px solid transparent;
+ }
+
+ .simplecolorpicker span.color:hover,
+ .simplecolorpicker span.color[data-selected],
+ .simplecolorpicker span.color[data-selected]:hover {
+  -webkit-transform: scale(1.11);
+  -ms-transform: scale(1.11);
+  transform: scale(1.11);
+  outline: 0;
+ }
+ .simplecolorpicker span.color[data-selected]:after {
+   color: #fff;
+   outline: 0;
+ }
+
+ /* Vertical separator, replaces optgroup. */
+ .simplecolorpicker span.vr {
+   border-left: 1px solid #222; /* @gray-dark */
+ }
 
 
 /*! ========================================================================
@@ -26905,61 +27038,61 @@ width: 180px
 
 .checkbox label .toggle,
 .checkbox-inline .toggle {
-	margin-left: -20px;
-	margin-right: 5px;
+  	margin-left: -20px;
+  	margin-right: 5px;
 }
 
 .toggle {
-	position: relative;
-	overflow: hidden;
+  	position: relative;
+  	overflow: hidden;
 }
 .toggle input[type="checkbox"] {
-	display: none;
+	 display: none;
 }
 .toggle-group {
-	position: absolute;
-	width: 200%;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	transition: left 0.35s;
-	-webkit-transition: left 0.35s;
-	-moz-user-select: none;
-	-webkit-user-select: none;
+  	position: absolute;
+  	width: 200%;
+  	top: 0;
+  	bottom: 0;
+  	left: 0;
+  	transition: left 0.35s;
+  	-webkit-transition: left 0.35s;
+  	-moz-user-select: none;
+  	-webkit-user-select: none;
 }
 .toggle.off .toggle-group {
-	left: -100%;
+  	left: -100%;
 }
 .toggle-on {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 50%;
-	margin: 0;
-	border: 0;
-	border-radius: 0 !important;
+  	position: absolute;
+  	top: 0;
+  	bottom: 0;
+  	left: 0;
+  	right: 50%;
+  	margin: 0;
+  	border: 0;
+  	border-radius: 0 !important;
 }
 .toggle-off {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 50%;
-	right: 0;
-	margin: 0;
-	border: 0;
-	border-radius: 0;
+  	position: absolute;
+  	top: 0;
+  	bottom: 0;
+  	left: 50%;
+  	right: 0;
+  	margin: 0;
+  	border: 0;
+  	border-radius: 0;
 }
 .toggle-handle {
-	position: relative;
-	margin: 0 auto;
-	padding-top: 0px;
-	padding-bottom: 0px;
-  padding-right: 20px;
-	height: 100%;
-	width: 0px;
-	border-width: 0 1px;
-  border-radius: 0 !important
+  	position: relative;
+  	margin: 0 auto;
+  	padding-top: 0px;
+  	padding-bottom: 0px;
+    padding-right: 20px;
+  	height: 100%;
+  	width: 0px;
+  	border-width: 0 1px;
+    border-radius: 0 !important
 }
 
 .toggle.btn { min-width: 59px; min-height: 34px; }
@@ -26980,37 +27113,59 @@ width: 180px
 .toggle-off.btn-xs { padding-left: 12px; }
 .toggle.android { border-radius: 0px;}
 .toggle.android .toggle-handle { border-radius: 0px; }
-/*.example {
-	position: relative;
-	border: 1px solid #ccc;
-	padding: 1em 1em 0.5em 1em;
-	border-radius: 4px 4px 0 0;
+
+div.show-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.image-size{
+  width: 100%;
+  height: auto;
+}
+.image-size-info{
+  width: 120px;
+  height: 120px;
+}
+.show-image img {
+  opacity: 1;
+  margin-top:25px;
+  text-align: center;
+   transition: opacity .25s ease-in-out;
+   -moz-transition: opacity .25s ease-in-out;
+   -webkit-transition: opacity .25s ease-in-out;
+}
+div.show-image:hover img{
+    opacity:0.7;
+}
+div.show-image:hover a {
+    display: block;
+}
+div.show-image a {
+    position:absolute;
+    display:none;
+}
+div.show-image input.update {
+    top:0;
+    left:0;
+}
+div.show-image a.delete {
+    top:25px;
+    right:0;
+    border-radius: 0 !important
 }
 
-.example:after {
-	content: "Company Information";
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	padding: 3px 7px;
-	font-size: 12px;
-	font-weight: bold;
-	background-color: #f5f5f5;
-	border: 1px solid #ccc;
-	color: #9da0a4;
-	border-radius: 0px 4px 0px 4px;
-	border-width: 0px 0px 1px 1px;
-}
 
-.example + code.hljs {
-	border-top: 0;
-	border-radius: 0px 0px 4px 4px;
+/** Branch Colors **/
+.coral-bg{
+    background-color: #E26A6A !important
 }
-
-.example > * {
-	margin-bottom: 10px;
+a.coral-bg:hover{
+    background-color: #dd5454 !important
 }
-
-.example > div.toggle {
-	margin-right: 10px;
-}*/
+.eggplant-bg{
+    background-color: #60355B !important
+}
+a.eggplant-bg:hover{
+    background-color:   !important
+}

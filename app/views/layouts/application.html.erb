@@ -14,8 +14,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body cz-shortcut-listen="true">
-	<%= link_to "Login", new_user_session_path, data: { keybinding: "i n" } unless user_signed_in? %>
-	<% if user_signed_in? %>		
+	<% if user_signed_in? %>
 		<div class="app layout-fixed-header">
 			<%= render "layouts/nav" if user_signed_in? && wizard_done? %>
 			<div class="main-panel">
@@ -27,7 +26,6 @@
 			</div>
 		</div>
 	<% else %>
-		<%= render "partials/flash" if flash %>
 		<%= yield %>
 	<% end %>
 
