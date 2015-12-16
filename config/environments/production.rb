@@ -76,4 +76,16 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.default_url_options = { :host => 'restobotv4.cloudapp.net' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :enable_starttls_auto => true,
+    :address              => "smtp.office365.com",
+    :port                 => '587',
+    :domain               => 'restobot.com',
+    :authentication       => :login,
+    :user_name            => 'restobot@appsource.biz',
+    :password             => ENV["RESTOBOT_EMAIL_PASSWORD"]
+   }
 end
