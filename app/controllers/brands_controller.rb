@@ -9,6 +9,8 @@ class BrandsController < ApplicationController
 	end
 
 	def show
+		@branches = @brand.branches
+		@branch = Branch.new
 	end
 
 	def create
@@ -32,8 +34,14 @@ class BrandsController < ApplicationController
 
 	def destroy
 		begin
-			@brand.destroy
-			redirect_to brands_path, notice: "Brand successfully deleted"
+			if @brand.id == session[:current_brand_id].to_i
+				session[:current_brand_id] = current_client.brands.first.id
+				@brand.destroy
+				redirect_to brands_path, notice: "Brand successfully deleted and switched to #{current_brand.name}"
+			else
+				@brand.destroy
+				redirect_to brands_path, notice: "Brand successfully deleted"
+			end
 		rescue ActiveRecord::InvalidForeignKey => e
 			errors = []
 			errors << "#{'Branch'.pluralize(@brand.branches.count)}(#{@brand.branches.pluck(:name).join(', ')}) belongs to this brand" if @brand.branches.present?

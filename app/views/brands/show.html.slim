@@ -20,34 +20,39 @@
             .text-light-grey
               | Website
             label.text-dark-grey
-              a href="#0" target="_blank"  www.cbtl.com
+              = @brand.website
             p
             .text-light-grey
               | Description
-            label.text-dark-grey A Coffee Bean & Tea Leaf that offers a more delectable dining experience than the usual coffee and tea.
+            label.text-dark-grey 
+              = @brand.description
             p
             .text-light-grey
               | Landline
-            label.text-dark-grey (02) 720 9558
+            label.text-dark-grey 
+              = @brand.landline_no
             p
             .text-light-grey
               | Mobile No.
-            label.text-dark-grey (+63) 0935 5700 000
+            label.text-dark-grey 
+              = @brand.mobile_no
             p
             .text-light-grey
               | Fax No.
-            label.text-dark-grey (+63) 292 4251
+            label.text-dark-grey 
+              = @brand.fax_no
         .col-xs-12.mt10
           .pull-right
             a.btn.btn-sm.btn-success.btn-outline.mr5
               i.icon-maxicons1-check.mr5
               | Switch Brand
-            a.btn.btn-sm.btn-primary.btn-outline.mr5 data-target=".edit-brand" data-toggle="modal"
-              i.icon-maxicons2-editting.mr5
-              | Edit
-            a.btn.btn-sm.btn-danger.btn-outline.swal-warning-confirm
-              i.icon-maxicons2-login.mr5
-              | Delete Brand
+            - if view_access_control("brands","update") 
+              a.btn.btn-sm.btn-primary.btn-outline.mr5 data-target=".edit-brand" data-toggle="modal"
+                i.icon-maxicons2-editting.mr5
+                | Edit
+            - if view_access_control("brands","destroy")
+              = link_to "<i class='icon-maxicons2-login mr5'></i> Delete Brand".html_safe, brand_path(@brand), method: :delete, class: "btn btn-sm btn-danger btn-outline", data: { confirm: "Are you sure?" }
+
       #branches-list.tab-pane
         | Show
         .btn-group.mb10
@@ -66,10 +71,11 @@
             li.divider
             li
               a href="javascript:;"  Show All
-        .pull-right
-          a.btn.btn-sm.btn-primary.btn-outline data-target=".add-branch" data-toggle="modal"
-            i.icon-maxicons2-plus.mr5
-            | Add Branch
+        - if view_access_control("branches","create")
+          .pull-right
+            a.btn.btn-sm.btn-primary.btn-outline data-target=".add-branch" data-toggle="modal"
+              i.icon-maxicons2-plus.mr5
+              | Add Branch
         .no-more-tables
           table.table.table-bordered.table-striped.mb0 data-sortable=""
             thead
@@ -77,33 +83,72 @@
                 th width="300"  Branch
                 th data-sortable="false" width="700"  Address
             tbody
-              tr
-                td data-title=("Branch ")
-                  a.view-link data-original-title=("View Information") data-placement="top" data-target=".branch-info" data-toggle="modal" data-tt="tooltip"
-                    span.label.label-primary.coral-bg SM Mall of Asia
-                td data-title="Description"
-                  | SM Mall of Asia. DUH!... Kidding, Pasay City, JW Diokno Blvd.,
-        .align-center
-          p Showing 1 to 10 of 57 entries
-          ul.pagination
-            li
-              a href="javascript:;"  ←
-            li.active
-              a href="javascript:;"  1
-            li
-              a href="javascript:;"  2
-            li
-              a href="javascript:;"  3
-            li
-              a href="javascript:;"  4
-            li
-              a href="javascript:;"  5
-            li
-              a href="javascript:;"  6
-            li
-              a href="javascript:;"  7
-            li
-              a href="javascript:;"  →
+              - @branches.each do |branch|
+                tr
+                  td data-title="Branch"
+                    a.view-link data-original-title="View Information" data-placement="top" data-target=".branch-info-#{branch.id}" data-toggle="modal" data-tt="tooltip"
+                      span.label.label-primary style="background-color: #{branch.color}" = branch.name
+                  td data-title="Description" = branch.address1
+
+                .modal class="branch-info-#{branch.id}" aria-hidden="true" role="dialog" tabindex="-1"
+                  .modal-dialog.modal-lg
+                    .modal-content
+                      .modal-header
+                        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+                        h4.modal-title = branch.name
+                      .modal-body
+                        .row.mt10
+                          .col-xs-12.col-lg-2
+                            .text-center.mt20
+                              img.image-size-info.img-circle src="/img/brand.png" /
+                          .col-xs-12.col-lg-10
+                            .row.mb10.mt10
+                              .col-xs-6
+                                .text-light-grey
+                                  | Branch
+                                label.text-dark-grey
+                                  span.label.label-primary.coral-bg = branch.name
+                              .col-xs-6
+                                .text-light-grey
+                                  | Landline
+                                label.text-dark-grey = branch.landline_no
+                            .row.mb10
+                              .col-xs-6
+                                .text-light-grey
+                                  | Address
+                                label.text-dark-grey
+                                  = branch.address1
+                              .col-xs-6
+                                .text-light-grey
+                                  | Mobile No.
+                                label.text-dark-grey = branch.mobile_no
+                            .row.mb10
+                              .col-xs-6
+                                .text-light-grey
+                                  | City
+                                label.text-dark-grey
+                                  | Pasay City
+                              .col-xs-6
+                                .text-light-grey
+                                  | Fax No.
+                                label.text-dark-grey = branch.fax_no
+                            .row.mb10
+                              .col-xs-6
+                                .text-light-grey
+                                  | Zip
+                                label.text-dark-grey
+                                  | 1300
+                              .col-xs-6
+                                .text-light-grey
+                                  | E-mail Address
+                                label.text-dark-grey = branch.email_address
+                        .modal-footer.no-border
+                          a.btn.btn-default.pull-left data-dismiss="modal" type="button"  Cancel
+                          a.btn.btn-sm.btn-primary.btn-outline
+                            i.icon-maxicons2-editting.mr5
+                            | Edit
+                          - if view_access_control("branches","destroy")
+                            = link_to "<i class='icon-maxicons2-login mr5'></i> Delete Branch".html_safe, branch_path(branch), method: :delete, class: "btn btn-sm btn-danger btn-outline", data: { confirm: "Are you sure?" }
 
 .modal.edit-brand aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg
@@ -112,40 +157,44 @@
         button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
         h4.modal-title Edit Brand
       .modal-body
-        .row
-          .col-xs-12.col-md-4.col-lg-4
-            .col-xs-12
-              .show-image.mb5
-                img.image-size src="/img/brand2.png" /
-                a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-                  i.icon-maxicons1-exit
-              input.mb10 type="file" /
-          .col-xs-12.col-md-8.col-lg-8
-            .col-xs-12.mb10
-              label
-                | Brand
-                small.field-req *
-              input.form-control placeholder="Name" /
-            .col-xs-12.mb10
-              label Description
-              textarea.form-control placeholder=("Description of Brand") rows="2"
-            .col-xs-12.col-lg-4.mb10
-              label Landline No
-              input.form-control placeholder="" type="number" /
-            .col-xs-12.col-lg-4.mb10
-              label Mobile No
-              input.form-control placeholder="" type="number" /
-            .col-xs-12.col-lg-4.mb10
-              label Fax No
-              input.form-control placeholder="" type="number" /
-            .col-xs-12
-              | (
-              small.field-req  *
-              |  )
-              i  indicates field is required
-        .modal-footer.no-border
-          button.btn.btn-default data-dismiss="modal" type="button"  Cancel
-          button.btn.btn-primary type="button"  Save Changes
+        = form_for @brand do |f|
+          .row
+            .col-xs-12.col-md-4.col-lg-4
+              .col-xs-12
+                .show-image.mb5
+                  img.image-size src="/img/brand2.png" /
+                  a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
+                    i.icon-maxicons1-exit
+                input.mb10 type="file" /
+            .col-xs-12.col-md-8.col-lg-8
+              .col-xs-12.mb10
+                = f.label :name
+                  | Brand
+                  small.field-req *
+                = f.text_field :name, class: "form-control", placeholder: "Name"
+              .col-xs-12.mb10
+                = f.label :website
+                = f.text_field :website, class: "form-control"
+              .col-xs-12.mb10
+                = f.label :description
+                = f.text_area :description, class: "form-control", placeholder:"Description of Brand", rows: "2"
+              .col-xs-12.col-lg-4.mb10
+                = f.label :landline_no
+                = f.number_field :landline_no, class: "form-control"
+              .col-xs-12.col-lg-4.mb10
+                = f.label :mobile_no
+                = f.number_field :mobile_no, class: "form-control"
+              .col-xs-12.col-lg-4.mb10
+                = f.label :fax_no
+                = f.number_field :fax_no, class: "form-control"
+              .col-xs-12
+                | (
+                small.field-req  *
+                |  )
+                i  indicates field is required
+          .modal-footer.no-border
+            button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+            button.btn.btn-primary type="submit"  Save Changes
 
 .modal.add-branch aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg
@@ -154,143 +203,62 @@
         button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
         h4.modal-title Add Branch
       .modal-body
-        .row
-          .col-xs-12.col-md-4.col-lg-4
-            .col-xs-12
-              .show-image.mb5
-                img.image-size src="/img/brand.png" /
-                a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-                  i.icon-maxicons1-exit
-              input.mb10 type="file" /
-          .col-xs-12.col-md-8.col-lg-8
-            .col-xs-12.mb10
-              label
-                | Branch
-                small.field-req *
-              input.form-control placeholder="Name" /
-            .col-xs-12.mb10
-              label
-                | Color
-                small.field-req *
-                br/
-                select#init name="colorpicker-option-selected"
-                  option value="#60355B"  Eggplant
-                  option value="#E26A6A"  Coral
-                  option value="#FF4500"  Pumpkin
-                  option value="#DC143C"
-                  option value="#FF8C00"
-                  option value="#C71585"
-                  option value="#1E81B4"
-                  option value="#00A087"
-                  option value="#DD525B"
-                  option value="#8CAF41"
-                  option value="#8F7260"
-                  option value="#4F669D"
-                  option value="#646464"
-                  option value="#AAA786"
-                  option value="#6F9684"
-                  option value="#98ACD1"
-            .col-xs-12.mb10
-              label Address
-              textarea.form-control placeholder=("Address of Branch") rows="2"
-            .col-xs-6.mb10
-              label City
-              input.form-control placeholder=(" ") /
-            .col-xs-6.mb10
-              label
-                | Zip
-                a data-original-title=("What's my zip?") data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
-                  i.icon-maxicons2-question.f10.text-grey
-              input.form-control type="number" /
-            .col-xs-12.mb10
-              label
-                | E-mail Address
-                small.field-req *
-              input.form-control placeholder="" /
-            .col-xs-12.col-lg-4.mb10
-              label Landline No
-              input.form-control placeholder="" type="number" /
-            .col-xs-12.col-lg-4.mb10
-              label Mobile No
-              input.form-control placeholder="" type="number" /
-            .col-xs-12.col-lg-4.mb10
-              label Fax No
-              input.form-control placeholder="" type="number" /
-            .col-xs-12
-              | (
-              small.field-req  *
-              |  )
-              i  indicates field is required
-        .modal-footer.no-border
-          button.btn.btn-default data-dismiss="modal" type="button"  Cancel
-          button.btn.btn-primary type="button"  Add Branch
-
-.modal.branch-info aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg
-    .modal-content
-      .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
-        h4.modal-title SM Mall of Asia
-      .modal-body
-        .row.mt10
-          .col-xs-12.col-lg-2
-            .text-center.mt20
-              img.image-size-info.img-circle src="/img/brand.png" /
-          .col-xs-12.col-lg-10
-            .row.mb10.mt10
-              .col-xs-6
-                .text-light-grey
+        = form_for @branch do |f|
+          .row
+            .col-xs-12.col-md-4.col-lg-4
+              .col-xs-12
+                .show-image.mb5
+                  img.image-size src="/img/brand.png" /
+                  a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
+                    i.icon-maxicons1-exit
+                input.mb10 type="file" /
+            .col-xs-12.col-md-8.col-lg-8
+              .col-xs-12.mb10
+                = f.label :name
                   | Branch
-                label.text-dark-grey
-                  span.label.label-primary.coral-bg SM Mall of Asia
-              .col-xs-6
-                .text-light-grey
-                  | Landline
-                label.text-dark-grey (02) 720 9558
-            .row.mb10
-              .col-xs-6
-                .text-light-grey
-                  | Address
-                label.text-dark-grey
-                  | SM Mall of Asia. DUH!... Kidding, Pasay City, JW Diokno Blvd.,
-              .col-xs-6
-                .text-light-grey
-                  | Mobile No.
-                label.text-dark-grey (+63) 0935 5700 000
-            .row.mb10
-              .col-xs-6
-                .text-light-grey
-                  | City
-                label.text-dark-grey
-                  | Pasay City
-              .col-xs-6
-                .text-light-grey
-                  | Fax No.
-                label.text-dark-grey (+63) 292 4251
-            .row.mb10
-              .col-xs-6
-                .text-light-grey
+                  small.field-req *
+                = f.text_field :name, class: "form-control", placeholder: "Name"
+              .col-xs-12.mb10
+                = f.label :color
+                  | Color
+                  small.field-req *
+                br
+                = f.select :color, [["Eggplant","#60355B"],["Coral","#E26A6A"],["Pumpkin","#FF4500"],["#DC143C","#DC143C"],["#FF8C00","#FF8C00"],["#C71585","#C71585"],["#1E81B4","#1E81B4"],["#00A087","#00A087"],["#DD525B","#DD525B"],["#8CAF41","#8CAF41"],["#8F7260","#8F7260"],["#4F669D","#4F669D"],["#646464","#646464"],["#AAA786","#AAA786"],["#6F9684","#6F9684"],["#98ACD1","#98ACD1"]], {}, name: "colorpicker-option-selected", id: "init"
+              .col-xs-12.mb10
+                = f.label :address1, "Address"
+                = f.text_area :address1, placeholder: "Address of Branch", rows: 2, class: "form-control"
+              .col-xs-6.mb10
+                = f.label :city
+                = f.text_field :city, class: "form-control"
+              .col-xs-6.mb10
+                = f.label :zip
                   | Zip
-                label.text-dark-grey
-                  | 1300
-              .col-xs-6
-                .text-light-grey
+                  a data-original-title="What's my zip?" data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
+                    i.icon-maxicons2-question.f10.text-grey
+                = f.number_field :zip, class: "form-control"
+              .col-xs-12.mb10
+                = f.label :email_address
                   | E-mail Address
-                label.text-dark-grey cbtl.moa@company.com
-            .row.mb10
-              .col-xs-6
-                .text-light-grey
-                  | Status
-                label.text-dark-grey
-                  span.label.label-success Active
-        .modal-footer.no-border
-          a.btn.btn-default.pull-left data-dismiss="modal" type="button"  Cancel
-          a.btn.btn-sm.btn-primary.btn-outline
-            i.icon-maxicons2-editting.mr5
-            | Edit
-          a.btn.btn-sm.btn-danger.btn-outline
-            i.icon-maxicons2-login.mr5
-            | Delete Branch
+                  small.field-req *
+                = f.text_field :email_address, class: "form-control"
+              .col-xs-12.col-lg-4.mb10
+                = f.label :landline_no
+                = f.number_field :landline_no, class: "form-control"
+              .col-xs-12.col-lg-4.mb10
+                = f.label :mobile_no
+                = f.number_field :mobile_no, class: "form-control"
+              .col-xs-12.col-lg-4.mb10
+                = f.label :fax_no
+                = f.number_field :fax_no, class: "form-control"
+              .col-xs-12
+                | (
+                small.field-req  *
+                |  )
+                i  indicates field is required
+          .modal-footer.no-border
+            button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+            button.btn.btn-primary type="submit"  Add Branch
+
 
 javascript:
   $(document).ready(function() {

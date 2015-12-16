@@ -1,5 +1,6 @@
 p Dashboard
 table
-	- @sale.each do |sale|	
-		tr = sale.branch.name
-		tr = sale.customer_count
+	- @sale.each do |sale|
+		tr 
+			th = sale.branch.name
+			th = sale.customer_count.nil? ? '0' : sale.customer_count
