@@ -29,4 +29,9 @@ class Sale < ActiveRecord::Base
 	def sale_per_person_average(count)
 		net_sales / count
 	end
+
+	def self.update_customer_count
+		yesterday = Date.today-1
+		@sale = Sale.select(:customer_count, :branch_id).where(sale_date: yesterday)
+	end
 end
