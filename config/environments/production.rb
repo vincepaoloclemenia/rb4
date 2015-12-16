@@ -87,6 +87,6 @@ Rails.application.configure do
     :domain               => 'restobot.com',
     :authentication       => :login,
     :user_name            => 'restobot@appsource.biz',
-    :password             => ENV["RESTOBOT_EMAIL_PASSWORD"]
+    :password             => '@ppsource2015'
    }
 end
