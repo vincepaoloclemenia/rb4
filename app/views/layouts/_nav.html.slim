@@ -82,9 +82,6 @@
 							- if view_access_control("brands","show")
 								li
 									= link_to "Brands", brands_path, data: { keybinding: "b r a n d s" }
-							- if view_access_control("branches","show")
-								li
-									= link_to "Branches", branches_path, data: { keybinding: "b r a n c h e s" }
 					li.menu-accordion class="#{is_menu_open?('labor_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
