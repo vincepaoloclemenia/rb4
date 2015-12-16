@@ -9,8 +9,7 @@ default: &default
   encoding: unicode
   pool: 5
   timeout: 5000
-  username: stefftabalong
-
+  
 development:
   <<: *default
   database: restobot-v4_development
