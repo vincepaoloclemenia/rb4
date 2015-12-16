@@ -15,7 +15,7 @@ class BranchesController < ApplicationController
 		else
 			flash[:alert] = @branch.errors.full_messages.join(", ")
 		end
-		redirect_to branches_path
+		redirect_to brand_path(@branch.brand)
 	end
 
 	def update
@@ -24,7 +24,7 @@ class BranchesController < ApplicationController
 		else
 			flash[:alert] = @branch.errors.full_messages.join(", ")
 		end
-		redirect_to branches_path
+		redirect_to brand_path(@branch.brand)
 	end
 
 	def destroy
@@ -46,6 +46,9 @@ class BranchesController < ApplicationController
 	end
 
 	def branch_params
-		params.require(:branch).permit(:name, :address1, :brand_id)
+		if params["colorpicker-option-selected"]
+			params[:branch][:color] = params["colorpicker-option-selected"]
+		end
+		params.require(:branch).permit(:name, :address1, :brand_id, :color, :city, :zip, :email_address, :landline_no, :mobile_no, :fax_no)
 	end
 end
