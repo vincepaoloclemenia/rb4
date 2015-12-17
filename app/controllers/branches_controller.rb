@@ -30,19 +30,19 @@ class BranchesController < ApplicationController
 	def destroy
 		begin
 			@branch.destroy
-			redirect_to branches_path, notice: "Branch successfully deleted"
+			redirect_to brand_path(@branch.brand), notice: "Branch successfully deleted"
 		rescue ActiveRecord::InvalidForeignKey => e
 			errors = []
 			errors << "An unkonwn reason ( please kindly report to the developers for immediate fixing )" if errors.empty?
 			puts e if errors.empty?
-      redirect_to branches_path, alert: "You cannot delete #{@branch.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
+      redirect_to brand_path(@branch.brand), alert: "You cannot delete #{@branch.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
     end
 	end
 
 	private
 
 	def set_branch
-		@branch = current_brand.branches.find(params[:id])
+		@branch = current_client.branches.find(params[:id])
 	end
 
 	def branch_params
