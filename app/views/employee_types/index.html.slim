@@ -1,50 +1,35 @@
-h2 EmployeeTypes
-= link_to "Create Employee Type", '#', data: { "reveal-id" => "create_employee_type", "reveal" => true }, class: "button tiny width-200 bottom-10"
-table { width="100%" }
-	thead
-		tr
-			th Name
-			th Description
-			th Dividend
-			th Action
-	tbody
-		- @employee_types.each do |employee_type|
-			tr
-				td = employee_type.name
-				td = employee_type.description
-				td 
-					- if employee_type.dividend_id == 0
-						= "Total Sales" + " " + " / # of total hours of work"
-					- else
-						= employee_type.dividend.name + " " + " / # of total hours of work" unless employee_type.dividend.nil?
-				td
-					= link_to "edit", edit_employee_type_path(employee_type), class: 'button tiny'
-					| &nbsp;
-					= link_to "destroy", employee_type_path(employee_type), method: :delete, class: 'button alert tiny'
+.panel.panel-primary
+	.panel-heading.border.pb45
+		.pull-left.mt7 Employee Types
+		.pull-right
+			= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Employee Type".html_safe, '#', data: { toggle: "modal", target: ".create_employee_type" }, class: "btn btn-default btn-round btn-outline"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead	
+						th Name
+						th Description
+						th Dividend
+						th Action
+				tbody
+					- @employee_types.each do |employee_type|
+						tr
+							td = employee_type.name
+							td = employee_type.description
+							td 
+								- if employee_type.dividend_id == 0
+									= "Total Sales" + " " + " / # of total hours of work"
+								- else
+									= employee_type.dividend.name + " " + " / # of total hours of work" unless employee_type.dividend.nil?
+							td
+								= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_employee_type_#{employee_type.id}" }
+								
+								= link_to "<i class= 'icon-maxicons1-exit'></i>".html_safe, employee_type_path(employee_type), method: :delete, class: 'btn btn-default btn-xs mb10 mr2 swal-warning-confirm', data: {tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?"}
 
-.reveal-modal.small#create_employee_type data-reveal="true" aria-labelledby="CreateEmployeeType" aria-hidden="true" role="dialog"
-	h6.modal-header#create_employee_type style="font-weight:700;text-transform:uppercase"
-		| Create Employee Type
-	.top-15
-		= form_for @employee_type do |f|
-			.row
-				.large-12.columns
-					= f.label :name
-					= f.text_field :name
-			.row
-				.large-12.columns
-					= f.label :description
-					= f.text_field :description
-			.row
-				.large-12.columns
-					= f.label :dividend
-					= f.select :dividend_id, @category.pluck(:name, :id)
-			.row
-				.top-15
-					.large-12.columns
-						span.inline.float-right
-							= f.submit "Create", class: "button tiny"
-							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
+						div class="modal edit_employee_type_#{employee_type.id}" tabindex="-1" role="dialog" aria-hidden="true"
+							= render 'form'
 
-	a.close-reveal-modal.close-x-btn aria-label="Close"
-		| &times;
+.modal.create_employee_type tabindex="-1" role="dialog" aria-hidden="true"
+	= render 'form'
+
