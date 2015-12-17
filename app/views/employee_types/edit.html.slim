@@ -1,2 +1,18 @@
-h2 Employee Types Edit
-= render 'form'
+= form_for @employee_type do |f|
+	.row
+		.large-12.columns
+			= f.label :name
+			= f.text_field :name
+	.row
+		.large-12.columns
+			= f.label :description
+			= f.text_field :description
+	.row
+		.large-12.columns
+			= f.label :dividend
+			= f.text_field :dividend_id
+	.row
+		.large-12.columns
+			span.inline.float-right
+			= f.submit "Save", class: "button tiny"
+			= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"

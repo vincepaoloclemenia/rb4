@@ -15,3 +15,7 @@
 //= require cocoon
 //= require mousetrap
 //= reuqire turbolinks
+
+//= require highcharts/highcharts
+//= require highcharts/highcharts-more
+//= require highcharts/highstock

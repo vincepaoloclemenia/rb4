@@ -51,4 +51,14 @@ class ReportsController < ApplicationController
     return daterange
 	end
 
+	def man_hours
+		if params[:date_entry].present? && params[:branch_id].present?
+			@date = params[:date_entry]
+			@branch = Branch.find(params[:branch_id])
+      @man_hours = EmployeeType.labor_hours_by_sale_category(@date,@branch,current_brand)
+		else
+			@date = Date.today.strftime("%m/%d/%y")
+      @man_hours = EmployeeType.all
+		end
+  end
 end

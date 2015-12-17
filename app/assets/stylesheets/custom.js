@@ -43,4 +43,4 @@ $('#nestable').nestable({
    group: 1
 });
 
-//multiple select
+//icheck

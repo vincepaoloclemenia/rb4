@@ -2,10 +2,14 @@
 	.panel-heading.border.pb45
 		.pull-left.mt7 Labor Hours
 		.pull-right
+<<<<<<< HEAD
+			= link_to "<i class='icon-maxicons1-download mr5'></i> Create PDF".html_safe, labor_hours_path(format: 'pdf'), data: { toggle: "modal", target: ".create-pdf-modal" }, class: "btn btn-default btn-round btn-outline"
+=======
 			button.btn.btn-default.btn-round.btn-outline.mr10
 				i.icon-maxicons1-download.mr5
 				| Download as PDF
 				= link_to '', labor_hours_path(format: 'pdf')
+>>>>>>> c58add28e6c2a0da3c57f853d346359b9a7589ab
 	.panel.body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
@@ -24,9 +28,27 @@
 							td = employee.date_employed
 							td = employee.contact_no
 							td
-								= link_to 'Download as PDF', labor_hour_work_hours_list_path(employee, format: 'pdf')
-								|  | &nbsp;
 								= link_to 'Work Hours', labor_hour_work_hours_list_path(employee)
+<<<<<<< HEAD
+.modal.create-pdf-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
+				h4.modal-title Create Purchase
+			.modal-body
+				= form_tag({action: 'index', format: :pdf}, method: :get)
+					.row.mb10
+						.col-xs-6
+							= label_tag :branch_id, "Branch"
+							= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id)), class: 'form-control'
+						.col-xs-6
+							label Date Range
+							= text_field :date_employed, '', class: 'form-control drp', readonly: true
+								/ = text_field :date_employed, '', value:'To', id: 'to_date_employed', readonly: true
+					.modal-footer.no-border
+=======
 
 h2 Labor Hours
 = link_to "Generate (PDF)", labor_hours_path(format: 'pdf'), class: "button tiny right", target: "_blank"
@@ -68,9 +90,13 @@ table { width = "100%"}
 			.row
 				.top-15
 					.large-12.columns
+>>>>>>> c58add28e6c2a0da3c57f853d346359b9a7589ab
 						span.inline.float-right
-							= submit_tag "Generate PDF", class: "button tiny"
+							= submit_tag "Generate PDF", class: "btn btn-primary"
 							| &nbsp;
+<<<<<<< HEAD
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+=======
 							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
 
 javascript:
@@ -97,3 +123,4 @@ javascript:
 	}).on('changeDate', function (ev) {
 		checkout.hide();
 	}).data('datepicker');
+>>>>>>> c58add28e6c2a0da3c57f853d346359b9a7589ab

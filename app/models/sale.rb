@@ -34,4 +34,11 @@ class Sale < ActiveRecord::Base
 		yesterday = Date.today-1
 		@sale = Sale.select(:customer_count, :branch_id).where(sale_date: yesterday)
 	end
+
+	def self.update_customer_count
+		date = Date.today-2
+		@sale = Sale.select(:id, :customer_count, :branch_id).where(created_at: date.beginning_of_day..date.end_of_day)
+		# @sale.last.customer_count
+	end
+
 end
