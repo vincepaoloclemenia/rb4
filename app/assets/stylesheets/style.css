@@ -26865,33 +26865,48 @@ select.mobile-device {
 }
 
 
-/** Icons **/
-.show-icon{
+/* Icons */
+.show-icon {
     font-size:11px
 }
 
-.green-color{
+.green-color {
     color:#2e7d32
 }
 
-.f10{
+.f10 {
     font-size: 10px !important;
 }
-/** Width **/
-.w180{
+/* Width */
+.w180 {
     width: 180px
 }
 
-/** Tables **/
-.bg-thead{
+/* Tables */
+.bg-thead {
     background-color: #f3f3f3
 }
-.view-link{
+.bg-total {
+    background-color: #FFFBE2 !important
+}
+.label-total {
+    text-transform: uppercase;
+    font-size: 10px;
+    color:#424242;
+    font-weight: 600
+}
+.label-total-num {
+    color:#bf360c;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+.view-link {
     color: #424242 !important;
     font-weight: 600;
     border-bottom: 1px #bdbdbd dotted
 }
-.field-req{
+.field-req {
     font-weight:600;
     color:#e53935
 }
@@ -27149,15 +27164,15 @@ div.show-image a.delete {
 
 
 /** Branch Colors **/
-.coral-bg{
+.coral-bg {
     background-color: #E26A6A !important
 }
-.coral-bg:hover{
+.coral-bg:hover {
     background-color: #dd5454 !important
 }
-.eggplant-bg{
+.eggplant-bg {
     background-color: #60355B !important
 }
-.eggplant-bg:hover{
+.eggplant-bg:hover {
     background-color:   !important
 }
