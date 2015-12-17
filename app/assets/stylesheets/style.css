@@ -4576,7 +4576,7 @@ a.list-group-item:hover {
 
 .close {
     float: right;
-    font-size: 21px;
+    font-size: 12px;
     line-height: 1;
     color: #000;
     text-shadow: 0 1px 0 #fff;
@@ -4707,7 +4707,8 @@ button.close {
 
 .modal-footer .btn+.btn {
     margin-bottom: 0;
-    margin-left: 5px
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .modal-footer .btn-group .btn+.btn {
@@ -14050,7 +14051,10 @@ footer.content-footer li:hover {
 .btn-default {
     color: #616161;
     background-color: #fff;
-    border-color: rgba(0, 0, 0, .13)
+    border-color: rgba(0, 0, 0, .13);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 11px
 }
 
 .btn-default:visited {
@@ -14213,7 +14217,10 @@ fieldset[disabled] .btn-default:hover {
 .btn-primary {
     color: #fff;
     background-color: #09c;
-    border-color: #09c
+    border-color: #09c;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600
 }
 
 .btn-primary:visited {
@@ -26874,6 +26881,10 @@ select.mobile-device {
     color:#2e7d32
 }
 
+.red-color {
+    color:#d96557
+}
+
 .f10 {
     font-size: 10px !important;
 }
@@ -27162,8 +27173,67 @@ div.show-image a.delete {
     border-radius: 0 !important
 }
 
+/* iCheck plugin Square skin, blue
+----------------------------------- */
+.icheckbox_square-blue,
+.iradio_square-blue {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(/img/blue.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
 
-/** Branch Colors **/
+.icheckbox_square-blue {
+    background-position: 0 0;
+}
+    .icheckbox_square-blue.hover {
+        background-position: -24px 0;
+    }
+    .icheckbox_square-blue.checked {
+        background-position: -48px 0;
+    }
+    .icheckbox_square-blue.disabled {
+        background-position: -72px 0;
+        cursor: default;
+    }
+    .icheckbox_square-blue.checked.disabled {
+        background-position: -96px 0;
+    }
+
+.iradio_square-blue {
+    background-position: -120px 0;
+}
+    .iradio_square-blue.hover {
+        background-position: -144px 0;
+    }
+    .iradio_square-blue.checked {
+        background-position: -168px 0;
+    }
+    .iradio_square-blue.disabled {
+        background-position: -192px 0;
+        cursor: default;
+    }
+    .iradio_square-blue.checked.disabled {
+        background-position: -216px 0;
+    }
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi), (min-resolution: 1.25dppx) {
+    .icheckbox_square-blue,
+    .iradio_square-blue {
+        background-image: url(/img/blue@2x.png);
+        -webkit-background-size: 240px 24px;
+        background-size: 240px 24px;
+    }
+}
+
+/* Branch Colors */
 .coral-bg {
     background-color: #E26A6A !important
 }
