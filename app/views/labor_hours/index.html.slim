@@ -2,8 +2,7 @@
 	.panel-heading.border.pb45
 		.pull-left.mt7 Labor Hours
 		.pull-right
-			= link_to "<i class='icon-maxicons1-download mr5'></i> Create PDF".html_safe, '#', data: { toggle: "modal", target: ".create-pdf-modal" }, class: "btn btn-default btn-round btn-outline"
-				/ = link_to '', labor_hours_path(format: 'pdf')
+			= link_to "<i class='icon-maxicons1-download mr5'></i> Create PDF".html_safe, labor_hours_path(format: 'pdf'), data: { toggle: "modal", target: ".create-pdf-modal" }, class: "btn btn-default btn-round btn-outline"
 	.panel.body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
@@ -22,31 +21,7 @@
 							td = employee.date_employed
 							td = employee.contact_no
 							td
-								= link_to 'Download as PDF', labor_hour_work_hours_list_path(employee, format: 'pdf')
-								|  | &nbsp;
 								= link_to 'Work Hours', labor_hour_work_hours_list_path(employee)
-
-/ h2 Labor Hours  
-/ = link_to "Generate (PDF)", labor_hours_path(format: 'pdf'), class: "button tiny right", target: "_blank"
-/ table { width = "100%"}
-/ 	thead
-/ 		tr
-/ 			th Employee Name
-/ 			th Branch
-/ 			th Date Employed
-/ 			th Contact Number
-/ 			th Actions
-/ 	tbody
-/ 		- @employees.each do |employee|
-/ 			tr 
-/ 				td = employee.full_name
-/ 				td = employee.branch.name
-/ 				td = employee.date_employed
-/ 				td = employee.contact_no
-/ 				td
-/ 					= link_to "work hours", labor_hour_work_hours_list_path(employee), class: 'button tiny'
-/ 					| &nbsp;
-/ 					= link_to "Generate (PDF)", labor_hour_work_hours_list_path(employee, format: 'pdf'), class: 'button success tiny', target: "_blank"
 .modal.create-pdf-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog
 		.modal-content
@@ -69,28 +44,3 @@
 							= submit_tag "Generate PDF", class: "btn btn-primary"
 							| &nbsp;
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-
-javascript:
-	var nowTemp = new Date();
-	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-	var checkin = $('#from_date_employed').fdatepicker({
-		onRender: function (date) {
-			return
-			//return date.valueOf() < now.valueOf() ? 'disabled' : '';
-		}
-	}).on('changeDate', function (ev) {
-		if (ev.date.valueOf() > checkout.date.valueOf()) {
-			var newDate = new Date(ev.date)
-			newDate.setDate(newDate.getDate() + 1);
-			checkout.update(newDate);
-		}
-		checkin.hide();
-		$('#to_date_employed')[0].focus();
-	}).data('datepicker');
-	var checkout = $('#to_date_employed').fdatepicker({
-		onRender: function (date) {
-			return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-		}
-	}).on('changeDate', function (ev) {
-		checkout.hide();
-	}).data('datepicker');
