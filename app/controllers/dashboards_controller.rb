@@ -3,23 +3,29 @@ class DashboardsController < ApplicationController
 
 	def index
 		@sale = Sale.update_customer_count
-		@branches = current_brand.branches.pluck(:name)
+		@branches = current_brand.branches
+
 		@chart = LazyHighCharts::HighChart.new('graph') do |f|
 		  f.title(text: "Customer Count")
-		  f.yAxis(categories: @branches)
-		  # f.xAxis(yAxis: @branches, data: [1])
-		  f.series(name: "GDP in Billions", yAxis: 0, data: [1])
-		  # f.series(name: "Population in Millions", yAxis: 1, data: [310, 127, 1340, 81, 65])
-
-		  # f.xAxis [
-		  #   {title: {text: "GDP in Billions", margin: 70} },
-		  #   {title: {text: "Population in Millions"}, opposite: true},
-		  # ]
-
-		  # f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical')
-		  f.chart({defaultSeriesType: "column"})
+		  f.xAxis(categories: @branches.pluck(:name))
+		  f.series(name: "Customer Count", data: get_customer_count_array(@branches, @sale))
+		  f.chart({defaultSeriesType: "bar"})
 		end
 	end
-
+	
+	def get_customer_count_array(branches, sale)
+	  arr = Array.new
+		branches.each do |branch|
+			sale.each do |sale|
+				if sale.branch_id == branch.id 
+					@a = sale.customer_count
+				else
+					@a = 0
+				end
+			end
+			arr.append(@a)
+		end
+		return arr
+	end
 
 end

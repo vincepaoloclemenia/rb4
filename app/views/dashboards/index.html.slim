@@ -1,38 +1,7 @@
 p Dashboard
-
-/ javascript:
-/ 	$(function() {
-/ 		new HighCharts.Chart({
-/ 			chart: {
-/ 				renderTo: "sales_chart"
-/ 			},
-
-/ 			title: {
-/ 				text: "Yesterday's Customer Count"
-/ 			},
-
-/ 			xAxis: {
-/ 				type: "datetime"
-/ 			},
-
-/ 			yAxis: {
-/ 				title: {
-/ 					text:	"Customer Count"
-/ 				}
-/ 			},
-
-/ 			series: [{
-/ 				data: [1, 2, 3, 7, 2]
-/ 			}]
-
-/ 		});
-/ 	});
-/ high_chart_globals(@chart_globals)
-
-
-= high_chart("my_id", @chart)
-table
-	- @sale.each do |sale|
-		tr 
-			th = sale.branch.name
-			th = sale.customer_count.nil? ? '0' : sale.customer_count
+= high_chart("customer_count", @chart)
+/ table (width="100%")
+/ 	- @sale.each do |sale|
+/ 		tr 
+/ 			th = sale.branch.name
+			/ th = sale.customer_count.nil? ? '0' : sale.customer_count 
