@@ -1,0 +1,59 @@
+.modal class="branch-info-#{branch.id}" aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        h4.modal-title = branch.name
+      .modal-body
+        .row.mt10
+          .col-xs-12.col-lg-2
+            .text-center.mt20
+              img.image-size-info.img-circle src="/img/brand.png" /
+          .col-xs-12.col-lg-10
+            .row.mb10.mt10
+              .col-xs-6
+                .text-light-grey
+                  | Branch
+                label.text-dark-grey
+                  span.label.label-primary.coral-bg = branch.name
+              .col-xs-6
+                .text-light-grey
+                  | Landline
+                label.text-dark-grey = branch.landline_no
+            .row.mb10
+              .col-xs-6
+                .text-light-grey
+                  | Address
+                label.text-dark-grey
+                  = branch.address1
+              .col-xs-6
+                .text-light-grey
+                  | Mobile No.
+                label.text-dark-grey = branch.mobile_no
+            .row.mb10
+              .col-xs-6
+                .text-light-grey
+                  | City
+                label.text-dark-grey
+                  | Pasay City
+              .col-xs-6
+                .text-light-grey
+                  | Fax No.
+                label.text-dark-grey = branch.fax_no
+            .row.mb10
+              .col-xs-6
+                .text-light-grey
+                  | Zip
+                label.text-dark-grey
+                  | 1300
+              .col-xs-6
+                .text-light-grey
+                  | E-mail Address
+                label.text-dark-grey = branch.email_address
+        .modal-footer.no-border
+          a.btn.btn-default.pull-left data-dismiss="modal" type="button"  Cancel
+          a.btn.btn-sm.btn-primary.btn-outline
+            i.icon-maxicons2-editting.mr5
+            | Edit
+          = if view_access_control("branches","destroy")
+            = link_to "<i class='icon-maxicons2-login mr5'></i> Delete Branch", branch_path(branch), method: :delete, class: "btn btn-sm btn-danger btn-outline", data: { confirm: "Are you sure?" }

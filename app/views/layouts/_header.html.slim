@@ -2,9 +2,7 @@ header.header.navbar
 	.brand.visible-xs
 		.toggle-offscreen
 			a.hamburger-icon.visible-xs data-toggle="offscreen" data-move="ltr"
-				span
-				span
-				span
+				i.icon-maxicons2-menu
 
 	ul.nav.navbar-nav.hidden-xs
 		li
@@ -12,7 +10,7 @@ header.header.navbar
 				- if ["index", "price_movement_report", "invoice_entry"].include?(params[:action])	&& ["reports", "purchases","inventories"].include?(params[:controller])
 					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
 						span.show-ctrls
-							i.icon-maxicons1-arrowdown-01.show-icon.mr5 
+							i.icon-maxicons1-arrowdown-01.show-icon.mr5
 							| Show Search
 						span.hide-ctrls
 							i.icon-maxicons1-arrowdown-02.show-icon.mr5
@@ -23,12 +21,12 @@ header.header.navbar
 
 	ul.nav.navbar-nav.navbar-right.hidden-xs
 		li
-			a href="javascript:;" data-toggle="dropdown" data-tt="tooltip" data-placement="bottom" data-original-title="Change Skin"
+			a href="javascript:;" data-toggle="dropdown" data-tt="tooltip"
 				i.icon-maxicons3-drop
 			ul.dropdown-menu
 				li
-					a href="javascript:;" 
-						| Coffee Brown
+					a href="javascript:;"
+						| Default
 						i.icon-maxicons1-check.pull-right.green-color
 				li
 					a href="javascript:;" Navy Blue
@@ -36,12 +34,12 @@ header.header.navbar
 			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Tour"
 				i.fa.icon-maxicons3-light
 		li
-			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Help"
+			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Support"
 				i.fa.icon-maxicons3-lifebuoy
 		- if wizard_done?
 			li
 				a href="javascript:;" data-toggle="dropdown"
-					img.header-avatar.img-circle src="/img/brand2.png" data-tt="tooltip" data-placement="bottom" data-original-title="My Brands"
+					img.header-avatar.img-circle src="/img/brand2.png"
 				- if current_user.role.role_level == 'client'
 					ul.dropdown-menu
 						- current_client.brands.each do |brand|
@@ -52,9 +50,49 @@ header.header.navbar
 									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
 		li
 			a href="javascript:;" data-toggle="dropdown"
-				img.header-avatar.img-circle src="/img/avatar-mummy.png" data-tt="tooltip" data-placement="bottom" data-original-title="My Account"
+				img.header-avatar.img-circle src="/img/avatar-mummy.png"
 			ul.dropdown-menu
 				li
-					a href="javascript:;" My Account
+					a href="javascript:;" Manage this account
 				li
 					= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
+
+javascript:
+	(function ($, window, delay) {
+    var theTimer = 0;
+    var theElement = null;
+    var theLastPosition = {x:0,y:0};
+    $('[data-toggle]')
+      .closest('li')
+      .on('mouseenter', function (inEvent) {
+      if (theElement) theElement.removeClass('open');
+      window.clearTimeout(theTimer);
+      theElement = $(this);
+
+      theTimer = window.setTimeout(function () {
+        theElement.addClass('open');
+      }, delay);
+    	})
+    	.on('mousemove', function (inEvent) {
+          if(Math.abs(theLastPosition.x - inEvent.ScreenX) > 4 ||
+             Math.abs(theLastPosition.y - inEvent.ScreenY) > 4)
+          {
+              theLastPosition.x = inEvent.ScreenX;
+              theLastPosition.y = inEvent.ScreenY;
+              return;
+          }
+
+      if (theElement.hasClass('open')) return;
+      window.clearTimeout(theTimer);
+      theTimer = window.setTimeout(function () {
+        theElement.addClass('open');
+      }, delay);
+    	})
+    	.on('mouseleave', function (inEvent) {
+      window.clearTimeout(theTimer);
+      theElement = $(this);
+      theTimer = window.setTimeout(function () {
+        theElement.removeClass('open');
+      }, delay);
+    	});
+  })(jQuery, window, 200); // 200 is the delay in milliseconds

@@ -3,7 +3,7 @@
 		.brand-logo
 			img src="/img/logo.png" height="15" alt=""
 		a.toggle-sidebar.hidden-xs.hamburger-icon.v3 data-toggle="layout-small-menu" href="javascript:;"
-			i.icon-maxicons2-menu
+				i.icon-maxicons2-menu
 
 	nav.ps-container role="navigation"
 		ul.nav
@@ -71,7 +71,7 @@
 			li.menu-accordion class="#{is_menu_open?('setup')}"
 				a href="javascript:;"
 					i.fa.icon-maxicons3-line
-					span Setup
+					span  Setup
 				ul.sub-menu
 					li.menu-accordion class="#{is_menu_open?('company_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Company Setup</span>'.html_safe, 'javascript:;'
@@ -125,17 +125,22 @@
 							- if view_access_control('suppliers','show')
 								li
 									= link_to "Suppliers", suppliers_path, data: { keybinding: "s u p p" }
-			li.menu-accordion
+			li
+				a href="javascript:;"
+					i.fa.icon-maxicons3-hand-basket
+					span Subscriptions
+			li
 				a href="javascript:;"
 					i.fa.icon-maxicons1-money
-					| Subscription
-				ul.sub-menu
-					li
-						a href="javascript:;"
-							span Plan
-					li
-						a href="javascript:;"
-							span Billing
+					span Billing
+					span.label.bg-danger.pull-right 2
+				/ ul.sub-menu
+				/ 	li
+				/ 		a href="javascript:;"
+				/ 			span Subscriptions List
+				/ 	li
+				/ 		a href="javascript:;"
+				/ 			span Billing
 			.pg-scrollbar-x-rail style="left: 0px; bottom: 3px; display: block;"
 				.ps-scrollbar-x style="left: 0px; width: 0px;"
 			.pg-scrollbar-y-rail style="top: 0px; height: 639px; right: 0px; display: block;"

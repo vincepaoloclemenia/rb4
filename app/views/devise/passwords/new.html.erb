@@ -12,6 +12,9 @@
               <p class="text-center mb30 mt10">
                 Lost your password? Submit your email address and we’ll send you a link to reset your password.
               </p>
+              <div class="alert alert-info text-center">
+                <i class="icon-maxicons1-mailsend mr5"></i> Help is on the way!
+              </div>
               <div class="form-inputs">
                 <%= f.email_field :email, autofocus: true, class:"form-control input-lg", placeholder:"Email Address" %>
               </div>
@@ -19,7 +22,7 @@
                 <span>Reset Password</span>
               </button>
               <p>
-                <em>Psst...Remembered your password?</em> <%= link_to "Try logging in again", session_path(resource_name) %>
+                <em>Remembered your password?</em> <%= link_to "Try logging in again", session_path(resource_name) %>
               </p>
             <% end %>
           </div>

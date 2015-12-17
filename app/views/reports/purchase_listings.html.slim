@@ -22,7 +22,7 @@
 								i.icon-maxicons2-search
 
 .panel.panel-primary
-	.panel-heading.border.pb45
+	.panel-heading
 		.pull-left.mt7 Purchase List
 		.pull-right
 			- if view_access_control('purchases','create')
@@ -50,7 +50,7 @@
 		/ 		li
 		/ 			= link_to "Show All", purchase_listings_path(request.params.except(:action,:controller).merge(show: "all"))
 		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+			table.table.table-bordered.table-striped.mb0
 				thead
 					tr.bg-thead
 						th width="130" Invoice No.
@@ -59,9 +59,9 @@
 						th width="120" Supplier
 						th width="110" Item
 						th width="120" Category
-						th width="110" VAT Amount
-						th width="110" Net Amount
-						th width="110" Total Amount
+						th width="110" VAT<br>Amount
+						th width="110" Net<br>Amount
+						th width="110" Total<br>Amount
 				tbody
 					- total_purchases_net_amount = 0
 					- total_purchases_total_amount = 0
@@ -85,20 +85,20 @@
 								- purchase_total_amount += nvt[:total]
 
 						- unless purchase.purchase_items.empty?
-							tr
+							tr.bg-total
 								td colspan="7"
-								td 
-									strong = number_to_currency(purchase_net_amount, unit: "")
-								td 
-									strong = number_to_currency(purchase_total_amount, unit: "")
+								td.label-total-num data-title="Net Amount"
+									= number_to_currency(purchase_net_amount, unit: "")
+								td.label-total-num data-title="Total Amount"
+									= number_to_currency(purchase_total_amount, unit: "")
 								- total_purchases_net_amount += purchase_net_amount
 								- total_purchases_total_amount += purchase_total_amount
-					tr
-						td colspan="7" style="text-align: right;" TOTAL:
-						td
-							strong = number_to_currency(total_purchases_net_amount, unit: "")
-						td 
-							strong = number_to_currency(total_purchases_total_amount, unit: "")
+					tr.bg-total
+						td.text-right.label-total colspan="7" Total:
+						td.label-total-num data-title="Net Amount"
+							= number_to_currency(total_purchases_net_amount, unit: "")
+						td.label-total-num data-title="Total Amount"
+							= number_to_currency(total_purchases_total_amount, unit: "")
 
 - @purchases.each do |purchase|
 	- purchase.purchase_items.each do |pi|

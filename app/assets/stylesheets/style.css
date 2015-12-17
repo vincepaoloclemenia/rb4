@@ -508,7 +508,7 @@ mark {
 }
 
 .text-right {
-    text-align: right !important
+    text-align: right
 }
 
 .text-center {
@@ -2471,7 +2471,8 @@ tbody.collapse.in {
     cursor: not-allowed;
     background-color: transparent;
     background-image: none;
-    filter: progid: DXImageTransform.Microsoft.gradient(enabled=false)
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    /*filter: unquote("progid:DXImageTransform.Microsoft.gradient(enabled=false)");*/
 }
 
 .open>.dropdown-menu {
@@ -4575,7 +4576,7 @@ a.list-group-item:hover {
 
 .close {
     float: right;
-    font-size: 21px;
+    font-size: 12px;
     line-height: 1;
     color: #000;
     text-shadow: 0 1px 0 #fff;
@@ -4706,7 +4707,8 @@ button.close {
 
 .modal-footer .btn+.btn {
     margin-bottom: 0;
-    margin-left: 5px
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .modal-footer .btn-group .btn+.btn {
@@ -5103,7 +5105,7 @@ button.close {
     background-image: -o-linear-gradient(left, rgba(0, 0, 0, .5) 0, rgba(0, 0, 0, .0001) 100%);
     background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .5)), to(rgba(0, 0, 0, .0001)));
     background-image: linear-gradient(to right, rgba(0, 0, 0, .5) 0, rgba(0, 0, 0, .0001) 100%);
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#80000000", endColorstr="#00000000", GradientType=1);
     background-repeat: repeat-x
 }
 
@@ -5114,7 +5116,7 @@ button.close {
     background-image: -o-linear-gradient(left, rgba(0, 0, 0, .0001) 0, rgba(0, 0, 0, .5) 100%);
     background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .0001)), to(rgba(0, 0, 0, .5)));
     background-image: linear-gradient(to right, rgba(0, 0, 0, .0001) 0, rgba(0, 0, 0, .5) 100%);
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00000000", endColorstr="#80000000", GradientType=1);
     background-repeat: repeat-x
 }
 
@@ -5706,11 +5708,6 @@ button.close {
     src: url(../fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
 }
 
-/*!
-Animate.css - http://daneden.me/animate
-Licensed under the MIT license - http://opensource.org/licenses/MIT
-
-*/
 
 @-webkit-keyframes bounce {
     0%,
@@ -8292,10 +8289,9 @@ Licensed under the MIT license - http://opensource.org/licenses/MIT
 /*!
 Animate.css - http://daneden.me/animate
 Licensed under the MIT license - http://opensource.org/licenses/MIT
-
 */
 
-*/.animated {
+.animated {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
@@ -14055,7 +14051,10 @@ footer.content-footer li:hover {
 .btn-default {
     color: #616161;
     background-color: #fff;
-    border-color: rgba(0, 0, 0, .13)
+    border-color: rgba(0, 0, 0, .13);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 11px
 }
 
 .btn-default:visited {
@@ -14218,7 +14217,10 @@ fieldset[disabled] .btn-default:hover {
 .btn-primary {
     color: #fff;
     background-color: #09c;
-    border-color: #09c
+    border-color: #09c;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600
 }
 
 .btn-primary:visited {
@@ -26870,36 +26872,52 @@ select.mobile-device {
 }
 
 
-/** Icons **/
-.show-icon{
+/* Icons */
+.show-icon {
     font-size:11px
 }
 
-.green-color{
+.green-color {
     color:#2e7d32
 }
 
-.f10{
+.red-color {
+    color:#d96557
+}
+
+.f10 {
     font-size: 10px !important;
 }
-/** Width **/
+/* Width */
 .w180 {
     width: 180px
 }
-.w300 {
-    width: 300px
-}
 
-/** Tables **/
-.bg-thead{
+/* Tables */
+.bg-thead {
     background-color: #f3f3f3
 }
-.view-link{
+.bg-total {
+    background-color: #FFFBE2 !important
+}
+.label-total {
+    text-transform: uppercase;
+    font-size: 10px;
+    color:#424242;
+    font-weight: 600
+}
+.label-total-num {
+    color:#bf360c;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+.view-link {
     color: #424242 !important;
     font-weight: 600;
     border-bottom: 1px #bdbdbd dotted
 }
-.field-req{
+.field-req {
     font-weight:600;
     color:#e53935
 }
@@ -27155,17 +27173,76 @@ div.show-image a.delete {
     border-radius: 0 !important
 }
 
+/* iCheck plugin Square skin, blue
+----------------------------------- */
+.icheckbox_square-blue,
+.iradio_square-blue {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(/img/blue.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
 
-/** Branch Colors **/
-.coral-bg{
+.icheckbox_square-blue {
+    background-position: 0 0;
+}
+    .icheckbox_square-blue.hover {
+        background-position: -24px 0;
+    }
+    .icheckbox_square-blue.checked {
+        background-position: -48px 0;
+    }
+    .icheckbox_square-blue.disabled {
+        background-position: -72px 0;
+        cursor: default;
+    }
+    .icheckbox_square-blue.checked.disabled {
+        background-position: -96px 0;
+    }
+
+.iradio_square-blue {
+    background-position: -120px 0;
+}
+    .iradio_square-blue.hover {
+        background-position: -144px 0;
+    }
+    .iradio_square-blue.checked {
+        background-position: -168px 0;
+    }
+    .iradio_square-blue.disabled {
+        background-position: -192px 0;
+        cursor: default;
+    }
+    .iradio_square-blue.checked.disabled {
+        background-position: -216px 0;
+    }
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi), (min-resolution: 1.25dppx) {
+    .icheckbox_square-blue,
+    .iradio_square-blue {
+        background-image: url(/img/blue@2x.png);
+        -webkit-background-size: 240px 24px;
+        background-size: 240px 24px;
+    }
+}
+
+/* Branch Colors */
+.coral-bg {
     background-color: #E26A6A !important
 }
-a.coral-bg:hover{
+.coral-bg:hover {
     background-color: #dd5454 !important
 }
-.eggplant-bg{
+.eggplant-bg {
     background-color: #60355B !important
 }
-a.eggplant-bg:hover{
+.eggplant-bg:hover {
     background-color:   !important
 }
