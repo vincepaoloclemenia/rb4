@@ -39,7 +39,7 @@ header.header.navbar
 		- if wizard_done?
 			li
 				a href="javascript:;" data-toggle="dropdown"
-					img.header-avatar.img-circle src="/img/brand2.png"
+					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
 				- if current_user.role.role_level == 'client'
 					ul.dropdown-menu
 						- current_client.brands.each do |brand|
@@ -50,7 +50,8 @@ header.header.navbar
 									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
 		li
 			a href="javascript:;" data-toggle="dropdown"
-				img.header-avatar.img-circle src="/img/avatar-mummy.png"
+				/img.header-avatar.img-circle src="/img/avatar-mummy.png"
+				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle"
 			ul.dropdown-menu
 				li
 					a href="javascript:;" My Account

@@ -10,7 +10,7 @@
         .row.mt10
           .col-xs-12.col-lg-2
             .text-center
-              img.image-size-info.img-circle src="/img/brand2.png" /
+              = image_tag @brand.avatar.url, class: "image-size-info img-circle"
           .col-xs-12.col-lg-10
             p
             .text-light-grey
@@ -104,10 +104,10 @@
             .col-xs-12.col-md-4.col-lg-4
               .col-xs-12
                 .show-image.mb5
-                  img.image-size src="/img/brand2.png" /
+                  = image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"
                   a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
                     i.icon-maxicons1-exit
-                input.mb10 type="file" /
+                = f.file_field :avatar, class: "mb10"
             .col-xs-12.col-md-8.col-lg-8
               .col-xs-12.mb10
                 = f.label :name
@@ -142,8 +142,30 @@
 
 javascript:
   $(document).ready(function() {
-      $('#init').on('click', function() {
-        $('select[name="colorpicker-option-selected"]').simplecolorpicker({theme: 'glyphicons'});
-      });
-      $('#init').trigger('click');
+    $('#init').on('click', function() {
+      $('select[name="colorpicker-option-selected"]').simplecolorpicker({theme: 'glyphicons'});
+    });
+    $('#init').trigger('click');
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+          $('#upload_preview').attr('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    $("#new_brand_avatar").change(function(){
+      readURL(this);
+    });
+
+    $("#remove-avatar").click(function(){
+      var new_avatar = $("#new_brand_avatar");
+      new_avatar.replaceWith( new_avatar.val('').clone( true ) );
+      $("#upload_preview").replaceWith('#{image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"}');
+    });
   });

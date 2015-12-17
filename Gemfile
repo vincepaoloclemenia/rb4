@@ -18,6 +18,7 @@ gem 'wkhtmltopdf-binary'
 gem 'will_paginate-bootstrap'
 gem 'ransack'
 gem 'whenever', :require => false
+gem "paperclip", "~> 4.3"
 
 group :development, :test do
   gem 'byebug'
