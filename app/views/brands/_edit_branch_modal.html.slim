@@ -3,9 +3,9 @@
     .modal-content
       .modal-header
         button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
-        h4.modal-title Add Branch
+        h4.modal-title Edit Branch
       .modal-body
-        = form_for branch do |f|
+        = form_for branch, url: brand_branch_path(brand_id: @brand.id, id: branch.id), method: :put do |f|
           .row
             .col-xs-12.col-md-4.col-lg-4
               .col-xs-12

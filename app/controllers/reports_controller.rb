@@ -55,31 +55,10 @@ class ReportsController < ApplicationController
 		if params[:date_entry].present? && params[:branch_id].present?
 			@date = params[:date_entry]
 			@branch = Branch.find(params[:branch_id])
-      @man_hours = EmployeeType.labor_hours_by_sale_category(@date,@branc,current_brand)
+      @man_hours = EmployeeType.labor_hours_by_sale_category(@date,@branch,current_brand)
 		else
 			@date = Date.today.strftime("%m/%d/%y")
-	end
-
-
-    # @branches = [params[:branch_id]]  
-    # @user_access = current_user.client_user_accesses.first
-    # @man_hours = []
-
-    # if params[:date_entry].present?
-    #   @date = params[:date_entry]
-    # else 
-    #   @date = DateTime.now.strftime("%m/%d/%Y")
-    # end
-
-    # @user_access = current_user.client_user_accesses.last
-    # if @user_access.branch_id.present? 
-    #   @branch = Branch.find([@user_access.branch_id]).first
-    #   @branch_list = [@branch].map{|a|[a.name, a.id]}
-    # else
-    #   @branch_list = current_brand.branches.map{|a|[a.name, a.id]}
-    # end
-    
-    # if params[:date_entry].present? && params[:branch_id].present?  
-    #   @man_hours = EmployeeType.labor_hours_by_sale_category(@date,@branches,current_brand)
-    end
+      @man_hours = EmployeeType.all
+		end
+  end
 end

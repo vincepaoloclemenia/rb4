@@ -41,10 +41,11 @@ module ApplicationHelper
 			"open" if current_pages?(company_users_path, roles_path) ||
 								(controller.eql?('roles') && action.eql?('manage_permissions'))
 		when "setup"
-			"open" if current_pages?(client_path, brands_path, branches_path, employees_path, employee_types_path, settlements_path,
-															shifts_path, units_path, categories_path, items_path, conversions_path, suppliers_path)
+			"open" if current_pages?(client_path, brands_path, employees_path, employee_types_path, settlements_path,
+															shifts_path, units_path, categories_path, items_path, conversions_path, suppliers_path) ||
+															(controller.eql?('brands') && action.eql?('show'))
 		when "company_setup"
-			"open" if current_pages?(client_path, brands_path, branches_path)
+			"open" if current_pages?(client_path, brands_path) || (controller.eql?('brands') && action.eql?('show'))
 		when "labor_setup"
 			"open" if current_pages?(employees_path, employee_types_path)
 		when "sales_setup"
@@ -98,6 +99,16 @@ module ApplicationHelper
 	def to_percentage(first_value, second_value)
 		val = ((first_value/second_value) * 100).round(2)
 		return val.to_s + '%'
+	end
+
+	def brand_pane_active?(pane_name)
+		if params[:brand_pane] && pane_name.eql?('branches')
+			return "active"
+		elsif params[:brand_pane].nil? && pane_name.eql?('info')
+			return "active"
+		else
+			return ""
+		end
 	end
 
 end

@@ -18,6 +18,7 @@ gem 'wkhtmltopdf-binary'
 gem 'will_paginate-bootstrap'
 gem 'ransack'
 gem 'whenever', :require => false
+gem "paperclip", "~> 4.3"
 gem 'lazy_high_charts'
 
 group :development, :test do
