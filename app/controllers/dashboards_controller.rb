@@ -8,7 +8,7 @@ class DashboardsController < ApplicationController
 	  arr = Array.new
 		@branches.each do |branch|
 			@sale.each do |sale|
-				if sale.branch_id == branch.id 
+				if sale.branch_id == branch.id
 					@a = sale.customer_count
 				else
 					@a = 0
@@ -18,11 +18,14 @@ class DashboardsController < ApplicationController
 		end
 
 		@chart = LazyHighCharts::HighChart.new('graph') do |f|
-		  f.title(text: "Customer Count")
+		  # f.title(text: "Customer Count")
 		  f.xAxis(categories: @branches.pluck(:name))
-		  f.series(name: "Customer Count", data: arr)
-		  f.chart({defaultSeriesType: "bar"})
+		  f.series(name: "Branch 1", data: arr)
+			f.series(name: "Branch 2", data: arr)
+			f.legend(layout:'horizontal')
+			# Legend color should be base on what the branch color the user picks
+			f.colors(["#0099CC", "#f7a35c", "#8085e9", "#f15c80", "#e4d354"])
+		  f.chart({defaultSeriesType: "line"}) 
 		end
 	end
 end
-
