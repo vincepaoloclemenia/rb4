@@ -36,9 +36,17 @@ class Sale < ActiveRecord::Base
 	end
 
 	def self.update_customer_count
-		date = Date.today-2
+		date = Date.today-1
 		@sale = Sale.select(:id, :customer_count, :branch_id).where(created_at: date.beginning_of_day..date.end_of_day)
-		# @sale.last.customer_count
 	end
+
+	def save_customer_count_to_dashboard
+		date = Date.today-1
+		@sale = Sale.select(:id, :customer_count, :branch_id).where(created_at: date.beginning_of_day..date.end_of_day)
+		dashboard.create(@sale)
+	end
+
+
+
 
 end
