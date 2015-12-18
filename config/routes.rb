@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'update_branch' => 'pages#update_branch'
   get 'update_units' => 'pages#update_units'
   root 'pages#index'
-  get 'dashboard' => 'pages#dashboard'
+  get 'dashboard' => 'dashboard#index'
   put 'change_brand' => 'pages#change_brand'
   get 'purchase_listings' => 'reports#purchase_listings'
   get 'price_movement_report' => 'reports#price_movement_report'
@@ -39,7 +39,6 @@ Rails.application.routes.draw do
   resources :suppliers
   resources :manifolds
   resources :directionals
-  resources :dashboards
   resources :purchases do
     resources :purchase_items
   end
