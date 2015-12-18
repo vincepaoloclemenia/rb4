@@ -14,8 +14,9 @@ Rails.application.routes.draw do
   get 'update_item' => 'reports#update_item'
   get 'man_hours' => 'reports#man_hours'
   resource :client, only: [:show, :edit, :update]
-  resources :brands
-  resources :branches
+  resources :brands do
+    resources :branches, only: [:create,:update,:destroy]
+  end
   resources :roles do
     get 'manage_permissions' => 'permissions#index'
     put 'manage_permissions' => 'permissions#update'

@@ -51,7 +51,7 @@
                   = image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"
                   a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
                     i.icon-maxicons1-exit id="remove-avatar"
-                = f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "new_brand_avatar"
+                = f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
             .col-xs-12.col-md-8.col-lg-8
               .col-xs-12.mb10
                 = f.label :name
@@ -97,12 +97,12 @@ javascript:
 	    }
 		}
 
-		$("#new_brand_avatar").change(function(){
+		$("#avatar_file_field").change(function(){
 			readURL(this);
 		});
 
 		$("#remove-avatar").click(function(){
-			var new_avatar = $("#new_brand_avatar");
+			var new_avatar = $("#avatar_file_field");
 			new_avatar.replaceWith( new_avatar.val('').clone( true ) );
 			$("#upload_preview").replaceWith('#{image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"}');
 		});

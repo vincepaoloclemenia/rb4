@@ -1,21 +1,17 @@
 class BranchesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
+	before_action :set_brand
 	before_action :set_branch, only: [:update, :destroy]
 
-	def index
-		@branches = current_brand.branches
-		@branch = Branch.new
-	end
-
 	def create
-		@branch = current_brand.branches.new(branch_params)
+		@branch = @brand.branches.new(branch_params)
 		if @branch.save
 			flash[:notice] = "Branch successfully created"
 		else
 			flash[:alert] = @branch.errors.full_messages.join(", ")
 		end
-		redirect_to brand_path(@branch.brand)
+		redirect_to brand_path(id: @brand.id, brand_pane: true)
 	end
 
 	def update
@@ -24,25 +20,29 @@ class BranchesController < ApplicationController
 		else
 			flash[:alert] = @branch.errors.full_messages.join(", ")
 		end
-		redirect_to brand_path(@branch.brand)
+		redirect_to brand_path(id: @brand.id, brand_pane: true)
 	end
 
 	def destroy
 		begin
 			@branch.destroy
-			redirect_to brand_path(@branch.brand), notice: "Branch successfully deleted"
+			redirect_to brand_path(id: @brand.id, brand_pane: true), notice: "Branch successfully deleted"
 		rescue ActiveRecord::InvalidForeignKey => e
 			errors = []
 			errors << "An unkonwn reason ( please kindly report to the developers for immediate fixing )" if errors.empty?
 			puts e if errors.empty?
-      redirect_to brand_path(@branch.brand), alert: "You cannot delete #{@branch.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
+      redirect_to brand_path(id: @brand.id, brand_pane: true), alert: "You cannot delete #{@branch.name} because of the following #{'reason'.pluralize(errors.count)}: #{errors.join('; ')}"
     end
 	end
 
 	private
 
+	def set_brand
+		@brand = current_client.brands.find(params[:brand_id])
+	end
+
 	def set_branch
-		@branch = current_client.branches.find(params[:id])
+		@branch = @brand.branches.find(params[:id])
 	end
 
 	def branch_params

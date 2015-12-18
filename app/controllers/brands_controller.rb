@@ -29,7 +29,7 @@ class BrandsController < ApplicationController
 		else
 			flash[:alert] = @brand.errors.full_messages.join(", ")
 		end
-		redirect_to brands_path
+		redirect_to brand_path(@brand)
 	end
 
 	def destroy

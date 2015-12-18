@@ -55,4 +55,4 @@
           - if view_access_control("branches","update")
             = link_to "<i class='icon-maxicons2-editting mr5'></i> Edit".html_safe, "javascript:;", class: "btn btn-sm btn-primary btn-outline", data: { toggle: "modal", target: ".edit-branch-#{branch.id}" }
           - if view_access_control("branches","destroy")
-            = link_to "<i class='icon-maxicons2-login mr5'></i> Delete Branch".html_safe, branch_path(branch), method: :delete, class: "btn btn-sm btn-danger btn-outline", data: { confirm: "Are you sure?" }
+            = link_to "<i class='icon-maxicons2-login mr5'></i> Delete Branch".html_safe, brand_branch_path(id: branch.id, brand_id: @brand.id), method: :delete, class: "btn btn-sm btn-danger btn-outline", data: { confirm: "Are you sure?" }
