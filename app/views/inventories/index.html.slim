@@ -44,15 +44,15 @@
 				thead
 					tr.bg-thead
 						th width="300" Branch
-						th width="300" Created By
 						th width="300" Entry Date
+						th width="300" Created By
 						th width="100" data-sortable="false" Action
 				tbody
 					- @inventories.each do |inventory|
 						tr
 							td data-title="Branch" = inventory.branch.name
-							td data-title="Created By" = inventory.user.full_name
 							td data-title="Entry Date" = to_default_date_format(inventory.entry_date)
+							td data-title="Created By" = inventory.user.full_name
 							td.action data-title="Action"
 								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, inventory_path(inventory), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Inventory" }
 								- if view_access_control('brands','destroy')

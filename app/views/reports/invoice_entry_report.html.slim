@@ -1,4 +1,4 @@
-#collapse.show-search
+.collapse#show-search class="#{ 'in' if params[:q].present? }"
 	.panel
 		.panel-body
 			= form_for invoice_entry_report_path, method: 'get' do
@@ -22,28 +22,25 @@
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="70" Invoice No.
-						th Supplier
-						th Vat Amount
-						th Total Amount
-						th Net Amount
-						th Invoice Date
-						th Entry Date
-						th Entered By
+						th width="120" Invoice<br>No.
+						th width="130" Invoice<br>Date
 						th Branch
+						th Supplier
+						th Vat<br>Amount
+						th Total<br>Amount
+						th Net<br>Amount
+						th Entry<br>Date
+						th Created<br>By
 				tbody
 					- @purchases.each do |purchase|
 						- nvtc = net_vat_total_computation(purchase.purchase_items)
 						tr
-							td = purchase.invoice_number
-							td = purchase.supplier.name
-							td = to_peso(nvtc[:vat])
-							td = to_peso(nvtc[:total])
-							td = to_peso(nvtc[:net])
-							td = to_default_date_format(purchase.purchase_date)
-							td = to_default_date_format(purchase.created_at)
-							td = purchase.created_by.full_name
-							td = purchase.branch.name
-
-
-
+							td data-title="Invoice No." = purchase.invoice_number
+							td data-title="Invoice Date"  = to_default_date_format(purchase.purchase_date)
+							td data-title="Branch"  = purchase.branch.name
+							td data-title="Supplier"  = purchase.supplier.name
+							td data-title="Vat Amount" = to_peso(nvtc[:vat])
+							td data-title="Total Amount" = to_peso(nvtc[:total])
+							td data-title="Net Amount"  = to_peso(nvtc[:net])
+							td data-title="Entry Date" = to_default_date_format(purchase.created_at)
+							td data-title="Created By" = purchase.created_by.full_name
