@@ -14,4 +14,7 @@
 //= require jquery_ujs
 //= require cocoon
 //= require mousetrap
-//= reuqire turbolinks
+//= require highcharts/highcharts
+//= require highcharts/highcharts-more
+//= require highcharts/highstock
+//= require turbolinks

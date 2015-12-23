@@ -2471,7 +2471,8 @@ tbody.collapse.in {
     cursor: not-allowed;
     background-color: transparent;
     background-image: none;
-    filter: progid: DXImageTransform.Microsoft.gradient(enabled=false)
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    /*filter: unquote("progid:DXImageTransform.Microsoft.gradient(enabled=false)");*/
 }
 
 .open>.dropdown-menu {
@@ -4575,7 +4576,7 @@ a.list-group-item:hover {
 
 .close {
     float: right;
-    font-size: 21px;
+    font-size: 12px;
     line-height: 1;
     color: #000;
     text-shadow: 0 1px 0 #fff;
@@ -4706,7 +4707,8 @@ button.close {
 
 .modal-footer .btn+.btn {
     margin-bottom: 0;
-    margin-left: 5px
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .modal-footer .btn-group .btn+.btn {
@@ -5103,7 +5105,7 @@ button.close {
     background-image: -o-linear-gradient(left, rgba(0, 0, 0, .5) 0, rgba(0, 0, 0, .0001) 100%);
     background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .5)), to(rgba(0, 0, 0, .0001)));
     background-image: linear-gradient(to right, rgba(0, 0, 0, .5) 0, rgba(0, 0, 0, .0001) 100%);
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#80000000", endColorstr="#00000000", GradientType=1);
     background-repeat: repeat-x
 }
 
@@ -5114,7 +5116,7 @@ button.close {
     background-image: -o-linear-gradient(left, rgba(0, 0, 0, .0001) 0, rgba(0, 0, 0, .5) 100%);
     background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .0001)), to(rgba(0, 0, 0, .5)));
     background-image: linear-gradient(to right, rgba(0, 0, 0, .0001) 0, rgba(0, 0, 0, .5) 100%);
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00000000", endColorstr="#80000000", GradientType=1);
     background-repeat: repeat-x
 }
 
@@ -5706,11 +5708,6 @@ button.close {
     src: url(../fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
 }
 
-/*!
-Animate.css - http://daneden.me/animate
-Licensed under the MIT license - http://opensource.org/licenses/MIT
-
-*/
 
 @-webkit-keyframes bounce {
     0%,
@@ -8292,10 +8289,9 @@ Licensed under the MIT license - http://opensource.org/licenses/MIT
 /*!
 Animate.css - http://daneden.me/animate
 Licensed under the MIT license - http://opensource.org/licenses/MIT
-
 */
 
-*/.animated {
+.animated {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
@@ -11837,8 +11833,8 @@ blockquote p {
     -moz-transition: transform 300ms ease;
     -o-transition: transform 300ms ease;
     transition: transform 300ms ease;
-    content: "Q";
-    font: normal normal normal 10px/1 "maxicons";
+    content: "\e912";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -14055,7 +14051,10 @@ footer.content-footer li:hover {
 .btn-default {
     color: #616161;
     background-color: #fff;
-    border-color: rgba(0, 0, 0, .13)
+    border-color: rgba(0, 0, 0, .13);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 11px
 }
 
 .btn-default:visited {
@@ -14218,7 +14217,10 @@ fieldset[disabled] .btn-default:hover {
 .btn-primary {
     color: #fff;
     background-color: #09c;
-    border-color: #09c
+    border-color: #09c;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600
 }
 
 .btn-primary:visited {
@@ -14378,7 +14380,10 @@ fieldset[disabled] .btn-primary:hover {
 .btn-warning {
     color: #fff;
     background-color: #ffc65d;
-    border-color: #ffc65d
+    border-color: #ffc65d;
+    font-size:11px !important;
+    text-transform: uppercase;
+    font-weight: 600
 }
 
 .btn-warning:visited {
@@ -16098,7 +16103,8 @@ a.list-group-item-danger.active:hover {
 }
 
 .panel-controls {
-    float: right
+    float: right;
+    font-size:12px
 }
 
 .panel-controls a {
@@ -18953,7 +18959,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-single .chosen-search::before {
     display: inline-block;
-    font: normal normal normal 10px/1 "maxicons";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -18962,7 +18968,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 24px;
-    content: '\e0a1';
+    content: '\e82d';
     position: absolute;
     top: 50%;
     right: 5px;
@@ -18980,7 +18986,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-single .chosen-single div b::before {
     display: inline-block;
-    font: normal normal normal 10px/1 'maxicons';
+    font: normal normal normal 10px/1 'fontello';
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -18989,7 +18995,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 24px;
-    content: "I";
+    content: "\e929";
     position: absolute;
     top: 50%;
     right: 5px;
@@ -19019,7 +19025,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-single .chosen-single abbr::before {
     display: inline-block;
-    font: normal normal normal 10px/1 "maxicons";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -19027,7 +19033,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
-    content: "A";
+    content: "\e91a";
     font-size: 10px;
     color: #e4e4e4
 }
@@ -19063,7 +19069,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-multi .chosen-choices li.search-choice .search-choice-close::before {
     display: inline-block;
-    font: normal normal normal 10px/1 "maxicons";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -19072,7 +19078,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 16px;
-    content: "A";
+    content: "\e91a";
     position: absolute;
     top: 50%;
     right: 0;
@@ -26870,36 +26876,72 @@ select.mobile-device {
 }
 
 
-/** Icons **/
-.show-icon{
+/* Icons */
+.show-icon {
     font-size:11px
 }
 
-.green-color{
+.green-color {
     color:#2e7d32
 }
 
-.f10{
-    font-size: 10px !important;
+.red-color {
+    color:#d96557
 }
-/** Width **/
+
+.f10 {
+    font-size: 10px !important
+}
+
+.price-down{
+    color:#d96557;
+    font-style: italic
+}
+
+.price-up{
+    color:#2e7d32;
+    font-style: italic
+}
+
+.refresh-icon{
+  color:#007299
+}
+.refresh-icon:hover{
+  color:#4ebfe5
+}
+/* Width */
 .w180 {
     width: 180px
 }
-.w300 {
-    width: 300px
+.no-upp{
+  text-transform: none !important
 }
 
-/** Tables **/
-.bg-thead{
+/* Tables */
+.bg-thead {
     background-color: #f3f3f3
 }
-.view-link{
+.bg-total {
+    background-color: #FFFBE2 !important
+}
+.label-total {
+    text-transform: uppercase;
+    font-size: 10px;
+    color:#424242;
+    font-weight: 600
+}
+.label-total-num {
+    color:#bf360c;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+.view-link {
     color: #424242 !important;
     font-weight: 600;
     border-bottom: 1px #bdbdbd dotted
 }
-.field-req{
+.field-req {
     font-weight:600;
     color:#e53935
 }
@@ -26927,10 +26969,10 @@ select.mobile-device {
   */
 .simplecolorpicker.glyphicons span.color[data-selected]:after {
   position: relative;
-  font-family: 'maxicons';
+  font-family: 'fontello';
   /*line-height: .9;*/
   -webkit-font-smoothing: antialiased;
-  content: 'd';
+  content: '\64';
   /*line-height: 20px;*/
   font-size: 12px;
   text-align: center;
@@ -27155,17 +27197,16 @@ div.show-image a.delete {
     border-radius: 0 !important
 }
 
-
-/** Branch Colors **/
-.coral-bg{
+/* Branch Colors */
+.coral-bg {
     background-color: #E26A6A !important
 }
-a.coral-bg:hover{
+.coral-bg:hover {
     background-color: #dd5454 !important
 }
-.eggplant-bg{
+.eggplant-bg {
     background-color: #60355B !important
 }
-a.eggplant-bg:hover{
+.eggplant-bg:hover {
     background-color:   !important
 }

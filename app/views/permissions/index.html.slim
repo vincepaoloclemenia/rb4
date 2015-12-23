@@ -1,30 +1,28 @@
-h2
-	= @role.name
+.panel
+	.panel-heading.border = @role.name
+	.panel-body
+		.no-more-tables
+			= form_for @role, url: role_manage_permissions_path(role_id: @role.id), method: :put do |f|
+				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+					thead
+						tr.bg-thead
+							th width="400" Section
+							th width="150" data-sortable="false" Read
+							th width="150" data-sortable="false" Create
+							th width="150" data-sortable="false" Edit
+							th width="150" data-sortable="false" Delete
+					tbody
+						= f.fields_for :permissions do |p|
+							tr
+								td data-title="Section" = p.instance_values['object'].section.page
+								td data-title="Read" = p.check_box :is_read, class: "read-checkbox icheck-me", data: { skin: "square", color: "blue" }
+								td data-title="Create" = p.check_box :is_create, class: "create-checkbox icheck-me", data: { skin: "square", color: "blue" }
+								td data-title="Update" = p.check_box :is_update, class: "update-checkbox icheck-me", data: { skin: "square", color: "blue" }
+								td data-title="Destroy" = p.check_box :is_destroy, class: "destroy-checkbox icheck-me", data: { skin: "square", color: "blue" }
 
-= form_for @role, url: role_manage_permissions_path(role_id: @role.id), method: :put do |f|
-	table
-		thead
-			tr
-				th Section
-				th Read
-				th Create
-				th Edit
-				th Delete
-		tbody
-			= f.fields_for :permissions do |p|
-				tr
-					td
-						= p.instance_values['object'].section.page
-					td
-						= p.check_box :is_read, class: "read-checkbox"
-					td
-						= p.check_box :is_create, class: "create-checkbox"
-					td
-						= p.check_box :is_update, class: "update-checkbox"
-					td
-						= p.check_box :is_destroy, class: "destroy-checkbox"
-
-	= f.submit "Save"
+				.col-xs-12.mt25
+					.pull-right
+						button.btn.btn-primary.btn-outline type="submit" style="margin-right:-10px" Save Changes
 
 javascript:
 	$(document).ready(function () {

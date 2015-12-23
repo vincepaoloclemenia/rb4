@@ -13,6 +13,17 @@ class ReportsController < ApplicationController
 		@q = current_brand.purchases.ransack(params[:q])
 		@purchases = @q.result
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
+
+		respond_to do |format|
+			format.html
+      format.pdf do
+        render :pdf         	=> "Purchase List Reports",
+                :orientation  => 'Landscape',
+                :page_width   => '13in',
+                :margin => {:top       => 1,
+                             :bottom   => 1} 
+      end
+    end
 	end
 
 	#PRICE MOVEMENT REPORT
@@ -51,4 +62,14 @@ class ReportsController < ApplicationController
     return daterange
 	end
 
+	def man_hours
+		if params[:date_entry].present? && params[:branch_id].present?
+			@date = params[:date_entry]
+			@branch = Branch.find(params[:branch_id])
+      @man_hours = EmployeeType.labor_hours_by_sale_category(@date,@branch,current_brand)
+		else
+			@date = Date.today.strftime("%m/%d/%y")
+      @man_hours = EmployeeType.all
+		end
+  end
 end

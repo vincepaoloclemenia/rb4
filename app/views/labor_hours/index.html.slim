@@ -1,77 +1,87 @@
 .panel.panel-primary
-	.panel-heading.border.pb45
+	.panel-heading
 		.pull-left.mt7 Labor Hours
 		.pull-right
-			button.btn.btn-default.btn-round.btn-outline.mr10
-				i.icon-maxicons1-download.mr5
-				| Download as Excel
-				= link_to '', labor_hours_path(format: 'pdf')
-	.panel.body
+			= link_to "<i class='icon-maxicons1-onright mr5'></i> Export as PDF".html_safe, labor_hours_path(format: "pdf"), class: "btn btn-default btn-round btn-outline", data: { toggle: "modal", target: ".create-pdf-modal" }
+	.panel-body
+		| Show
+		.btn-group.mb10
+		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+		    span.mr5 10
+		    span.caret
+		  ul.dropdown-menu role="menu"
+		    li
+		      a href="javascript:;"  10
+		    li
+		      a href="javascript:;"  25
+		    li
+		      a href="javascript:;"  50
+		    li
+		      a href="javascript:;"  100
+		    li.divider
+		    li
+		      a href="javascript:;"  Show All
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th Employee Name
-						th Branch
-						th Date Employed
-						th Contact Number
-						th Actions
+						th width="300" Employee Name
+						th width="200" Branch
+						th width="200" Date Employed
+						th width="200" data-sortable="false" Contact No.
+						th width="100" data-sortable="false" Action
 				tbody
 					- @employees.each do |employee|
 						tr
-							td = employee.full_name
-							td = employee.branch.name
-							td = employee.date_employed
-							td = employee.contact_no
-							td
-								= link_to 'Download as PDF', labor_hour_work_hours_list_path(employee, format: 'pdf')
-								|  | &nbsp;
-								= link_to 'Work Hours', labor_hour_work_hours_list_path(employee)
+							td data-title="Employee Name" = link_to employee.full_name, "#", class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "View Profile" }
+							td data-title="Branch" = employee.branch.name
+							td data-title="Date Employed" = employee.date_employed
+							td data-title="Contact No." = employee.contact_no
+							td.action data-title="Action"
+								= link_to "<i class='icon-maxicons2-clock'></i>".html_safe, labor_hour_work_hours_list_path(employee), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Work Hours" }
 
-h2 Labor Hours  
-= link_to "Generate (PDF)", labor_hours_path(format: 'pdf'), class: "button tiny right", target: "_blank"
-table { width = "100%"}
-	thead
-		tr
-			th Employee Name
-			th Branch
-			th Date Employed
-			th Contact Number
-			th Actions
-	tbody
-		- @employees.each do |employee|
-			tr 
-				td = employee.full_name
-				td = employee.branch.name
-				td = employee.date_employed
-				td = employee.contact_no
-				td
-					= link_to "work hours", labor_hour_work_hours_list_path(employee), class: 'button tiny'
-					| &nbsp;
-					= link_to "Generate (PDF)", labor_hour_work_hours_list_path(employee, format: 'pdf'), class: 'button success tiny', target: "_blank"
-.reveal-modal.small#generate_pdf data-reveal="true" aria-labelledby="GeneratePdf" aria-hidden="true" role="dialog"
-	h6.modal-header#generate_pdf style="font-weight:700;text-transform:uppercase"
-		| Generate PDF
-	.top-15
-		= form_tag({action: 'index', format: :pdf}, method: :get)
-			.row
-				.large-12.columns
-					= label_tag :branch_id, "Branch"
-					= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id))
-			br
-			.row
-				.large-12.columns
-					label Date Range
-					span.inline
-						= text_field :date_employed, '', value:'From', id: 'from_date_employed', readonly: true
-						= text_field :date_employed, '', value:'To', id: 'to_date_employed', readonly: true
-			.row
-				.top-15
-					.large-12.columns
-						span.inline.float-right
-							= submit_tag "Generate PDF", class: "button tiny"
-							| &nbsp;
-							= link_to "Cancel", "#", class: "button tiny secondary close-reveal-modal"
+		.align-center
+		  p Showing 1 to 10 of 57 entries
+		  ul.pagination
+		    li
+		      a href="javascript:;"  ←
+		    li.active
+		      a href="javascript:;"  1
+		    li
+		      a href="javascript:;"  2
+		    li
+		      a href="javascript:;"  3
+		    li
+		      a href="javascript:;"  4
+		    li
+		      a href="javascript:;"  5
+		    li
+		      a href="javascript:;"  6
+		    li
+		      a href="javascript:;"  7
+		    li
+		      a href="javascript:;"  →
+
+.modal.create-pdf-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
+				h4.modal-title Export as PDF
+			.modal-body
+				= form_tag({action: 'index', format: :pdf}, method: :get)
+					.row.mb10
+						.col-xs-6
+							label Date Range
+							= text_field :date_employed, '', class: 'form-control drp', disabled: true
+								/ = text_field :date_employed, '', value:'To', id: 'to_date_employed', disabled: true
+						.col-xs-6
+							= label_tag :branch_id, "Branch"
+							= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id)), class: 'form-control'
+					.modal-footer.no-border
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							button.btn.btn-primary type="submit" Export
 
 javascript:
 	var nowTemp = new Date();

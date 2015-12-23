@@ -1,11 +1,16 @@
 class BrandsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_brand, only: [:update, :destroy]
+	before_action :set_brand, only: [:show, :update, :destroy]
 
 	def index
 		@brands = current_client.brands
 		@brand = Brand.new
+	end
+
+	def show
+		@branches = @brand.branches
+		@branch = Branch.new
 	end
 
 	def create
@@ -24,13 +29,19 @@ class BrandsController < ApplicationController
 		else
 			flash[:alert] = @brand.errors.full_messages.join(", ")
 		end
-		redirect_to brands_path
+		redirect_to brand_path(@brand)
 	end
 
 	def destroy
 		begin
-			@brand.destroy
-			redirect_to brands_path, notice: "Brand successfully deleted"
+			if @brand.id == session[:current_brand_id].to_i
+				session[:current_brand_id] = current_client.brands.first.id
+				@brand.destroy
+				redirect_to brands_path, notice: "Brand successfully deleted and switched to #{current_brand.name}"
+			else
+				@brand.destroy
+				redirect_to brands_path, notice: "Brand successfully deleted"
+			end
 		rescue ActiveRecord::InvalidForeignKey => e
 			errors = []
 			errors << "#{'Branch'.pluralize(@brand.branches.count)}(#{@brand.branches.pluck(:name).join(', ')}) belongs to this brand" if @brand.branches.present?
@@ -48,6 +59,6 @@ class BrandsController < ApplicationController
 	end
 
 	def brand_params
-		params.require(:brand).permit(:name, :website)
+		params.require(:brand).permit(:name, :website, :avatar, :description, :landline_no, :mobile_no, :fax_no)
 	end
 end

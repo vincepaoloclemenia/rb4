@@ -14,11 +14,17 @@ class Brand < ActiveRecord::Base
   has_many :purchases
   has_many :suppliers
 
+  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
+  validates_attachment :avatar, 
+                       :content_type => { :content_type => /^image\/(png|gif|jpeg|jpg)/, message: "must be in the format png|gif|jpg" },
+                       :size => { :in => 0..1000.kilobytes, message: "must be less than 1MB" }
+
 	validates :name,
 						presence: true,
 						length: {
 							maximum: 50
-						}
+						},
+            uniqueness: { scope: :client_id, message: "already exist", case_sensitive: false }
 
   accepts_nested_attributes_for :branches
 end

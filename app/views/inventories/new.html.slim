@@ -12,10 +12,10 @@
 					= f.label :entry_date
 					small.field-req  *
 					- if params[:inventory].present? && params[:inventory][:entry_date].present?
-						= f.text_field :entry_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: Date.strptime(params[:inventory][:entry_date]).strftime("%m/%d/%Y")
+						= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: Date.strptime(params[:inventory][:entry_date]).strftime("%m/%d/%Y")
 
 					- else
-						= f.text_field :entry_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+						= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
 			.row.mb10
 				.col-xs-12
 					- if current_brand.categories.main.empty?
@@ -28,12 +28,12 @@
 									- current_brand.categories.main.each do |category|
 										- unless category.subcategories.empty?
 											li.dd-item
-												.dd-handle = category.name
+												.dd-new-handle = category.name
 												ol.dd-list
 													- category.subcategories.each do |subcategory|
 														- unless subcategory.items.for_inventory.empty?
 															li.dd-item
-																.dd-handle = subcategory.name
+																.dd-new-handle = subcategory.name
 																ol.dd-list
 																	.row
 																		.col-xs-12
@@ -59,7 +59,7 @@
 																											= ii.hidden_field :item_id, value: item.id
 																											= ii.number_field :stock_count, class: "form-control", placeholder: "0"
 			.row
-				.col-xs-12
+				.col-xs-12.mt20
 					/ .align-center.mt5
 					/ 	p Filter: Show all
 					= f.submit "Create", class: "btn btn-lg btn-primary btn-outline pull-right w180"

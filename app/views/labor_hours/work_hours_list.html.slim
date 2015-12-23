@@ -1,27 +1,30 @@
-h3 Labor Hour Entries
-table { width = "100%"} 
-	thead
-		tr
-			th Working Date
-			th Regular
-			th Overtime
-			th Night Differential
-			th Legal Holiday
-			th Special Holiday
-			th Absent
-			th Late
-			th Rest Day
-	tbody
-		- @labor_hours.each do |labor_hour|
-			- @labor_work = LaborHoursEntry.where(labor_hour_id: labor_hour.id)
-			- @labor_work.each do |lw|
-				tr
-					th = lw.working_date
-					th = lw.regular.to_ichr
-					th = lw.overtime.to_i
-					th = lw.night_differential.to_i
-					th = lw.legal_holiday.to_i
-					th = lw.special_holiday.to_i
-					th = lw.absent.to_i
-					th = lw.late.to_i
-					th = lw.rest_day.to_i
+.panel.panel-primary
+	.panel-heading Work Hours
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0
+				thead
+					tr.bg-thead
+						th Working Date
+						th Regular
+						th Overtime
+						th Night Differential
+						th Legal Holiday
+						th Special Holiday
+						th Absent
+						th Late
+						th Rest Day
+				tbody
+					- @labor_hours.each do |labor_hour|
+						- @labor_work = LaborHoursEntry.where(labor_hour_id: labor_hour.id)
+						- @labor_work.each do |lw|
+							tr
+								td data-title="Working Date" = lw.working_date 
+								td data-title="Regular" = lw.regular.to_i
+								td data-title="Overtime" = lw.overtime.to_i
+								td data-title="Night Differential" = lw.night_differential.to_i
+								td data-title="Legal Holiday" = lw.legal_holiday.to_i
+								td data-title="Special Holiday" = lw.special_holiday.to_i
+								td data-title="Absent" = lw.absent.to_i
+								td data-title="Late" = lw.late.to_i
+								td data-title="Rest Day" = lw.rest_day.to_i

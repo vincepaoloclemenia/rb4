@@ -1,0 +1,22 @@
+h2 Employee Fringe Expense
+table.table.table-bordered.table-striped.mb0
+	thead
+		tr.bg-head
+			td
+			td width="20%"
+			td width="20%" %
+	tbody
+		- @total_efe_purchase_total_item_amount = []
+		- @total_efe_percentage = []
+		- @employee_fringe_expenses.each do |efe|
+			tr
+				td = efe[:item_name]
+				td = to_peso(efe[:purchase_total_item_amount])
+				td = to_percentage(efe[:purchase_total_item_amount], @revenue_holder.sum)
+	    	- @total_efe_purchase_total_item_amount << efe[:purchase_total_item_amount]
+	    	- @total_efe_percentage << to_percentage(efe[:purchase_total_item_amount], @revenue_holder.sum)
+
+    tr
+    	td Total Employee Fringe Expense
+    	td = to_peso(@total_efe_purchase_total_item_amount.sum)
+    	td = @total_efe_percentage.sum

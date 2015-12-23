@@ -57,6 +57,11 @@
 						th width="120" Total<br>Amount
 						th width="120" data-sortable="false" Action
 				tbody
+					- if @purchases.empty?
+						tr
+							td colspan="8"
+								p.text-center.mt5 No Records Found
+
 					- @purchases.each do |purchase|
 						- nvt = net_vat_total_computation(purchase.purchase_items)
 						tr
@@ -74,10 +79,11 @@
 								- if view_access_control('purchases','destroy')
 									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-			.align-center
-				p
-					= page_entries_info @purchases, renderer: BootstrapPagination::Rails
-				= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
+			- if @purchases.any?
+				.align-center
+					p
+						= page_entries_info @purchases, renderer: BootstrapPagination::Rails
+					= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
 
 
 						div class="modal edit_purchase_#{purchase.id}" tabindex="-1" role="dialog" aria-hidden="true"
@@ -149,7 +155,7 @@
 							= f.label :purchase_date
 								| Purchase Date
 								small.field-req  *
-							= f.text_field :purchase_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+							= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
 					.row.mb10
 						.col-xs-12
 							= f.label :supplier_id, "Supplier"

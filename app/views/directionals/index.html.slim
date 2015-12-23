@@ -7,7 +7,7 @@
 					= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
 				.col-xs-12.col-lg-6
 					label Date
-					= text_field_tag :date_entry, params[:date_entry],readonly: true, class: 'form-control',  placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+					= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
 			.row.mt10
 				.col-xs-12
 					.pull-right
@@ -15,7 +15,7 @@
 							i.icon-maxicons2-search
 .panel.panel-primary
 	.panel-heading.border.pb45
-		.pull-left.mt7 Directionals
+		.pull-left.mt7 Net Sales - Categories
 		.pull-right
 			button.btn.btn-default.btn-round.btn-outline.mr10
 				i.icon-maxicons1-download.mr5
@@ -26,55 +26,52 @@
 				| Download as PDF
 				= link_to '', directionals_path(format: 'pdf'), target: '_blank'
 	.panel-body
-		h4 Net Sales [Categories]
 		.no-more-tables
 			table.table.table-bordered.table-stripped.mb0 data-sortable="true"
 				thead
-					tr.big-head
-						th
-						th MTD TOTALS
-						th PERCENTAGE
+					tr.bg-thead
+						th width="300"
+						th width="350" MTD Totals
+						th width="350" Percentage
 				tbody
 					- @directional.sales_entries(@sale_by_category_entries).each do |category_name, amount|
 						tr
-							td = category_name
-							td = to_peso(amount)
-							td = to_percentage(amount, @directional.total_sales(@sale_by_category_entries))
+							td.text-right  data-title="Category Name" = category_name
+							td data-title="MTD Totals" = to_peso(amount)
+							td data-title="Percentage" = to_percentage(amount, @directional.total_sales(@sale_by_category_entries))
 					tr
-						td Total
-						td = to_peso(@directional.total_sales(@sale_by_category_entries))
-						td 
-.panel.panel-primary
-	.panel-heading.border.pb45
-		.pull-left.mt7 Net Sales
+						td.text-right data-title="Category Name" Total
+						td data-title="MTD Totals" = to_peso(@directional.total_sales(@sale_by_category_entries))
+						td data-title="Percentage" -
+.panel
+	.panel-heading.border Net Sales
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-stripped.mb0 data-sortable="true"
 				thead
-					tr.big-head
-						th
-						th MTD TOTALS
-						th LAST YEAR
+					tr.bg-thead
+						th width="300"
+						th width="350" MTD Totals
+						th width="350" Last Year
 				tbody
 					- @title_and_column_array.each do |title, column_name, act|
 						tr
-							td = title
-							td = @directional.resource_count(column_name, act, @sale_by_category_entries)
-							td
-.panel.panel-primary
-	.panel-heading.border.pb45
-		.pull-left.mt7 Complimentary Analysis
+							td.text-right data-title="Title" = title
+							td data-title="MTD Totals" = @directional.resource_count(column_name, act, @sale_by_category_entries)
+							td data-title="Percentage" -
+.panel
+	.panel-heading.border Complimentary Analysis
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-stripped.mb0 data-sortable="true"
 				thead
-					tr.big-head
-						th
-						th MTD TOTALS
-						th PERCENTAGE
+					tr.bg-thead
+						th width="300"
+						th width="350" MTD Totals
+						th width="350" Percentage
 				tbody
 					- @directional.sales_entries(@sale_by_settlement_entries).each do |settlement_name, amount|
 						tr
-							td = settlement_name
-							td = to_peso(amount)
-							td = to_percentage(amount, @directional.total_sales(@sale_by_settlement_entries))
+							td.text-right data-title="Settlement Name" = settlement_name
+							td data-title="MTD Totals" = to_peso(amount)
+							td data-title="Percentage" = to_percentage(amount, @directional.total_sales(@sale_by_settlement_entries))

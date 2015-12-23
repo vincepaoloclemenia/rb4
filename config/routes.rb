@@ -6,15 +6,18 @@ Rails.application.routes.draw do
   get 'update_branch' => 'pages#update_branch'
   get 'update_units' => 'pages#update_units'
   root 'pages#index'
-  get 'dashboard' => 'pages#dashboard'
+  get 'dashboard' => 'dashboard#index'
   put 'change_brand' => 'pages#change_brand'
   get 'purchase_listings' => 'reports#purchase_listings'
   get 'price_movement_report' => 'reports#price_movement_report'
   get 'invoice_entry_report' => 'reports#invoice_entry_report'
   get 'update_item' => 'reports#update_item'
+  get 'man_hours' => 'reports#man_hours'
+  get 'profit_and_losses' => 'profit_and_losses#index'
   resource :client, only: [:show, :edit, :update]
-  resources :brands
-  resources :branches
+  resources :brands do
+    resources :branches, only: [:create,:update,:destroy]
+  end
   resources :roles do
     get 'manage_permissions' => 'permissions#index'
     put 'manage_permissions' => 'permissions#update'
@@ -37,10 +40,10 @@ Rails.application.routes.draw do
   resources :suppliers
   resources :manifolds
   resources :directionals
-  resources :dashboards
   resources :purchases do
     resources :purchase_items
   end
+  
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'
