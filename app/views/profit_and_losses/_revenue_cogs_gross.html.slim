@@ -1,0 +1,66 @@
+h2 REVENUES
+.no-more-tables
+	table.table.table-bordered.table-striped.mb0
+		thead
+			tr.bg-thead
+				th
+				th width="20%"
+				th width="20%" %
+		tbody
+			- @revenue_holder = []
+			- @category_listing.each do |cat|
+				- revenue = cat.total_revenue_month_to_date(@branch_id, params[:date_entry])
+				- @revenue_holder << revenue
+
+			- @category_listing.each_with_index do |cat, index|
+				tr
+					td = cat.name
+					td = to_peso(@revenue_holder[index])
+					td = to_percentage(@revenue_holder[index], @revenue_holder.sum)
+			tr
+				td REVENUE TOTAL
+				td = to_peso(@revenue_holder.sum)
+				td 100%
+| ================
+h2 COST OF SALES
+.no-more-tables
+	table.table.table-bordered.table-striped.mb0
+		thead
+			tr.bg-thead
+				th
+				th width="20%"
+				th width="20%" %
+		tbody
+			- @cogs_holder = []
+			- @category_listing.each do |cat|
+				- cogs = cat.total_cost_of_sales_month_to_date(@branch_id, params[:date_entry])
+				- @cogs_holder << cogs
+				tr
+					td = cat.name
+					td data-value="#{cogs}" = to_peso(cogs)
+					td 
+			tr
+				td Total Cost of Sale
+				td = to_peso(@cogs_holder.sum)
+				td
+
+| ===============
+h2 GROSS PROFIT
+.no-more-tables
+	table.table.table-bordered.table-striped.mb0
+		thead
+			tr
+				th
+				th width="20%"
+				th width="20%" %
+		tbody
+			- @category_listing.each_with_index do |cat, index|
+				tr
+					td = cat.name
+					td = to_peso(@revenue_holder[index] - @cogs_holder[index])
+					td
+
+			tr
+				td Gross Profit
+				td = to_peso(@revenue_holder.sum - @cogs_holder.sum)
+				td

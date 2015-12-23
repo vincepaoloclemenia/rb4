@@ -9,5 +9,6 @@ class Branch < ActiveRecord::Base
 						presence: true,
 						length: {
 							maximum: 50
-						}
+						},
+            uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
 end

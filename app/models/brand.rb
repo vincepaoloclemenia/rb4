@@ -23,7 +23,8 @@ class Brand < ActiveRecord::Base
 						presence: true,
 						length: {
 							maximum: 50
-						}
+						},
+            uniqueness: { scope: :client_id, message: "already exist", case_sensitive: false }
 
   accepts_nested_attributes_for :branches
 end

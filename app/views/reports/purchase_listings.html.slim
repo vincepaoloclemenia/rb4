@@ -29,9 +29,7 @@
 				button.btn.btn-default.btn-round.btn-outline.mr10
 					i.icon-maxicons1-download.mr5
 					| Download as Excel
-				button.btn.btn-default.btn-round.btn-outline
-					i.icon-maxicons1-download.mr5
-					| Download as PDF
+				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf), class: "btn btn-default btn-round btn-outline", target: "_blank"
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
