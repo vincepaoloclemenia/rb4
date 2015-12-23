@@ -1,6 +1,6 @@
-= wicked_pdf_stylesheet_link_tag "pdf"
+= wicked_pdf_stylesheet_link_tag "application"
 h2 Purchase List Reports
-table { width = "100%"} 
+table width="100%"
 	thead
 		tr
 			th INVOICE NUMBER
@@ -31,7 +31,12 @@ table { width = "100%"}
 					td = purchase.branch.name
 					td = purchase.supplier.name
 					td = pi.item.name
+					td = pi.vat_type
 					td = pi.item.category.name
+					td = pi.quantity
+					td = pi.unit.name
+					td = pi.remarks
+					td = pi.purchase_item_amount
 					td = number_to_currency(nvt[:vat], unit: "")
 					td = number_to_currency(nvt[:net], unit: "")
 					td = number_to_currency(nvt[:total], unit: "")
@@ -40,12 +45,12 @@ table { width = "100%"}
 
 			- unless purchase.purchase_items.empty?
 				tr
-					td colspan="7"
+					td colspan="12"
 					td = number_to_currency(purchase_net_amount, unit: "")
 					td = number_to_currency(purchase_total_amount, unit: "")
 					- total_purchases_net_amount += purchase_net_amount
 					- total_purchases_total_amount += purchase_total_amount
 		tr
-			td.text-right colspan="7" Total:
+			td.text-right colspan="12" Total:
 			td = number_to_currency(total_purchases_net_amount, unit: "")
 			td = number_to_currency(total_purchases_total_amount, unit: "")
