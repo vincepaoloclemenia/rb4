@@ -3,54 +3,33 @@
 		.pull-left.mt7 Units
 		.pull-right
 			- if view_access_control('units','create')
-				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Unit".html_safe, '#', data: { toggle: "modal", target: ".create-unit-modal" }, class: "btn btn-default btn-round btn-outline"
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> Add Unit".html_safe, '#', data: { toggle: "modal", target: ".create-unit-modal" }, class: "btn btn-default btn-round btn-outline"
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="290" Name
-						th width="290" Symbol
-						th width="290" data-sortable="false" Remarks
-						th width="130" data-sortable="false" Action
+						th width="200" Unit of Measure
+						th width="150" Abbreviation
+						th width="200" data-sortable="false" Description
+						th width="175" Track as Sales
+						th width="175" Status
+						th width="100" data-sortable="false" Action
 				tbody
 					- @units.each do |unit|
 						tr
-							td data-title="Name" = unit.name
-							td data-title="Symbol" = unit.symbol
-							td data-title="Remarks" = unit.remarks
+							td data-title="Unit of Measure" = unit.name
+							td data-title="Abbreviation" = unit.symbol
+							td data-title="Description" = unit.remarks
+							td data-title="Track as Sales" = unit.track_as_sales ? "Yes" : "No"
+							td data-title="Status" = unit.is_active ? "<span class='label label-success'>Active</span>".html_safe : "<span class='label label-default'>Deactivated</span>".html_safe
 							td.action data-title="Action"
-								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Show Unit", toggle: "modal", target: ".show-unit-#{unit.id}" }
 								- if view_access_control('units','update')
-									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-unit-#{unit.id}" }
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-unit-#{unit.id}" }
 								- if view_access_control('units','destroy')
 									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, unit_path(unit), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
-						.modal class="show-unit-#{unit.id}" tabindex="-1" role="dialog" aria-hidden="true"
-							.modal-dialog.modal-sm
-								.modal-content
-									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true" x
-										h4.modal-title = unit.name
-									.modal-body
-										.row.mb10
-											.col-xs-12
-												| Symbol: 
-												= unit.symbol
-										.row.mb10
-											.col-xs-12
-												| Remarks: 
-												= unit.remarks
-										.row.mb10
-											.col-xs-12
-												| Status: 
-												= unit.is_active ? "Active" : "Inactive"
-										.row.mb10
-											.col-xs-12
-												| Track as sales?
-												= unit.track_as_sales ? "Yes" : "No"
-
 						.modal class="edit-unit-#{unit.id}" tabindex="-1" role="dialog" aria-hidden="true"
-							.modal-dialog.modal-sm
+							.modal-dialog
 								.modal-content
 									.modal-header
 										button.close type="button" data-dismiss="modal" aria-hidden="true" x
@@ -60,75 +39,86 @@
 											.row.mb10
 												.col-xs-12
 													= f.label :name
-														| Name 
-														small.field-req *
-													= f.text_field :name, class: "form-control"											
+														| Unit of Measure
+														small.field-req  *
+													= f.text_field :name, class: "form-control"
 											.row.mb10
 												.col-xs-12
 													= f.label :symbol
-														| Symbol 
-														small.field-req *
+														| Abbreviation
+														small.field-req  *
 													= f.text_field :symbol, class: "form-control"
+											.row.mb10
 												.col-xs-12
 													= f.label :remarks
+														| Description
 													= f.text_area :remarks, class: "form-control", rows: 2
 											.row.mb10
-												.col-xs-6
-													= f.label :is_active
-													= f.check_box :is_active
-												.col-xs-6
+												.col-xs-4
 													= f.label :track_as_sales
-													= f.check_box :track_as_sales
+														| Track as Sales
+													p
+														= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
+												.col-xs-4
+													= f.label :is_active
+														| Status
+													p
+														= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 											.row.mb10
 												.col-xs-12.mt20
-													| ( 
-													small.field-req *
-													|  ) 
-													i indicates field is required
+													| (
+													small.field-req  *
+													|   )
+													i  indicates field is required
 											.modal-footer.no-border
 												span.inline.float-right
 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-													|  
-													= f.submit "Update", class: "btn btn-primary"
+													|
+													= f.submit "Save Changes", class: "btn btn-primary"
 
 .modal.create-unit-modal tabindex="-1" role="dialog" aria-hidden="true"
-	.modal-dialog.modal-sm
+	.modal-dialog
 		.modal-content
 			.modal-header
 				button.close type="button" data-dismiss="modal" aria-hidden="true" x
-				h4.modal-title Create Unit
+				h4.modal-title Add Unit
 			.modal-body
 				= form_for @unit do |f|
 					.row.mb10
 						.col-xs-12
 							= f.label :name
-								| Name 
-								small.field-req *
-							= f.text_field :name, class: "form-control"											
+								| Unit of Measure
+								small.field-req  *
+							= f.text_field :name, class: "form-control", placeholder:"e.g: Litre"
 					.row.mb10
 						.col-xs-12
 							= f.label :symbol
-								| Symbol 
-								small.field-req *
-							= f.text_field :symbol, class: "form-control"
+								| Abbreviation
+								small.field-req  *
+							= f.text_field :symbol, class: "form-control", placeholder:"e.g: m"
+					.row.mb10
 						.col-xs-12
 							= f.label :remarks
-							= f.text_area :remarks, class: "form-control", rows: 2
+								| Description
+							= f.text_area :remarks, class: "form-control", rows: 2, placeholder:"e.g: Metric Measure"
 					.row.mb10
-						.col-xs-6
-							= f.label :is_active
-							= f.check_box :is_active
-						.col-xs-6
+						.col-xs-4
 							= f.label :track_as_sales
-							= f.check_box :track_as_sales
+								| Track as Sales
+							p
+								= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
+						.col-xs-4
+							= f.label :is_active
+								| Status
+							p
+								= f.check_box :is_active, checked: true, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 					.row.mb10
 						.col-xs-12.mt20
-							| ( 
-							small.field-req *
-							|  ) 
-							i indicates field is required
+							| (
+							small.field-req  *
+							|  )
+							i  indicates field is required
 					.modal-footer.no-border
 						span.inline.float-right
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|  
-							= f.submit "Create", class: "btn btn-primary"
+							button.btn.btn-primary type="submit" Add Unit

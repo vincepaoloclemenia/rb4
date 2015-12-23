@@ -7,4 +7,5 @@
 //= require bootstrap-datepicker
 //= require bootstrap-select
 //= require jquery.simplecolorpicker
+//= require bootstrap-toggle.min
 //= require custom

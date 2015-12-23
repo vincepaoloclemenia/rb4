@@ -14540,7 +14540,10 @@ fieldset[disabled] .btn-warning:hover {
 .btn-success {
     color: #fff;
     background-color: #689f38;
-    border-color: #689f38
+    border-color: #689f38;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .btn-success:visited {
