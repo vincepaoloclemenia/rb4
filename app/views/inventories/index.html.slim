@@ -75,19 +75,19 @@
 						.col-xs-12
 							= label_tag :brand_id
 								| Brand
-								small.field-req *
+								small.field-req  *
 							= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id)), class: "form-control"
 						.col-xs-12
 							= label_tag :subcategory_id
 								| Category
-								small.field-req *
+								small.field-req  *
 						= select_tag :subcategory_id, option_groups_from_collection_for_select(current_brand.categories.main, :subcategories, :name, :id, :name), class: "selectpicker col-xs-12", multiple: true, data: { "live-search" => true, "live-search-placeholder" => "Search", "actions-box" => true }
 					.row.mb10
 						.col-xs-12.mt20
 							| (
-							small.field-req *
+							small.field-req  *
 							|  )
-							i indicates field is required
+							i  indicates field is required
 					.modal-footer.no-border
 						= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-						= submit_tag "Export", class: "btn btn-primary"
+						button.btn.btn-primary type="submit" Export
