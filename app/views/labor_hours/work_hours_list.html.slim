@@ -1,9 +1,8 @@
 .panel.panel-primary
-	.panel-heading.border.pb45
-		.pull-left.mt7 Work Hours
-	.panel.body
+	.panel-heading Work Hours
+	.panel-body
 		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+			table.table.table-bordered.table-striped.mb0
 				thead
 					tr.bg-thead
 						th Working Date
@@ -20,12 +19,12 @@
 						- @labor_work = LaborHoursEntry.where(labor_hour_id: labor_hour.id)
 						- @labor_work.each do |lw|
 							tr
-								th = lw.working_date
-								th = lw.regular.to_i
-								th = lw.overtime.to_i
-								th = lw.night_differential.to_i
-								th = lw.legal_holiday.to_i
-								th = lw.special_holiday.to_i
-								th = lw.absent.to_i
-								th = lw.late.to_i
-								th = lw.rest_day.to_i
+								td data-title="Working Date" = lw.working_date 
+								td data-title="Regular" = lw.regular.to_i
+								td data-title="Overtime" = lw.overtime.to_i
+								td data-title="Night Differential" = lw.night_differential.to_i
+								td data-title="Legal Holiday" = lw.legal_holiday.to_i
+								td data-title="Special Holiday" = lw.special_holiday.to_i
+								td data-title="Absent" = lw.absent.to_i
+								td data-title="Late" = lw.late.to_i
+								td data-title="Rest Day" = lw.rest_day.to_i

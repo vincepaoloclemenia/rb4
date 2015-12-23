@@ -1,26 +1,66 @@
-.large-12.columns
-	h3.page-header Sales
-.large-12.columns
-	table.responsive.large-12
-		thead
-			tr.bg-fff
-				th Date
-				th Branch
-				th Net Sales
-				th VAT
-				th Settlement Type Sales
-				th Cash for deposits
-				th Action
-		tbody
-			- @sales.each do |sale|
-				tr
-					td = sale.sale_date.strftime("%b %d %Y")
-					td = sale.branch.name
-					td = to_peso(sale.net_sales)
-					td = to_peso(sale.vat)
-					td = to_peso(sale.total_settlement_sales)
-					td = to_peso(sale.cash_in_drawer)
-					td
-						= link_to "Show", sale_path(sale)
-						- if view_access_control("sales","destroy")
-							= link_to "Delete", sale_path(sale), method: :delete
+.panel
+  .panel-heading.border Sales
+  .panel-body
+    | Show
+    .btn-group.mb10
+      button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+        span.mr5 10
+        span.caret
+      ul.dropdown-menu role="menu"
+        li
+          a href="javascript:;"  10
+        li
+          a href="javascript:;"  25
+        li
+          a href="javascript:;"  50
+        li
+          a href="javascript:;"  100
+        li.divider
+        li
+          a href="javascript:;"  Show All
+    .no-more-tables
+      table.table.table-bordered.table-striped.mb0 data-sortable=""
+        thead
+					tr.bg-thead
+						th width="140" Date
+						th width="140" Branch
+						th width="130" Net Sales
+						th width="130" Vat
+						th width="190" Settlement Type Sales
+						th width="170" Cash for Deposits
+						th width="100" Action
+        tbody
+          tr
+						- @sales.each do |sale|
+							td data-title="Date" = to_default_date_format(sale.sale_date)
+							td data-title="Branch" = sale.branch.name
+							td data-title="Net Sales" = to_peso(sale.net_sales)
+							td data-title="Vat" = to_peso(sale.vat)
+							td data-title="Settlement Type Sales"  = to_peso(sale.total_settlement_sales)
+							td data-title="Cash for Deposits" = to_peso(sale.cash_in_drawer)
+							td.action data-sortable="false" data-title="Action"
+								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, sale_path(sale), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Sales" }
+								- if view_access_control("sales","destroy")
+									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, sale_path(sale), method: :delete, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete" }
+
+    .align-center
+      p Showing 1 to 10 of 57 entries
+      ul.pagination
+        li
+          a href="javascript:;"  ←
+        li.active
+          a href="javascript:;"  1
+        li
+          a href="javascript:;"  2
+        li
+          a href="javascript:;"  3
+        li
+          a href="javascript:;"  4
+        li
+          a href="javascript:;"  5
+        li
+          a href="javascript:;"  6
+        li
+          a href="javascript:;"  7
+        li
+          a href="javascript:;"  →

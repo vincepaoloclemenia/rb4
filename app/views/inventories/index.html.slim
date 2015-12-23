@@ -44,15 +44,15 @@
 				thead
 					tr.bg-thead
 						th width="300" Branch
-						th width="300" Created By
 						th width="300" Entry Date
+						th width="300" Created By
 						th width="100" data-sortable="false" Action
 				tbody
 					- @inventories.each do |inventory|
 						tr
 							td data-title="Branch" = inventory.branch.name
-							td data-title="Created By" = inventory.user.full_name
 							td data-title="Entry Date" = to_default_date_format(inventory.entry_date)
+							td data-title="Created By" = inventory.user.full_name
 							td.action data-title="Action"
 								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, inventory_path(inventory), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Inventory" }
 								- if view_access_control('brands','destroy')
@@ -75,19 +75,19 @@
 						.col-xs-12
 							= label_tag :brand_id
 								| Brand
-								small.field-req *
+								small.field-req  *
 							= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id)), class: "form-control"
 						.col-xs-12
 							= label_tag :subcategory_id
 								| Category
-								small.field-req *
+								small.field-req  *
 						= select_tag :subcategory_id, option_groups_from_collection_for_select(current_brand.categories.main, :subcategories, :name, :id, :name), class: "selectpicker col-xs-12", multiple: true, data: { "live-search" => true, "live-search-placeholder" => "Search", "actions-box" => true }
 					.row.mb10
 						.col-xs-12.mt20
 							| (
-							small.field-req *
+							small.field-req  *
 							|  )
-							i indicates field is required
+							i  indicates field is required
 					.modal-footer.no-border
 						= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-						= submit_tag "Export", class: "btn btn-primary"
+						button.btn.btn-primary type="submit" Export
