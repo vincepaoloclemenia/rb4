@@ -15404,6 +15404,10 @@ textarea {
     background-color: #ce402f
 }
 
+.label-track {
+    background-color: #ffb300;
+}
+
 .list-group {
     margin-bottom: 15px
 }
