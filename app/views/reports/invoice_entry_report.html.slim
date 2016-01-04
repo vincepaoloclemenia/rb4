@@ -8,7 +8,7 @@
 						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
 					.col-xs-12.col-lg-6
 						label Date
-						= text_field_tag :date_range, params[:date_range], readonly: true, class: 'form-control drp',  placeholder: "mm/dd/yyyy"
+						= text_field_tag :date_range, params[:date_range], class: 'form-control drp',  placeholder: "mm/dd/yyyy"
 				.row.mt10
 					.col-xs-12
 						.pull-right
