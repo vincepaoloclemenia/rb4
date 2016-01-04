@@ -5628,84 +5628,84 @@ button.close {
     font-family: Roboto;
     font-style: normal;
     font-weight: 400;
-    src: url(../fonts/roboto/roboto-regular-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-regular-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: italic;
     font-weight: 400;
-    src: url(../fonts/roboto/roboto-italic-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-italic-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: normal;
     font-weight: 500;
-    src: url(../fonts/roboto/roboto-medium-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-medium-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: italic;
     font-weight: 500;
-    src: url(../fonts/roboto/roboto-mediumitalic-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-mediumitalic-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: normal;
     font-weight: 700;
-    src: url(../fonts/roboto/roboto-bold-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-bold-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: italic;
     font-weight: 700;
-    src: url(../fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: normal;
     font-weight: 400;
-    src: url(../fonts/roboto/roboto-regular-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-regular-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: italic;
     font-weight: 400;
-    src: url(../fonts/roboto/roboto-italic-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-italic-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: normal;
     font-weight: 500;
-    src: url(../fonts/roboto/roboto-medium-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-medium-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: italic;
     font-weight: 500;
-    src: url(../fonts/roboto/roboto-mediumitalic-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-mediumitalic-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: normal;
     font-weight: 700;
-    src: url(../fonts/roboto/roboto-bold-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-bold-webfont.woff) format('woff')
 }
 
 @font-face {
     font-family: Roboto;
     font-style: italic;
     font-weight: 700;
-    src: url(../fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
+    src: url(/fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
 }
 
 
@@ -11833,8 +11833,8 @@ blockquote p {
     -moz-transition: transform 300ms ease;
     -o-transition: transform 300ms ease;
     transition: transform 300ms ease;
-    content: "Q";
-    font: normal normal normal 10px/1 "maxicons";
+    content: "\e912";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -14380,7 +14380,10 @@ fieldset[disabled] .btn-primary:hover {
 .btn-warning {
     color: #fff;
     background-color: #ffc65d;
-    border-color: #ffc65d
+    border-color: #ffc65d;
+    font-size:11px !important;
+    text-transform: uppercase;
+    font-weight: 600
 }
 
 .btn-warning:visited {
@@ -14537,7 +14540,10 @@ fieldset[disabled] .btn-warning:hover {
 .btn-success {
     color: #fff;
     background-color: #689f38;
-    border-color: #689f38
+    border-color: #689f38;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .btn-success:visited {
@@ -15396,6 +15402,10 @@ textarea {
 .label-danger[href]:focus,
 .label-danger[href]:hover {
     background-color: #ce402f
+}
+
+.label-track {
+    background-color: #ffb300;
 }
 
 .list-group {
@@ -18956,7 +18966,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-single .chosen-search::before {
     display: inline-block;
-    font: normal normal normal 10px/1 "maxicons";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -18965,7 +18975,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 24px;
-    content: '\e0a1';
+    content: '\e82d';
     position: absolute;
     top: 50%;
     right: 5px;
@@ -18983,7 +18993,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-single .chosen-single div b::before {
     display: inline-block;
-    font: normal normal normal 10px/1 'maxicons';
+    font: normal normal normal 10px/1 'fontello';
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -18992,7 +19002,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 24px;
-    content: "I";
+    content: "\e929";
     position: absolute;
     top: 50%;
     right: 5px;
@@ -19022,7 +19032,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-single .chosen-single abbr::before {
     display: inline-block;
-    font: normal normal normal 10px/1 "maxicons";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -19030,7 +19040,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
-    content: "A";
+    content: "\e91a";
     font-size: 10px;
     color: #e4e4e4
 }
@@ -19066,7 +19076,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
 
 .chosen-container.chosen-container-multi .chosen-choices li.search-choice .search-choice-close::before {
     display: inline-block;
-    font: normal normal normal 10px/1 "maxicons";
+    font: normal normal normal 10px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -19075,7 +19085,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 16px;
-    content: "A";
+    content: "\e91a";
     position: absolute;
     top: 50%;
     right: 0;
@@ -26887,7 +26897,17 @@ select.mobile-device {
 }
 
 .f10 {
-    font-size: 10px !important;
+    font-size: 10px !important
+}
+
+.price-down{
+    color:#d96557;
+    font-style: italic
+}
+
+.price-up{
+    color:#2e7d32;
+    font-style: italic
 }
 
 .refresh-icon{
@@ -26956,10 +26976,10 @@ select.mobile-device {
   */
 .simplecolorpicker.glyphicons span.color[data-selected]:after {
   position: relative;
-  font-family: 'maxicons';
+  font-family: 'fontello';
   /*line-height: .9;*/
   -webkit-font-smoothing: antialiased;
-  content: 'd';
+  content: '\64';
   /*line-height: 20px;*/
   font-size: 12px;
   text-align: center;

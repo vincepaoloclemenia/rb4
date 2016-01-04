@@ -13,6 +13,18 @@ class ReportsController < ApplicationController
 		@q = current_brand.purchases.ransack(params[:q])
 		@purchases = @q.result
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
+
+		respond_to do |format|
+			format.html
+			format.xlsx
+      format.pdf do
+        render :pdf         	=> "Purchase List Reports",
+                :orientation  => 'Landscape',
+                :page_width   => '13in',
+                :margin => {:top       => 1,
+                             :bottom   => 1} 
+      end
+    end
 	end
 
 	#PRICE MOVEMENT REPORT

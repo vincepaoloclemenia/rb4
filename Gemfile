@@ -20,6 +20,7 @@ gem 'ransack'
 gem 'whenever', :require => false
 gem "paperclip", "~> 4.3"
 gem 'lazy_high_charts'
+gem 'axlsx_rails'
 
 group :development, :test do
   gem 'byebug'

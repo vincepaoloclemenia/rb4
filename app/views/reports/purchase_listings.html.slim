@@ -8,7 +8,7 @@
 						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Select"
 					.col-xs-6.col-xs-3
 						= f.label :purchase_date_cont, "Purchase Date"
-						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", readonly: true
+						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select"
 					.col-xs-6.col-xs-3
 						= f.label :branch_id_eq, "Branch"
 						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
@@ -26,12 +26,9 @@
 		.pull-left.mt7 Purchase List
 		.pull-right
 			- if view_access_control('purchases','create')
-				button.btn.btn-default.btn-round.btn-outline.mr10
-					i.icon-maxicons1-download.mr5
-					| Download as Excel
-				button.btn.btn-default.btn-rounskd.btn-outline
-					i.icon-maxicons1-download.mr5
-					| Download as PDF
+				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as Excel".html_safe, purchase_listings_path(format: :xlsx, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				|  
+				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
