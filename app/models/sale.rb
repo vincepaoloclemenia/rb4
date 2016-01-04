@@ -30,15 +30,18 @@ class Sale < ActiveRecord::Base
 		net_sales / count
 	end
 
-	def self.update_customer_count
-		yesterday = Date.today-1
-		@sale = Sale.select(:customer_count, :branch_id).where(sale_date: yesterday)
+	def self.update_customer_count(branch)
+		date = Date.today-1
+		sale = Sale.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, sale_date: date).last
+		sale.nil? ? sale = 0 : sale = sale.customer_count
+		return sale
 	end
 
-	def self.update_customer_count
-		date = Date.today-1
-		@sale = Sale.select(:id, :customer_count, :branch_id).where(created_at: date.beginning_of_day..date.end_of_day)
-	end
+	# def self.update_customer_count
+	# 	date = Date.today-1
+	# 	@sale = Sale.select(:id, :customer_count, :branch_id).where(sale_date: date.beginning_of_day..date.end_of_day)
+	# 	# raise
+	# end
 
 	def save_customer_count_to_dashboard
 		date = Date.today-1
