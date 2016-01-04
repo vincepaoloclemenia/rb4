@@ -8,7 +8,7 @@
 						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Select"
 					.col-xs-6.col-xs-3
 						= f.label :purchase_date_cont, "Purchase Date"
-						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", readonly: true
+						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select"
 					.col-xs-6.col-xs-3
 						= f.label :branch_id_eq, "Branch"
 						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"

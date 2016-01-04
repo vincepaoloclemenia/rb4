@@ -8,7 +8,7 @@
 						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Search"
 					.col-xs-12.col-lg-3
 						= f.label :purchase_date_cont, "Purchase Date"
-						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search", readonly: true
+						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
 					.col-xs-12.col-lg-3
 						= f.label :branch_id_eq, "Branch"
 						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
@@ -111,7 +111,7 @@
 													= f.label :purchase_date
 														| Purchase Date
 														small.field-req *
-													= f.text_field :purchase_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, readonly: true, value: to_datepicker_format(f.object.purchase_date)
+													= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(f.object.purchase_date)
 											.row.mb10
 												.col-xs-12
 													= f.label :supplier_id, "Supplier"

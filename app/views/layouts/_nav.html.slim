@@ -44,8 +44,7 @@
 					- if view_access_control("sales","show")
 						li
 							= link_to "Daily Sales Reports", sales_path, data: { keybinding: "s a l e s" }
-					li
-						= link_to "POS Reports", 'javascript:;'
+							
 			li.menu-accordion class="#{is_menu_open?('management_reports')}"
 				= link_to '<i class="fa icon-maxicons1-presentation"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
