@@ -26,10 +26,9 @@
 		.pull-left.mt7 Purchase List
 		.pull-right
 			- if view_access_control('purchases','create')
-				button.btn.btn-default.btn-round.btn-outline.mr10
-					i.icon-maxicons1-download.mr5
-					| Download as Excel
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as Excel".html_safe, purchase_listings_path(format: :xlsx, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				|  
+				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0

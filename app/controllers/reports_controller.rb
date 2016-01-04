@@ -16,6 +16,7 @@ class ReportsController < ApplicationController
 
 		respond_to do |format|
 			format.html
+			format.xlsx
       format.pdf do
         render :pdf         	=> "Purchase List Reports",
                 :orientation  => 'Landscape',

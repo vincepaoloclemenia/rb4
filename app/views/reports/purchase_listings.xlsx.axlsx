@@ -1,0 +1,82 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Sheet1") do |sheet|
+	sheet.add_row [
+									"Invoice Number",
+									"Transaction Date",
+									"Branch",
+									"Supplier",
+									"Item Name",
+									"VAT Type",
+									"Category",
+									"Qty",
+									"Unit",
+									"Remarks",
+									"Unit Price",
+									"VAT Amount",
+									"Net Amount",
+									"Total Amount"
+								]
+	total_purchases_net_amount = 0
+	total_purchases_total_amount = 0
+	@purchases.each do |purchase|
+		purchase_net_amount = 0
+		purchase_total_amount = 0
+		purchase.purchase_items.each do |pi|
+			nvt = net_vat_total_computation([pi])
+			sheet.add_row [
+											purchase.invoice_number,
+											to_default_date_format(purchase.purchase_date),
+											purchase.branch.name,
+											purchase.supplier.name,
+											pi.item.name,
+											pi.vat_type,
+											pi.item.category.name,
+											pi.quantity,
+											pi.unit.name,
+											pi.remarks,
+											pi.purchase_item_amount,
+											to_peso(nvt[:vat]),
+											to_peso(nvt[:net]),
+											to_peso(nvt[:total])
+										]
+			purchase_net_amount += nvt[:net]
+			purchase_total_amount += nvt[:total]
+		end
+		unless purchase.purchase_items.empty?
+			sheet.add_row [
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											" ",
+											to_peso(purchase_net_amount),
+											to_peso(purchase_total_amount)
+										]
+			total_purchases_net_amount += purchase_net_amount
+			total_purchases_total_amount += purchase_total_amount
+		end
+	end
+	sheet.add_row [
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									" ",
+									to_peso(total_purchases_net_amount),
+									to_peso(total_purchases_total_amount)
+								]
+end
