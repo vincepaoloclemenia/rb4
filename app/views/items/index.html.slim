@@ -5,6 +5,23 @@
 			- if view_access_control('items','create')
 				= link_to "<i class='icon-maxicons2-paste mr5'></i> Add Item".html_safe, '#', data: { toggle: "modal", target: ".create-item-modal" }, class: "btn btn-default btn-round btn-outline"
 	.panel-body
+		| Show
+		.btn-group.mb10
+		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+		    span.mr5 10
+		    span.caret
+		  ul.dropdown-menu role="menu"
+		    li
+		      a href="javascript:;"  10
+		    li
+		      a href="javascript:;"  25
+		    li
+		      a href="javascript:;"  50
+		    li
+		      a href="javascript:;"  100
+		    li.divider
+		    li
+		      a href="javascript:;"  Show All
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
@@ -35,64 +52,92 @@
 							.modal-dialog
 								.modal-content
 									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										button.close type="button" data-dismiss="modal" aria-hidden="true"
+											i.icon-maxicons1-exit
 										h4.modal-title Edit Item
 									.modal-body
 										= form_for item do |f|
 											.row.mb10
 												.col-xs-12
+													= f.label :name
+														| Item
+														small.field-req  *
+													= f.text_field :name, class: "form-control"
+											.row.mb10
+												.col-xs-12
 													= f.label :category_id
 														| Category
-														small.field-req *
+														small.field-req  *
 													= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, { include_blank: true }, class: "chosen", style: "width: 100%; display: none;"
-												.col-xs-12
+											.row.mb10
+												.col-xs-6
 													= f.label :unit_id
 														| Unit
-														small.field-req *
+														small.field-req  *
 													= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, class: "chosen", style: "width: 100%; display: none;"
-												.col-xs-12
-													= f.label :name
-														| Name
-														small.field-req *
-													= f.text_field :name, class: "form-control"
-												.col-xs-12
+												.col-xs-6
 													= f.label :item_type
 														| Item Type
 														small.field-req *
 													= f.select :item_type, @item_types, { include_blank: "Select" }, class: "form-control"
 												.unit_cost_div
-													.col-xs-12
+													.col-xs-12.mt10
 														= f.label :item_value
 															| Item Value
-															small.field-req *
+															small.field-req  *
 														= f.text_field :item_value, class: "form-control"
+											.row.mt10.mb10
 												.col-xs-12
 													= f.label :item_code
 													= f.text_field :item_code, class: "form-control"
-												.col-xs-12
-													= f.label :is_active
-													= f.check_box :is_active, class: "form-control"
-												.col-xs-12
+											.row.mb10
+												.col-xs-4
 													= f.label :track_as_sales
-													= f.check_box :track_as_sales, class: "form-control"
+													p
+														= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
+												.col-xs-4
+													= f.label :is_active, "Status"
+													p
+														= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 											.row.mb10
 												.col-xs-12.mt20
 													| (
-													small.field-req *
+													small.field-req  *
 													|  )
-													i indicates field is required
+													i  indicates field is required
 											.modal-footer.no-border
 												span.inline.float-right
 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 													|
-													= f.submit "Update", class: "btn btn-primary"
-
+													button.btn.btn-primary type="submit" Save Changes
+			.align-center
+			  p Showing 1 to 10 of 57 entries
+			  ul.pagination
+			    li
+			      a href="javascript:;"  ←
+			    li.active
+			      a href="javascript:;"  1
+			    li
+			      a href="javascript:;"  2
+			    li
+			      a href="javascript:;"  3
+			    li
+			      a href="javascript:;"  4
+			    li
+			      a href="javascript:;"  5
+			    li
+			      a href="javascript:;"  6
+			    li
+			      a href="javascript:;"  7
+			    li
+			      a href="javascript:;"  →
 .modal.create-item-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog
 		.modal-content
 			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true" x
-				h4.modal-title Add Item
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
+				h4.modal-title New Item
 			.modal-body
 				= form_for @item do |f|
 					.row.mb10
@@ -107,43 +152,47 @@
 								| Category
 								small.field-req  *
 							= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-						.col-xs-12
+					.row.mb10
+						.col-xs-6
 							= f.label :unit_id
 								| Unit
-								small.field-req *
+								small.field-req  *
 							= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-						.col-xs-12
+						.col-xs-6
 							= f.label :item_type
 								| Item Type
-								small.field-req *
+								small.field-req  *
 							= f.select :item_type, @item_types, { include_blank: "Select" }, class: "form-control"
 						.unit_cost_div
-							.col-xs-12
+							.col-xs-12.mt10
 								= f.label :item_value
 									| Item Value
-									small.field-req *
+									small.field-req  *
 								= f.text_field :item_value, class: "form-control"
+					.row.mt10.mb10
 						.col-xs-12
 							= f.label :item_code
 							= f.text_field :item_code, class: "form-control"
-						.col-xs-12
-							= f.label :is_active
-							= f.check_box :is_active, class: "form-control"
-						.col-xs-12
-							= f.label :track_as_sales
-							= f.check_box :track_as_sales, class: "form-control"
-
+					.row.mb10
+						.col-xs-4
+							= f.label :track_as_sales, "Track as Sales"
+							p
+								= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
+						.col-xs-4
+							= f.label :is_active, "Status"
+							p
+								= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 					.row.mb10
 						.col-xs-12.mt20
 							| (
-							small.field-req *
+							small.field-req  *
 							|  )
-							i indicates field is required
+							i  indicates field is required
 					.modal-footer.no-border
 						span.inline.float-right
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 							|
-							= f.submit "Create", class: "btn btn-primary"
+							button.btn.btn-primary type="submit" Add Item
 
 javascript:
 	$(document).ready(function () {

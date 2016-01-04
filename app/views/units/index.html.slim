@@ -32,7 +32,8 @@
 							.modal-dialog
 								.modal-content
 									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										button.close type="button" data-dismiss="modal" aria-hidden="true"
+											i.icon-maxicons1-exit
 										h4.modal-title Edit Unit
 									.modal-body
 										= form_for unit do |f|
@@ -55,13 +56,11 @@
 													= f.text_area :remarks, class: "form-control", rows: 2
 											.row.mb10
 												.col-xs-4
-													= f.label :track_as_sales
-														| Track as Sales
+													= f.label :track_as_sales, "Track as Sales"
 													p
 														= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
 												.col-xs-4
-													= f.label :is_active
-														| Status
+													= f.label :is_active, "Status"
 													p
 														= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 											.row.mb10
@@ -79,7 +78,8 @@
 	.modal-dialog
 		.modal-content
 			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
 				h4.modal-title Add Unit
 			.modal-body
 				= form_for @unit do |f|
@@ -102,13 +102,11 @@
 							= f.text_area :remarks, class: "form-control", rows: 2, placeholder:"e.g: Metric Measure"
 					.row.mb10
 						.col-xs-4
-							= f.label :track_as_sales
-								| Track as Sales
+							= f.label :track_as_sales, "Track as Sales"
 							p
 								= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
 						.col-xs-4
-							= f.label :is_active
-								| Status
+							= f.label :is_active, "Status"
 							p
 								= f.check_box :is_active, checked: true, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 					.row.mb10
