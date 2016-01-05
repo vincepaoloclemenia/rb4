@@ -1,9 +1,10 @@
 class EmployeesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_employee, only: [:edit, :destroy, :update]
-  
+
   def index
     @employees = Employee.all
+    @employee = Employee.new
   end
 
   def new

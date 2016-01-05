@@ -2,7 +2,8 @@
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+          i.icon-maxicons1-exit
         h4.modal-title Edit Branch
       .modal-body
         = form_for branch, url: brand_branch_path(brand_id: @brand.id, id: branch.id), method: :put do |f|

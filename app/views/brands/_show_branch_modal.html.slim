@@ -1,15 +1,13 @@
 .modal class="branch-info-#{branch.id}" aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg
+  .modal-dialog
     .modal-content
       .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+          i.icon-maxicons1-exit
         h4.modal-title = branch.name
       .modal-body
-        .row.mt10
-          .col-xs-12.col-lg-2
-            .text-center.mt20
-              img.image-size-info.img-circle src="/img/brand.png" /
-          .col-xs-12.col-lg-10
+        .row
+          .col-xs-12
             .row.mb10.mt10
               .col-xs-6
                 .text-light-grey

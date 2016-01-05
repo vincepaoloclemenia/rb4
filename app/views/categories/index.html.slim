@@ -98,14 +98,14 @@
 															= f.label :description
 															= f.text_field :description, class: "form-control"
 													.row.mb10
-														.col-xs-6
-															= f.label :is_active
-															= f.check_box :is_active, class: "form-control"
-														.col-xs-6
+                            .col-xs-6
 															= f.label :track_as_sales
 															= f.check_box :track_as_sales, class: "form-control"
-													.row.mb10
-														.col-xs-12.mt20
+                            .col-xs-6
+                              = f.label :is_active
+                              = f.check_box :is_active, class: "form-control"
+                          .row.mb10
+                            .col-xs-12.mt20
 															| (
 															small.field-req *
 															|  )

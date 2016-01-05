@@ -1,3 +1,158 @@
+.panel.panel-primary
+  .panel-heading
+    .pull-left.mt7 Employee List
+    .pull-right
+      button.btn.btn-default.btn-round.btn-outline data-target=".add-employee-modal" data-toggle="modal"
+        i.icon-maxicons2-paste.mr5
+        | Add Employee
+  .panel-body
+    | Show
+    .btn-group.mb10
+      button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+        span.mr5 10
+        span.caret
+      ul.dropdown-menu role="menu"
+        li
+          a href="javascript:;"  10
+        li
+          a href="javascript:;"  25
+        li
+          a href="javascript:;"  50
+        li
+          a href="javascript:;"  100
+        li.divider
+        li
+          a href="javascript:;"  Show All
+    .no-more-tables
+      table.table.table-bordered.table-striped.mb0 data-sortable=""
+        thead
+          tr.bg-thead
+            th width="300" Name
+            th width="200" Employee Type
+            th width="200" Branch
+            th width="200" Date Employeed
+            th data-sortable="false" width="100" Action
+        tbody
+					- @employees.each do |employee|
+						tr
+							td data-title="Name"
+								= link_to employee.full_name, "#", class: "view-link", data: {tt:"tooltip",toggle:"modal",target:".employee-info-modal",placement:"top", "original-title" => "View Information"}
+							td data-title="Employee Type" = employee.employee_type.name
+							td data-title="Branch" = employee.branch.name
+							td data-title="Date Employeed" = employee.date_employed
+							td data-title="Action"
+								= link_to "<i class='icon-maxicons2-clock'></i>".html_safe, employee_labor_hours_path(employee), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Work Hours" }
+    .align-center
+      p Showing 1 to 10 of 57 entries
+      ul.pagination
+        li
+          a href="javascript:;"  ←
+        li.active
+          a href="javascript:;"  1
+        li
+          a href="javascript:;"  2
+        li
+          a href="javascript:;"  3
+        li
+          a href="javascript:;"  4
+        li
+          a href="javascript:;"  5
+        li
+          a href="javascript:;"  6
+        li
+          a href="javascript:;"  7
+        li
+          a href="javascript:;"  →
+
+.modal.add-employee-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+					i.icon-maxicons1-exit
+        h4.modal-title Add Employee
+      .modal-body
+				= form_for @employee do |f|
+					.row.mb10
+						.col-xs-12
+							label
+								| Branch
+								small.field-req  *
+							= f.select :branch_id, current_brand.branches.order(:name).pluck(:name, :id), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
+					.row.mb10
+						.col-xs-6
+							label
+								| First Name
+								small.field-req  *
+							= f.text_field :first_name, class: "form-control", placeholder: "e.g: Juan"
+						.col-xs-6
+							label
+								| Last Name
+								small.field-req  *
+							= f.text_field :last_name, class: "form-control", placeholder: "e.g: Dela Cruz"
+					.row.mb10
+						.col-xs-4
+							label
+								| Date of Birth
+							= f.text_field :birthdate, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+						.col-xs-4
+							label
+								| Age
+							= f.number_field :age, class: "form-control"
+						.col-xs-4
+							label Contact No
+							= f.number_field :contact_no, class: "form-control"
+					.row.mb10
+						.col-xs-12
+							label Address
+							= f.text_area :address, class: "form-control", rows:"2"
+					.row.mb10
+						.col-xs-6
+							label Position Title
+							= f.text_field :position, class: "form-control", placeholder: "e.g: Chef"
+						.col-xs-6
+							label Employee Type
+							= f.select :employee_type_id, EmployeeType.pluck(:name, :id), {include_blank: true},  class: "chosen", data: {placeholder:"Select"}
+					.row.mb10
+						.col-xs-6
+							label
+								| Position Type
+							= f.select :position, ["Contractual", "Regular"], {include_blank: true}, id: "position_type", class: "chosen", data: {placeholder:"Select"}
+						.col-xs-3
+							label
+								| Date Employed
+							= f.text_field :date_employed, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+						.col-xs-3
+							label
+								| End Date
+							= f.text_field :end_date, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+					.row.mb10
+						.col-xs-3
+							label
+								| SSS
+							= f.text_field :sss, class: "form-control"
+						.col-xs-3
+							label
+								| TIN
+							= f.text_field :tin, class: "form-control"
+						.col-xs-3
+							label
+								| Philhealth
+							= f.text_field :philhealth, class: "form-control"
+						.col-xs-3
+							label
+								| HDMF
+							= f.text_field :hdmf, class: "form-control"
+					.row.mb10
+						.col-xs-12.mt20
+							| (
+							small.field-req  *
+							|  )
+							i  indicates field is required
+					.modal-footer.no-border
+						button.btn.btn-default data-dismiss="modal" type="button" Close
+						button.btn.btn-primary type="submit" Add Employee
+
 h2 Employees
 - if view_access_control('employees','create')
 	= link_to "Add Employee", new_employee_path(), class: 'button tiny right'

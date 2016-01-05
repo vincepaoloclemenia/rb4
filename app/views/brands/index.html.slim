@@ -25,7 +25,7 @@
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
-					tr.bg-thead 
+					tr.bg-thead
 						th width="350" Brand
 						th width="550" data-sortable="false" Website
 				tbody
@@ -40,7 +40,8 @@
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+					i.icon-maxicons1-exit
         h4.modal-title Create Brand
       .modal-body
         = form_for @brand do |f|
@@ -56,7 +57,7 @@
               .col-xs-12.mb10
                 = f.label :name
                   | Brand
-                  small.field-req *
+                  small.field-req  *
                 = f.text_field :name, class: "form-control", placeholder: "Name"
               .col-xs-12.mb10
                 = f.label :website
@@ -88,11 +89,11 @@ javascript:
 		function readURL(input) {
 	    if (input.files && input.files[0]) {
 	      var reader = new FileReader();
-	      
+
 	      reader.onload = function (e) {
 	      	$('#upload_preview').attr('src', e.target.result);
 	      }
-	      
+
 	      reader.readAsDataURL(input.files[0]);
 	    }
 		}
