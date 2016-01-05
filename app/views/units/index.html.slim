@@ -5,6 +5,23 @@
 			- if view_access_control('units','create')
 				= link_to "<i class='icon-maxicons2-paste mr5'></i> Add Unit".html_safe, '#', data: { toggle: "modal", target: ".create-unit-modal" }, class: "btn btn-default btn-round btn-outline"
 	.panel-body
+		| Show
+		.btn-group.mb10
+		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+		    span.mr5 10
+		    span.caret
+		  ul.dropdown-menu role="menu"
+		    li
+		      a href="javascript:;"  10
+		    li
+		      a href="javascript:;"  25
+		    li
+		      a href="javascript:;"  50
+		    li
+		      a href="javascript:;"  100
+		    li.divider
+		    li
+		      a href="javascript:;"  Show All
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
@@ -73,7 +90,27 @@
 												span.inline.float-right
 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 													button.btn.btn-primary type="submit" Save Changes
-
+		.align-center
+		  p Showing 1 to 10 of 57 entries
+		  ul.pagination
+		    li
+		      a href="javascript:;"  ←
+		    li.active
+		      a href="javascript:;"  1
+		    li
+		      a href="javascript:;"  2
+		    li
+		      a href="javascript:;"  3
+		    li
+		      a href="javascript:;"  4
+		    li
+		      a href="javascript:;"  5
+		    li
+		      a href="javascript:;"  6
+		    li
+		      a href="javascript:;"  7
+		    li
+		      a href="javascript:;"  →
 .modal.create-unit-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog
 		.modal-content

@@ -17,7 +17,7 @@
 					- @suppliers.each do |supplier|
 						tr
 							td data-title="Name" = supplier.name
-							td data-title="Contact" = supplier.contact_person
+							td data-title="Person to Contact" = supplier.contact_person
 							td data-title="Mobile No" = supplier.mobile_no
 							td.action data-title="Action"
 								- if view_access_control('suppliers','update')

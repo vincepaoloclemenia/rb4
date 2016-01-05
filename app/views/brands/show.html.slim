@@ -24,22 +24,22 @@
             p
             .text-light-grey
               | Description
-            label.text-dark-grey 
+            label.text-dark-grey
               = @brand.description
             p
             .text-light-grey
               | Landline
-            label.text-dark-grey 
+            label.text-dark-grey
               = @brand.landline_no
             p
             .text-light-grey
               | Mobile No.
-            label.text-dark-grey 
+            label.text-dark-grey
               = @brand.mobile_no
             p
             .text-light-grey
               | Fax No.
-            label.text-dark-grey 
+            label.text-dark-grey
               = @brand.fax_no
         .col-xs-12.mt10
           .pull-right
@@ -47,7 +47,7 @@
               = link_to "<i class='icon-maxicons1-check mr5'></i> Current Brand".html_safe, '#0', method: :put, class: "btn btn-sm btn-success btn-outline mr5", disabled: true
             - else
               = link_to "<i class='mr5'></i> Switch Brand".html_safe, change_brand_path(brand_id: @brand.id), method: :put, class: "btn btn-sm btn-success btn-outline mr5"
-            - if view_access_control("brands","update") 
+            - if view_access_control("brands","update")
               a.btn.btn-sm.btn-primary.btn-outline.mr5 data-target=".edit-brand" data-toggle="modal"
                 i.icon-maxicons2-editting.mr5
                 | Edit
@@ -142,22 +142,16 @@
 
 
 .modal.add-branch aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg
+  .modal-dialog
     .modal-content
       .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+          i.icon-maxicons1-exit
         h4.modal-title Add Branch
       .modal-body
         = form_for @branch, url: brand_branches_path(brand_id: @brand.id), method: :post do |f|
           .row
-            .col-xs-12.col-md-4.col-lg-4
-              .col-xs-12
-                .show-image.mb5
-                  img.image-size src="/img/brand.png" /
-                  a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-                    i.icon-maxicons1-exit
-                input.mb10 type="file" /
-            .col-xs-12.col-md-8.col-lg-8
+            .col-xs-12
               .col-xs-12.mb10
                 = f.label :name
                   | Branch
@@ -202,7 +196,7 @@
                 i  indicates field is required
           .modal-footer.no-border
             button.btn.btn-default data-dismiss="modal" type="button"  Cancel
-            button.btn.btn-primary type="submit"  Create
+            button.btn.btn-primary type="submit"  Add Branch
 
 
 
@@ -216,11 +210,11 @@ javascript:
     function readURL(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
-        
+
         reader.onload = function (e) {
           $('#upload_preview').attr('src', e.target.result);
         }
-        
+
         reader.readAsDataURL(input.files[0]);
       }
     }
