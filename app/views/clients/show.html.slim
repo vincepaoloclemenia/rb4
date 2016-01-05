@@ -1,19 +1,64 @@
-h2 Company Info
-p 
-	| Name:
-	| &nbsp;
-	= current_client.name
-p 
-	| Email:
-	| &nbsp;
-	= current_client.email
-p 
-	| Address:
-	| &nbsp;
-	= current_client.address1
-p 
-	| Contact:
-	| &nbsp;
-	= current_client.contact
-- if view_access_control('clients','update')
-	= link_to "Edit", edit_client_path
+.panel.panel-primary
+	.panel-heading
+		.pull-left.mt7 Company Information
+	.panel-body
+		.row
+			.col-xs-12
+				p
+				.text-light-grey
+					| Company
+				label.text-dark-grey = current_client.name
+				p
+				.text-light-grey
+					| E-mail
+				label.text-dark-grey = current_client.email
+				p
+				.text-light-grey
+					| Address
+				label.text-dark-grey = current_client.address1
+				p
+				.text-light-grey
+					| Contact
+				label.text-dark-grey = current_client.contact
+			.col-xs-12.mt10
+				.pull-right
+					- if view_access_control('clients','update')
+						a.btn.btn-sm.btn-primary.btn-outline.mr5 data-target=".edit-company-modal" data-toggle="modal"
+							i.icon-maxicons2-editting.mr5
+							| Edit
+
+.modal.edit-company-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+					i.icon-maxicons1-exit
+        h4.modal-title Edit Company Information
+      .modal-body
+        = form_for current_client do |f|
+					.row.mb10
+					  .col-xs-12
+					    label
+								| Company
+								small.field-req  *
+					    = f.text_field :name, class: "form-control"
+					.row.mb10
+						.col-xs-6
+							= f.label :email, "E-mail"
+							= f.text_field :email, class: "form-control"
+						.col-xs-6
+						  = f.label :contact, "Contact No"
+						  = f.text_field :contact, class: "form-control"
+					.row.mb10
+						.col-xs-12
+							= f.label :address1, "Address"
+							= f.text_area :address1, class: "form-control", rows: "3"
+					.row.mb10
+					  .col-xs-12
+					    | (
+					    small.field-req  *
+					    |  )
+					    i  indicates field is required
+					.modal-footer.no-border
+					  button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+					  button.btn.btn-primary type="submit"  Save Changes
