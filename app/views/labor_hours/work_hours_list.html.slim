@@ -1,6 +1,7 @@
 .panel.panel-primary
 	.panel-heading Work Hours
 	.panel-body
+		= link_to "Add Work Hours", employee_labor_hours_path(@employee), class: 'btn btn-default'
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead
@@ -28,3 +29,4 @@
 								td data-title="Absent" = lw.absent.to_i
 								td data-title="Late" = lw.late.to_i
 								td data-title="Rest Day" = lw.rest_day.to_i
+		

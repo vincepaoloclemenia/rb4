@@ -41,7 +41,8 @@
 							td data-title="Branch" = employee.branch.name
 							td data-title="Date Employeed" = employee.date_employed
 							td data-title="Action"
-								= link_to "<i class='icon-maxicons2-clock'></i>".html_safe, employee_labor_hours_path(employee), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Work Hours" }
+								= link_to "<i class='icon-maxicons2-clock'></i>".html_safe, labor_hour_work_hours_list_path(employee), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Work Hours" }
+								/ employee_labor_hours_path(employee)
     .align-center
       p Showing 1 to 10 of 57 entries
       ul.pagination
