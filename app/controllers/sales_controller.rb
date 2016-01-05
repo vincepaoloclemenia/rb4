@@ -24,6 +24,7 @@ class SalesController < ApplicationController
 		@sale = current_brand.sales.new(sale_params)
 		@sale.sale_date = Date.strptime(params[:sale][:sale_date], "%m/%d/%Y").to_s if params[:sale][:sale_date].present?
 		if @sale.save
+			Dashboard.create(client_id: current_brand.client_id, brand_id: current_brand.id, branch_id: @sale.branch_id, customer_count: @sale.customer_count, previous_date_entry: @sale.sale_date)
 			redirect_to sales_path, notice: "Sale successfully created"
 		else
 			redirect_to new_sale_path, alert: @sale.errors.full_messages.join(", "), params: sale_params

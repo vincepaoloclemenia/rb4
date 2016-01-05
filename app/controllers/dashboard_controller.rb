@@ -5,10 +5,12 @@ class DashboardController < ApplicationController
 		# @sale = Sale.update_customer_count
 		@branches = current_brand.branches.order(:id)
 		@update_customer_count = update_customer_count(@branches)
+
+		# Sale.save_customer_count_to_dashboard
 	end
 
 	def update_customer_count(branches)
-		arr =Array.new
+		arr = Array.new
 		@branches.each do |branch|
 			a = Sale.update_customer_count(branch)
 			arr.append(a)
