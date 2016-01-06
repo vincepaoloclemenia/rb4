@@ -1,14 +1,12 @@
 tr.nested-fields
-  td = f.text_field :working_date, id: 'date_field'
-  td = f.number_field :regular
-  td = f.text_field :overtime
-  td = f.text_field :night_differential
-  td = f.text_field :legal_holiday
-  td = f.text_field :special_holiday
-  td = f.text_field :late
-  td = f.text_field :absent
-  td = f.text_field :rest_day
-  td = link_to_remove_association 'Remove', f
-  
-javascript:
-  $('#date_field').fdatepicker();
+  td data-title="Working Date" = f.text_field :working_date, class: "form-control", data: {provide: "datepicker"}
+  td data-title="Regular" = f.number_field :regular, class: "form-control"
+  td data-title="Overtime" = f.text_field :overtime, class: "form-control"
+  td data-title="Night Differential" = f.text_field :night_differential, class: "form-control"
+  td data-title="Legal Holiday" = f.text_field :legal_holiday, class: "form-control"
+  td data-title="Special Holiday" = f.text_field :special_holiday, class: "form-control"
+  td data-title="Absent" = f.text_field :late, class: "form-control"
+  td data-title="Late" = f.text_field :absent, class: "form-control"
+  td data-title="Rest Day" = f.text_field :rest_day, class: "form-control"
+  td.action data-title="Action"
+    = link_to_remove_association "<i class='icon-maxicons1-exit'></i>".html_safe, f, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
