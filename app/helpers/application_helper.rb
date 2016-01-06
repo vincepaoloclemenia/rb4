@@ -9,7 +9,7 @@ module ApplicationHelper
 	end
 
 	def to_datepicker_format(date)
-		date.strftime("%m/%d/%Y")
+		date.to_date.strftime("%m/%d/%Y")
 	end
 
 	def to_default_date_format(date)
