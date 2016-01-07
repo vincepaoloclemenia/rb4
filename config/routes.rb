@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get 'dashboard' => 'dashboard#index'
   put 'change_brand' => 'pages#change_brand'
   get 'purchase_listings' => 'reports#purchase_listings'
+  get 'purchase_summary' => 'reports#purchase_summary'
+  get 'item_purchase_detail' => 'reports#item_purchase_detail'
   get 'price_movement_report' => 'reports#price_movement_report'
   get 'invoice_entry_report' => 'reports#invoice_entry_report'
   get 'update_item' => 'reports#update_item'

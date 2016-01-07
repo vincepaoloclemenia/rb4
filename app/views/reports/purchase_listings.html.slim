@@ -51,8 +51,8 @@
 					- total_purchases_total_amount = 0
 					- if @purchases.empty?
 						td colspan="9"
-							i 
-								| No records found from 
+							| No records found from 
+							i
 								b 
 									= "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
 					- else
