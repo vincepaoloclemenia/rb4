@@ -17,10 +17,14 @@ class DashboardController < ApplicationController
 		end
 
 		@chart = LazyHighCharts::HighChart.new('graph') do |f|
-		  # f.title(text: "Customer Count")
+		  f.title(text: "Customer Count")
+		  f.subtitle(text: current_brand.name)
 		  f.xAxis(categories: @branches.pluck(:name))
-		  f.series(name: "Customer Count", data: arr)
+		  f.series(showInLegend: false, name: 'Customer Count', data: arr, colors: @branches.pluck(:color))
 			f.chart({defaultSeriesType: "bar"})
+			f.plotOptions(bar: {
+				colorByPoint: true
+				})
 		end
 	end
 
