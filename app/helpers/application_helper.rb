@@ -30,13 +30,14 @@ module ApplicationHelper
 								(controller.eql?('purchase_items') && action.eql?('index')) ||
 								(controller.eql?('inventories') && ["show","edit"].include?(action))
 		when "purchase_reports"
-			"open" if current_pages?(purchase_listings_path)
+			"open" if current_pages?(purchase_listings_path, purchase_summary_path, item_purchase_detail_path)
 		when "labor_reports"
-			"open" if current_pages?(labor_hours_path)
+			"open" if current_pages?(labor_hours_path, man_hours_path)
 		when "sales_reports"
 			"open" if current_pages?(sales_path) ||
 								(controller.eql?('sales') && action.eql?('show'))
 		when "management_reports"
+			"open" if current_pages?(directionals_path, invoice_entry_report_path, price_movement_report_path, profit_and_losses_path)
 		when "accounts_management"
 			"open" if current_pages?(company_users_path, roles_path) ||
 								(controller.eql?('roles') && action.eql?('manage_permissions'))
