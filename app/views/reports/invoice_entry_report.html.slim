@@ -12,7 +12,7 @@
 				.row.mt10
 					.col-xs-12
 						.pull-right
-							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+							button.btn.btn-primary autocomplete="off" id="#search-btn" data-tt="tooltip" data-placement="top" data-original-title="Search" data-loading-text="Loading..."
 								i.icon-maxicons2-search
 .panel.panel-primary
 	.panel-heading.border.pb45
@@ -22,8 +22,8 @@
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="120" Invoice<br>No.
-						th width="130" Invoice<br>Date
+						th width="120" Invoice No.
+						th width="130" Invoice Date
 						th Branch
 						th Supplier
 						th Vat<br>Amount
@@ -32,6 +32,12 @@
 						th Entry<br>Date
 						th Created<br>By
 				tbody
+					- if @purchases.empty?
+						tr
+							td colspan="9"
+								p.text-center.mt5
+									i.icon-maxicons3-danger.mr5.text-orange
+									| No Records Found
 					- @purchases.each do |purchase|
 						- nvtc = net_vat_total_computation(purchase.purchase_items)
 						tr
@@ -44,3 +50,10 @@
 							td data-title="Net Amount"  = to_peso(nvtc[:net])
 							td data-title="Entry Date" = to_default_date_format(purchase.created_at)
 							td data-title="Created By" = purchase.created_by.full_name
+
+javascript:
+	$('#search-btn').on('click', function () {
+    var $btn = $(this).button('loading')
+    // business logic...
+    $btn.button('reset')
+  })
