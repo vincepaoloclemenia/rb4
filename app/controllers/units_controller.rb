@@ -3,7 +3,7 @@ class UnitsController < ApplicationController
 	before_action :access_control
 
 	def index
-		@units = current_brand.units.not_deleted
+		@units = current_brand.units.not_deleted.paginate(page: params[:page], per_page: per_page)
 		@unit = current_brand.units.new
 	end
 
@@ -32,8 +32,12 @@ class UnitsController < ApplicationController
 	end
 
 	private
+		def unit_params
+			params.require(:unit).permit(:name, :symbol, :remarks, :is_active, :track_as_sales)
+		end
 
-	def unit_params
-		params.require(:unit).permit(:name, :symbol, :remarks, :is_active, :track_as_sales)
-	end
+		def per_page
+			params[:show].eql?('all') ? current_brand.purchases.count : params[:show]
+			return 10 if params[:show].nil?
+		end
 end
