@@ -7,21 +7,20 @@
 	.panel-body
 		| Show
 		.btn-group.mb10
-		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
-		    span.mr5 10
-		    span.caret
-		  ul.dropdown-menu role="menu"
-		    li
-		      a href="javascript:;"  10
-		    li
-		      a href="javascript:;"  25
-		    li
-		      a href="javascript:;"  50
-		    li
-		      a href="javascript:;"  100
-		    li.divider
-		    li
-		      a href="javascript:;"  Show All
+			- params[:show] = "10" if params[:show].nil?
+			= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
+			ul.dropdown-menu role="menu"
+				li
+					= link_to "10", units_path(request.params.except(:action,:controller).merge(show: "10"))
+				li
+					= link_to "25", units_path(request.params.except(:action,:controller).merge(show: "25"))
+				li
+					= link_to "50", units_path(request.params.except(:action,:controller).merge(show: "50"))
+				li
+					= link_to "100", units_path(request.params.except(:action,:controller).merge(show: "100"))
+				li.divider
+				li
+					= link_to "Show All", units_path(request.params.except(:action,:controller).merge(show: "all"))
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
@@ -90,27 +89,10 @@
 												span.inline.float-right
 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 													button.btn.btn-primary type="submit" Save Changes
-		.align-center
-		  p Showing 1 to 10 of 57 entries
-		  ul.pagination
-		    li
-		      a href="javascript:;"  ←
-		    li.active
-		      a href="javascript:;"  1
-		    li
-		      a href="javascript:;"  2
-		    li
-		      a href="javascript:;"  3
-		    li
-		      a href="javascript:;"  4
-		    li
-		      a href="javascript:;"  5
-		    li
-		      a href="javascript:;"  6
-		    li
-		      a href="javascript:;"  7
-		    li
-		      a href="javascript:;"  →
+			.align-center
+				p
+					= page_entries_info @units, renderer: BootstrapPagination::Rails
+				= will_paginate @units, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
 .modal.create-unit-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog
 		.modal-content

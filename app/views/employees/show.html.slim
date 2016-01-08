@@ -1,73 +1,78 @@
 .panel.panel-primary
-  .panel-heading
-    .pull-left.mt7 Employee List
-    .pull-right
-      button.btn.btn-default.btn-round.btn-outline data-target=".add-employee-modal" data-toggle="modal"
-        i.icon-maxicons2-paste.mr5
-        | Add Employee
+  .panel-heading Employee Information
   .panel-body
-    | Show
-    .btn-group.mb10
-      button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
-        span.mr5 10
-        span.caret
-      ul.dropdown-menu role="menu"
-        li
-          a href="javascript:;"  10
-        li
-          a href="javascript:;"  25
-        li
-          a href="javascript:;"  50
-        li
-          a href="javascript:;"  100
-        li.divider
-        li
-          a href="javascript:;"  Show All
-    .no-more-tables
-      table.table.table-bordered.table-striped.mb0 data-sortable=""
-        thead
-          tr.bg-thead
-            th width="300" Name
-            th width="240" Employee Type
-            th width="230" Branch
-            th width="230" Date Employeed
-        tbody
-					- @employees.each do |employee|
-						tr
-							td data-title="Name"
-								= link_to employee.full_name, employee_path(employee), class: "view-link", data: {tt:"tooltip", placement:"top", "original-title" => "View Information"}
-							td data-title="Employee Type" = employee.employee_type.name
-							td data-title="Branch" = employee.branch.name
-							td data-title="Date Employeed" = employee.date_employed
-    .align-center
-      p Showing 1 to 10 of 57 entries
-      ul.pagination
-        li
-          a href="javascript:;"  ←
-        li.active
-          a href="javascript:;"  1
-        li
-          a href="javascript:;"  2
-        li
-          a href="javascript:;"  3
-        li
-          a href="javascript:;"  4
-        li
-          a href="javascript:;"  5
-        li
-          a href="javascript:;"  6
-        li
-          a href="javascript:;"  7
-        li
-          a href="javascript:;"  →
+    .row
+      .col-xs-12.col-md-4
+        p
+          .text-light-grey
+            | Name
+          label.text-dark-grey = @employee.full_name
+        p
+          .text-light-grey
+            | Date of Birth
+          label.text-dark-grey = @employee.birthdate
+        p
+          .text-light-grey
+            | Age
+          label.text-dark-grey = @employee.age
+        p
+          .text-light-grey
+            | Contact No
+          label.text-dark-grey = @employee.contact_no
+        p
+          .text-light-grey
+            | Address
+          label.text-dark-grey = @employee.address
+      .col-xs-12.col-md-4
+        p
+          .text-light-grey
+            | Position Title
+          label.text-dark-grey = @employee.position
+        p
+          .text-light-grey
+            | Employee Type
+          label.text-dark-grey = @employee.employee_type_id
+        p
+          .text-light-grey
+            | Position Type
+          label.text-dark-grey = @employee.position_type
+        p
+          .text-light-grey
+            | Date Employed
+          label.text-dark-grey = @employee.date_employed
+        p
+          .text-light-grey
+            | End Date
+          label.text-dark-grey = @employee.end_date
+      .col-xs-12.col-md-4
+        p
+          .text-light-grey
+            | SSS
+          label.text-dark-grey = @employee.sss
+        p
+          .text-light-grey
+            | TIN
+          label.text-dark-grey = @employee.tin
+        p
+          .text-light-grey
+            | Philhealth
+          label.text-dark-grey = @employee.philhealth
+        p
+          .text-light-grey
+            | HDMF
+          label.text-dark-grey = @employee.hdmf
+      .col-xs-12.mt10
+        .pull-right
+          = link_to "<i class='icon-maxicons2-editting mr2'></i> Edit".html_safe, "#", class: "btn btn-sm btn-primary btn-outline mr5", data: {tt:"tooltip", placement:"top", "original-title" => "View Information", toggle: "modal", target: ".edit-employee-modal"}
+          = link_to "<i class='icon-maxicons1-exit mr2'></i> Delete".html_safe, employee_path(@employee), method: :delete, class: 'btn btn-sm btn-danger btn-outline swal-warning-confirm', data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-.modal.add-employee-modal aria-hidden="true" role="dialog" tabindex="-1"
+.modal.edit-employee-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog
     .modal-content
       .modal-header
         button.close aria-hidden="true" data-dismiss="modal" type="button"
 					i.icon-maxicons1-exit
-        h4.modal-title Add Employee
+        h4.modal-title Edit Employee
       .modal-body
 				= form_for @employee do |f|
 					.row.mb10
@@ -148,4 +153,4 @@
 							i  indicates field is required
 					.modal-footer.no-border
 						button.btn.btn-default data-dismiss="modal" type="button" Close
-						button.btn.btn-primary type="submit" Add Employee
+						button.btn.btn-primary type="submit" Save Changes

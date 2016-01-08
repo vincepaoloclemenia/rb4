@@ -1,0 +1,64 @@
+.collapse#show-search class="#{ 'in' if params[:q].present? }"
+	.panel
+		.panel-body
+			= search_form_for @q, url: purchase_summary_path do |f|
+				.row
+					.col-xs-6
+						= f.label :purchase_date_cont, "Purchase Date"
+						- if params[:q][:purchase_date_gteq].present? && params[:q][:purchase_date_lteq].present?
+							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", value: "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+						- else
+							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select"
+					.col-xs-6
+						= f.label :branch_id_eq, "Branch"
+						= f.select :branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
+				.row.mt10
+					.col-xs-12
+						.pull-right
+							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+								i.icon-maxicons2-search
+
+.panel.panel-primary
+	.panel-heading
+		.pull-left.mt7 Purchase List
+		.pull-right
+			- if view_access_control('purchases','create')
+				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as Excel".html_safe, purchase_summary_path(format: :xlsx, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				|  
+				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_summary_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0
+				thead
+					tr.bg-thead
+						th width="130" Rank
+						th width="120" Branch
+						th width="120" Item
+						th width="110" Unit
+						th width="120" Quantity
+						th width="110" Unit Cost
+						th width="110" Net Amount
+				tbody
+					- @rank_number = rank_number(params[:page].to_i)
+					- if @purchase_items.empty?
+						td colspan="9"
+							| No records found from 
+							i
+								b 
+									= "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+					- @purchase_items.each do |pi|
+						tr
+							td = @rank_number
+							td = pi[:branch].to_s
+							td = pi[:name].to_s
+							td = pi[:unit].to_s
+							td = number_with_precision(pi[:quantity], precision: 2)
+							td = to_peso(pi[:cost])
+							td = to_peso(pi[:net_amount])
+							- @rank_number += 1
+
+			.align-center
+				p
+					- unless @purchase_items.empty?
+						= page_entries_info @purchase_items, renderer: BootstrapPagination::Rails
+				= will_paginate @purchase_items, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"

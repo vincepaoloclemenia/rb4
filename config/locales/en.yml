@@ -20,4 +20,16 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  will_paginate:
+    page_entries_info:
+      single_page:
+        zero:  "No records found"
+        one:   "Displaying 1 record"
+        other: "Displaying all %{count} records"
+      single_page_html:
+        zero:  "No records found"
+        one:   "Displaying <b>1</b> record"
+        other: "Displaying <b>all&nbsp;%{count}</b> records"
+
+      multi_page: "Displaying records %{from} - %{to} of %{count} in total"
+      multi_page_html: "Displaying records <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total"
