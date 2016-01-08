@@ -1,0 +1,25 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Sheet1") do |sheet|
+	sheet.add_row [
+									"RANK",
+									"BRANCH",
+									"ITEM",
+									"UNIT",
+									"QUANTITY",
+									"UNIT COST",
+									"NET AMOUNT"
+								]
+	@rank_number = rank_number(params[:page].to_i)
+	@purchase_items.each do |pi|	
+		sheet.add_row [
+										@rank_number,
+										pi[:branch].to_s,
+										pi[:name].to_s,
+										pi[:unit].to_s,
+										number_with_precision(pi[:quantity], precision: 2),
+										to_peso(pi[:cost]),
+										to_peso(pi[:net_amount])
+									]
+		@rank_number += 1
+	end
+end

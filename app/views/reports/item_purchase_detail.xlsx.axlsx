@@ -1,0 +1,70 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Sheet1") do |sheet|
+	sheet.add_row [
+									"BRANCH",
+									"INVOICE DATE",
+									"SUPPLIER",
+									"ITEM NAME",
+									"QUANTITY",
+									"UNIT COST",
+									"NET AMOUNT"
+								]
+	@purchase_items = @purchases.group_by{|t| t.purchase_id }
+	@purchase_items.each do |test, purchase_items|
+	  @total_unit_amount = 0
+	  @total_quantity = 0
+
+	  purchase_items.each do |listing|
+	    vcs = vat_computation_summary([listing])
+	    # For Each @purchases Generate one of each Invoice Amount, Net Amount, Purchase Amount
+	    # vcs = vat_computation_summary(purchase) %> <%# computations for VAT %>
+	    @quantity = number_with_precision(listing.quantity, precision: 2)
+	    @net_amount = vcs[0]
+	    @nonideal_amount = vcs[2]
+	    @total_purchase_amount = vcs[2]
+	    @vat_amount = vcs[1]
+	    if listing.vat_type == "VAT-Exclusive"
+	      @unit_price = @net_amount.to_f / @quantity.to_f
+	    else
+	      @total_purchase_amount = vcs[2]
+	      @unit_price = @net_amount.to_f / @quantity.to_f
+	    end
+
+	    sheet.add_row [
+	    								listing.purchase.branch.name,
+	    								to_default_date_format(listing.purchase.purchase_date),
+	    								listing.purchase.supplier.name,
+	    								listing.item.name,
+	    								number_with_precision(@quantity, precision: 2),
+	    								number_to_currency(@unit_price, precision: 2, unit: ''),
+	    								number_to_currency(@total_purchase_amount, precision: 2, unit: '')
+	    							]
+	    @total_quantity += @quantity.to_f
+	    @total_purchase += @total_purchase_amount
+	    @total_amount += @net_amount
+	    @total_unit_amount += @unit_price
+
+	    if purchase_items.count != 1
+		    sheet.add_row [
+		    								" ",
+		    								" ",
+		    								" ",
+		    								" ",
+		    								number_with_precision(@total_quantity, precision: 2, unit: ''),
+		    								number_to_currency(sum[2] / @total_quantity , precision: 2, unit: ''),
+		    								number_to_currency(sum[2], precision: 2, unit: '')
+		    							]
+		 	else
+		 		sheet.add_row [
+		 										" ",
+		    								" ",
+		    								" ",
+		    								" ",
+		    								" ",
+		    								" ",
+		    								" "
+		 									]
+		 	end
+		end
+	end
+end
