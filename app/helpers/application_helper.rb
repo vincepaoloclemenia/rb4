@@ -97,7 +97,7 @@ module ApplicationHelper
 	end
 
 	def to_percentage(first_value, second_value)
-		val = ((first_value/second_value) * 100).round(2)
+		val = (((first_value/second_value) * 100).round(2)).abs
 		return val.to_s + '%'
 	end
 

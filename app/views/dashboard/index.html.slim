@@ -57,30 +57,4 @@
     						td data-title="Price Movement" -
 
   .col-xs-12.col-md-12.col-md-6
-    .panel.panel-primary
-      .panel-heading style="font-size:11px"
-        .pull-left
-          small style="font-size:8px" Price Movement<br>
-          | Highest to Lowest
-        .panel-controls.no-upp
-          a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
-      .panel-body
-        .no-more-tables
-    			table.table.table-bordered.table-striped.mb0
-    				thead
-    					tr.bg-thead
-    						th width="100" Rank
-    						th width="200" Branch
-    						th width="250" Item
-    						th width="150" Prev Amount
-    						th width="150" Current Amount
-    						th width="150" Price Movement
-    				tbody
-    					tr
-    						td data-title="Rank" -
-    						td data-title="Branch" -
-    						td data-title="Item" -
-    						td data-title="Prev Amount" -
-    						td data-title="Current Amount" -
-    						td data-title="Price Movement" -
+    = render "price_movement"

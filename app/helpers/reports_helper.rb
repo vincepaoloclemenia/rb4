@@ -8,4 +8,6 @@ module ReportsHelper
 			return "+ " + to_peso(upper_amount)
 		end
 	end
+
+	
 end

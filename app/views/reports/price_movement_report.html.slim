@@ -42,31 +42,7 @@
 						th Created By
 						th Entry Date
 				tbody
-					tr
-						td data-title="Category" Sample
-						td data-title="Item" Sample
-						td data-title="Unit" Sample
-						td data-title="Price Movement (₱)"
-							.price-down
-								i.icon-down-dir.mr5
-								| 75.50
-						td data-title="Price Movement (%)" Sample
-						td data-title="Branch" Sample
-						td data-title="Created By" Sample
-						td data-title="Date Created" Sample
-					tr
-						td data-title="Category" Sample
-						td data-title="Item" Sample
-						td data-title="Unit" Sample
-						td data-title="Price Movement (₱)"
-							.price-up
-								i.icon-up-dir.mr5
-								| 72.50
-						td data-title="Price Movement (%)" Sample
-						td data-title="Branch" Sample
-						td data-title="Created By" Sample
-						td data-title="Date Created" Sample
-					-previous_amount = 0
+					- previous_amount = 0
 					- @purchase_items.each do |purchase_item|
 						- previous_amount == 0 ? previous_amount = 0 : previous_amount
 						tr
@@ -76,7 +52,19 @@
 							td.hidden = previous_amount
 							td.hidden = current_amount = purchase_item.purchase_item_amount.to_f
 							- upper_amount = current_amount - previous_amount
-							td data-title="Price Movement (₱)" = previous_amount.zero? ? '-' : price_movement(previous_amount,current_amount)
+							td data-title="Price Movement (₱)"
+							 	- if previous_amount.zero?
+									= '-'
+								- elsif previous_amount > current_amount
+									.price-down
+										i.icon-down-dir.mr5
+										|
+										= upper_amount.abs
+								- else
+									.price-up
+										i.icon-up-dir.mr5
+										|
+										= upper_amount
 							- bottom_amount = (current_amount + previous_amount) / 2
 							td data-title="Price Movement (%)" = previous_amount.zero? ? '-' : to_percentage(upper_amount,bottom_amount)
 							td data-title="Branch" = purchase_item.purchase.branch.name
@@ -95,3 +83,4 @@ javascript:
 			});
 		});
 	});
+/ = previous_amount.zero? ? '-' : price_movement(previous_amount,current_amount)
