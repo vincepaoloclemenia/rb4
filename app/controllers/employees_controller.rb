@@ -10,6 +10,10 @@ class EmployeesController < ApplicationController
   def new
     @employee = Employee.new
   end
+  
+  def show
+    @employee = current_client.employees.find(params[:id])
+  end
 
   def create
     @employee = Employee.new(employee_params)
