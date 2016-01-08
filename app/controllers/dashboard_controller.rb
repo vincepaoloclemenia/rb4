@@ -36,5 +36,5 @@ class DashboardController < ApplicationController
 		@purchase_items.order(:item_id, :id).each do |purchase_item|
 
 		end
-	end
+	end	
 end
