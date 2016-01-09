@@ -1,14 +1,12 @@
-.row
-	.col-xs-3.pull-right.mt5.mr10
+.flash-notice
+	.col-xs-12.col-sm-4.col-md-4.col-lg-4.pull-right
 		- if notice
 			.alert.alert-success role="alert"
 				= notice
-				button.close data-dismiss="alert" aria-label="Close"
-					span aria-hidden="true"
-						| &times;
+				button.close data-dismiss="alert" aria-label="Close" aria-hidden="true"
+					i.icon-maxicons1-exit
 		- if alert
 			.alert.alert-danger role="alert"
 				= alert
-				button.close data-dismiss="alert" aria-label="Close"
-					span aria-hidden="true"
-						| &times;
+				button.close data-dismiss="alert" aria-label="Close" aria-hidden="true"
+					i.icon-maxicons1-exit

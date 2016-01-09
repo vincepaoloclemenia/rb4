@@ -27217,3 +27217,12 @@ div.show-image a.delete {
 .eggplant-bg:hover {
     background-color:   !important
 }
+
+
+.flash-notice{
+    z-index: 1021;
+    position: fixed;
+    display: inline-block;
+    width: 100%;
+    margin-top:15px;
+}
