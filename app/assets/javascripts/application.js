@@ -17,4 +17,4 @@
 //= require highcharts/highcharts
 //= require highcharts/highstock
 //= require turbolinks
-//= require bootstrap-notify
+//= require flash
