@@ -27222,7 +27222,10 @@ div.show-image a.delete {
 .flash-notice{
     z-index: 1021;
     position: fixed;
-    display: inline-block;
+    display: none;
     width: 100%;
-    margin-top:15px;
+    margin-top:5px;
+    -vendor-animation-duration: 1s;
+    -vendor-animation-delay: 1s;
+    -vendor-animation-iteration-count: infinite;
 }
