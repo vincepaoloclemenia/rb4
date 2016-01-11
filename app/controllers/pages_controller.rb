@@ -37,4 +37,12 @@ class PagesController < ApplicationController
 			end
 		end
 	end
+
+	def registration_validate_email
+		@taken = User.all.pluck(:email).include? params[:email]
+	end
+
+	def registration_validate_username
+		@taken = User.all.pluck(:username).include? params[:username]
+	end
 end
