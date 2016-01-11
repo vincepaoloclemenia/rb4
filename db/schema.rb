@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215072657) do
+ActiveRecord::Schema.define(version: 20160111043900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -374,6 +374,17 @@ ActiveRecord::Schema.define(version: 20151215072657) do
     t.string   "name"
   end
 
+  create_table "settings", force: :cascade do |t|
+    t.string   "theme",      default: "Default"
+    t.string   "currency",   default: "Philippine Peso"
+    t.string   "language",   default: "English"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "client_id"
+  end
+
+  add_index "settings", ["client_id"], name: "index_settings_on_client_id", using: :btree
+
   create_table "settlements", force: :cascade do |t|
     t.string   "name"
     t.boolean  "is_complimentary"
@@ -510,6 +521,7 @@ ActiveRecord::Schema.define(version: 20151215072657) do
   add_foreign_key "sale_by_settlement_entries", "sales"
   add_foreign_key "sale_by_settlement_entries", "settlements"
   add_foreign_key "sales", "branches"
+  add_foreign_key "settings", "clients"
   add_foreign_key "settlements", "clients"
   add_foreign_key "shifts", "brands"
   add_foreign_key "suppliers", "branches"

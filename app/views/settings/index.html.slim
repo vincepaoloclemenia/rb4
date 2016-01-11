@@ -1,0 +1,86 @@
+.panel.panel-primary
+	.panel-heading
+		.pull-left.mt7 Themes
+	.panel-body
+		.row
+			.col-xs-12
+				.pull-left
+					p
+						| Current theme: 
+						= @setting.theme
+				.pull-right
+					a href="#0" class="btn btn-default change-btn" Change Theme
+					a href="#0" class="btn btn-default change-btn" style="display: none;" Cancel
+		.form-field style="display: none;"
+			hr
+			= form_for @setting, url: update_settings_path do |f|
+				.row
+					.col-xs-3
+						p = f.select :theme, @theme_list, {}, class: "chosen"
+					.col-xs-3
+						= f.submit "Update", class: "btn btn-primary"	
+
+.panel.panel-primary
+	.panel-heading
+		.pull-left.mt7 Currency
+	.panel-body
+		.row
+			.col-xs-12
+				.pull-left
+					p
+						| Current currency: 
+						= @setting.currency
+				.pull-right
+					a href="#0" class="btn btn-default change-btn" Change Currency
+					a href="#0" class="btn btn-default change-btn" style="display: none;" Cancel
+		.form-field style="display: none;"
+			hr
+			= form_for @setting, url: update_settings_path do |f|
+				.row
+					.col-xs-3
+						p = f.select :currency, @currency_list, {}, class: "chosen"
+					.col-xs-3
+						= f.submit "Update", class: "btn btn-primary"	
+
+.panel.panel-primary
+	.panel-heading
+		.pull-left.mt7 Language
+	.panel-body
+		.row
+			.col-xs-12
+				.pull-left
+					p
+						| Current language: 
+						= @setting.language
+				.pull-right
+					a href="#0" class="btn btn-default change-btn" Change Language
+					a href="#0" class="btn btn-default change-btn" style="display: none;" Cancel
+		.form-field style="display: none;"
+			hr
+			= form_for @setting, url: update_settings_path do |f|
+				.row
+					.col-xs-3
+						p = f.select :language, @language_list, {}, class: "chosen"
+					.col-xs-3
+						= f.submit "Update", class: "btn btn-primary"
+
+.panel.panel-primary
+	.panel-heading
+		.pull-left.mt7 Comments / Suggestions / Report a bug
+	.panel-body
+		.row
+			.col-xs-12
+				.form-field
+					= form_for :contact, url: csrab_path do |f|
+						.row
+							.col-xs-12
+								p = f.text_area :message, class: "form-control", placeholder: "Your message here", rows: 4
+							.col-xs-12
+								.pull-right
+									= f.submit "Send Message", class: "btn btn-primary"	
+
+javascript:
+	$('.change-btn').click(function(){
+		$(this).parent().parent().parent().parent().find('.form-field').slideToggle();
+		$(this).parent().find('a').toggle();
+	});

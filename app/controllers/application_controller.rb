@@ -12,6 +12,10 @@ class ApplicationController < ActionController::Base
     current_user.client
   end
 
+  def current_settings
+    current_client.setting
+  end
+
   def current_brand
     unless session[:current_brand_id]
       if current_user.role.role_level.eql?("client")

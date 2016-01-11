@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   get 'update_item' => 'reports#update_item'
   get 'man_hours' => 'reports#man_hours'
   get 'profit_and_losses' => 'profit_and_losses#index'
+  get 'settings' => 'settings#index'
+  patch 'update_settings' => 'settings#update_settings'
+  patch 'csrab' => 'settings#csrab'
   resource :client, only: [:show, :edit, :update]
   resources :brands do
     resources :branches, only: [:create,:update,:destroy]
