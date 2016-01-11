@@ -27204,7 +27204,7 @@ div.show-image a.delete {
     border-radius: 0 !important
 }
 
-/* Branch Colors */
+
 .coral-bg {
     background-color: #E26A6A !important
 }
@@ -27216,4 +27216,16 @@ div.show-image a.delete {
 }
 .eggplant-bg:hover {
     background-color:   !important
+}
+
+
+.flash-notice{
+    z-index: 1021;
+    position: fixed;
+    display: none;
+    width: 100%;
+    margin-top:5px;
+    -vendor-animation-duration: 1s;
+    -vendor-animation-delay: 1s;
+    -vendor-animation-iteration-count: infinite;
 }

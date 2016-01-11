@@ -21,6 +21,7 @@ gem 'whenever', :require => false
 gem "paperclip", "~> 4.3"
 gem 'lazy_high_charts'
 gem 'axlsx_rails'
+gem "animate-rails"
 
 group :development, :test do
   gem 'byebug'
