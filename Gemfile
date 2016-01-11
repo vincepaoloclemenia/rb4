@@ -36,6 +36,10 @@ group :development, :test do
   gem 'capistrano3-nginx_unicorn', require: false
 end
 
+group :production do
+  gem 'exception_notification'
+end
+
 gem 'unicorn'
 #hotkey
 gem 'mousetrap-rails'

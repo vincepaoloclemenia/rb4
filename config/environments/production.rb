@@ -80,6 +80,8 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { :host => 'restobotv4.cloudapp.net' }
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
     :enable_starttls_auto => true,
     :address              => "smtp.office365.com",
@@ -89,4 +91,11 @@ Rails.application.configure do
     :user_name            => 'restobot@appsource.biz',
     :password             => '@ppsource2015'
    }
+
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "[ERROR] ",
+    :sender_address => %{"notifier" <notifier@example.com>},
+    :exception_recipients => %w{juntalan@appsource.biz ralbaredo@appsource.biz kdegracia@appsource.biz}
+  }
 end

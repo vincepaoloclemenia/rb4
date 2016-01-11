@@ -14,7 +14,7 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # config.action_mailer.raise_delivery_errors = false
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -51,4 +51,11 @@ Rails.application.configure do
     :user_name            => 'apeiron.jmunts@gmail.com',
     :password             => 'fLLxORdxlO5a6RFzKNWfUA'
   }
+
+  # Rails.application.config.middleware.use ExceptionNotification::Rack,
+  # :email => {
+  #   :email_prefix => "[ERROR] ",
+  #   :sender_address => %{"notifier" <notifier@example.com>},
+  #   :exception_recipients => %w{juntalan@appsource.biz}
+  # }
 end
