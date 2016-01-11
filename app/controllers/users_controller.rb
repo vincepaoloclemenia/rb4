@@ -8,6 +8,35 @@ class UsersController < ApplicationController
 		@user = User.new
 	end
 
+	def account
+		@user = current_client.users.find_by_username(params[:username])
+		if current_user == @user
+		else
+			redirect_to account_path(username: current_user.username)
+		end
+	end
+
+	def update_account
+		@user = current_client.users.find_by_username(params[:username])
+		if @user.update(account_params)
+			flash[:notice] = "Account successfully updated"
+		else
+			flash[:alert] = @user.errors.full_messages.join(", ")
+		end
+		redirect_to account_path(username: current_user.username)
+	end
+
+	def change_password
+		@user = current_client.users.find_by_username(params[:username])
+		if @user.update_with_password(change_password_params)
+			sign_in @user, bypass: true
+			flash[:notice] = "Password successfully changed"
+		else
+			flash[:alert] = @user.errors.full_messages.join(", ")
+		end
+		redirect_to account_path(username: current_user.username)
+	end
+
 	def create
 		@user = current_client.users.new(user_params)
 		if @user.save
@@ -53,5 +82,13 @@ class UsersController < ApplicationController
 
 	def client_user_access_params
 		params.require(:user).require(:client_user_access_attributes).permit(:role_id, :client_id, :brand_id, :branch_id)
+	end
+
+	def change_password_params
+		params.require(:user).permit(:current_password, :password, :password_confirmation)
+	end
+
+	def account_params
+		params.require(:user).permit(:first_name, :last_name, :avatar)
 	end
 end

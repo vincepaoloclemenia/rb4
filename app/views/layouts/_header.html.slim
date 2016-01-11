@@ -51,7 +51,7 @@ header.header.navbar
 				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle"
 			ul.dropdown-menu
 				li
-					a href="javascript:;" Manage this account
+					= link_to "Manage this account", account_path(username: current_user.username)
 				li
 					= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
 

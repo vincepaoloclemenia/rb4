@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   get 'settings' => 'settings#index'
   patch 'update_settings' => 'settings#update_settings'
   patch 'csrab' => 'settings#csrab'
+  get 'account/:username' => 'users#account', as: 'account'
+  patch 'account/:username/update_account' => 'users#update_account', as: 'update_account'
+  patch 'account/:username/change_password' => 'users#change_password', as: 'change_password'
   resource :client, only: [:show, :edit, :update]
   resources :brands do
     resources :branches, only: [:create,:update,:destroy]
