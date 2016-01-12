@@ -14,13 +14,13 @@
   <%= csrf_meta_tags %>
 </head>
 <body cz-shortcut-listen="true">
-	<%= render "partials/flash" if flash %>
 	<% if user_signed_in? %>
 		<div class="app layout-fixed-header">
 			<%= render "layouts/nav" if user_signed_in? && wizard_done? %>
 			<div class="main-panel">
 				<%= render "layouts/header" if user_signed_in? %>
 				<div class="main-content">
+					<%= render "partials/flash" if flash %>
 					<%= yield %>
 				</div>
 			</div>

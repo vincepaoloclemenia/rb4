@@ -166,4 +166,8 @@ module ApplicationHelper
     return val 
       #val[0] = netamount val[1] = vat val[2]=totalpurchase 
   end
+
+  def lowest_price_movement(purchase_items)
+  	# raise
+  end
 end

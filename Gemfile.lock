@@ -36,8 +36,6 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    animate-rails (1.0.9)
-      rails
     arel (6.0.3)
     axlsx (2.0.1)
       htmlentities (~> 4.3.1)
@@ -241,7 +239,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  animate-rails
   axlsx_rails
   better_errors
   binding_of_caller

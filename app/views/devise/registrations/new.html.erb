@@ -37,42 +37,38 @@
   </div>
 </div>
 
-<%#= render "devise/shared/links" %>
+<!-- <h2>Sign up</h2>
 
-<script>
-  $('#user_email').change(function(){
-    if($(this).parent().is(".has-error")){
-      $(this).parent().find('label').remove();
-      $(this).unwrap();
-    }
-    else if($(this).parent().is(".has-success")){
-      $(this).unwrap();
-    }
-    else{
-    }
-    $.ajax({
-      url: "<%= registration_validate_email_path %>",
-      data: {
-        email: $(this).val()
-      }
-    });
-  });
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+  <%= f.hidden_field :flag, value: 1 %>
 
-  $('#user_username').change(function(){
-    if($(this).parent().is(".has-error")){
-      $(this).parent().find('label').remove();
-      $(this).unwrap();
-    }
-    else if($(this).parent().is(".has-success")){
-      $(this).unwrap();
-    }
-    else{
-    }
-    $.ajax({
-      url: "<%= registration_validate_username_path %>",
-      data: {
-        username: $(this).val()
-      }
-    });
-  });
-</script>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @validatable %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "off" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %> -->

@@ -1,6 +1,0 @@
-<% if @taken %>
-	$('#user_email').wrap("<div class='has-error'></div>");
-	$('#user_email').parent().prepend("<label class='control-label pull-right' for='user_email'>Email is already taken</label>");
-<% else %>
-	$('#user_email').wrap("<div class='has-success'></div>");
-<% end %>
