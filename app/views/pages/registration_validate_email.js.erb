@@ -1,6 +1,19 @@
-<% if @taken %>
+var emailValid = validateEmail("<%= @email %>");
+
+if(emailValid == false){
 	$('#user_email').wrap("<div class='has-error'></div>");
-	$('#user_email').parent().prepend("<label class='control-label pull-right' for='user_email'>Email is already taken</label>");
-<% else %>
-	$('#user_email').wrap("<div class='has-success'></div>");
-<% end %>
+	$('#user_email').parent().prepend("<label class='control-label pull-right' for='user_email'>Email is invalid</label>");
+}
+else{
+	<% if @taken %>
+		$('#user_email').wrap("<div class='has-error'></div>");
+		$('#user_email').parent().prepend("<label class='control-label pull-right' for='user_email'>Email is already taken</label>");
+	<% else %>
+		$('#user_email').wrap("<div class='has-success'></div>");
+	<% end %>
+}
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
