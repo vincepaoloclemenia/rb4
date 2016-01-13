@@ -16,3 +16,4 @@
 //= require mousetrap
 //= require highcharts/highcharts
 //= require turbolinks
+//= require flash
