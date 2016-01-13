@@ -92,7 +92,6 @@ class ReportsController < ApplicationController
 		@categories = Category.where(brand_id: current_brand)
 		@purchase_ids = Purchase.select(:id).where(purchase_date: @date_range, brand_id: current_brand, branch_id: params[:branch_id])
 
-		# @purchase = Purchase.select(:id)
 		if params[:item_id].present?
 			@purchase_items = PurchaseItem.where(item_id: params[:item_id], purchase_id: @purchase_ids)
 			# @purchase_items = PurchaseItem.where(item_id: params[:item_id])

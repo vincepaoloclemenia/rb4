@@ -38,8 +38,9 @@ class DashboardController < ApplicationController
 
 	def get_lowest_price_movement(item_ids)
 		price_movement = Array.new
+		@date_range = Date.today.beginning_of_month..Date.today
 		item_ids.each do |item_id|
-			purchased_items = get_purchased_items(item_id)
+			purchased_items = get_purchased_items(item_id, @date_range)
 			price_movement = price_movement + get_price_movement(purchased_items)
 		end
 		price_movement = price_movement.sort_by{ |a| a[:price_movement].to_i}
@@ -70,9 +71,8 @@ class DashboardController < ApplicationController
 		return price_movement_values
 	end
 
-	def get_purchased_items(item_id)
-		@date_range = Date.today.beginning_of_month..Date.today
-		@purchase_ids = Purchase.select(:id).where(purchase_date: @date_range, brand_id: current_brand)
+	def get_purchased_items(item_id, date_range)
+		@purchase_ids = Purchase.select(:id).where(purchase_date: date_range, brand_id: current_brand)
 		@purchase_items = PurchaseItem.where(purchase_id: @purchase_ids, item_id: item_id).order('purchase_item_amount ASC')
 		return @purchase_items
 	end
