@@ -5,8 +5,6 @@ Rails.application.routes.draw do
   get 'update_role' => 'pages#update_role'
   get 'update_branch' => 'pages#update_branch'
   get 'update_units' => 'pages#update_units'
-  get 'registration_validate_email' => 'pages#registration_validate_email'
-  get 'registration_validate_username' => 'pages#registration_validate_username'
   root 'pages#index'
   get 'dashboard' => 'dashboard#index'
   put 'change_brand' => 'pages#change_brand'
