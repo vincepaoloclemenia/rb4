@@ -16591,7 +16591,7 @@ a.bg-danger-light:hover {
     background-color: #fff
 }
 .bg-login {
-    background: url('/img/login-bg-2.png') no-repeat;
+    background: url('/img/login-bg-3.jpg') no-repeat;
     background-size: cover;
 
 }
@@ -27228,4 +27228,17 @@ div.show-image a.delete {
     -vendor-animation-duration: 1s;
     -vendor-animation-delay: 1s;
     -vendor-animation-iteration-count: infinite;
+}
+
+.background-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+noindex:-o-prefocus,
+.background-container {
+    display: none;
 }

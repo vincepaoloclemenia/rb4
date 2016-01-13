@@ -1,7 +1,7 @@
 <div class="app layout-fixed-header bg-login usersession">
   <div class="full-height">
     <%= render "partials/flash" if flash %>
-    <div class="center-wrapper">
+    <div class="center-wrapper" style="z-index:20">
       <div class="center-content">
         <div class="row no-margin">
           <div class="text-center mb15">
@@ -28,4 +28,7 @@
       </div>
     </div>
   </div>
+</div>
+<div id="background-container" class="background-container">
+  <div id="background-output" class="background-output"></div>
 </div>

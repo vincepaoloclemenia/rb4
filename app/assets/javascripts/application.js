@@ -17,3 +17,5 @@
 //= require highcharts/highcharts
 //= require turbolinks
 //= require flash
+//= require fss
+//= require fss-settings
