@@ -94,7 +94,6 @@ class ReportsController < ApplicationController
 
 		if params[:item_id].present?
 			@purchase_items = PurchaseItem.where(item_id: params[:item_id], purchase_id: @purchase_ids)
-			# @purchase_items = PurchaseItem.where(item_id: params[:item_id])
 		else
 			@purchase_items = PurchaseItem.where(purchase_id: @purchase_id)
 		end
