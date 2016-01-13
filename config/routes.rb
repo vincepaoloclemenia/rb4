@@ -2,12 +2,8 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: "registrations" }
   resources :company_users, controller: "users"
-  get 'update_role' => 'pages#update_role'
-  get 'update_branch' => 'pages#update_branch'
-  get 'update_units' => 'pages#update_units'
   root 'pages#index'
   get 'dashboard' => 'dashboard#index'
-  put 'change_brand' => 'pages#change_brand'
   get 'purchase_listings' => 'reports#purchase_listings'
   get 'purchase_summary' => 'reports#purchase_summary'
   get 'item_purchase_detail' => 'reports#item_purchase_detail'
@@ -66,4 +62,12 @@ Rails.application.routes.draw do
   end
 
   get 'directionals/search' => 'directionals#search_entry'
+
+  # ajax
+  get 'update_role' => 'pages#update_role'
+  get 'update_branch' => 'pages#update_branch'
+  get 'update_units' => 'pages#update_units'
+  get 'registration_validate_email' => 'pages#registration_validate_email'
+  get 'registration_validate_username' => 'pages#registration_validate_username'
+  put 'change_brand' => 'pages#change_brand'
 end

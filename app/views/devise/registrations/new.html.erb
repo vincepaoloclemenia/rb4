@@ -9,17 +9,17 @@
           </div>
           <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 bg-white">
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html:{class:"form-layout"}) do |f| %>
+              <%#= devise_error_messages! %>
               <%= f.hidden_field :flag, value: 1 %>
-              <%= f.hidden_field :field_errors, value: 0 %>
               <p class="text-center mb30 mt10">
                 Welcome to Restobot. Please sign in to your account
               </p>
               <div class="form-inputs">
                 <%= f.email_field :email, autofocus: true, class:"form-control input-lg", placeholder:"Email Address" %>
                 <%= f.text_field :username, autofocus: true, class:"form-control input-lg", placeholder:"Username" %>
-                <!-- <% if @validatable %>
-                <em>(<%= @minimum_password_length %> characters minimum)</em>
-                <% end %> -->
+                <!-- <%# if @validatable %>
+                <em>(<%#= @minimum_password_length %> characters minimum)</em>
+                <%# end %> -->
                 <%= f.password_field :password, autocomplete: "off", class:"form-control input-lg", placeholder:"Password (8 characters min)" %>
 
                 <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control input-lg", placeholder:"Confirm Password" %>
@@ -39,7 +39,7 @@
 </div>
 
 <script>
-  $('#user_email').change(function(){
+  $('#user_email').blur(function(){
     if($(this).parent().is(".has-error")){
       $(this).parent().find('label').remove();
       $(this).unwrap();
@@ -59,7 +59,7 @@
     });
   });
 
-  $('#user_username').change(function(){
+  $('#user_username').blur(function(){
     if($(this).parent().is(".has-error")){
       $(this).parent().find('label').remove();
       $(this).unwrap();
@@ -77,25 +77,25 @@
     });
   });
 
-  if($('#user_email').val() != ""){
-    $.ajax({
-      url: "<%= registration_validate_email_path %>",
-      data: {
-        email: $(this).val()
-      }
-    });
-  }
+  // if($('#user_email').val() != ""){
+  //   $.ajax({
+  //     url: "<%= registration_validate_email_path %>",
+  //     data: {
+  //       email: $(this).val()
+  //     }
+  //   });
+  // }
 
-  if($('#user_username').val() != ""){
-    $.ajax({
-      url: "<%= registration_validate_username_path %>",
-      data: {
-        username: $(this).val()
-      }
-    });
-  }
+  // if($('#user_username').val() != ""){
+  //   $.ajax({
+  //     url: "<%= registration_validate_username_path %>",
+  //     data: {
+  //       username: $(this).val()
+  //     }
+  //   });
+  // }
 
-  $('#user_password').change(function(){
+  $('#user_password').blur(function(){
     var pwLength = $(this).val().length;
     if($(this).parent().is(".has-error")){
       $(this).parent().find('label').remove();
@@ -116,7 +116,7 @@
     }
   })
 
-  $('#user_password_confirmation').change(function(){
+  $('#user_password_confirmation').blur(function(){
     var pw = $('#user_password').val();
     var pwConfirm = $(this).val();
 
@@ -140,7 +140,7 @@
   })
 
   var successFields = 0;
-  $('.form-inputs').find('input').change(function(){
+  $('.form-inputs').find('input').blur(function(){
     successFields = $('.form-inputs').find('.has-success').length;
     if(successFields == 4){
       $('.form-inputs').parent().find('button[type=submit]').attr('disabled',false);
