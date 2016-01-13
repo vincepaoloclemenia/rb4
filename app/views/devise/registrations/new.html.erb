@@ -79,6 +79,24 @@
     });
   });
 
+  if($('#user_email').val() != ""){
+    $.ajax({
+      url: "<%= registration_validate_email_path %>",
+      data: {
+        email: $(this).val()
+      }
+    });
+  }
+
+  if($('#user_username').val() != ""){
+    $.ajax({
+      url: "<%= registration_validate_username_path %>",
+      data: {
+        username: $(this).val()
+      }
+    });
+  }
+
   $('#user_password').change(function(){
     var pwLength = $(this).val().length;
     if($(this).parent().is(".has-error")){

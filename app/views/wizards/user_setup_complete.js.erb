@@ -1,3 +1,7 @@
-$('.wizard-area').replaceWith("<div class='wizard-area'><%= j render('company_setup') %></div>");
+<% if @user.errors.empty? %>
+	$('.wizard-area').replaceWith("<div class='wizard-area'><%= j render('company_setup') %></div>");
+<% else %>
+	// $('.wizard-area').prepend("<p><%= @user.errors.full_messages %></p>");
+<% end %>
 // $('#user-setup-form').hide();
 // $('.wizard-area').append("<%= j render('company_setup') %>");

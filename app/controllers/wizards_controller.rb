@@ -13,13 +13,23 @@ class WizardsController < ApplicationController
 		@user = current_user
 
 		respond_to do |format|
-			if @user.update(user_params)
-				@user.update(flag: 2)
-				ClientUserAccess.create user_id: @user.id
-				format.js
-			else
-				format.json { render json: @user.errors.full_messages.join(", "), status: :unprocessable_entity }
+			if params[:user][:first_name].blank?
+				@user.errors.add(:first_name, "can't be blank")
 			end
+
+			if params[:user][:last_name].blank?
+				@user.errors.add(:last_name, "can't be blank")
+			end
+
+			if @user.errors.present?
+			else
+				if @user.update(user_params)
+					@user.update(flag: 2)
+					ClientUserAccess.find_or_create_by user_id: @user.id
+					#format.json { render json: @user.errors.full_messages.join(", "), status: :unprocessable_entity }
+				end
+			end
+			format.js
 		end
 	end
 
@@ -139,6 +149,7 @@ class WizardsController < ApplicationController
 			end
 		end
 		@errors << "Please input at least 1 branch" if branch_created_count == 0
+		current_user.update(flag: 5) if branch_created_count > 0
 	end
 
 	def setup_summary

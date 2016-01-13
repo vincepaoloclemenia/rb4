@@ -27,13 +27,13 @@ header.header.navbar
 		/ 				i.icon-maxicons1-check.pull-right.green-color
 		/ 		li
 		/ 			a href="javascript:;" Navy Blue
-		li
-			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Tour"
-				i.fa.icon-maxicons3-light
-		li
-			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Support"
-				i.fa.icon-maxicons3-lifebuoy
 		- if wizard_done?
+			li
+				a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Tour"
+					i.fa.icon-maxicons3-light
+			li
+				a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Support"
+					i.fa.icon-maxicons3-lifebuoy
 			li
 				a href="javascript:;" data-toggle="dropdown"
 					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
@@ -50,8 +50,9 @@ header.header.navbar
 				/img.header-avatar.img-circle src="/img/avatar-mummy.png"
 				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle"
 			ul.dropdown-menu
-				li
-					= link_to "Manage this account", account_path(username: current_user.username)
+				- if wizard_done?
+					li
+						= link_to "Manage this account", account_path(username: current_user.username)
 				li
 					= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
 

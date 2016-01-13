@@ -1,29 +1,55 @@
-#company-setup-form
-	h2 Company Setup
-	- if current_user.client
-		- @client = current_user.client
-	-	else
-		- @client = Client.new
-	= form_for @client, url: company_setup_complete_wizard_path, method: :put, remote: true do |f|
-		= f.label :name
-		| &nbsp;
-		= f.text_field :name
-		br
-		= f.label :address1, "Main address"
-		| &nbsp;
-		= f.text_field :address1
-		br
-		= f.label :contact, "Contact no."
-		| &nbsp;
-		= f.text_field :contact
-		br
-		= f.label :email, "Company email"
-		| &nbsp;
-		= f.text_field :email
-		br
-		= link_to "Back", "#", id: "back-btn"
-		| &nbsp;
-		= f.submit "Save"
+.panel.panel-primary#company-setup-form
+	.panel-heading
+		.pull-left.mt7 Now tell me about your Company
+	.panel-body
+		- if current_user.client
+			- @client = current_user.client
+		-	else
+			- @client = Client.new
+		= form_for @client, url: company_setup_complete_wizard_path, method: :put, remote: true do |f|
+			.row
+				.col-xs-12.mb5
+					= f.text_field :name, placeholder: "Name", class: "form-control"
+				.col-xs-12.mb5
+					= f.text_field :address1, placeholder: "Main address", class: "form-control"
+				.col-xs-12.mb5
+					= f.text_field :contact, placeholder: "Contact no.", class: "form-control"
+				.col-xs-12.mb5
+					= f.text_field :email, placeholder: "Company email", class: "form-control"
+			.row
+				.col-xs-12
+					.pull-left
+						= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+					.pull-right
+						= f.submit "Next", class: "btn btn-primary"
+
+
+/ #company-setup-form
+/ 	h2 Company Setup
+/ 	- if current_user.client
+/ 		- @client = current_user.client
+/ 	-	else
+/ 		- @client = Client.new
+/ 	= form_for @client, url: company_setup_complete_wizard_path, method: :put, remote: true do |f|
+/ 		= f.label :name
+/ 		| &nbsp;
+/ 		= f.text_field :name
+/ 		br
+/ 		= f.label :address1, "Main address"
+/ 		| &nbsp;
+/ 		= f.text_field :address1
+/ 		br
+/ 		= f.label :contact, "Contact no."
+/ 		| &nbsp;
+/ 		= f.text_field :contact
+/ 		br
+/ 		= f.label :email, "Company email"
+/ 		| &nbsp;
+/ 		= f.text_field :email
+/ 		br
+/ 		= link_to "Back", "#", id: "back-btn"
+/ 		| &nbsp;
+/ 		= f.submit "Save"
 
 javascript:
 	$(document).ready(function () {
