@@ -23,7 +23,7 @@
 
                 <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control input-lg", placeholder:"Confirm Password" %>
               </div>
-              <button class="btn btn-success btn-block btn-lg mb15" type="submit" disabled data-disable-with="<span>Creating Account.. Please wait..</span>">
+              <button class="btn btn-success btn-block btn-lg mb15" type="submit" data-disable-with="<span>Creating Account.. Please wait..</span>">
                 <span>Create Account</span>
               </button>
               <p class="text-center">
@@ -138,16 +138,16 @@
     }
   })
 
-  var successFields = 0;
-  $('.form-inputs').find('input').blur(function(){
-    successFields = $('.form-inputs').find('.has-success').length;
-    if(successFields == 4){
-      $('.form-inputs').parent().find('button[type=submit]').attr('disabled',false);
-    }
-    else{
-      $('.form-inputs').parent().find('button[type=submit]').attr('disabled',true);
-    }
-  });
+  // var successFields = 0;
+  // $('.form-inputs').find('input').blur(function(){
+  //   successFields = $('.form-inputs').find('.has-success').length;
+  //   if(successFields == 4){
+  //     $('.form-inputs').parent().find('button[type=submit]').attr('disabled',false);
+  //   }
+  //   else{
+  //     $('.form-inputs').parent().find('button[type=submit]').attr('disabled',true);
+  //   }
+  // });
 
 </script>
 
