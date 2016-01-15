@@ -27220,7 +27220,7 @@ div.show-image a.delete {
 
 
 .flash-notice{
-    z-index: 1021;
+    z-index: 2021;
     position: fixed;
     display: none;
     width: 100%;
