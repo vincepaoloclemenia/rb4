@@ -45,12 +45,13 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
     :enable_starttls_auto => true,
-    :address              => "smtp.mandrillapp.com",
+    :address              => "smtp.office365.com",
     :port                 => '587',
+    :domain               => 'restobot.com',
     :authentication       => :login,
-    :user_name            => 'apeiron.jmunts@gmail.com',
-    :password             => 'fLLxORdxlO5a6RFzKNWfUA'
-  }
+    :user_name            => 'restobot@appsource.biz',
+    :password             => '@ppsource2015'
+   }
 
   # Rails.application.config.middleware.use ExceptionNotification::Rack,
   # :email => {
