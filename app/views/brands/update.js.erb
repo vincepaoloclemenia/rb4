@@ -2,6 +2,8 @@ $('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
 retriggerFlash();
 
 <% if @success %>
-	$('.edit-brand').modal('hide');
+	$('.modal').modal('hide');
+	$('body').removeClass('modal-open');
+	$('.modal-backdrop').remove();
 	$('#brand-info').html("<%= j render partial: 'brand_info', brand: @brand %>");
 <% end %>
