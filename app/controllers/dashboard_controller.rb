@@ -1,13 +1,15 @@
 class DashboardController < ApplicationController
 	before_action :authenticate_user!
 
-	include ReportsHelper
+	# ActionView::Helpers::NumberHelper, 
+	include ReportsHelper, ApplicationHelper
 
 	def index
 		# @sale = Sale.update_customer_count
 		@branches = current_brand.branches.order(:id)
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
+		@purchase_cost_stat = purchase_cost_stat
 		# Sale.save_customer_count_to_dashboard
 	end
 
@@ -39,6 +41,53 @@ class DashboardController < ApplicationController
 		
 		return lowest_price_movement.first(5)
 	end
+
+	def purchase_cost_stat
+		total_purchase = Array.new purchase_dates = Array.new
+		@purchase = Purchase.where(purchase_date: [DateTime.now - 7.days..DateTime.now], brand_id: current_brand)
+		@purchase.each_with_index do |p, index|
+			purchase_item_total = 0 
+			p.purchase_items.each do |pi|
+				purchase_item_total += pi.purchase_item_amount
+			end
+			total_purchase[index] = purchase_item_total.to_i
+		  purchase_dates[index] = p.purchase_date.to_date.strftime("%B %d, %Y | %a")
+		  # Date.strptime(p.purchase_date.to_date, "%m%d%y").to_s
+
+		end	
+		create_chart("Purchase Cost Stat", "", purchase_dates, total_purchase, current_brand.name, "line", '')
+	end
+
+	def create_chart(title, subtitle, categories, data, name, chartType, colors)
+		@purchase_chart = LazyHighCharts::HighChart.new('graph') do |f|
+		  f.title(text: title)
+		  f.subtitle(text: subtitle)
+		  f.xAxis(categories: categories)
+		  f.series(showInLegend: false, name: name, data: data, colors: colors)
+			f.chart({defaultSeriesType: chartType})
+			f.plotOptions(bar: {
+				colorByPoint: true
+				})
+		end
+	end
+
+	# def purchase_cost_stat
+	# 	@purchase_array = []
+ #    @purchase = Purchase.where(purchase_date: [DateTime.now - 7.days..DateTime.now], brand_id: current_brand).group_by{ |s| [s.branch.try(:name), s.purchase_date] }
+ #    @purchase.each_with_index do |(purchase_group, purchases), index|
+ #    	purchase_item_total_amount = 0
+ #    	@purchase_array << [purchase_group[1]]
+ #    	purchases.each do |p|
+ #      	p.purchase_items.each do |pi|
+ #      		purchase_item_total_amount += pi.purchase_item_total_amount
+ #        end
+ #        	total_purchase += purchase_item_total_amount
+ #      end
+ #    raise
+ #      # @purchase_array[index] << purchase_amount_total
+ #      # @purchase_array[index] << purchase_group
+ #    end
+	# end
 
 	# def get_price_movement_items(item_ids)
 	# 	price_movement = Array.new
