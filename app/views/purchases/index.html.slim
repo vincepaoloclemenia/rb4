@@ -78,14 +78,7 @@
 									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
 								- if view_access_control('purchases','destroy')
 									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
-
-			- if @purchases.any?
-				.align-center
-					p
-						= page_entries_info @purchases, renderer: BootstrapPagination::Rails
-					= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
-
-
+									
 						div class="modal edit_purchase_#{purchase.id}" tabindex="-1" role="dialog" aria-hidden="true"
 							.modal-dialog
 								.modal-content
@@ -129,6 +122,13 @@
 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 													|
 													= f.submit "Update", class: "btn btn-primary"
+
+			- if @purchases.any?
+				.align-center
+					p
+						= page_entries_info @purchases, renderer: BootstrapPagination::Rails
+					= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
+
 
 .modal.create-purchase-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog
