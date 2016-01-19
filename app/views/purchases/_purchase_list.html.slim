@@ -1,0 +1,84 @@
+- purchases = purchases || @purchases
+table.table.table-bordered.table-striped.mb0 data-sortable="true"
+	thead
+		tr.bg-thead
+			th width="130" Invoice No.
+			th width="120" Date
+			th width="130" Branch
+			th width="160" Supplier
+			th width="110" Net<br>Amount
+			th width="110" VAT<br>Amount
+			th width="120" Total<br>Amount
+			th width="120" data-sortable="false" Action
+	tbody
+		- if purchases.empty?
+			tr
+				td colspan="8"
+					p.text-center.mt5 No Records Found
+
+		- purchases.each do |purchase|
+			- nvt = net_vat_total_computation(purchase.purchase_items)
+			tr
+				td data-title="Invoice No." = purchase.invoice_number
+				td data-title="Date" = purchase.purchase_date.strftime("%b %d %Y")
+				td data-title="Branch" = purchase.branch.name
+				td data-title="Supplier" = purchase.supplier.name
+				td data-title="Net Amount" = to_peso(nvt[:net])
+				td data-title="VAT Amount" = to_peso(nvt[:vat])
+				td data-title="Total Amount" = to_peso(nvt[:total])
+				td.action data-title="Action"
+					= link_to "<i class='icon-maxicons2-view'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
+					- if view_access_control('purchases','update')
+						= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
+					- if view_access_control('purchases','destroy')
+						= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true
+						
+			div class="modal edit_purchase_#{purchase.id}" tabindex="-1" role="dialog" aria-hidden="true"
+				.modal-dialog
+					.modal-content
+						.modal-header
+							button.close type="button" data-dismiss="modal" aria-hidden="true"
+								i.icon-maxicons1-exit
+							h4.modal-title Edit Purchase
+						.modal-body
+							= form_for purchase, remote: true do |f|
+								.row.mb10
+									.col-xs-12
+										= f.label :branch_id
+											| Branch
+											small.field-req *
+										= f.select :branch_id, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+								.row.mb10
+									.col-xs-6
+										= f.label :invoice_number
+											| Invoice number
+											small.field-req *
+										= f.text_field :invoice_number, class: "form-control"
+									.col-xs-6
+										= f.label :purchase_date
+											| Purchase Date
+											small.field-req *
+										= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(f.object.purchase_date)
+								.row.mb10
+									.col-xs-12
+										= f.label :supplier_id, "Supplier"
+											| Supplier
+											small.field-req *
+										= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+								.row.mb10
+									.col-xs-12.mt20
+										| (
+										small.field-req *
+										|  )
+										i indicates field is required
+								.modal-footer.no-border
+									span.inline.float-right
+										= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+										|
+										= f.submit "Update", class: "btn btn-primary", data: { "disable-wth" => "Updating.." }
+
+- if purchases.any?
+	.align-center
+		p
+			= page_entries_info purchases, renderer: BootstrapPagination::Rails
+		= will_paginate purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"

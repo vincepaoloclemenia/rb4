@@ -30,13 +30,14 @@ class BrandsController < ApplicationController
 				#format.json { render status: :unprocessable_entity, json: @brand }
 				# flash.clear
 				@success = true
-				format.js { flash[:success] = "Successfully updated" }
+				flash[:notice] = "Successfully updated"
 			else
 				#flash[:alert] = @brand.errors.full_messages.join(", ")
 				# flash.clear
 				@success = false
-				format.js { flash[:danger] = @brand.errors.full_messages.join(", ") }
+				flash[:alert] = @brand.errors.full_messages.join(", ")
 			end
+			format.js
 		end
 		#redirect_to brand_path(@brand)
 	end
