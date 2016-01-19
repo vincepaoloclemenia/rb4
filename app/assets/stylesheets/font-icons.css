@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: 'fontello';
-  src: url('/assets/fontello.eot?3870418');
-  src: url('/assets/fontello.eot?3870418#iefix') format('embedded-opentype'),
-       url('/assets/fontello.woff?3870418') format('woff'),
-       url('/assets/fontello.ttf?3870418') format('truetype'),
-       url('/assets/fontello.svg?3870418#fontello') format('svg');
+  src: url('/assets/fontello.eot');
+  src: url('/assets/fontello.eot') format('embedded-opentype'),
+       url('/assets/fontello.woff') format('woff'),
+       url('/assets/fontello.ttf') format('truetype'),
+       url('/assets/fontello.svg#fontello') format('svg');
   /*font-family: "maxicons";
   src:url("/assets/maxicons.eot");
   src:url("/assets/maxicons.eot?#iefix") format("embedded-opentype"),
