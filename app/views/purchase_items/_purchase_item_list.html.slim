@@ -1,0 +1,30 @@
+- purchase_items = purchase_items || @purchase_items
+- purchase = purchase || @purchase
+table.table.table-bordered.table-striped.mb0 data-sortable="true"
+	thead
+		tr.bg-thead
+			th width="145" Item Name
+			th width="160" data-sortable="false" Item Description
+			th width="110" Quantity
+			th width="115" Unit
+			th width="120" Unit Price
+			th width="140" VAT Type
+			th width="140" Total Amount
+			th width="60" data-sortable="false" Action
+	tbody
+		- purchase_items.each do |pi|
+			tr
+				td data-title="Item Name" = pi.item.name
+				td data-title="Item Description" = pi.remarks
+				td data-title="Quantity" = pi.quantity.to_s
+				td data-title="Unit" = pi.unit.name
+				td data-title="Unit Price" = to_peso(pi.purchase_item_amount)
+				td data-title="VAT Type" = pi.vat_type
+				td data-title="Total Action" = to_peso(pi.purchase_item_total_amount)
+				td.action data-title="Action"
+					- if view_access_control('purchase_items','destroy')
+						= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+.align-center
+	p
+		= page_entries_info purchase_items, renderer: BootstrapPagination::Rails
+	= will_paginate purchase_items, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"

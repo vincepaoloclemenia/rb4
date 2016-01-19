@@ -19,29 +19,51 @@ class PurchasesController < ApplicationController
 	def create
 		@purchase = current_brand.purchases.new(purchase_params)
 		@purchase.user_created_by_id = current_user.id
-		if @purchase.save
-			flash[:notice] = "Purchase successfully created"
-		else
-			flash[:alert] = @purchase.errors.full_messages.join(", ")
+		respond_to do |format|
+			if @purchase.save
+				index
+				@success = true
+				flash[:notice] = "Purchase successfully created"
+			else
+				@success = false
+				flash[:alert] = @purchase.errors.full_messages.join(", ")
+			end
+			format.js
 		end
-		redirect_to purchases_path
+		#redirect_to purchases_path
 	end
 
 	def update
 		@purchase = current_brand.purchases.find(params[:id])
-		if @purchase.update(purchase_params)
-			@purchase.update(user_modified_by_id: current_user.id)
-			flash[:notice] = "Purchase successfully updated"
-		else
-			flash[:alert] = @purchase.errors.full_messages.join(", ")
+		respond_to do |format|
+			if @purchase.update(purchase_params)
+				@purchase.update(user_modified_by_id: current_user.id)
+				index
+				@success = true
+				flash[:notice] = "Purchase successfully updated"
+			else
+				@success = false
+				flash[:alert] = @purchase.errors.full_messages.join(", ")
+			end
+			format.js
 		end
-		redirect_to purchases_path
+		#redirect_to purchases_path
 	end
 
 	def destroy
 		@purchase = current_brand.purchases.find(params[:id])
-		@purchase.destroy
-		redirect_to purchases_path, notice: "Purchase successfully deleted"
+		respond_to do |format|
+			if @purchase.destroy
+				index
+				@success = true
+				flash[:notice] = "Purchase successfully deleted"
+			else
+				@success = false
+				flash[:alert] = @purchase.errors.full_messages.join(", ")
+			end
+			format.js
+		end
+		#redirect_to purchases_path, notice: "Purchase successfully deleted"
 	end
 
 	private

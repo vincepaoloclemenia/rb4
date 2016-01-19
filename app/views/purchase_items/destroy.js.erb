@@ -1,0 +1,12 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+<% if @success %>
+	$('.modal').modal('hide');
+	$('body').removeClass('modal-open');
+	$('.modal-backdrop').remove();
+	$('#purchase-item-list').html("<%= j render partial: 'purchase_item_list', purchase_items: @purchase_items, purchase: @purchase %>");
+	$('.chosen').chosen({
+		width: "100%"
+	});
+<% end %>
