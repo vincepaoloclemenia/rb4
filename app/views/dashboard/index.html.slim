@@ -1,14 +1,27 @@
 .row
   .col-xs-12.col-md-12.col-lg-8
     .panel.panel-primary
-      .panel-heading style="font-size:11px"
-        .pull-left Sales
+      .panel-heading style=""
+        .pull-left.mt5 Sales
         .panel-controls.no-upp
-          a.panel-refresh.refresh-icon data-toggle="panel-refresh" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
+          btn-group data-toggle="buttons"
+            label.btn.btn-primary.no-margin.active
+              input#option1 name="options" type="radio"
+                i.fa.fa-thumbs-up.mr5
+                | Branches
+            label.btn.btn-primary
+              input#option2 name="options" type="radio"
+                i.fa.fa-thumbs-down.mr5
+                | Brands
       .panel-body
 
   .col-xs-12.col-md-12.col-lg-4
+    .widget.bg-danger-light
+      .text-uppercase
+        strong New update
+      p.text-white Lorem ipsum dolor sit amet, consectetur adipiscing elit. Frater et T. Sed ad bona praeterita redeamus.
+      a.btn.btn-danger.mt5 href="javascript:;"  Update Now
+
     .panel.panel-primary
       .panel-heading style="font-size:11px"
         .pull-left Customer Count
@@ -20,11 +33,20 @@
 
   .col-xs-12
     .panel.panel-primary
-      .panel-heading style="font-size:11px"
-        .pull-left Purchase Cost Stats
+      .panel-heading
+        .pull-left.mt5 Purchase Cost Stats
         .panel-controls.no-upp
-          a.panel-refresh.refresh-icon data-toggle="panel-refresh" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
+          btn-group data-toggle="buttons"
+            label.btn.btn-primary.no-margin.active
+              input#option1 name="options" type="radio"
+                i.fa.fa-thumbs-up.mr5
+                | Unilever Corporation
+            label.btn.btn-primary
+              input#option2 name="options" type="radio"
+                i.fa.fa-thumbs-down.mr5
+                | Starbucks Corp
+          / a.panel-refresh.refresh-icon data-toggle="panel-refresh" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
+          /   i.icon-maxicons1-refresh
       .panel-body
 
   .col-xs-12.col-md-12.col-md-6
