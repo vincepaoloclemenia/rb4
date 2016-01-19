@@ -19,7 +19,7 @@ class DashboardController < ApplicationController
 			a = Sale.update_customer_count(branch)
 			arr.append(a)
 		end
-		create_chart(current_brand.name, "", @branches.pluck(:name), arr, "", "bar", @branches.pluck(:color))
+		create_chart(current_brand.name, "", @branches.pluck(:name), arr, " ", "bar", @branches.pluck(:color))
 		# @customer_count_chart = LazyHighCharts::HighChart.new('graph') do |f|
 		#   f.title(text: "Customer Count")
 		#   f.subtitle(text: current_brand.name)
@@ -68,7 +68,8 @@ class DashboardController < ApplicationController
 		  f.series(showInLegend: false, name: name, data: data, colors: colors)
 			f.chart({defaultSeriesType: chartType})
 			f.plotOptions(bar: {
-				colorByPoint: true
+				colorByPoint: true,
+				# visible: false
 				# series: hide
 				})
 		end
