@@ -32,7 +32,7 @@ class Sale < ActiveRecord::Base
 
 	def self.update_customer_count(branch)
 		date = Date.today-1
-		dashboard = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, created_at: date).last
+		dashboard = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, created_at: date.beginning_of_day..date.end_of_day ).last
 		dashboard.nil? ? dashboard = 0 : dashboard = dashboard.customer_count
 		return dashboard
 	end

@@ -19,17 +19,17 @@ class DashboardController < ApplicationController
 			a = Sale.update_customer_count(branch)
 			arr.append(a)
 		end
-
-		@chart = LazyHighCharts::HighChart.new('graph') do |f|
-		  f.title(text: "Customer Count")
-		  f.subtitle(text: current_brand.name)
-		  f.xAxis(categories: @branches.pluck(:name))
-		  f.series(showInLegend: false, name: 'Customer Count', data: arr, colors: @branches.pluck(:color))
-			f.chart({defaultSeriesType: "bar"})
-			f.plotOptions(bar: {
-				colorByPoint: true
-				})
-		end
+		create_chart(current_brand.name, "", @branches.pluck(:name), arr, "", "bar", @branches.pluck(:color))
+		# @customer_count_chart = LazyHighCharts::HighChart.new('graph') do |f|
+		#   f.title(text: "Customer Count")
+		#   f.subtitle(text: current_brand.name)
+		#   f.xAxis(categories: @branches.pluck(:name))
+		#   f.series(showInLegend: false, name: 'Customer Count', data: arr, colors: @branches.pluck(:color))
+		# 	f.chart({defaultSeriesType: "bar"})
+		# 	f.plotOptions(bar: {
+		# 		colorByPoint: true
+		# 		})
+		# end
 	end
 
 	def price_movement_dashboard
@@ -52,14 +52,16 @@ class DashboardController < ApplicationController
 			end
 			total_purchase[index] = purchase_item_total.to_i
 		  purchase_dates[index] = p.purchase_date.to_date.strftime("%B %d, %Y | %a")
-		  # Date.strptime(p.purchase_date.to_date, "%m%d%y").to_s
-
 		end	
 		create_chart("Purchase Cost Stat", "", purchase_dates, total_purchase, current_brand.name, "line", '')
 	end
 
+	def purchase_cost_stat_branches
+		
+	end
+
 	def create_chart(title, subtitle, categories, data, name, chartType, colors)
-		@purchase_chart = LazyHighCharts::HighChart.new('graph') do |f|
+		  LazyHighCharts::HighChart.new('graph') do |f|
 		  f.title(text: title)
 		  f.subtitle(text: subtitle)
 		  f.xAxis(categories: categories)
@@ -67,6 +69,7 @@ class DashboardController < ApplicationController
 			f.chart({defaultSeriesType: chartType})
 			f.plotOptions(bar: {
 				colorByPoint: true
+				# series: hide
 				})
 		end
 	end
