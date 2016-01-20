@@ -42,3 +42,29 @@ function retriggerFlash(){
     });
   }
 };
+
+$(document).ajaxError(function(event,xhr,options,exc) {
+    
+    $('form input').each(function(){
+      if($(this).parent().parent().is('.has-error')){
+        $(this).parent().unwrap();
+        $(this).parent().find('.error-msgs').remove();        
+      }
+    });
+
+    $.each( xhr.responseJSON, function( key, value ){
+      var field_name = ".validate_"+key;
+      var field = $(field_name);
+
+      // if(field.parent().parent().is('.has-error')){
+      //   field.parent().unwrap();
+      //   field.parent().find('.error-msgs').remove();
+      //   // $(this).find('.error-msgs').remove();
+      //   // field.parent().unwrap();
+      // }
+      field.before("<label class='control-label pull-right error-msgs'>"+value.join(', ')+"</label>");
+      field.parent().wrap("<div class='has-error'></div>");
+    });
+
+       
+});
