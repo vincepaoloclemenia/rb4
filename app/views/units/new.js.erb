@@ -2,6 +2,13 @@ $('#modal h4').html('Add Unit');
 
 $('.modal-body').html('<%= j render("form") %>');
 
+var page = getParameterByName('page');
+var show = getParameterByName('show');
+
+$('form').prepend('<input type="hidden" value='+page+' name="page">');
+$('form').prepend('<input type="hidden" value='+show+' name="show">');
+
 $('#modal').modal("show");
 
+$("[data-toggle='toggle']").bootstrapToggle('destroy');
 $("[data-toggle='toggle']").bootstrapToggle();

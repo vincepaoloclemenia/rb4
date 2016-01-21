@@ -1,5 +1,5 @@
-// $('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
-// retriggerFlash();
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
 
 // <% if @success %>
 // 	$('.modal').modal('hide');
@@ -8,5 +8,13 @@
 // 	$('#unit-list').html("<%= j render partial: 'unit_list', units: @units %>");
 // <% end %>
 
-$('#unit_<%= @unit.id %>').fadeOut();
+$('#units').html('<%= j render @units %>');
+
+// var units_count = $('#units tr');
+
+// if(units_count == 0){
+// 	var page = getParameterByName('page');
+// 	var show = getParameterByName('show');
+// }
+
 $('#pagination').html('<%= j render "partials/pagination", collection: @units %>');

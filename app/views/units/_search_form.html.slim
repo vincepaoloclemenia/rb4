@@ -1,0 +1,19 @@
+= search_form_for @q do |f|
+	.row
+		.col-xs-12.col-lg-3
+			= f.label :name_cont, "Unit of Measure"
+			= f.text_field :name_cont, class: "form-control", placeholder: "Search"
+		.col-xs-12.col-lg-3
+			= f.label :symbol_cont, "Abbreviation"
+			= f.text_field :symbol_cont, class: "form-control drp", placeholder: "Search"
+		.col-xs-12.col-lg-3
+			= f.label :track_as_sales_eq, "Track as sales?"
+			= f.select :track_as_sales_eq, [["Yes","true"],["No","false"]], { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+		.col-xs-12.col-lg-3
+			= f.label :is_active_eq, "Status"
+			= f.select :is_active_eq, [["Active","true"],["Deactivated","false"]], { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+	.row.mt10
+		.col-xs-12
+			.pull-right
+				button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+					i.icon-maxicons2-search

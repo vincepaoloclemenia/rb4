@@ -1,5 +1,5 @@
-// $('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
-// retriggerFlash();
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
 
 // <% if @success %>
 // 	$('.modal').modal('hide');
@@ -12,4 +12,3 @@ $('#modal').modal('hide');
 $('body').removeClass('modal-open');
 $('.modal-backdrop').remove();
 $('#unit_<%= @unit.id %>').replaceWith('<%= j render(@unit) %>');
-$('#pagination').html('<%= j render "partials/pagination", collection: @units %>');

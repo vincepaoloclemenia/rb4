@@ -167,4 +167,8 @@ module ApplicationHelper
       #val[0] = netamount val[1] = vat val[2]=totalpurchase 
   end
 
+	def per_page
+		return 10 if params[:show].blank?
+		params[:show].eql?('all') ? current_brand.purchases.count : params[:show]
+	end
 end

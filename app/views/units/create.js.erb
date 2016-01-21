@@ -1,5 +1,5 @@
-// $('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
-// retriggerFlash();
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
 
 // <% if @success %>
 // 	$('.modal').modal('hide');
@@ -11,5 +11,9 @@
 $('#modal').modal('hide');
 $('body').removeClass('modal-open');
 $('.modal-backdrop').remove();
-$('#units').append('<%= j render(@unit) %>');
+<% if @units.size < @units.per_page %>
+	$('#units').append('<%= j render(@unit) %>');
+<% else %>
+	$('#units').html('<%= j render @units %>');
+<% end %>
 $('#pagination').html('<%= j render "partials/pagination", collection: @units %>');
