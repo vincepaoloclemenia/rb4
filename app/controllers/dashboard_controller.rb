@@ -6,10 +6,15 @@ class DashboardController < ApplicationController
 
 	def index
 		# @sale = Sale.update_customer_count
+
+		# Dashboard.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).destroy_all
 		@branches = current_brand.branches.order(:id)
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
+
 		@purchase_cost_stat = purchase_cost_stat
+		# Dashboard.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).destroy_all
+		# @a = get_purchase_total_amount
 		# Sale.save_customer_count_to_dashboard
 	end
 
@@ -42,22 +47,40 @@ class DashboardController < ApplicationController
 		return lowest_price_movement.first(5)
 	end
 
-	def purchase_cost_stat
-		total_purchase = Array.new purchase_dates = Array.new
-		@purchase = Purchase.where(purchase_date: [DateTime.now - 7.days..DateTime.now], brand_id: current_brand)
-		@purchase.each_with_index do |p, index|
-			purchase_item_total = 0 
-			p.purchase_items.each do |pi|
-				purchase_item_total += pi.purchase_item_amount
-			end
-			total_purchase[index] = purchase_item_total.to_i
-		  purchase_dates[index] = p.purchase_date.to_date.strftime("%B %d, %Y | %a")
-		end	
-		create_chart("Purchase Cost Stat", "", purchase_dates, total_purchase, current_brand.name, "line", '')
-	end
+	# def purchase_cost_stat
+	# 	total_purchase = Array.new purchase_dates = Array.new
+	# 	@purchase = Purchase.where(purchase_date: [DateTime.now - 7.days..DateTime.now], brand_id: current_brand)
+	# 	@purchase.each_with_index do |p, index|
+	# 		purchase_item_total = 0 
+	# 		p.purchase_items.each do |pi|
+	# 			purchase_item_total += pi.purchase_item_amount
+	# 		end
+	# 		total_purchase[index] = purchase_item_total.to_i
+	# 	  purchase_dates[index] = p.purchase_date.to_date.strftime("%B %d, %Y | %a")
+	# 	end	
+	# 	create_chart("Purchase Cost Stat", "", purchase_dates, total_purchase, current_brand.name, "line", '')
+	# end
 
-	def purchase_cost_stat_branches
+	def purchase_cost_stat
+		dates = Array.new amount = Array.new
 		
+		fr = Date.today - 7 
+		d = fr..Date.today
+ 		@purchase_cost = Dashboard.where(previous_date_entry: d, brand_id: current_brand).order('previous_date_entry ASC')
+ 		
+ 		d.each_with_index do |range_date, index|
+
+ 			@total_amount = 0
+ 			@purchase_cost.each do |pc|
+ 				if pc.previous_date_entry == range_date 
+ 					@total_amount += pc.purchase_total_amount.to_i
+ 				end
+ 			end
+ 			dates[index] = range_date.strftime("%b %d,%Y | %a")
+ 			amount[index] = @total_amount
+ 		end
+ 		# @purchase_cost.each do |pc|
+		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')	
 	end
 
 	def create_chart(title, subtitle, categories, data, name, chartType, colors)
@@ -69,29 +92,10 @@ class DashboardController < ApplicationController
 			f.chart({defaultSeriesType: chartType})
 			f.plotOptions(bar: {
 				colorByPoint: true,
-				# visible: false
-				# series: hide
 				})
 		end
 	end
-
-	# def purchase_cost_stat
-	# 	@purchase_array = []
- #    @purchase = Purchase.where(purchase_date: [DateTime.now - 7.days..DateTime.now], brand_id: current_brand).group_by{ |s| [s.branch.try(:name), s.purchase_date] }
- #    @purchase.each_with_index do |(purchase_group, purchases), index|
- #    	purchase_item_total_amount = 0
- #    	@purchase_array << [purchase_group[1]]
- #    	purchases.each do |p|
- #      	p.purchase_items.each do |pi|
- #      		purchase_item_total_amount += pi.purchase_item_total_amount
- #        end
- #        	total_purchase += purchase_item_total_amount
- #      end
- #    raise
- #      # @purchase_array[index] << purchase_amount_total
- #      # @purchase_array[index] << purchase_group
- #    end
-	# end
+end
 
 	# def get_price_movement_items(item_ids)
 	# 	price_movement = Array.new
@@ -134,4 +138,4 @@ class DashboardController < ApplicationController
 	# 	return @purchase_items
 	# end
 
-end
+# end

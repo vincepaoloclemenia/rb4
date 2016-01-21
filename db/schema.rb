@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119015754) do
+ActiveRecord::Schema.define(version: 20160119053921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,7 +127,7 @@ ActiveRecord::Schema.define(version: 20160119015754) do
     t.integer  "brand_id"
     t.integer  "branch_id"
     t.integer  "customer_count"
-    t.datetime "previous_date_entry"
+    t.date     "previous_date_entry"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.decimal  "purchase_total_amount"
