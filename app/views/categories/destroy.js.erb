@@ -1,0 +1,6 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+<% unless @errors %>
+	$('#category_<%= @category_id %>').fadeOut();
+<% end %>

@@ -1,0 +1,19 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+// <% if @success %>
+// 	$('.modal').modal('hide');
+// 	$('body').removeClass('modal-open');
+// 	$('.modal-backdrop').remove();
+// 	$('#unit-list').html("<%= j render partial: 'unit_list', units: @units %>");
+// <% end %>
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+<% if @category.is_subcategory? %>
+	$('#category_<%= @category.parent_id %>').find('#subcategories').append('<%= j render "subcategory", subcategory: @category %>');
+<% else %>
+	$('#categories').append('<%= j render @category %>');
+	$('#nestable').nestable('reinit');
+<% end %>

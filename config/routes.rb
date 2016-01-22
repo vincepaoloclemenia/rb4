@@ -33,7 +33,9 @@ Rails.application.routes.draw do
     get 'work_hours_list' => 'labor_hours#work_hours_list'
   end
   resources :settlements
-  resources :categories
+  resources :categories do
+    get 'new_subcategory' =>'categories#new_subcategory'
+  end
   resources :shifts, only: [:index,:create,:update,:destroy]
   resources :sales
   resources :units

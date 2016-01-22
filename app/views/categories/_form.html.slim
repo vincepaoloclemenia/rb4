@@ -1,0 +1,32 @@
+= form_for @category, remote: true do |f|
+  - if @category.is_subcategory? && @category.new_record?
+    = f.hidden_field :parent_id, value: @category.parent_id
+  .row.mb10
+    .col-xs-12
+      = f.label :name, class: "control-label"
+        = @category.is_subcategory? ? "Subcategory Name" : "Main Category Name"
+        small.field-req  *
+      = f.text_field :name, class: "form-control validate_name", autofocus: true
+  .row.mb10
+    .col-xs-12
+      = f.label :description
+      = f.text_field :description, class: "form-control"
+  .row.mb10
+    - unless @category.is_subcategory?
+      .col-xs-6
+        = f.label :track_as_sales
+        p
+          = f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
+    .col-xs-6
+      = f.label :is_active, "Status"
+      p
+        = f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
+  .row.mb10
+    .col-xs-12.mt20
+      | (
+      small.field-req  *
+      |  )
+      i  indicates field is required
+  .modal-footer.no-border
+    = link_to "Cancel", '#', class: "btn btn-default", data: {dismiss: "modal"}
+    button.btn.btn-primary type="submit" = @category.new_record? ? "Add" : "Save"
