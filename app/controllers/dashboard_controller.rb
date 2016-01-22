@@ -1,21 +1,14 @@
 class DashboardController < ApplicationController
 	before_action :authenticate_user!
 
-	# ActionView::Helpers::NumberHelper, 
-	include ReportsHelper, ApplicationHelper
+	include ReportsHelper
 
 	def index
-		# @sale = Sale.update_customer_count
-
-		# Dashboard.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).destroy_all
 		@branches = current_brand.branches.order(:id)
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
-
+		@branch_cost_stat = branch_cost_stat
 		@purchase_cost_stat = purchase_cost_stat
-		# Dashboard.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).destroy_all
-		# @a = get_purchase_total_amount
-		# Sale.save_customer_count_to_dashboard
 	end
 
 	def update_customer_count(branches)
@@ -25,16 +18,6 @@ class DashboardController < ApplicationController
 			arr.append(a)
 		end
 		create_chart(current_brand.name, "", @branches.pluck(:name), arr, " ", "bar", @branches.pluck(:color))
-		# @customer_count_chart = LazyHighCharts::HighChart.new('graph') do |f|
-		#   f.title(text: "Customer Count")
-		#   f.subtitle(text: current_brand.name)
-		#   f.xAxis(categories: @branches.pluck(:name))
-		#   f.series(showInLegend: false, name: 'Customer Count', data: arr, colors: @branches.pluck(:color))
-		# 	f.chart({defaultSeriesType: "bar"})
-		# 	f.plotOptions(bar: {
-		# 		colorByPoint: true
-		# 		})
-		# end
 	end
 
 	def price_movement_dashboard
@@ -47,29 +30,13 @@ class DashboardController < ApplicationController
 		return lowest_price_movement.first(5)
 	end
 
-	# def purchase_cost_stat
-	# 	total_purchase = Array.new purchase_dates = Array.new
-	# 	@purchase = Purchase.where(purchase_date: [DateTime.now - 7.days..DateTime.now], brand_id: current_brand)
-	# 	@purchase.each_with_index do |p, index|
-	# 		purchase_item_total = 0 
-	# 		p.purchase_items.each do |pi|
-	# 			purchase_item_total += pi.purchase_item_amount
-	# 		end
-	# 		total_purchase[index] = purchase_item_total.to_i
-	# 	  purchase_dates[index] = p.purchase_date.to_date.strftime("%B %d, %Y | %a")
-	# 	end	
-	# 	create_chart("Purchase Cost Stat", "", purchase_dates, total_purchase, current_brand.name, "line", '')
-	# end
-
 	def purchase_cost_stat
 		dates = Array.new amount = Array.new
-		
-		fr = Date.today - 7 
-		d = fr..Date.today
- 		@purchase_cost = Dashboard.where(previous_date_entry: d, brand_id: current_brand).order('previous_date_entry ASC')
+		start_date = Date.today - 7 
+		range_dates = start_date..Date.today
+ 		@purchase_cost = Dashboard.where(previous_date_entry: range_dates, brand_id: current_brand).order('previous_date_entry ASC')
  		
- 		d.each_with_index do |range_date, index|
-
+ 		range_dates.each_with_index do |range_date, index|
  			@total_amount = 0
  			@purchase_cost.each do |pc|
  				if pc.previous_date_entry == range_date 
@@ -79,63 +46,51 @@ class DashboardController < ApplicationController
  			dates[index] = range_date.strftime("%b %d,%Y | %a")
  			amount[index] = @total_amount
  		end
- 		# @purchase_cost.each do |pc|
 		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')	
 	end
 
-	def create_chart(title, subtitle, categories, data, name, chartType, colors)
-		  LazyHighCharts::HighChart.new('graph') do |f|
+	def branch_cost_stat
+		branches = Array.new total_purchases = Array.new
+		dates = Array.new 
+		start_date = Date.today - 7 
+		range_dates = start_date..Date.today
+ 		@purchase_cost = Dashboard.where(previous_date_entry: range_dates, brand_id: current_brand).order('previous_date_entry ASC')
+
+ 		current_brand.branches.each_with_index do |branch, index|
+ 			total_day_amount = Array.new
+ 			range_dates.each_with_index do |range_date, index|
+ 					@purchases = @purchase_cost.where(branch_id: branch.id, previous_date_entry: range_date)
+		 			@total_amount = 0
+		 			@purchases.each do |p|
+		 				@total_amount += p.purchase_total_amount.to_i
+		 			end
+		 			total_day_amount[index] = @total_amount 
+		 	end
+		 	total_purchases[index] = total_day_amount
+ 		end
+
+	 	create_chart(current_brand.name, "branches", range_dates.map{|a| a.strftime("%b %d,%Y | %a")}, total_purchases, @branches.pluck(:name), "line",  @branches.pluck(:color))
+ 	end
+ 		
+	def create_chart(title, subtitle, categories, data, names, chartType, colors)
+	  LazyHighCharts::HighChart.new('graph') do |f|
 		  f.title(text: title)
 		  f.subtitle(text: subtitle)
 		  f.xAxis(categories: categories)
-		  f.series(showInLegend: false, name: name, data: data, colors: colors)
+		  data.each_with_index do |d, index|
+	  		f.series(showInLegend: false, name: names[index], data: d, colors: colors)
+	  	end
+		  # if count == 'single'
+		  # 	f.series(showInLegend: false, name: names, data: data, colors: colors)
+		  # else
+		  # 	data.each_with_index do |d, index|
+		  # 		f.series(showInLegend: false, name: names[index], data: d, colors: colors)
+		  # 	end
+		  # end
 			f.chart({defaultSeriesType: chartType})
 			f.plotOptions(bar: {
-				colorByPoint: true,
+				colorByPoint: true
 				})
 		end
 	end
 end
-
-	# def get_price_movement_items(item_ids)
-	# 	price_movement = Array.new
-	# 	@date_range = Date.today.beginning_of_month..Date.today
-	# 	item_ids.each do |item_id|
-	# 		purchased_items = get_purchased_items(item_id, @date_range)
-	# 		price_movement = price_movement + get_price_movement(purchased_items)
-	# 	end
-	# 	price_movement = price_movement.sort_by{ |a| a[:price_movement].to_i}
-	# 	return price_movement
-	# 	# return (price_movement.delete_if { |a| a[:price_movement].to_i == 0}).first(5)
-	# end
-
-	# def get_price_movement(purchased_items)
-	# 	past_price = Array.new
-	# 	current_price = purchased_items
-	# 	price_movement_values = Array.new
-	# 	hash = Hash.new
-			
-	# 	current_price.each_with_index do |a, index|
-	# 		if past_price.empty?
-	# 			past_price.append(0)
-	# 		else
-	# 			past_price.append(current_price[index-1])
-	# 		end
-	# 		if past_price[index] != 0
-	# 			a = current_price[index]
-	# 			price_movement_value = past_price[index].purchase_item_amount - current_price[index].purchase_item_amount
-	# 			hash = { :branch_name => a.purchase.branch.name, :item => a.item.name, :prev_amount => past_price[index].purchase_item_amount.to_i, :present_amount => a.purchase_item_amount.to_i, :price_movement => price_movement_value }
- #      end
- #      price_movement_values.append(hash)
-	# 	end
-
-	# 	return price_movement_values
-	# end
-
-	# def get_purchased_items(item_id, date_range)
-	# 	@purchase_ids = Purchase.select(:id).where(purchase_date: date_range, brand_id: current_brand)
-	# 	@purchase_items = PurchaseItem.where(purchase_id: @purchase_ids, item_id: item_id).order('purchase_item_amount ASC')
-	# 	return @purchase_items
-	# end
-
-# end
