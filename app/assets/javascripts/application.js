@@ -20,6 +20,8 @@
 //= require fss
 //= require fss-settings
 
+Turbolinks.enableProgressBar();
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),

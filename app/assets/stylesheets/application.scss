@@ -4,3 +4,8 @@
 @import "daterangepicker-bs3";
 @import "bootstrap-datepicker3";
 @import "animate";
+
+html.turbolinks-progress-bar::before {
+  background-color: red !important;
+  height: 5px !important;
+}
