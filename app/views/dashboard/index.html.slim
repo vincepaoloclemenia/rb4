@@ -30,7 +30,6 @@
             i.icon-maxicons1-refresh
       .panel-body
         = high_chart("customer_count", @update_customer_count)
-
   .col-xs-12
     .panel.panel-primary
       .panel-heading
@@ -40,15 +39,15 @@
             label.btn.btn-primary.no-margin.active
               input#option1 name="options" type="radio"
                 i.fa.fa-thumbs-up.mr5
-                | Unilever Corporation
+                | Brand
             label.btn.btn-primary
               input#option2 name="options" type="radio"
                 i.fa.fa-thumbs-down.mr5
-                | Starbucks Corp
+                | Branches
           / a.panel-refresh.refresh-icon data-toggle="panel-refresh" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
           /   i.icon-maxicons1-refresh
-      .panel-body
-        = high_chart("puchase_cost_stat", @purchase_cost_stat)
+      .panel-body#purchase-cost-stat
+        = high_chart("puchase_cost_stat", @branch_cost_stat)
 
   .col-xs-12.col-md-12.col-md-6
     .panel.panel-primary
@@ -82,3 +81,9 @@
 
   .col-xs-12.col-md-12.col-md-6
     = render "price_movement"
+
+javascript:
+  $('#option1').on('click',function(){
+    alert("option 1");
+  //do something
+  });
