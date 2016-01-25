@@ -19,6 +19,7 @@
 //= require flash
 //= require fss
 //= require fss-settings
+//= reuqire paypal-button
 
 Turbolinks.enableProgressBar();
 
@@ -75,5 +76,8 @@ $(document).ajaxError(function(event,xhr,options,exc) {
       field.parent().wrap("<div class='has-error'></div>");
     });
 
+    if( xhr.status == 401 ){
+      window.location.reload();
+    }
        
 });
