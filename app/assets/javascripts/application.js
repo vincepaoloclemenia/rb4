@@ -19,7 +19,6 @@
 //= require flash
 //= require fss
 //= require fss-settings
-//= reuqire paypal-button
 
 Turbolinks.enableProgressBar();
 
