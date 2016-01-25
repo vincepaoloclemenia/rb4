@@ -7,7 +7,7 @@ class DashboardController < ApplicationController
 		@branches = current_brand.branches.order(:id)
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
-		@branch_cost_stat = branch_cost_stat
+		@branch_cost_stat = branch_purchase_cost_stat
 		@purchase_cost_stat = purchase_cost_stat
 	end
 
@@ -32,7 +32,7 @@ class DashboardController < ApplicationController
 
 	def purchase_cost_stat
 		dates = Array.new amount = Array.new
-		start_date = Date.today - 7 
+		start_date = Date.today - 7
 		range_dates = start_date..Date.today
  		@purchase_cost = Dashboard.where(previous_date_entry: range_dates, brand_id: current_brand).order('previous_date_entry ASC')
  		
@@ -46,10 +46,10 @@ class DashboardController < ApplicationController
  			dates[index] = range_date.strftime("%b %d,%Y | %a")
  			amount[index] = @total_amount
  		end
-		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')	
+ 		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')
 	end
 
-	def branch_cost_stat
+	def branch_purchase_cost_stat
 		branches = Array.new total_purchases = Array.new
 		dates = Array.new 
 		start_date = Date.today - 7 
@@ -64,12 +64,11 @@ class DashboardController < ApplicationController
 		 			@purchases.each do |p|
 		 				@total_amount += p.purchase_total_amount.to_i
 		 			end
-		 			total_day_amount[index] = @total_amount 
+		 			total_day_amount[index] = @total_amount
 		 	end
 		 	total_purchases[index] = total_day_amount
  		end
-
-	 	create_chart(current_brand.name, "branches", range_dates.map{|a| a.strftime("%b %d,%Y | %a")}, total_purchases, @branches.pluck(:name), "line",  @branches.pluck(:color))
+	 	create_chart(current_brand.name, "Branches", range_dates.map{|a| a.strftime("%b %d,%Y | %a")}, total_purchases, @branches.pluck(:name), "line",  @branches.pluck(:color))
  	end
  		
 	def create_chart(title, subtitle, categories, data, names, chartType, colors)
@@ -77,16 +76,13 @@ class DashboardController < ApplicationController
 		  f.title(text: title)
 		  f.subtitle(text: subtitle)
 		  f.xAxis(categories: categories)
-		  data.each_with_index do |d, index|
-	  		f.series(showInLegend: false, name: names[index], data: d, colors: colors)
-	  	end
-		  # if count == 'single'
-		  # 	f.series(showInLegend: false, name: names, data: data, colors: colors)
-		  # else
-		  # 	data.each_with_index do |d, index|
-		  # 		f.series(showInLegend: false, name: names[index], data: d, colors: colors)
-		  # 	end
-		  # end
+		  if names.instance_of? Array
+			  data.each_with_index do |d, index|
+		  		f.series(showInLegend: false, name: names[index], data: d, colors: colors)
+		  	end
+		  else
+		  	f.series(showInLegend: false, name: names, data: data, colors: colors)
+		  end
 			f.chart({defaultSeriesType: chartType})
 			f.plotOptions(bar: {
 				colorByPoint: true

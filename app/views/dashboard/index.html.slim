@@ -30,24 +30,22 @@
             i.icon-maxicons1-refresh
       .panel-body
         = high_chart("customer_count", @update_customer_count)
+
   .col-xs-12
     .panel.panel-primary
       .panel-heading
         .pull-left.mt5 Purchase Cost Stats
-        .panel-controls.no-upp
-          btn-group data-toggle="buttons"
-            label.btn.btn-primary.no-margin.active
-              input#option1 name="options" type="radio"
-                i.fa.fa-thumbs-up.mr5
-                | Brand
-            label.btn.btn-primary
-              input#option2 name="options" type="radio"
-                i.fa.fa-thumbs-down.mr5
-                | Branches
-          / a.panel-refresh.refresh-icon data-toggle="panel-refresh" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-          /   i.icon-maxicons1-refresh
-      .panel-body#purchase-cost-stat
-        = high_chart("puchase_cost_stat", @branch_cost_stat)
+        .panel-controls.no-upp.nav-tabs
+          ul.nav.nav-tabs.btn-group data-toggle="buttons"
+            label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
+              a data-toggle="tab" href="#brand-info"  Brand Information
+            label.btn.btn-primary class="#{brand_pane_active?('branches')}"
+              a data-toggle="tab" href="#branches-list"  Branches
+      .panel-body.tab-content
+        #brand-info.tab-pane class="#{brand_pane_active?('info')}"
+          = high_chart("brand_cost_stat", @purchase_cost_stat)
+        #branches-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
+          = high_chart("branch_cost_stat", @branch_cost_stat)
 
   .col-xs-12.col-md-12.col-md-6
     .panel.panel-primary
@@ -81,9 +79,3 @@
 
   .col-xs-12.col-md-12.col-md-6
     = render "price_movement"
-
-javascript:
-  $('#option1').on('click',function(){
-    alert("option 1");
-  //do something
-  });
