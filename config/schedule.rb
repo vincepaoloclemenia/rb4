@@ -24,3 +24,7 @@ set :output, "log/cron.log"
 every :day, at: '2am' do
 	runner 'Sale.update_customer_count'
 end
+
+every 30.seconds do
+	runner 'ipakita'
+end
