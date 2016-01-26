@@ -11,7 +11,7 @@
 							th style="text-align: center" width="15%" Include?
 							th Branch
 					tbody
-						= f.collection_check_boxes :branches, current_client.branches, :id, :name do |b|
+						= f.collection_check_boxes :branches, current_client.branches.all_unsubscribed, :id, :name do |b|
 							tr
 								= b.label do
 									td style="text-align: center" = b.check_box
