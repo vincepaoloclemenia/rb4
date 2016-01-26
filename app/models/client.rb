@@ -9,6 +9,8 @@ class Client < ActiveRecord::Base
 	has_many :suppliers
 	has_many :purchases
 	has_many :purchase_items, through: :purchases
+	has_many :subscriptions
+	has_many :bills
 	has_one :setting, dependent: :destroy
 
 	validates :name,

@@ -1,0 +1,30 @@
+.panel.panel-primary
+	.panel-heading
+		.pull-left.mt7 Subscriptions
+		.pull-right
+			- if view_access_control('subscriptions','create')
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> New Subscription".html_safe, new_subscription_path, class: "btn btn-default btn-round btn-outline", remote: true
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="200" Plan
+						th width="180" Previous payment
+						th width="120" Next payment
+						th width="120" Amount
+						/ th width="170" Period
+						th width="120" data-sortable="false" Status
+						th.action width="90" data-sortable="false" Action
+				tbody
+					- @subscriptions.each do |subscription|
+						tr
+							td data-title="Plan" = subscription.plan.name
+							td data-title="Previous payment" = to_default_date_format(subscription.previous_payment)
+							td data-title="Next payment" = to_default_date_format(subscription.next_payment)
+							td data-title="Amount" = to_dollar subscription.amount.to_f
+							/ td data-title="Period" = subscription.period
+							td data-title="Status" = subscription.status
+							td data-title="Action"
+
+= render "partials/modal"

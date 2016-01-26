@@ -1,9 +1,12 @@
 class Branch < ActiveRecord::Base
   belongs_to :brand
+  belongs_to :subscription
   has_many :sales
   has_many :employees
   has_many :inventories, dependent: :restrict_with_error
   has_many :purchases
+  has_one :branch_subscription
+  has_one :subscription, through: :branch_subscription
 
 	validates :name,
 						presence: true,

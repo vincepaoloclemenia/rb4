@@ -49,7 +49,12 @@ Rails.application.routes.draw do
   resources :purchases do
     resources :purchase_items
   end
-  
+  resources :subscriptions
+  resources :bills
+  resources :payment_notifications
+  post 'paypal_checkout' => 'subscriptions#paypal_checkout'
+  get 'process_subscription' => 'subscriptions#process_subscription'
+
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'
@@ -72,4 +77,5 @@ Rails.application.routes.draw do
   get 'registration_validate_email' => 'pages#registration_validate_email'
   get 'registration_validate_username' => 'pages#registration_validate_username'
   put 'change_brand' => 'pages#change_brand'
+  get 'get_plan_info' => 'pages#get_plan_info'
 end

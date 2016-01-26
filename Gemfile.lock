@@ -139,6 +139,7 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (= 0.3.0)
+    paypal-recurring (1.1.0)
     pg (0.18.3)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
@@ -263,6 +264,7 @@ DEPENDENCIES
   lazy_high_charts
   mousetrap-rails
   paperclip (~> 4.3)
+  paypal-recurring
   pg
   rails (= 4.2.5.rc2)
   ransack
@@ -280,4 +282,4 @@ DEPENDENCIES
   wkhtmltopdf-binary
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

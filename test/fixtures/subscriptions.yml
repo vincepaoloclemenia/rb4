@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client_id: 
+  plan_id: 
+  start_date: 2016-01-25 09:03:10
+  end_date: 2016-01-25 09:03:10
+  status: MyString
+  paypal_customer_token: MyString
+  paypal_recurring_profile_token: MyString
+  paypal_email: MyString
+  paypal_payment_token: MyString
+  previous_payment: 2016-01-25 09:03:10
+  next_payment: 2016-01-25 09:03:10
+  branch_count: 1
+  period: MyString
+  amount: 9.99
+  outstanding_balance: 9.99
+
+two:
+  client_id: 
+  plan_id: 
+  start_date: 2016-01-25 09:03:10
+  end_date: 2016-01-25 09:03:10
+  status: MyString
+  paypal_customer_token: MyString
+  paypal_recurring_profile_token: MyString
+  paypal_email: MyString
+  paypal_payment_token: MyString
+  previous_payment: 2016-01-25 09:03:10
+  next_payment: 2016-01-25 09:03:10
+  branch_count: 1
+  period: MyString
+  amount: 9.99
+  outstanding_balance: 9.99

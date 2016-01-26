@@ -8,11 +8,17 @@ module ApplicationHelper
 		number_to_currency(num, unit: "₱ ")
 	end
 
+	def to_dollar(num)
+		num = 0 if num == 0 || num.nil?
+		number_to_currency(num, unit: "$ ")		
+	end
+
 	def to_datepicker_format(date)
 		date.to_date.strftime("%m/%d/%Y")
 	end
 
 	def to_default_date_format(date)
+		return " - " if date.blank?
 		date.strftime("%b %d, %Y")
 	end
 
@@ -53,6 +59,10 @@ module ApplicationHelper
 			"open" if current_pages?(settlements_path, shifts_path)
 		when "purchase_setup"
 			"open" if current_pages?(units_path, categories_path, items_path, conversions_path, suppliers_path)
+		when "subscriptions"
+			"open" if current_pages?(subscriptions_path)
+		when "billing"
+			"open" if current_pages?(bills_path)
 		else
 		end	
 	end

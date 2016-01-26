@@ -1,0 +1,88 @@
+= form_for @subscription, url: paypal_checkout_path, method: :post do |f|
+	.row.mb10
+		.col-xs-12
+			= f.label :plan_id, "Plan"
+			= f.select :plan_id, Plan.all.where(plan_type: "Subscription").pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+		.col-xs-12
+			.no-more-tables
+				table.table.table-bordered.mb0
+					thead
+						tr
+							th style="text-align: center" width="15%" Include?
+							th Branch
+					tbody
+						= f.collection_check_boxes :branches, current_client.branches, :id, :name do |b|
+							tr
+								= b.label do
+									td style="text-align: center" = b.check_box
+									td = b.label
+
+			/= f.select :branches, current_client.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select branches to include" }, style: "width: 100%; display: none;", multiple: true
+	.row.mb10
+		.col-xs-12
+			hr
+				p
+					| Rate per branch: $ 
+					span#amount-value
+					| &nbsp;
+					span#period-value
+				.no-more-tables
+					table.table.table-bordered.mb0
+						thead
+							tr.bg-thead
+								th width="80%" Branch
+								th width="20%" style="text-align: right" Amount
+						tbody#branches
+
+						tfoot
+							tr
+								td style="text-align: right"
+									b Total
+								td#total style="text-align: right"
+									b $ 0.00
+			hr
+	.modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			= f.submit "Subscribe via PayPal", class: "btn btn-primary"
+
+javascript:
+	var plan_id = $('#subscription_plan_id').val();
+	var get_plan_info_path = "#{get_plan_info_path}?plan_id="+plan_id;
+	$.getJSON(get_plan_info_path, function( json ){
+		$('#amount-value').html(json.amount);
+		$('#period-value').html(json.period);
+	});
+
+	$('#subscription_plan_id').on('change', function(){
+		var plan_id = $('#subscription_plan_id').val();
+		var get_plan_info_path = "#{get_plan_info_path}?plan_id="+plan_id;
+		$.getJSON(get_plan_info_path, function( json ){
+			$('#amount-value').html(json.amount);
+			$('#period-value').html(json.period);
+
+			var selected = $('input:checked');
+			var amount = $('#amount-value').text();
+			var period = $('#period-value').text();
+			$('#branches').empty();
+			$.each(selected, function( index, value ){
+				var id = $(this).prop("id");
+				var label = $("label[for="+id+"]");
+				$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>$ "+amount+"</td><tr>");
+			});
+			$('#total').html("<b>$ "+selected.length * amount+"<br>"+period+"</b>");
+		});
+	});
+
+	$('input[type=checkbox]').on('change', function(){
+		var selected = $('input:checked');
+		var amount = $('#amount-value').text();
+		var period = $('#period-value').text();
+		$('#branches').empty();
+		$.each(selected, function( index, value ){
+			var id = $(this).prop("id");
+			var label = $("label[for="+id+"]");
+			$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>$ "+amount+"</td><tr>");
+		});
+		$('#total').html("<b>$ "+selected.length * amount+"<br>"+period+"</b>");
+	});
