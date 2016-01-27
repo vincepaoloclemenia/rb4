@@ -1,4 +1,7 @@
 = form_for @subscription, url: paypal_checkout_path, method: :post do |f|
+	.row.mb10#no-branch-selected-error style="display:none;"
+		.col-xs-12
+			p.bg-danger Please select at least one branch
 	.row.mb10
 		.col-xs-12
 			= f.label :plan_id, "Plan"
@@ -85,4 +88,16 @@ javascript:
 			$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>$ "+amount+"</td><tr>");
 		});
 		$('#total').html("<b>$ "+selected.length * amount+"<br>"+period+"</b>");
+	});
+
+	$('form').submit(function(e){
+		$('#no-branch-selected-error').hide();
+		var selected = $('input:checked');
+		if(selected.length > 0){
+			$('.modal-content').addClass("panel-refreshing");
+		}
+		else{
+			e.preventDefault();
+			$('#no-branch-selected-error').show();
+		}
 	});

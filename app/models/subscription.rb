@@ -38,4 +38,43 @@ class Subscription < ActiveRecord::Base
   def payment_provided?
     paypal_payment_token.present?
   end
+
+  # Remove subscription of branches with 'Cancelled' subscription
+  def self.process_cancelled_subscriptions
+    subscriptions = Subscription.where(status: "Cancelled").where("next_payment >= ?", DateTime.now)
+    if subscriptions.empty?
+      puts "======== No 'Cancelled' subscriptions Found for today ========"
+    else
+      puts "======== Processing 'Cancelled' Subscriptions ========"
+    end
+    subscriptions.each do |subscription|
+      puts "======== Subscription##{subscription.id} ========"
+      subscription.branches.each do |branch|
+        puts "======== Subscription##{subscription.id} and Branch##{branch.id} ========"
+        branch.update_attributes(subscription_id: nil)
+      end
+      subscription.update_attributes(status: "Unsubscribed")
+      puts "======== Subscription##{subscription.id} updated to 'Unsubscribed' ========"
+    end
+    puts "======== Processing Complete ========" unless subscriptions.empty?
+  end
+
+  # Change expired free trial subscription
+  def self.process_free_trial_subscriptions
+    subscriptions = Subscription.where(plan_id: 1).where("next_payment >= ?", DateTime.now)
+    if subscriptions.empty?
+      puts "======== No 'Expired' subscriptions found today ========"
+    else
+      puts "======== Processing 'Expired' Subscriptions ========"
+    end
+    subscriptions.each do |subscription|
+      subscription.branches.each do |branch|
+        puts "======== Subscription##{subscription.id} and Branch##{branch.id} ========"
+        branch.update_attributes(subscription_id: nil)
+      end
+      subscription.update_attributes(status: "Expired")
+      puts "======== Subscription##{subscription.id} updated to 'Expired' ========"
+    end
+    puts "======== Processing Complete ========" unless subscriptions.empty?
+  end
 end

@@ -26,5 +26,6 @@
 							/ td data-title="Period" = subscription.period
 							td data-title="Status" = subscription.status
 							td data-title="Action"
+								= link_to "Cancel", cancel_subscription_path(subscription), class: "btn btn-xs btn-danger", data: { confirm: "You still have #{distance_of_time_in_words(subscription.previous_payment, subscription.next_payment)} before you can use the branches for another subscription. Do you still want to continue?" }
 
 = render "partials/modal"

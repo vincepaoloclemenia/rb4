@@ -14,6 +14,7 @@ class PaypalPayment
   def make_recurring
     process :request_payment, description: "#{@subscription.plan.name} for a total of #{@subscription.branch_count} #{'branch'.pluralize(@subscription.branch_count)}",
                               amount: @subscription.amount
+    #change the period in live
     process :create_recurring_profile, period: :daily, 
                                       frequency: 1, 
                                       start_at: Time.zone.now, 

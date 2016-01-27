@@ -17,7 +17,7 @@ class Branch < ActiveRecord::Base
 
   after_create :set_default_color
 
-  scope :all_unsubscribed, lambda { includes(:branch_subscription).select { |b| !b.branch_subscription.nil? } }
+  scope :all_unsubscribed, lambda { includes(:branch_subscription).select { |b| b.branch_subscription.nil? } }
 
   def set_default_color
     #for nil branch color
@@ -26,9 +26,5 @@ class Branch < ActiveRecord::Base
                   "#8CAF41","#8F7260","#4F669D","#646464","#AAA786","#6F9684","#98ACD1"]
       self.update color: color_set.sample
     end
-  end
-
-  def all_unsubscribed
-    
   end
 end
