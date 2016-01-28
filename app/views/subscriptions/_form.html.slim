@@ -14,11 +14,17 @@
 							th style="text-align: center" width="15%" Include?
 							th Branch
 					tbody
-						= f.collection_check_boxes :branches, current_client.branches.all_unsubscribed, :id, :name do |b|
+						- if current_client.branches.all_unsubscribed.empty?
 							tr
-								= b.label do
-									td style="text-align: center" = b.check_box
-									td = b.label
+								td colspan="2"
+									| No branch available. You can create new branches 
+									= link_to "here", brand_path(current_brand)
+						- else
+							= f.collection_check_boxes :branches, current_client.branches.all_unsubscribed, :id, :name do |b|
+								tr
+									= b.label do
+										td style="text-align: center" = b.check_box
+										td = b.label
 
 			/= f.select :branches, current_client.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select branches to include" }, style: "width: 100%; display: none;", multiple: true
 	.row.mb10

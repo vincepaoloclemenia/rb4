@@ -77,4 +77,8 @@ class Subscription < ActiveRecord::Base
     end
     puts "======== Processing Complete ========" unless subscriptions.empty?
   end
+
+  def cancelled?
+    status == "Cancelled"
+  end
 end

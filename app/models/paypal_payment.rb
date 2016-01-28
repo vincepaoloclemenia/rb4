@@ -12,12 +12,13 @@ class PaypalPayment
   end
   
   def make_recurring
-    process :request_payment, description: "#{@subscription.plan.name} for a total of #{@subscription.branch_count} #{'branch'.pluralize(@subscription.branch_count)}",
-                              amount: @subscription.amount
     #change the period in live
+    #used PST for start_at because PayPal uses PST
+    branch_names = []
+    branches.each { |b| branch_names << "#{Branch.find(b).brand.name} - #{Branch.find(b).name}" }
     process :create_recurring_profile, period: :daily, 
                                       frequency: 1, 
-                                      start_at: Time.zone.now, 
+                                      start_at: DateTime.now.in_time_zone('Pacific Time (US & Canada)'), 
                                       failed: 1, 
                                       description: "#{@subscription.plan.name} for a total of #{@subscription.branch_count} #{'branch'.pluralize(@subscription.branch_count)}",
                                       amount: @subscription.amount
@@ -31,7 +32,7 @@ private
       payer_id: @subscription.paypal_customer_token,
       # description: "#{@subscription.plan.name} payment for a total of #{} #{'branch'.pluralize(@subscription.branches.count)}",
       # amount: @subscription.plan.price * @subscription.branches.count,
-      ipn_url: "https://2cd523b5.ngrok.com/payment_notifications",
+      ipn_url: "https://2c81ca3a.ngrok.com/payment_notifications",
       currency: "USD"
     )
     response = PayPal::Recurring.new(options).send(action)

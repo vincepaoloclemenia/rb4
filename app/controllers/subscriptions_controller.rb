@@ -57,10 +57,12 @@ class SubscriptionsController < ApplicationController
 		else
 			plan = Plan.find(params[:subscription][:plan_id])
 	    subscription = current_client.subscriptions.build(plan_id: plan.id)
+	    branch_names = []
+	    branches.each { |b| branch_names << "#{Branch.find(b).brand.name} - #{Branch.find(b).name}" }
 	    redirect_to subscription.paypal.checkout_url(
 	      return_url: process_subscription_url(:plan_id => plan.id, branches: branches),
 	      cancel_url: subscriptions_url,
-	      description: "#{subscription.plan.name} for a total of #{branches.count} #{'branch'.pluralize(branches.count)}",
+	      description: "#{subscription.plan.name} for a total of #{branches.count} #{'branch'.pluralize(branches.count)}: #{branch_names.join(', ')}",
 	      amount: subscription.plan.amount * branches.count
 	    )
 	 	end

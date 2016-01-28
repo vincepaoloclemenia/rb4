@@ -15,18 +15,18 @@ class PaymentNotificationsController < ApplicationController
      	when "recurring_payment_profile_created"
      		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
      		subscription.update_attributes(status: params[:profile_status], 
-     																	previous_payment: DateTime.now, 
-     																	next_payment: paypal_datetime_current_time_zone(params[:next_payment_date]), 
+     																	previous_payment: DateTime.now.in_time_zone, 
+     																	next_payment: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly), 
      																	outstanding_balance: params[:outstanding_balance])
-     		subscription.bills.create(amount: subscription.amount,
-     															payer_email: subscription.paypal_email,
-     															status: "Complete",
-     															branches: subscription.branches.pluck(:name).join(", "),
-                                  client_id: subscription.client_id)
+     		# subscription.bills.create(amount: subscription.amount,
+     		# 													payer_email: subscription.paypal_email,
+     		# 													status: "Completed",
+     		# 													branches: subscription.branches.pluck(:name).join(", "),
+       #                            client_id: subscription.client_id)
      	when "recurring_payment"
      		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
-     		subscription.update_attributes(previous_payment: DateTime.now, 
-     																	next_payment: paypal_datetime_current_time_zone(params[:next_payment_date]),
+     		subscription.update_attributes(previous_payment: DateTime.now.in_time_zone, 
+     																	next_payment: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly),
      																	outstanding_balance: params[:outstanding_balance])
      		subscription.bills.create(amount: params[:mc_gross],
      															payer_email: subscription.paypal_email,
@@ -39,10 +39,12 @@ class PaymentNotificationsController < ApplicationController
      		subscription.update_attributes(status: params[:profile_status])
      	when "recurring_payment_failed"
      	when "recurring_payment_profile_cancel"
+        #cancel recurring profile (DELETE)
      		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
      		subscription.update_attributes(status: params[:profile_status])
      	when "recurring_payment_skipped"
      	when "recurring_payment_suspended"
+        #suspend recurring profile (PAUSE)
      		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
      		subscription.update_attributes(status: params[:profile_status])
      	when "recurring_payment_suspended_due_to_max_failed_payment"
