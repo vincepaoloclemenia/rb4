@@ -30,10 +30,16 @@ class Sale < ActiveRecord::Base
 		net_sales / count
 	end
 
-	def self.update_customer_count(branch)
-		date = Date.today-1
-		dashboard = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, created_at: date.beginning_of_day..date.end_of_day ).last
-		dashboard.nil? ? dashboard = 0 : dashboard = dashboard.customer_count
-		return dashboard
+	def self.get_customer_count(branches)
+		arr = Array.new
+		branches.each_with_index do |branch, index|
+			hash = Hash.new
+			customer_count = Sale.select(:id, :customer_count).order('created_at DESC').where(branch_id: branch.id, sale_date: Date.today - 1).last
+			customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
+			hash[:branch_name] = branch.name
+			hash[:customer_count] = customer_count
+			arr[index] = hash
+		end
+		return arr
 	end
 end

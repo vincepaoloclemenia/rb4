@@ -4,6 +4,7 @@ class DashboardController < ApplicationController
 	include ReportsHelper
 
 	def index
+		# populate_dashboard
 		@branches = current_brand.branches.order(:id)
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
@@ -14,8 +15,9 @@ class DashboardController < ApplicationController
 	def update_customer_count(branches)
 		arr = Array.new
 		@branches.each do |branch|
-			a = Sale.update_customer_count(branch)
-			arr.append(a)
+			customer_count = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, previous_date_entry: Date.today - 1).last
+			customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
+			arr.append(customer_count)
 		end
 		create_chart(current_brand.name, "", @branches.pluck(:name), arr, " ", "bar", @branches.pluck(:color))
 	end
@@ -26,7 +28,6 @@ class DashboardController < ApplicationController
 		@date_range = Date.today.beginning_of_month..Date.today
 		lowest_price_movement = get_price_movement_items(@item_ids, @date_range)
 		lowest_price_movement.delete_if { |a| a[:price_movement].to_i == 0}
-		
 		return lowest_price_movement.first(5)
 	end
 
@@ -89,4 +90,5 @@ class DashboardController < ApplicationController
 				})
 		end
 	end
+
 end
