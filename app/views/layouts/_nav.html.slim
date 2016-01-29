@@ -121,15 +121,14 @@
 							- if view_access_control('suppliers','show')
 								li
 									= link_to "Suppliers", suppliers_path, data: { keybinding: "s u p p" }
-			li
-				a href="javascript:;"
-					i.fa.icon-maxicons3-hand-basket
-					span Subscriptions
-			li
-				a href="javascript:;"
-					i.fa.icon-maxicons1-money
-					span Billing
-					span.label.bg-danger.pull-right 2
+			- if view_access_control("subscriptions","show")
+				li class="#{is_menu_open?('subscriptions')}"
+					= link_to "<i class='fa icon-maxicons3-hand-basket'></i> <span>Subscriptions</span>".html_safe, subscriptions_path
+			- if view_access_control("bills","show")
+				li class="#{is_menu_open?('billing')}"
+					= link_to "<i class='fa icon-maxicons1-money'></i> <span>Billing</span>".html_safe, bills_path
+					/= link_to "<i class='fa icon-maxicons1-money'></i> <span>Billing</span> <span class='label bg-danger pull-right'>2</span>".html_safe, bills_path
+				//span.label.bg-danger.pull-right 2
 			li
 				a href="#{settings_path}"
 					i.fa.icon-maxicons2-blocks

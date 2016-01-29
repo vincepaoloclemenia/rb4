@@ -38,6 +38,12 @@ class PagesController < ApplicationController
 		end
 	end
 
+	def get_plan_info
+		@plan = Plan.find(params[:plan_id])
+		render json: { amount: @plan.amount, period: @plan.period },
+					status: :ok
+	end
+
 	def registration_validate_email
 		@taken = User.all.pluck(:email).include? params[:email]
 		@email = params[:email]

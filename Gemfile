@@ -22,6 +22,7 @@ gem "paperclip", "~> 4.3"
 gem 'lazy_high_charts'
 gem 'axlsx_rails'
 gem 'animate-rails'
+gem 'paypal-recurring'
 
 group :development, :test do
   gem 'byebug'

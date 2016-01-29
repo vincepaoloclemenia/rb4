@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subscription_id: 
+  amount: 9.99
+  status: MyString
+  payer_email: MyString
+  transaction_id: MyString
+  plan_name: MyString
+  branches: MyText
+  start_date: 2016-01-25 09:08:41
+  end_date: 2016-01-25 09:08:41
+
+two:
+  subscription_id: 
+  amount: 9.99
+  status: MyString
+  payer_email: MyString
+  transaction_id: MyString
+  plan_name: MyString
+  branches: MyText
+  start_date: 2016-01-25 09:08:41
+  end_date: 2016-01-25 09:08:41

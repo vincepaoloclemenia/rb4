@@ -1,0 +1,10 @@
+$('#modal h4').html('New Subscription');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('.chosen').chosen({
+	width: "100%"
+})
+
+$('#modal').modal({backdrop: 'static', keyboard: false});
+$('#modal').modal("show");

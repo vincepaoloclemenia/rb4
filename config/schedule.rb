@@ -25,6 +25,7 @@ every :day, at: '2am' do
 	runner 'Sale.update_customer_count'
 end
 
+<<<<<<< HEAD
 every 1.minute do
 	# rake 'ipakita'
 	runner 'Dashboard.sample'
@@ -33,3 +34,13 @@ end
 every :day, at: '2am' do 
 	runner 'Dashboard.populate_dashboard'
 end 
+=======
+every 30.seconds do
+	runner 'ipakita'
+end
+
+every :day, :at => '4:00am' do
+	runner 'Subscription.process_cancelled_subscriptions'
+	runner 'Subscription.process_free_trial_subscriptions'
+end
+>>>>>>> bd466f0e166e100993d668ec2865b1d25961313d

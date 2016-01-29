@@ -1,9 +1,12 @@
 class Branch < ActiveRecord::Base
   belongs_to :brand
+  belongs_to :subscription
   has_many :sales
   has_many :employees
   has_many :inventories, dependent: :restrict_with_error
   has_many :purchases
+  has_one :branch_subscription
+  has_one :subscription, -> { where(status: "Active") }, through: :branch_subscription
 
 	validates :name,
 						presence: true,
@@ -13,6 +16,10 @@ class Branch < ActiveRecord::Base
             uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
 
   after_create :set_default_color
+
+  def self.all_unsubscribed
+    select { |b| b.subscription.nil? }
+  end
 
   def set_default_color
     #for nil branch color
