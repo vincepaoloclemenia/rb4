@@ -14,8 +14,6 @@ class PaypalPayment
   def make_recurring
     #change the period in live
     #used PST for start_at because PayPal uses PST
-    branch_names = []
-    branches.each { |b| branch_names << "#{Branch.find(b).brand.name} - #{Branch.find(b).name}" }
     process :create_recurring_profile, period: :daily, 
                                       frequency: 1, 
                                       start_at: DateTime.now.in_time_zone('Pacific Time (US & Canada)'), 

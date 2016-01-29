@@ -81,4 +81,8 @@ class Subscription < ActiveRecord::Base
   def cancelled?
     status == "Cancelled"
   end
+
+  def is_processing?
+    status == "Processing"
+  end
 end

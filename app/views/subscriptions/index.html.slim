@@ -26,7 +26,8 @@
 							/ td data-title="Period" = subscription.period
 							td data-title="Status" = subscription.status
 							td data-title="Action"
-								- unless subscription.cancelled?
-									= link_to "Cancel", cancel_subscription_path(subscription), method: :delete, class: "btn btn-xs btn-danger", data: { confirm: "Are you sure want to cancel?" }
+								- unless subscription.is_processing?
+									- unless subscription.cancelled?
+										= link_to "Cancel", cancel_subscription_path(subscription), method: :delete, class: "btn btn-xs btn-danger", data: { confirm: "Are you sure want to cancel?" }
 
 = render "partials/modal"
