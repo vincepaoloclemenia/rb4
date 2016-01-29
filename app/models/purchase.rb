@@ -11,20 +11,18 @@ class Purchase < ActiveRecord::Base
 
   validates :invoice_number, :purchase_date, :supplier_id, :brand_id, :branch_id, presence: true
 
-	def self.get_total_purchases_per_branch()
+	def self.get_total_purchases_per_branch(brand)
 		d = Date.today - 1 
 		purchase_array = Array.new
-		brands = Brand.all.pluck(:id)
+		# brands = Brand.all.pluck(:id)
 
-		brands.each do |brand|
-			brand.branches.each_with_index do |branch, index|
-				hash = Hash.new
-				hash[:branch_id] = branch.id
-				hash[:branch_name] = branch.name
-				@branch_purchases = Purchase.where(branch_id: branch, brand_id: brand, purchase_date: d)
-				hash[:total_purchases_amount] = get_total_purchases(@branch_purchases)
-				purchase_array[index] = hash
-			end
+		brand.branches.each_with_index do |branch, index|
+			hash = Hash.new
+			hash[:branch_id] = branch.id
+			hash[:branch_name] = branch.name
+			@branch_purchases = Purchase.where(branch_id: branch, brand_id: brand, purchase_date: d)
+			hash[:total_purchases_amount] = get_total_purchases(@branch_purchases)
+			purchase_array[index] = hash
 		end
 		return purchase_array
 	end

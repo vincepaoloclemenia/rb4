@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
 	include ReportsHelper
 
 	def index
-		# populate_dashboard
+		Dashboard.populate_dashboard
 		@branches = current_brand.branches.order(:id)
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
@@ -14,12 +14,18 @@ class DashboardController < ApplicationController
 
 	def update_customer_count(branches)
 		arr = Array.new
-		@branches.each do |branch|
+		@branches.each_with_index do |branch, index|
+			hash = Hash.new
 			customer_count = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, previous_date_entry: Date.today - 1).last
 			customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
-			arr.append(customer_count)
+			hash[:name] = branch.name
+			hash[:y] = customer_count
+			# arr.append(customer_count)
+			arr[index] = hash
 		end
-		create_chart(current_brand.name, "", @branches.pluck(:name), arr, " ", "bar", @branches.pluck(:color))
+
+	# raise 
+		create_chart(current_brand.name, "Brand", @branches.pluck(:name), arr, " ", "pie", @branches.pluck(:color))
 	end
 
 	def price_movement_dashboard
@@ -76,6 +82,7 @@ class DashboardController < ApplicationController
 	  LazyHighCharts::HighChart.new('graph') do |f|
 		  f.title(text: title)
 		  f.subtitle(text: subtitle)
+		  # raise
 		  f.xAxis(categories: categories)
 		  if names.instance_of? Array
 			  data.each_with_index do |d, index|
@@ -87,7 +94,15 @@ class DashboardController < ApplicationController
 			f.chart({defaultSeriesType: chartType})
 			f.plotOptions(bar: {
 				colorByPoint: true
-				})
+				},
+				pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: true
+      })
 		end
 	end
 
