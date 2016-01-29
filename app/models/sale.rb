@@ -30,16 +30,22 @@ class Sale < ActiveRecord::Base
 		net_sales / count
 	end
 
-	def self.get_customer_count(branches)
+	def self.get_customer_count(branches, brand)
 		arr = Array.new
 		branches.each_with_index do |branch, index|
 			hash = Hash.new
-			customer_count = Sale.select(:id, :customer_count).order('created_at DESC').where(branch_id: branch.id, sale_date: Date.today - 1).last
+			customer_count = Sale.select(:id, :customer_count).order('created_at DESC').where(brand_id: brand.id, branch_id: branch.id, sale_date: Date.today - 1).last
 			customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
 			hash[:branch_name] = branch.name
 			hash[:customer_count] = customer_count
 			arr[index] = hash
 		end
 		return arr
+	end
+
+	def self.get_total_sales(branches, brand)
+		branches.each do |branch|
+			
+		end
 	end
 end
