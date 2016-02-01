@@ -25,12 +25,13 @@ class PaypalPayment
 private
 
   def process(action, options = {})
+    ipn_url = ENV['RAILS_ENV'].eql?('development') ? "https://2c81ca3a.ngrok.com/payment_notifications" : "http://restobotv4.cloudapp.net/payment_notifications"
     options = options.reverse_merge(
       token: @subscription.paypal_payment_token,
       payer_id: @subscription.paypal_customer_token,
       # description: "#{@subscription.plan.name} payment for a total of #{} #{'branch'.pluralize(@subscription.branches.count)}",
       # amount: @subscription.plan.price * @subscription.branches.count,
-      ipn_url: "https://2c81ca3a.ngrok.com/payment_notifications",
+      ipn_url: ipn_url,
       currency: "USD"
     )
     response = PayPal::Recurring.new(options).send(action)
