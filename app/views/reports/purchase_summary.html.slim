@@ -16,16 +16,16 @@
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-								i.icon-maxicons2-search
+								i.icon-glyph-42
 
-.panel.panel-primary
-	.panel-heading
+.panel
+	.panel-heading.border.pb45
 		.pull-left.mt7 Purchase List
 		.pull-right
 			- if view_access_control('purchases','create')
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as Excel".html_safe, purchase_summary_path(format: :xlsx, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
-				|  
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_summary_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as Excel".html_safe, purchase_summary_path(format: :xlsx, q: request.params[:q]), class: "btn btn-success btn-round btn-outline mr10", target: "_blank"
+				|
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_summary_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
@@ -41,10 +41,10 @@
 				tbody
 					- @rank_number = rank_number(params[:page].to_i)
 					- if @purchase_items.empty?
-						td colspan="9"
-							| No records found from 
+						td.text-center colspan="7"
+							| No records found from &nbsp;
 							i
-								b 
+								b
 									= "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
 					- @purchase_items.each do |pi|
 						tr

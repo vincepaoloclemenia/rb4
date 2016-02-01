@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Signika:400,300,600,700');
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700,900,100);
 @charset "UTF-8";
 
 html {
     /*font-family: sans-serif;*/
     -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%
+    -ms-text-size-adjust: 100%;
 }
 
 body {
     margin: 0;
-    font-family: 'Signika', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 article,
@@ -48,7 +48,7 @@ template {
 
 a {
     background-color: transparent;
-    font-family: 'Signika', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 b,
@@ -283,7 +283,7 @@ th {
 html {
     font-size: 11px;
     -webkit-tap-highlight-color: transparent;
-    font-family: 'Signika', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 body {
@@ -2942,8 +2942,8 @@ span.nav-category{
 .nav .open>a,
 .nav .open>a:focus,
 .nav .open>a:hover {
-    background-color: #eee;
-    border-color: #337ab7
+    background-color: #46586E;
+    border-color: #71B75E;
 }
 
 .nav .nav-divider {
@@ -4756,7 +4756,8 @@ button.close {
     position: absolute;
     z-index: 1070;
     display: block;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Lato', sans-serif;
+    /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
     font-size: 12px;
     font-weight: 400;
     line-height: 1.4;
@@ -5629,7 +5630,7 @@ button.close {
     background-color: #999
 }
 
-@font-face {
+/*@font-face {
     font-family: Roboto;
     font-style: normal;
     font-weight: 400;
@@ -5711,7 +5712,7 @@ button.close {
     font-style: italic;
     font-weight: 700;
     src: url(/fonts/roboto/roboto-bolditalic-webfont.woff) format('woff')
-}
+}*/
 
 
 @-webkit-keyframes bounce {
@@ -11286,13 +11287,13 @@ Licensed under the MIT license - http://opensource.org/licenses/MIT
 }
 
 ::-moz-selection {
-    background: #E66E00;
+    background: #E75649;
     color: #fff;
     text-shadow: none
 }
 
 ::selection {
-    background: #E66E00;
+    background: #444;
     color: #fff;
     text-shadow: none
 }
@@ -11301,11 +11302,11 @@ body,
 html {
     height: 100%;
     width: 100%;
-    font-family: 'Signika', sans-serif;
+    font-family: 'Nunito', sans-serif;
 }
 
 .app {
-    background: #f0f0f0;
+    background: #e1e1e1;
     width: 100%;
     min-height: 100%;
     position: relative
@@ -11319,7 +11320,7 @@ body {
     line-height: 1.53846154;
     direction: ltr;
     -webkit-font-smoothing: antialiased;
-    font-family: 'Signika', sans-serif;
+    font-family: 'Lato', sans-serif;
     /*font-family: "Helvetica Neue", Helvetica, Arial, Roboto, sans-serif, sans-serif;*/
     -ms-overflow-style: -ms-autohiding-scrollbar
 }
@@ -11812,7 +11813,7 @@ blockquote p {
 .sidebar-panel>nav ul>li>a .fa {
     padding-right: 15px;
     width: 30px;
-    font-size: 12px;
+    font-size: 20px;
     text-align: center
 }
 
@@ -11826,22 +11827,25 @@ blockquote p {
 
 .sidebar-panel>nav li:hover>a>.fa,
 .sidebar-panel>nav li:hover>a>span {
-    text-indent: 3px
+    /*text-indent: 3px*/
 }
 
 .sidebar-panel>nav li ul li a {
     padding: 10px 25px 10px 58px
 }
-
+.sidebar-panel>nav li ul li a::before {
+    margin-top:-2px !important;
+}
 .sidebar-panel>nav li.menu-accordion>a::before {
     min-width: 15px;
+    margin-top:10px;
     text-align: center;
     -webkit-transition: transform 300ms ease;
     -moz-transition: transform 300ms ease;
     -o-transition: transform 300ms ease;
     transition: transform 300ms ease;
-    content: "\e912";
-    font: normal normal normal 10px/1 "fontello";
+    content: "\e8a4";
+    font: normal normal normal 11px/1 "fontello";
     speak: none;
     font-style: normal;
     font-weight: 400;
@@ -11852,20 +11856,21 @@ blockquote p {
     position: relative;
     display: inline-block;
     float: right;
-    margin-left: 5px
+    /*margin-left: 5px*/
 }
 
+
 .sidebar-panel>nav li.open.menu-accordion>a::before {
-    -webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    -o-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    transform: rotate(-90deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .sidebar-panel>nav li.open>a .fa,
 .sidebar-panel>nav li.open>a>span {
-    text-indent: 3px
+    /*text-indent: 3px*/
 }
 
 .sidebar-panel>nav>ul>li {
@@ -11874,12 +11879,12 @@ blockquote p {
 }
 
 .sidebar-panel>nav>ul>li>a:focus {
-    background-color: transparent
+    /*background-color: transparent*/
 }
 
 .sidebar-panel>nav>ul>li a {
     position: relative;
-    padding: 13px 25px
+    padding: 13px 20px
 }
 
 .sidebar-panel>nav>ul>li>ul {
@@ -11905,7 +11910,7 @@ blockquote p {
 }
 
 .sidebar-panel>nav>ul>li>.sub-menu .sub-menu {
-    padding-left: 20px
+    padding-left: 20px;
 }
 
 .sidebar-panel>nav .open>ul {
@@ -11953,7 +11958,7 @@ blockquote p {
         content: ''
     }
     .layout-small-menu .sidebar-panel>nav>ul>li>a {
-        padding: 15px 0
+        /*padding: 15px 0*/
     }
     .layout-small-menu .sidebar-panel>nav>ul>li>a>span {
         display: none
@@ -12032,18 +12037,27 @@ blockquote p {
 
 .sidebar-panel,
 .sidebar-panel>.brand {
-    background-color: #FFFFFF;
-    border-right: 1px solid #B9B9BB;
+    background-color: #fff;
+    /*text-transform: uppercase;*/
+    /*border-right: 1px solid #B9B9BB;*/
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .1);
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 1px rgba(0, 0, 0, .1)
+}
+
+.sidebar-panel>.brand{
+  background-color: #E75649;
 }
 
 .sidebar-panel>.brand a {
-    color: #b2b6be
+    color: #fff;
 }
 
 .sidebar-panel>.brand a:active,
 .sidebar-panel>.brand a:focus,
 .sidebar-panel>.brand a:hover {
-    color: #313567
+    color: #fff;
+    /*background-color: #474646;*/
 }
 
 .sidebar-panel>.brand .hamburger-icon span {
@@ -12055,41 +12069,62 @@ blockquote p {
 }
 
 .sidebar-panel>nav>ul>li>ul {
-    background-color: #4a5059
+    color: #888;
+    background-color: #fff;
+
+}
+
+.sidebar-panel>nav>ul>li.open>a:active {
+    color: #fff;
 }
 
 .sidebar-panel>nav>ul>li.open>a,
 .sidebar-panel>nav>ul>li.open>a:focus,
 .sidebar-panel>nav>ul>li.open>a:hover,
 .sidebar-panel>nav>ul>li>a:hover {
-    background-color: #3b4042
+    color: #333;
+    background-color: #fff;
+    /*border-left: 3px solid #71B75E;*/
 }
 
 .sidebar-panel>nav li.active>a,
 .sidebar-panel>nav li.open>a {
-    color: #fff
+    color: #333;
+    background-color: #fff;
+    /*border-left: 3px solid #71B75E;*/
 }
 
 .sidebar-panel>nav li.active>a{
-  /*background-color: #d39b46;*/
-  /*font-weight: 600 !important;*/
+  color: #333;
+  background-color: #fff;
+  /*border-left: 3px solid #71B75E;*/
+  font-weight: 600 !important;
 }
 
 .sidebar-panel>nav .open>a,
 .sidebar-panel>nav .open>a:focus,
 .sidebar-panel>nav .open>a:hover {
-    background-color: transparent
+    color: #333;
+    background-color: #fff;
+    /*border-left: 3px solid #71B75E;*/
 }
 
 .sidebar-panel>nav a {
-    color: #fff;
-    font-size: 14px
+    color: #888888;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.sidebar-panel>nav > i {
+  color:#D8DDE4;
 }
 
 .sidebar-panel>nav a:active,
 .sidebar-panel>nav a:focus,
 .sidebar-panel>nav a:hover {
-    color: #313567
+    color: #333;
+    background-color: #fff;
+    /*border-left: 3px solid #71B75E;*/
 }
 
 .quick-launch-panel {
@@ -12170,7 +12205,8 @@ blockquote p {
 
 .main-panel>.header .navbar-nav .dropdown-menu {
     margin-top: 1px;
-    padding: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
     border-color: rgba(0, 0, 0, .1);
     border-top: 0;
     background-color: #fff;
@@ -12265,7 +12301,7 @@ blockquote p {
 }
 
 .main-panel>.header a>i.fa {
-    font-size: 14px
+    font-size: 20px
 }
 
 .main-panel>.header .header-avatar {
@@ -12311,12 +12347,12 @@ blockquote p {
 }
 
 .main-panel>.header {
-    background-color: #fff
+    background-color: #444444
 }
 
 .main-panel>.header .nav>li>a,
 .main-panel>.header .navbar-text {
-    color: #616161
+    color: #A9A9A9
 }
 
 .main-panel>.header .nav .open>a,
@@ -12324,8 +12360,8 @@ blockquote p {
 .main-panel>.header .nav .open>a:hover,
 .main-panel>.header .nav>li>a:focus,
 .main-panel>.header .nav>li>a:hover {
-    background-color: #f8f8f8;
-    color: #474747
+    background-color: #383838;
+    color: #fff
 }
 
 .main-panel>.header .hamburger-icon span {
@@ -12754,7 +12790,7 @@ footer.content-footer li:hover {
 .chat-panel .chat-users .nav-tabs li.active:focus::after,
 .chat-panel .chat-users .nav-tabs li.active:hover::after,
 .chat-panel .chat-users .nav-tabs li:hover::after {
-    background-color: #E66E00
+    background-color: #E75649
 }
 
 .chat-panel .chat-users .nav-tabs li>a:focus,
@@ -13815,11 +13851,11 @@ footer.content-footer li:hover {
 }
 
 .switch.switch-primary:checked+span {
-    border-color: #E66E00;
-    -webkit-box-shadow: #E66E00 0 0 0 21px inset;
-    -moz-box-shadow: #E66E00 0 0 0 21px inset;
-    box-shadow: #E66E00 0 0 0 21px inset;
-    background-color: #E66E00
+    border-color: #E75649;
+    -webkit-box-shadow: #E75649 0 0 0 21px inset;
+    -moz-box-shadow: #E75649 0 0 0 21px inset;
+    box-shadow: #E75649 0 0 0 21px inset;
+    background-color: #E75649
 }
 
 .switch.switch-warning:checked+span {
@@ -14225,8 +14261,8 @@ fieldset[disabled] .btn-default:hover {
 
 .btn-primary {
     color: #fff;
-    background-color: #E66E00;
-    border-color: #E66E00;
+    background-color: #E75649;
+    border-color: #E75649;
     text-transform: uppercase;
     font-size: 11px;
     font-weight: 600
@@ -14243,8 +14279,8 @@ fieldset[disabled] .btn-default:hover {
 .btn-primary:hover,
 .open>.dropdown-toggle.btn-primary {
     color: #fff;
-    background-color: #bd5b16;
-    border-color: #bd5b16
+    background-color: #db493f;
+    border-color: #db493f
 }
 
 .btn-primary::before {
@@ -14255,7 +14291,7 @@ fieldset[disabled] .btn-default:hover {
     z-index: -1;
     width: 100%;
     height: 100%;
-    background-color: #bd5b16;
+    background-color: #db493f;
     -moz-opacity: 0;
     -khtml-opacity: 0;
     -webkit-opacity: 0;
@@ -14332,8 +14368,8 @@ fieldset[disabled] .btn-default:hover {
 .open>.dropdown-toggle.btn-primary:focus,
 .open>.dropdown-toggle.btn-primary:hover {
     color: #fff;
-    background-color: #bd5b16;
-    border-color: #bd5b16
+    background-color: #db493f;
+    border-color: #db493f
 }
 
 .btn-primary.disabled::before,
@@ -14359,20 +14395,20 @@ fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:active,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background-color: #E66E00;
-    border-color: #E66E00
+    background-color: #E75649;
+    border-color: #E75649
 }
 
 .btn-primary .badge {
-    color: #E66E00;
+    color: #E75649;
     background-color: #fff
 }
 
 .btn-primary.btn-outline {
     background-color: transparent;
     background-image: none;
-    border: 1px solid #E66E00;
-    color: #E66E00;
+    border: 1px solid #E75649;
+    color: #E75649;
     text-transform: uppercase;
     font-size: 11px;
     font-weight: 600
@@ -14382,7 +14418,7 @@ fieldset[disabled] .btn-primary:hover {
 .btn-primary.btn-outline:active,
 .btn-primary.btn-outline:focus,
 .btn-primary.btn-outline:hover {
-    background-color: #E66E00;
+    background-color: #E75649;
     color: #fff
 }
 
@@ -15369,7 +15405,7 @@ textarea {
 }
 
 .label-primary {
-    background-color: #E66E00
+    background-color: #E75649
 }
 
 .label-primary[href]:focus,
@@ -15645,8 +15681,8 @@ a.list-group-item-danger.active:hover {
 
 .nav>li>a:focus,
 .nav>li>a:hover {
-    background-color: #E66E00;
-    color: #fff
+    background-color: #fff;
+    color: #333
 }
 
 .nav-pills>li>a {
@@ -15658,7 +15694,7 @@ a.list-group-item-danger.active:hover {
 .nav-pills>li.active>a,
 .nav-pills>li.active>a:focus,
 .nav-pills>li.active>a:hover {
-    background-color: #E66E00;
+    background-color: #E75649;
     color: #fff
 }
 
@@ -15892,7 +15928,7 @@ a.list-group-item-danger.active:hover {
 .pagination>li>span:hover {
     border-color: #d7d7d7;
     background-color: #f1f1f1;
-    color: #E66E00;
+    color: #E75649;
 }
 
 .pagination>.active>a,
@@ -15901,8 +15937,8 @@ a.list-group-item-danger.active:hover {
 .pagination>.active>span,
 .pagination>.active>span:focus,
 .pagination>.active>span:hover {
-    border-color: #E66E00;
-    background-color: #E66E00;
+    border-color: #E75649;
+    background-color: #E75649;
     color: #fff
 }
 
@@ -16000,7 +16036,7 @@ a.list-group-item-danger.active:hover {
 }
 
 .panel-primary {
-    border-color: #E66E00
+    border-color: #E75649
 }
 
 .panel-primary>.panel-heading {
@@ -16010,16 +16046,16 @@ a.list-group-item-danger.active:hover {
 }
 
 .panel-primary>.panel-heading+.panel-collapse .panel-body {
-    border-top-color: #E66E00
+    border-top-color: #E75649
 }
 
 .panel-primary>.panel-heading .badge {
-    color: #E66E00;
+    color: #E75649;
     background-color: #fff
 }
 
 .panel-primary>.panel-footer+.panel-collapse .panel-body {
-    border-bottom-color: #E66E00
+    border-bottom-color: #E75649
 }
 
 .panel-success {
@@ -16213,7 +16249,7 @@ a.list-group-item-danger.active:hover {
 }
 
 .progress-bar {
-    background-color: #E66E00;
+    background-color: #E75649;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none
@@ -16438,7 +16474,7 @@ a.list-group-item-danger.active:hover {
 
 .bg-primary {
     color: #fff;
-    background-color: #E66E00
+    background-color: #E75649
 }
 
 a.bg-primary:hover {
@@ -16808,7 +16844,7 @@ a.bg-bluegrey:hover {
 }
 
 .text-primary {
-    color: #E66E00
+    color: #E75649
 }
 
 a.text-primary:hover {
@@ -17458,14 +17494,14 @@ a.text-bluegrey:hover {
     display: block;
     width: 100%;
     height: 100%;
-    background-color: #E66E00;
+    background-color: #E75649;
     content: ''
 }
 
 .event-type li a.active,
 .event-type li a:focus,
 .event-type li a:hover {
-    border-color: #E66E00
+    border-color: #E75649
 }
 
 .event-type li a {
@@ -17478,7 +17514,7 @@ a.text-bluegrey:hover {
 }
 
 .event-type li a.event-primary::before {
-    background-color: #E66E00
+    background-color: #E75649
 }
 
 .event-type li a.event-success::before {
@@ -17956,7 +17992,7 @@ a.text-bluegrey:hover {
     width: 34%;
     height: 5px;
     text-align: center;
-    background-color: #E66E00;
+    background-color: #E75649;
     -webkit-transition: width .6s ease;
     -moz-transition: width .6s ease;
     -o-transition: width .6s ease;
@@ -18087,9 +18123,9 @@ a.text-bluegrey:hover {
 .search-sidebar .nav>li>a:focus,
 .search-sidebar .nav>li>a:hover {
     padding-left: 19px;
-    border-left: 1px solid #E66E00;
+    border-left: 1px solid #E75649;
     background-color: transparent;
-    color: #E66E00;
+    color: #E75649;
     text-decoration: none
 }
 
@@ -18439,7 +18475,7 @@ svg.nvd3-svg {
 
 .ui-slider-range,
 .ui-slider-range-min {
-    background-color: #E66E00
+    background-color: #E75649
 }
 
 .slider-info .ui-slider-range,
@@ -18459,17 +18495,17 @@ svg.nvd3-svg {
 
 .slider-primary .ui-slider-range,
 .slider-primary .ui-slider-range-min {
-    background-color: #E66E00
+    background-color: #E75649
 }
 
 .slider-primary .ui-slider-handle {
-    -webkit-box-shadow: #E66E00 0 0 0 1px;
-    -moz-box-shadow: #E66E00 0 0 0 1px;
-    box-shadow: #E66E00 0 0 0 1px
+    -webkit-box-shadow: #E75649 0 0 0 1px;
+    -moz-box-shadow: #E75649 0 0 0 1px;
+    box-shadow: #E75649 0 0 0 1px
 }
 
 .slider-primary .slider-handle.triangle {
-    border-bottom-color: #E66E00
+    border-bottom-color: #E75649
 }
 
 .slider-success .ui-slider-range,
@@ -18533,11 +18569,11 @@ div.tagsinput {
 }
 
 div.tagsinput span.tag {
-    border-color: #E66E00;
+    border-color: #E75649;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
-    background: #E66E00;
+    background: #E75649;
     color: #fff;
     font-family: inherit;
     padding: 2px 5px
@@ -18818,16 +18854,16 @@ ul.wysihtml5-toolbar .dropdown-menu {
 }
 
 .c3 .c3-tooltip tr {
-    border-color: #E66E00
+    border-color: #E75649
 }
 
 .c3 .c3-tooltip th {
-    background-color: #E66E00;
+    background-color: #E75649;
     font-size: 13px
 }
 
 .c3 .c3-tooltip td {
-    border-left-color: #E66E00
+    border-left-color: #E75649
 }
 
 .canvas-holder {
@@ -18869,11 +18905,11 @@ ul.wysihtml5-toolbar .dropdown-menu {
 }
 
 .cb-radio.checked i {
-    background-color: #E66E00
+    background-color: #E75649
 }
 
 .cb-radio:hover .cb-inner {
-    border-color: #E66E00
+    border-color: #E75649
 }
 
 .cb-checkbox .cb-inner,
@@ -18888,12 +18924,12 @@ ul.wysihtml5-toolbar .dropdown-menu {
 }
 
 .cb-checkbox.checked .cb-inner {
-    border-color: #E66E00;
-    background-color: #E66E00
+    border-color: #E75649;
+    background-color: #E75649
 }
 
 .cb-checkbox:hover .cb-inner {
-    border-color: #E66E00
+    border-color: #E75649
 }
 
 .cb-checkbox .cb-inner,
@@ -18984,7 +19020,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 24px;
-    content: '\e82d';
+    content: '\e82c';
     position: absolute;
     top: 50%;
     right: 5px;
@@ -19011,7 +19047,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 24px;
-    content: "\e929";
+    content: "\e8a4";
     position: absolute;
     top: 50%;
     right: 5px;
@@ -19094,7 +19130,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
     line-height: 16px;
-    content: "\e91a";
+    content: "\e81d"; /* Delete */
     position: absolute;
     top: 50%;
     right: 0;
@@ -19339,8 +19375,8 @@ table.dataTable thead .sorting_desc {
 .datepicker table tr td.active:hover {
     position: relative;
     color: #fff;
-    background-color: #E66E00;
-    border-color: #E66E00;
+    background-color: #E75649;
+    border-color: #E75649;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, .25)
 }
 
@@ -19376,7 +19412,7 @@ table.dataTable thead .sorting_desc {
 .open>.dropdown-toggle.datepicker table tr td.active.disabled:hover,
 .open>.dropdown-toggle.datepicker table tr td.active:hover {
     color: #fff;
-    background-color: #E66E00;
+    background-color: #E75649;
     border-color: #007399
 }
 
@@ -19611,15 +19647,15 @@ fieldset[disabled] .datepicker table tr td.active:hover.focus,
 fieldset[disabled] .datepicker table tr td.active:hover:active,
 fieldset[disabled] .datepicker table tr td.active:hover:focus,
 fieldset[disabled] .datepicker table tr td.active:hover:hover {
-    background-color: #E66E00;
-    border-color: #E66E00
+    background-color: #E75649;
+    border-color: #E75649
 }
 
 .datepicker table tr td.active .badge,
 .datepicker table tr td.active.disabled .badge,
 .datepicker table tr td.active.disabled:hover .badge,
 .datepicker table tr td.active:hover .badge {
-    color: #E66E00;
+    color: #E75649;
     background-color: #fff
 }
 
@@ -19629,8 +19665,8 @@ fieldset[disabled] .datepicker table tr td.active:hover:hover {
 .datepicker table tr td.active:hover.btn-outline {
     background-color: transparent;
     background-image: none;
-    border-color: #E66E00;
-    color: #E66E00
+    border-color: #E75649;
+    color: #E75649
 }
 
 .datepicker table tr td.active.btn-outline.active,
@@ -19649,7 +19685,7 @@ fieldset[disabled] .datepicker table tr td.active:hover:hover {
 .datepicker table tr td.active:hover.btn-outline:active,
 .datepicker table tr td.active:hover.btn-outline:focus,
 .datepicker table tr td.active:hover.btn-outline:hover {
-    background-color: #E66E00;
+    background-color: #E75649;
     color: #fff
 }
 
@@ -19665,8 +19701,8 @@ fieldset[disabled] .datepicker table tr td.active:hover:hover {
 .datepicker table tr td span.active:hover {
     position: relative;
     color: #fff;
-    background-color: #E66E00;
-    border-color: #E66E00;
+    background-color: #E75649;
+    border-color: #E75649;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, .25)
 }
 
@@ -19702,7 +19738,7 @@ fieldset[disabled] .datepicker table tr td.active:hover:hover {
 .open>.dropdown-toggle.datepicker table tr td span.active.disabled:hover,
 .open>.dropdown-toggle.datepicker table tr td span.active:hover {
     color: #fff;
-    background-color: #E66E00;
+    background-color: #E75649;
     border-color: #007399
 }
 
@@ -19937,15 +19973,15 @@ fieldset[disabled] .datepicker table tr td span.active:hover.focus,
 fieldset[disabled] .datepicker table tr td span.active:hover:active,
 fieldset[disabled] .datepicker table tr td span.active:hover:focus,
 fieldset[disabled] .datepicker table tr td span.active:hover:hover {
-    background-color: #E66E00;
-    border-color: #E66E00
+    background-color: #E75649;
+    border-color: #E75649
 }
 
 .datepicker table tr td span.active .badge,
 .datepicker table tr td span.active.disabled .badge,
 .datepicker table tr td span.active.disabled:hover .badge,
 .datepicker table tr td span.active:hover .badge {
-    color: #E66E00;
+    color: #E75649;
     background-color: #fff
 }
 
@@ -19955,8 +19991,8 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
 .datepicker table tr td span.active:hover.btn-outline {
     background-color: transparent;
     background-image: none;
-    border-color: #E66E00;
-    color: #E66E00
+    border-color: #E75649;
+    color: #E75649
 }
 
 .datepicker table tr td span.active.btn-outline.active,
@@ -19975,7 +20011,7 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
 .datepicker table tr td span.active:hover.btn-outline:active,
 .datepicker table tr td span.active:hover.btn-outline:focus,
 .datepicker table tr td span.active:hover.btn-outline:hover {
-    background-color: #E66E00;
+    background-color: #E75649;
     color: #fff
 }
 
@@ -20042,8 +20078,8 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: #E66E00;
-    border-color: #E66E00;
+    background-color: #E75649;
+    border-color: #E75649;
     color: #fff
 }
 
@@ -20076,8 +20112,8 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
 
 .daterangepicker .ranges li.active,
 .daterangepicker .ranges li:hover {
-    background: #E66E00;
-    border-color: #E66E00
+    background: #E75649;
+    border-color: #E75649
 }
 
 .dropzone {
@@ -20121,7 +20157,7 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
 }
 
 .dropzone .dz-preview .dz-progress .dz-upload {
-    background: #E66E00
+    background: #E75649
 }
 
 .dropzone .dz-preview .dz-details .dz-filename:hover span {
@@ -20189,7 +20225,8 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
     top: 0;
     content: '%';
     font-size: .5em;
-    font-family: Helvetica, Georgia, serif
+    font-family: 'Lato', sans-serif;
+    /*font-family: Helvetica, Georgia, serif*/
 }
 
 #tooltip {
@@ -20197,7 +20234,7 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
     display: none;
     padding: 5px 10px;
     border: 0;
-    background-color: #E66E00;
+    background-color: #E75649;
     color: #fff;
     line-height: 1
 }
@@ -20211,7 +20248,7 @@ fieldset[disabled] .datepicker table tr td span.active:hover:hover {
     height: 0;
     border-width: 6px;
     border-style: solid;
-    border-color: transparent #E66E00 transparent transparent;
+    border-color: transparent #E75649 transparent transparent;
     content: ''
 }
 
@@ -20325,7 +20362,7 @@ td.legendLabel {
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
-    border: 1px solid #E66E00;
+    border: 1px solid #E75649;
     background: #fff;
     color: #616161;
     font-family: inherit
@@ -20341,8 +20378,8 @@ td.legendLabel {
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
-    border-color: #E66E00;
-    background-color: #E66E00
+    border-color: #E75649;
+    background-color: #E75649
 }
 
 .jvectormap-zoomin,
@@ -25225,6 +25262,10 @@ fieldset[disabled] .btn-yahoo:hover {
     margin-bottom: 2px
 }
 
+.f14 {
+    font-size: 14px;
+}
+
 .no-padding:not(.main-content) {
     padding: 0!important
 }
@@ -25583,7 +25624,7 @@ td.align-middle {
 }
 
 .border-primary {
-    border-color: #E66E00
+    border-color: #E75649
 }
 
 .border-default {
@@ -25729,7 +25770,7 @@ td.align-middle {
 .feather-list a:hover [class^=icon-],
 .fontawesome-list a:hover .fa {
     top: 5px;
-    color: #E66E00;
+    color: #E75649;
     font-size: 1.5em
 }
 
