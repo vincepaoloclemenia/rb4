@@ -13,7 +13,7 @@
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-								i.icon-maxicons2-search
+								i.icon-glyph-42
 
 .panel
 	.panel-heading.border.pb45
@@ -23,6 +23,10 @@
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i>Export to PDF".html_safe, "javascript:;", data: { toggle: "modal", target: ".export-pdf-modal" }, class: "btn btn-success btn-round btn-outline mr10"
 				= link_to "<i class='icon-glyph-185 f14 mr5'></i>Create Inventory".html_safe, new_inventory_path, class: "btn btn-success btn-round btn-outline"
 	.panel-body
+		.alert.alert-info.text-center role="alert"
+			| Oops! No records found.<br> To start tracking your inventories click&nbsp;
+			b "Create Inventory"
+			| &nbsp;button
 		| Show
 		.btn-group.mb10
 			- params[:show] = "10" if params[:show].nil?
@@ -67,7 +71,8 @@
 	.modal-dialog
 		.modal-content
 			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true" x
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-glyph-27
 				h4.modal-title Export to PDF
 			.modal-body
 				= form_tag({action: 'index', format: :pdf}, method: :get)
