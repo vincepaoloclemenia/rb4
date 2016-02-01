@@ -5,34 +5,38 @@
 				.row
 					.col-xs-6.col-xs-3
 						= f.label :item_id_in, "Item"
-						= f.select :item_id_in, current_brand.items.pluck(:name, :id), {}, class: "chosen", placeholder: "Select", multiple: true
+						= f.select :item_id_in, current_brand.items.pluck(:name, :id), {}, class: "chosen", placeholder: "Search", multiple: true
 					.col-xs-6.col-xs-3
 						= f.label :purchase_purchase_date_cont, "Purchase Date"
 						- if params[:q][:purchase_purchase_date_gteq].present? && params[:q][:purchase_purchase_date_lteq].present?
-							= f.text_field :purchase_purchase_date_cont, class: "form-control drp", placeholder: "Select", value: "#{to_datepicker_format(params[:q][:purchase_purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_purchase_date_lteq])}"
+							= f.text_field :purchase_purchase_date_cont, class: "form-control drp", placeholder: "Search", value: "#{to_datepicker_format(params[:q][:purchase_purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_purchase_date_lteq])}"
 						- else
-							= f.text_field :purchase_purchase_date_cont, class: "form-control drp", placeholder: "Select"
+							= f.text_field :purchase_purchase_date_cont, class: "form-control drp", placeholder: "Search"
 					.col-xs-6.col-xs-3
 						= f.label :purchase_branch_id_in, "Branch"
-						= f.select :purchase_branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
+						= f.select :purchase_branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
 					.col-xs-6.col-xs-3
 						= f.label :purchase_supplier_id_in, "Supplier"
-						= f.select :purchase_supplier_id_in, @suppliers, {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
+						= f.select :purchase_supplier_id_in, @suppliers, {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
 				.row.mt10
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-								i.icon-maxicons2-search
+								i.icon-glyph-42
 
-.panel.panel-primary
-	.panel-heading
+.panel
+	.panel-heading.border.pb45
 		.pull-left.mt7 Item Purchase Detail
 		.pull-right
 			- if view_access_control('purchases','create')
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as Excel".html_safe, item_purchase_detail_path(format: :xlsx, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
-				|  
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, item_purchase_detail_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as Excel".html_safe, item_purchase_detail_path(format: :xlsx, q: request.params[:q]), class: "btn btn-success btn-round btn-outline mr10", target: "_blank"
+				|
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, item_purchase_detail_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
+		.alert.alert-info.text-center role="alert"
+			| Oops! There seems to be no records of item purchase here.<br> To find out about your purchase details: <br> Please go to
+			b
+				|  Data Entry > Purchases > Create Purchase
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead
@@ -44,13 +48,13 @@
 						th Quantity
 						th Unit Amount
 						th Total Amount
-				tbody			
+				tbody
 					- @purchase_items = @purchases.group_by{|t| t.purchase_id }
 					- if @purchase_items.empty?
-						td colspan="7"
-							| No records found from 
+						td.text-center colspan="7"
+							| No records found from &nbsp;
 							i
-								b 
+								b
 									= "#{to_datepicker_format(params[:q][:purchase_purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_purchase_date_lteq])}"
 					- @purchase_items.each do |test, purchase_items|
 					  - @total_unit_amount = 0
@@ -77,7 +81,7 @@
 						    td class="text-right" = listing.purchase.supplier.name
 						    td class="text-right" = listing.item.name
 						    td class="text-right" = number_with_precision(@quantity, precision: 2)
-						    td class="text-right" = number_to_currency(@unit_price, precision: 2, unit: '')     
+						    td class="text-right" = number_to_currency(@unit_price, precision: 2, unit: '')
 						    td class="text-right" = number_to_currency(@total_purchase_amount, precision: 2, unit: '')
 						    - @total_quantity += @quantity.to_f
 						    - @total_purchase += @total_purchase_amount
@@ -85,16 +89,16 @@
 						    - @total_unit_amount += @unit_price
 
 						  tr
-						    - if purchase_items.count != 1   
+						    - if purchase_items.count != 1
 						      td colspan="4"
 						      - sum = vat_computation_summary(purchase_items)
-						      td class="text-right" style="background-color: #DFDFDF;" 
+						      td class="text-right" style="background-color: #DFDFDF;"
 						      	b
 						       	= number_with_precision(@total_quantity, precision: 2, unit: '')
-						      td class="text-right" style="background-color: #DFDFDF;" 
+						      td class="text-right" style="background-color: #DFDFDF;"
 						        b
 						        	= number_to_currency(sum[2] / @total_quantity , precision: 2, unit: '')
-						      td class="text-right" style="background-color: #DFDFDF;" 
+						      td class="text-right" style="background-color: #DFDFDF;"
 						        b
 						        	= number_to_currency(sum[2], precision: 2, unit: '')
 						    - else

@@ -33,6 +33,10 @@
 				|
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
+		.alert.alert-info.text-center role="alert"
+			| Oops! There seems to be no records of purchase list here.<br> To get the list of purchase: <br> Please go to
+			b
+				|  Data Entry > Purchases > Create Purchase
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead

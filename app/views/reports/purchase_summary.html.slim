@@ -20,13 +20,17 @@
 
 .panel
 	.panel-heading.border.pb45
-		.pull-left.mt7 Purchase List
+		.pull-left.mt7 Purchase Summary
 		.pull-right
 			- if view_access_control('purchases','create')
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as Excel".html_safe, purchase_summary_path(format: :xlsx, q: request.params[:q]), class: "btn btn-success btn-round btn-outline mr10", target: "_blank"
 				|
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_summary_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
+		.alert.alert-info.text-center role="alert"
+			| Oops! There seems to be no records of purchase summary here.<br> To get the your purchase summary: <br> Please go to
+			b
+				|  Data Entry > Purchases > Create Purchase
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead
