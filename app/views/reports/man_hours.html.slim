@@ -4,10 +4,14 @@
 			= form_for man_hours_path, method: 'get' do
 				= render 'branch_date_search'
 
-.panel.panel-primary
+.panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Man Hours
 	.panel-body
+		.alert.alert-info.text-center role="alert"
+			| Oops! There seems to be no records of employee types here.<br> To track employee labour hours: <br> Please go to
+			b
+				|  Setup > Labor Setup > Employee Type
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead

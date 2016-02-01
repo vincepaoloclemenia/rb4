@@ -3,36 +3,40 @@
 		.panel-body
 			= search_form_for @q, url: purchase_listings_path do |f|
 				.row
-					.col-xs-6.col-xs-3
+					.col-xs-6.col-xs-6.mb5
 						= f.label :invoice_number_cont, "Invoice No."
-						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Select"
-					.col-xs-6.col-xs-3
+						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Search"
+					.col-xs-6.col-xs-6.mb5
 						= f.label :purchase_date_cont, "Purchase Date"
 						- if params[:q][:purchase_date_gteq].present? && params[:q][:purchase_date_lteq].present?
-							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", value: "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search", value: "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
 						- else
-							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select"
-					.col-xs-6.col-xs-3
+							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
+					.col-xs-6.col-xs-6
 						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
-					.col-xs-6.col-xs-3
+						= f.select :branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
+					.col-xs-6.col-xs-6
 						= f.label :supplier_id_eq, "Supplier"
-						= f.select :supplier_id_in, @suppliers, {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
+						= f.select :supplier_id_in, @suppliers, {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
 				.row.mt10
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-								i.icon-maxicons2-search
+								i.icon-glyph-42
 
-.panel.panel-primary
-	.panel-heading
+.panel
+	.panel-heading.border.pb45
 		.pull-left.mt7 Purchase List
 		.pull-right
 			- if view_access_control('purchases','create')
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as Excel".html_safe, purchase_listings_path(format: :xlsx, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
-				|  
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as Excel".html_safe, purchase_listings_path(format: :xlsx, q: request.params[:q]), class: "btn btn-success btn-round btn-outline mr10", target: "_blank"
+				|
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
+		.alert.alert-info.text-center role="alert"
+			| Oops! There seems to be no records of purchase list here.<br> To get the list of purchase: <br> Please go to
+			b
+				|  Data Entry > Purchases > Create Purchase
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead
@@ -50,10 +54,10 @@
 					- total_purchases_net_amount = 0
 					- total_purchases_total_amount = 0
 					- if @purchases.empty?
-						td colspan="9"
-							| No records found from 
+						td.text-center colspan="9"
+							| No records found from &nbsp;
 							i
-								b 
+								b
 									= "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
 					- else
 						- @purchases.each do |purchase|

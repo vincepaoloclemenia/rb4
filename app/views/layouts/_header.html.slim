@@ -10,10 +10,10 @@ header.header.navbar
 				- if ["index", "price_movement_report", "invoice_entry", "invoice_entry_report","man_hours","purchase_listings","purchase_summary","item_purchase_detail"].include?(params[:action])	&& ["reports", "purchases","inventories","units"].include?(params[:controller])
 					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
 						span.show-ctrls
-							i.icon-maxicons1-arrowdown-01.show-icon.mr5
+							i.icon-glyph-48.show-icon.mr5
 							| Show Search
 						span.hide-ctrls
-							i.icon-maxicons1-arrowdown-02.show-icon.mr5
+							i.icon-glyph-202.show-icon.mr5
 							| Hide Search
 
 	ul.nav.navbar-nav.navbar-right.hidden-xs
@@ -30,10 +30,10 @@ header.header.navbar
 		- if wizard_done?
 			li
 				a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Tour"
-					i.fa.icon-maxicons3-light
+					i.fa.icon-glyph-166
 			li
 				a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Support"
-					i.fa.icon-maxicons3-lifebuoy
+					i.fa.icon-glyph-179
 			li
 				a href="javascript:;" data-toggle="dropdown"
 					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
@@ -42,7 +42,7 @@ header.header.navbar
 						- current_client.brands.each do |brand|
 							li
 								- if current_brand.name == brand.name
-									= link_to "#{brand.name}<i class='icon-maxicons1-check pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
+									= link_to "#{brand.name}<i class='icon-glyph-26 pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
 								- else
 									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
 		li
