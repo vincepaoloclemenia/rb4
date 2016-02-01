@@ -6,6 +6,14 @@ class Subscription < ActiveRecord::Base
   has_many :branches, through: :branch_subscriptions
   has_many :payment_notifications
 
+  def self.free_trial
+    find_by_status_and_plan_id("Active", 1)
+  end
+
+  def self.except_free_trial
+    where("plan_id != ?", 1)
+  end
+
   def save_with_payment
     if valid?
       if paypal_payment_token.present?

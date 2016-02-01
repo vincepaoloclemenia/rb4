@@ -6,6 +6,7 @@
 		.col-xs-12
 			= f.label :plan_id, "Plan"
 			= f.select :plan_id, Plan.all.where(plan_type: "Subscription").pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+	.row.mb10
 		.col-xs-12
 			.no-more-tables
 				table.table.table-bordered.mb0
@@ -21,10 +22,16 @@
 									= link_to "here", brand_path(current_brand)
 						- else
 							= f.collection_check_boxes :branches, current_client.branches.all_unsubscribed, :id, :name do |b|
-								tr
-									= b.label do
-										td style="text-align: center" = b.check_box
-										td = b.label
+								- if b.object.subscription && b.object.subscription.plan_id.eql?(1)
+									tr
+										= b.label do
+											td style="text-align: center" = b.check_box
+											td = "#{b.label} (Free Trial: #{distance_of_time_in_words_to_now(b.object.subscription.end_date)} left)".html_safe
+								- else
+									tr
+										= b.label do
+											td style="text-align: center" = b.check_box
+											td = b.label
 
 			/= f.select :branches, current_client.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select branches to include" }, style: "width: 100%; display: none;", multiple: true
 	.row.mb10

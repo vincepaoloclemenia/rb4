@@ -18,7 +18,7 @@ class Branch < ActiveRecord::Base
   after_create :set_default_color
 
   def self.all_unsubscribed
-    select { |b| b.subscription.nil? }
+    select { |b| b.subscription.nil? || b.subscription.plan_id.eql?(1) }
   end
 
   def set_default_color

@@ -2,7 +2,8 @@ class SubscriptionsController < ApplicationController
 	before_action :authenticate_user!
 
 	def index
-		@subscriptions = current_client.subscriptions
+		@subscriptions = current_client.subscriptions.except_free_trial
+		@free_trial = current_client.subscriptions.free_trial
 	end
 
 	def new
@@ -39,6 +40,10 @@ class SubscriptionsController < ApplicationController
 				@subscription.period = plan.period
 				if @subscription.save_with_payment
 					branches.each do |b|
+						branch = Branch.find(b)
+						if branch.subscription && branch.subscription.plan_id.eql?(1)
+							branch.subscription.branch_subscriptions.find_by_branch_id(b).destroy
+						end
 						@subscription.branch_subscriptions.create(branch_id: b)
 					end
 					redirect_to subscriptions_path, notice: "Subscription is now being processed by PayPal. This could only take a few moments."

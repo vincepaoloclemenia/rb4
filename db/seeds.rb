@@ -34,7 +34,7 @@ Section.find_or_create_by name: "bills", page: "Bills"
 puts "Done!"
 
 puts "Loading plans.."
-Plan.find_or_create_by name: "Free Trial", description: "Free trial for 2 months", amount: 0.00, plan_type: "Free", period: "monthly", brand_limit: 1, branch_limit: 3, duration_in_days: 2
+Plan.find_or_create_by name: "Free Trial", description: "Free trial for 2 months", amount: 0.00, plan_type: "Free", period: "monthly", brand_limit: 1, branch_limit: 3, duration_in_days: 60
 Plan.find_or_create_by name: "Monthly Payment", description: "Monthly payment with unlimited usage", amount: 39.99, plan_type: "Subscription", period: "monthly", brand_limit: 0, branch_limit: 0
 Plan.find_or_create_by name: "Yearly Payment", description: "Yearly payment with unlimited usage", amount: 399.99, plan_type: "Subscription", period: "yearly", brand_limit: 0, branch_limit: 0
 puts "Done!"
