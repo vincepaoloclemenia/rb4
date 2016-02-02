@@ -49,7 +49,7 @@ class Subscription < ActiveRecord::Base
 
   # Remove subscription of branches with 'Cancelled' subscription
   def self.process_cancelled_subscriptions
-    subscriptions = Subscription.where(status: "Cancelled").where("next_payment >= ?", DateTime.now)
+    subscriptions = Subscription.where(status: "Cancelled").where("end_date >= ?", DateTime.now)
     if subscriptions.empty?
       puts "======== No 'Cancelled' subscriptions Found for today ========"
     else
@@ -69,7 +69,7 @@ class Subscription < ActiveRecord::Base
 
   # Change expired free trial subscription
   def self.process_free_trial_subscriptions
-    subscriptions = Subscription.where(plan_id: 1).where("next_payment >= ?", DateTime.now)
+    subscriptions = Subscription.where(plan_id: 1).where("end_date >= ?", DateTime.now)
     if subscriptions.empty?
       puts "======== No 'Expired' subscriptions found today ========"
     else

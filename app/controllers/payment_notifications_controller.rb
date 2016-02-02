@@ -15,8 +15,10 @@ class PaymentNotificationsController < ApplicationController
      	when "recurring_payment_profile_created"
      		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
      		subscription.update_attributes(status: params[:profile_status], 
-     																	previous_payment: DateTime.now.in_time_zone, 
-     																	next_payment: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly), 
+                                      start_date: DateTime.now.in_time_zone,
+                                      end_date: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly),
+     																	previous_payment: DateTime.strptime(params[:payment_date], "%I:%M:%S %b %d, %Y %Z").in_time_zone, 
+     																	next_payment: DateTime.strptime(params[:next_payment_date], "%I:%M:%S %b %d, %Y %Z").in_time_zone, 
      																	outstanding_balance: params[:outstanding_balance])
      		# subscription.bills.create(amount: subscription.amount,
      		# 													payer_email: subscription.paypal_email,
@@ -25,14 +27,19 @@ class PaymentNotificationsController < ApplicationController
        #                            client_id: subscription.client_id)
      	when "recurring_payment"
      		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
-     		subscription.update_attributes(previous_payment: DateTime.now.in_time_zone, 
-     																	next_payment: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly),
+     		subscription.update_attributes(start_date: DateTime.now.in_time_zone,
+                                      end_date: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly),
+                                      previous_payment: DateTime.strptime(params[:payment_date], "%I:%M:%S %b %d, %Y %Z").in_time_zone, 
+     																	next_payment: DateTime.strptime(params[:next_payment_date], "%I:%M:%S %b %d, %Y %Z").in_time_zone,
      																	outstanding_balance: params[:outstanding_balance])
-     		subscription.bills.create(amount: params[:mc_gross],
+     		subscription.bills.create(client_id: subscription.client_id,
+                                  amount: params[:mc_gross],
      															payer_email: subscription.paypal_email,
      															status: params[:payment_status],
      															branches: subscription.branches.pluck(:name).join(", "),
-     															transaction_id: params[:txn_id])
+     															transaction_id: params[:txn_id],
+                                  start_date: DateTime.now.in_time_zone,
+                                  end_date: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly))
      	when "recurring_payment_outstanding_payment"
      	when "recurring_payment_expired"
      		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
