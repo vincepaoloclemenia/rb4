@@ -6,7 +6,7 @@ class DashboardController < ApplicationController
 	def index
 		@branches = current_brand.branches.order(:id)
 		@branches_sales = branches_sales
-		@brands_sales = brands_sales
+		@brand_sales = brand_sales
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
 		@branch_cost_stat = branch_purchase_cost_stat
@@ -79,38 +79,36 @@ class DashboardController < ApplicationController
 	 	create_chart(current_brand.name, "Branches", range_dates.map{|a| a.strftime("%b %d,%Y | %a")}, total_purchases, @branches.pluck(:name), "line",  @branches.pluck(:color))
 	end
 
+ 	@sales_per_branch_total = Array.new
  	def branches_sales
- 		start_day = Date.today - 7
- 		range_dates = start_day..(Date.today-1)
-
- 		@branches_sales = Array.new
+ 		range_date = (Date.today - 7)..(Date.today - 1)
+ 		sales_total_amount = Array.new
  		current_brand.branches.each_with_index do |branch, index|
- 			hash = Hash.new
- 			total_day_amount = Array.new
- 			range_dates.each_with_index do |date, index|
- 				sales = Sale.where(sale_date: date, branch_id: branch.id)
- 				amount = 0
- 				sales.each do |sale|	
- 					amount += sale.net_sales
+ 			amount = Array.new
+ 			range_date.each_with_index do |date, index|
+ 				dashboard = Dashboard.where(previous_date_entry: date, branch_id: branch.id, brand_id: current_brand.id).first
+ 				if dashboard.nil?
+ 					amount[index] = 0
+ 				else
+ 					amount[index] = dashboard.sales_total_amount.to_i
  				end
- 				total_day_amount[index] = amount.to_i
  			end
- 			hash[:branch_name] = branch.name
- 			hash[:amount] = total_day_amount
- 			@branches_sales[index] = hash
+ 			sales_total_amount[index] = amount
  		end
- 		create_chart(current_brand.name, "Branches", range_dates.map{|a| a.strftime("%b %d, %Y | %a")}, @branches_sales.map{|c|c[:amount]}, @branches_sales.map{|n| n[:branch_name]}, "column", @branches.pluck(:color))
+ 		@sales_per_branch_total = sales_total_amount
+ 		create_chart(current_brand.name, "Branches", range_date.map{|a| a.strftime("%b %d, %Y | %a")}, sales_total_amount, @branches.pluck(:name), "column", @branches.pluck(:color))
  	end
 
- 	def brands_sales
- 		
+ 	def brand_sales
+ 		range_date = (Date.today - 7)..(Date.today - 1)
+ 		brand_total_sale = @sales_per_branch_total.transpose.map{|x| x.reduce(:+)}
+ 		create_chart(current_brand.name, "Brand", range_date.map{|a| a.strftime("%b %d, %Y | %a")}, brand_total_sale, "Total Amount", "column", @branches.pluck(:color))
  	end
  		
 	def create_chart(title, subtitle, categories, data, names, chartType, colors)
 	  LazyHighCharts::HighChart.new('graph') do |f|
 		  f.title(text: title)
 		  f.subtitle(text: subtitle)
-		  # raise
 		  f.xAxis(categories: categories)
 		  if names.instance_of? Array
 			  data.each_with_index do |d, index|
