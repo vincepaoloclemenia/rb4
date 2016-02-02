@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160129052757) do
+ActiveRecord::Schema.define(version: 20160202024808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 20160129052757) do
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.decimal  "purchase_total_amount"
+    t.decimal  "sales_total_amount"
   end
 
   add_index "dashboards", ["branch_id"], name: "index_dashboards_on_branch_id", using: :btree
