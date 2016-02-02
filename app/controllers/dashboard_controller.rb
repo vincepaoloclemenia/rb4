@@ -4,8 +4,9 @@ class DashboardController < ApplicationController
 	include ReportsHelper
 
 	def index
-		Dashboard.populate_dashboard
 		@branches = current_brand.branches.order(:id)
+		@branches_sales = branches_sales
+		@brands_sales = brands_sales
 		@update_customer_count = update_customer_count(@branches)
 		@price_movement = price_movement_dashboard
 		@branch_cost_stat = branch_purchase_cost_stat
@@ -23,9 +24,9 @@ class DashboardController < ApplicationController
 			# arr.append(customer_count)
 			arr[index] = hash
 		end
-
-	# raise 
-		create_chart(current_brand.name, "Brand", @branches.pluck(:name), arr, " ", "pie", @branches.pluck(:color))
+		a = ""
+		arr.map{|x| x[:y] == 0 ? a = "bar" : a = "pie"}
+		create_chart(current_brand.name, "Brand", @branches.pluck(:name), arr, " ", a, @branches.pluck(:color))
 	end
 
 	def price_movement_dashboard
@@ -76,6 +77,33 @@ class DashboardController < ApplicationController
 		 	total_purchases[index] = total_day_amount
  		end
 	 	create_chart(current_brand.name, "Branches", range_dates.map{|a| a.strftime("%b %d,%Y | %a")}, total_purchases, @branches.pluck(:name), "line",  @branches.pluck(:color))
+	end
+
+ 	def branches_sales
+ 		start_day = Date.today - 7
+ 		range_dates = start_day..(Date.today-1)
+
+ 		@branches_sales = Array.new
+ 		current_brand.branches.each_with_index do |branch, index|
+ 			hash = Hash.new
+ 			total_day_amount = Array.new
+ 			range_dates.each_with_index do |date, index|
+ 				sales = Sale.where(sale_date: date, branch_id: branch.id)
+ 				amount = 0
+ 				sales.each do |sale|	
+ 					amount += sale.net_sales
+ 				end
+ 				total_day_amount[index] = amount.to_i
+ 			end
+ 			hash[:branch_name] = branch.name
+ 			hash[:amount] = total_day_amount
+ 			@branches_sales[index] = hash
+ 		end
+ 		create_chart(current_brand.name, "Branches", range_dates.map{|a| a.strftime("%b %d, %Y | %a")}, @branches_sales.map{|c|c[:amount]}, @branches_sales.map{|n| n[:branch_name]}, "column", @branches.pluck(:color))
+ 	end
+
+ 	def brands_sales
+ 		
  	end
  		
 	def create_chart(title, subtitle, categories, data, names, chartType, colors)

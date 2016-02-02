@@ -1,9 +1,5 @@
 class Dashboard < ActiveRecord::Base
-	
-	# def self.sample
-	# 	puts "DASHBOARD MODEl"
-	# end
-	
+		
 	def self.populate_dashboard
 		brands = Brand.all
 		brands.each do |brand|

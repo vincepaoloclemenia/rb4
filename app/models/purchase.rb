@@ -36,8 +36,4 @@ class Purchase < ActiveRecord::Base
 		end
 		return total_amount
 	end
-
-	def sample
-		puts "Dashboard Model"
-	end
 end

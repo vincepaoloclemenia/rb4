@@ -14,6 +14,7 @@
                 i.fa.fa-thumbs-down.mr5
                 | Brands
       .panel-body
+        = high_chart("branch_sales", @branches_sales)
 
   .col-xs-12.col-md-12.col-lg-4
     / .widget.bg-danger-light
@@ -25,7 +26,7 @@
     .panel.panel-primary
       .panel-heading style="font-size:11px"
         .pull-left Customer Count
-        .panel-controls.no-upp
+        .panel-controls.no-up
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
             i.icon-maxicons1-refresh
       .panel-body
@@ -38,9 +39,9 @@
         .panel-controls.no-upp.nav-tabs
           ul.nav.nav-tabs.btn-group data-toggle="buttons"
             label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
-              a data-toggle="tab" href="#brand-info"  Brand Information
+              a data-toggle="tab" href="#brand-info"  Brand Total
             label.btn.btn-primary class="#{brand_pane_active?('branches')}"
-              a data-toggle="tab" href="#branches-list"  Branches
+              a data-toggle="tab" href="#branches-list"  Branches Total 
       .panel-body.tab-content
         #brand-info.tab-pane class="#{brand_pane_active?('info')}"
           = high_chart("brand_cost_stat", @purchase_cost_stat)
@@ -71,7 +72,7 @@
               - @price_movement.each_with_index do |pm, index|
                 tr
                   td data-title="Rank" = index+1
-                  td data-title="Branch" = pm[:branch_name]
+                  td data-title="Branch" = pm[:branch_name] 
                   td data-title="Item" = pm[:item]
                   td data-title="Prev Amount" = to_peso(pm[:prev_amount])
                   td data-title="Current Amount" = to_peso(pm[:present_amount])
