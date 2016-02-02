@@ -1,0 +1,5 @@
+- subtitle ||= nil
+.alert.alert-info.text-center role="alert"
+	| Oops! No records found.
+	- if subtitle
+		br = subtitle.html_safe
