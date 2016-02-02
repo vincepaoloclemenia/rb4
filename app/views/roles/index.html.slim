@@ -45,7 +45,7 @@
 													= f.label :role_level
 														| Role Level
 														small.field-req  *
-													= f.select :role_level, [["Company","client"], ["Brand","brand"], ["Branch","branch"]], {}, class: "form-control"
+													= f.select :role_level, [["Company","client"], ["Brand","brand"], ["Branch","branch"]], {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
 												.col-xs-12.mb10
 													= f.label :description
 													= f.text_area :description, class: "form-control", rows: 2
@@ -68,6 +68,11 @@
 					i.icon-glyph-27
 				h4.modal-title Create Role
 			.modal-body
+				.alert.alert-info.mt5 role="alert"
+					| You can manage permissions of the role after creating.<br>
+					i Click the role &nbsp;
+					b > Manage Permission
+
 				= form_for @role do |f|
 					.row.mb10
 						.col-xs-12.mb10

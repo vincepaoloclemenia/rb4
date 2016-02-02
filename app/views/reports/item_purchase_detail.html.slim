@@ -33,10 +33,13 @@
 				|
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, item_purchase_detail_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
-		.alert.alert-info.text-center role="alert"
-			| Oops! There seems to be no records of item purchase here.<br> To find out about your purchase details: <br> Please go to
-			b
-				|  Data Entry > Purchases > Create Purchase
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| Oops! There seems to be no records of purchase here.<br> Go to&nbsp;
+					b Data Entry > Purchases > Create Purchase
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead

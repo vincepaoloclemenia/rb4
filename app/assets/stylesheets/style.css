@@ -129,6 +129,15 @@ select {
     text-transform: none
 }
 
+a.helper-link {
+    color: #EA6153 !important;
+    text-decoration: underline;
+}
+a.helper-link:hover {
+    color: #d62c1a !important;
+    text-decoration: underline;
+}
+
 select.form-control {
     -webkit-appearance:none;
     -moz-appearance:none;
@@ -4760,7 +4769,7 @@ button.close {
     display: block;
     font-family: 'Lato', sans-serif;
     /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     line-height: 1.4;
     filter: alpha(opacity=0);
@@ -19088,7 +19097,7 @@ ul.wysihtml5-toolbar .dropdown-menu {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transform: translate(0, 0);
-    content: "\e91a";
+    content: "\e82c";
     font-size: 10px;
     color: #e4e4e4
 }
@@ -25269,6 +25278,14 @@ fieldset[disabled] .btn-yahoo:hover {
     font-size: 14px;
 }
 
+.f20 {
+    font-size: 20px;
+}
+
+.f25 {
+    font-size: 25px;
+}
+
 .no-padding:not(.main-content) {
     padding: 0!important
 }
@@ -26964,10 +26981,11 @@ select.mobile-device {
 }
 
 .refresh-icon{
-  color:#007299
+  color:#848484;
+  font-size:20px;
 }
 .refresh-icon:hover{
-  color:#4ebfe5
+  color:#565656
 }
 /* Width */
 .w180 {

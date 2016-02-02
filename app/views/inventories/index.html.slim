@@ -23,10 +23,14 @@
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i>Export to PDF".html_safe, "javascript:;", data: { toggle: "modal", target: ".export-pdf-modal" }, class: "btn btn-success btn-round btn-outline mr10"
 				= link_to "<i class='icon-glyph-185 f14 mr5'></i>Create Inventory".html_safe, new_inventory_path, class: "btn btn-success btn-round btn-outline"
 	.panel-body
-		.alert.alert-info.text-center role="alert"
-			| Oops! No records found.<br> To start tracking your inventories click&nbsp;
-			b "Create Inventory"
-			| &nbsp;button
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| Oops! No records found.<br> To start tracking your inventories click&nbsp;
+					b "Create Inventory"
+					| &nbsp;button
 		| Show
 		.btn-group.mb10
 			- params[:show] = "10" if params[:show].nil?
