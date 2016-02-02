@@ -1,10 +1,16 @@
-.panel.panel-primary
-  .panel-heading
+.panel
+  .panel-heading.border.pb45
     .pull-left.mt7 Categories
     .pull-right
       - if view_access_control('categories','create')
-        = link_to "<i class='icon-maxicons2-paste mr5'></i> Add Main Category".html_safe, new_category_path, class: "btn btn-default btn-round btn-outline", remote: true
+        = link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Main Category".html_safe, new_category_path, class: "btn btn-success btn-round btn-outline", remote: true
   .panel-body
+    .alert.alert-danger role="alert"
+      .row
+        .col-xs-1.text-right
+          i.icon-glyph-93.f25
+        .col-xs-11
+          | You currently have no list of categories.<br> Create a category to get you started.
     .row.mt30.mb10
       .col-xs-12
         .cf.nestable-lists

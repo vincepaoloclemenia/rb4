@@ -4,10 +4,13 @@
 		.pull-right
 			= link_to "<i class='icon-glyph-54 mr5 f14'></i> Export as PDF".html_safe, labor_hours_path(format: "pdf"), class: "btn btn-success btn-round btn-outline", data: { toggle: "modal", target: ".create-pdf-modal" }
 	.panel-body
-		.alert.alert-info.text-center role="alert"
-			| Oops! There seems to be no records of employees here.<br> To track employee labour hours: <br> Please go to
-			b
-				|  Setup > Labor Setup > Employee List
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| Oops! There seems to be no records of employees here. For us to track the employee labour hours: <br>Go to&nbsp;
+					b Setup > Labor Setup > Employee List
 		| Show
 		.btn-group.mb10
 		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"

@@ -23,7 +23,7 @@
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i>Export to PDF".html_safe, "javascript:;", data: { toggle: "modal", target: ".export-pdf-modal" }, class: "btn btn-success btn-round btn-outline mr10"
 				= link_to "<i class='icon-glyph-185 f14 mr5'></i>Create Inventory".html_safe, new_inventory_path, class: "btn btn-success btn-round btn-outline"
 	.panel-body
-		- if @inventories.empty?
+		- if current_brand.inventories.empty?
 			= render "partials/no_records_found", subtitle: 'To start tracking your inventories click <b>"Create Inventory"</b> button'
 		- else
 			| Show
@@ -51,6 +51,10 @@
 							th width="300" Created By
 							th width="100" data-sortable="false" Action
 					tbody
+						- if @inventories.empty?
+							tr
+								td colspan="100%" style="text-align: center"
+									em No records found
 						- @inventories.each do |inventory|
 							tr
 								td data-title="Branch" = inventory.branch.name
@@ -60,10 +64,9 @@
 									= link_to "<i class='icon-maxicons2-view'></i>".html_safe, inventory_path(inventory), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Inventory" }
 									- if view_access_control('brands','destroy')
 										= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, inventory_path(inventory), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
-				.align-center
-					p
-						= page_entries_info @inventories, renderer: BootstrapPagination::Rails
-					= will_paginate @inventories, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
+				- if @inventories.present?	
+					.align-center
+						= render "partials/pagination", collection: @inventories
 
 
 .modal.export-pdf-modal tabindex="-1" role="dialog" aria-hidden="true"

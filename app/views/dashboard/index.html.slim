@@ -1,7 +1,7 @@
 .row
   .col-xs-12.col-md-12.col-lg-8
     .panel
-      .panel-heading.border.pb45
+      .panel-heading.border.pb45 style="font-size:13px"
         .pull-left.mt5 Sales
         .panel-controls.no-upp
           ul.nav.nav-tabs.btn-group data-toggle="buttons"
@@ -23,17 +23,17 @@
     /   a.btn.btn-danger.mt5 href="javascript:;"  Update Now
 
     .panel
-      .panel-heading.border.pb45
-        .pull-left Customer Count
+      .panel-heading.border.pb45 style="font-size:13px"
+        .pull-left.mt7 Customer Count
         .panel-controls.no-upp
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
+            i.icon-glyph-98
       .panel-body
         = high_chart("customer_count", @update_customer_count)
 
   .col-xs-12
     .panel
-      .panel-heading.border.pb45
+      .panel-heading.border.pb45 style="font-size:13px"
         .pull-left.mt5 Purchase Cost Stats
         .panel-controls.no-upp.nav-tabs
           ul.nav.nav-tabs.btn-group data-toggle="buttons"
@@ -55,7 +55,7 @@
           | Lowest to Highest
         .panel-controls.no-upp
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
+            i.icon-glyph-98
       .panel-body
         .no-more-tables
           table.table.table-bordered.table-striped.mb0

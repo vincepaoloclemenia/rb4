@@ -5,6 +5,8 @@
 			- if view_access_control('users','create')
 				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add User".html_safe, '#', data: { toggle: "modal", target: ".create-user-modal" }, class: "btn btn-success btn-round btn-outline"
 	.panel-body
+		.alert.alert-info.text-center role="alert"
+			| Add unlimited users who can access restobot &amp; manage their roles.
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
@@ -123,7 +125,7 @@
 							= f.password_field :password_confirmation, class: "form-control mt25", placeholder:"Confirm Password"
 						= f.fields_for :client_user_access, current_client.users.new().client_user_access do |cua|
 							= hidden_field_tag :user_role_id, ""
-							.col-xs-12.role_field_div
+							.col-xs-12.role_field_div.mb10
 								= cua.label :role_id
 									| Role
 									small.field-req  *
@@ -131,13 +133,21 @@
 							.col-xs-12.brand_field_div
 								= cua.label :brand_id
 									| Brand
-									small.field-req *
+									small.field-req  *
 								= cua.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, id: "brand_field_id_new"
+								.alert.alert-info.mt5 role="alert"
+									| You can add Brands at &nbsp;
+									b Setup > Company Setup > Brands
 							.col-xs-12.branch_field_div
 								= cua.label :branch_id
 									| Branch
-									small.field-req *
+									small.field-req  *
 								= cua.select :branch_id, [], { include_blank: true }, class: "chosen", data: { placeholder: "Select" }
+								.alert.alert-info.mt5 role="alert"
+									| You can add more branches at<br>
+									b Setup > Company Setup > Brands >
+									i &nbsp; Click your brand &nbsp;
+									b > Add Branch
 					.row.mb10
 						.col-xs-12.mt20
 							| (

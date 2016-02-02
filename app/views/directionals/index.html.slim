@@ -12,17 +12,25 @@
 				.col-xs-12
 					.pull-right
 						button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-							i.icon-maxicons2-search
-.panel.panel-primary
+							i.icon-glyph-42
+
+.alert.alert-info role="alert"
+	.row
+		.col-xs-1.text-right
+			i.icon-glyph-73.f25
+		.col-xs-11
+			| Oops! There seems to be no records of sales here.<br>Go to&nbsp;
+			b Data Entry > Sales
+.panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Net Sales - Categories
 		.pull-right
-			button.btn.btn-default.btn-round.btn-outline.mr10
-				i.icon-maxicons1-download.mr5
+			button.btn.btn-success.btn-round.btn-outline.mr10
+				i.icon-glyph-162.f14.mr5
 				| Download as Excel
 				= link_to '', directionals_path(format: 'xls')
-			button.btn.btn-default.btn-round.btn-outline
-				i.icon-maxicons1-download.mr5
+			button.btn.btn-success.btn-round.btn-outline
+				i.icon-glyph-162.f14.mr5
 				| Download as PDF
 				= link_to '', directionals_path(format: 'pdf'), target: '_blank'
 	.panel-body

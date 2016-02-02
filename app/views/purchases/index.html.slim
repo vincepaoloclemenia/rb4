@@ -28,7 +28,7 @@
 			- if view_access_control('purchases','create')
 				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, '#', data: { toggle: "modal", target: ".create-purchase-modal" }, class: "btn btn-success btn-round btn-outline"
 	.panel-body
-		- if @purchases.empty?
+		- if current_brand.purchases.empty?
 			= render "partials/no_records_found", subtitle: 'To start tracking your purchase click <b>"Create Purchase"</b> button'
 		- else
 			| Show
@@ -83,6 +83,15 @@
 								| Supplier
 								small.field-req  *
 							= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+							.alert.alert-danger.mt5 role="alert"
+								i.icon-glyph-93.mr10.f20
+								| You currently have no list of&nbsp;
+								b suppliers
+							.alert.alert-info role="alert"
+								i.icon-glyph-166.mr10.f20
+								| To add Suppliers: Go to
+								b
+									|  Setup > Purchase Setup > Suppliers
 					.row.mb10
 						.col-xs-12.mt20
 							| (
