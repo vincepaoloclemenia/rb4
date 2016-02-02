@@ -62,9 +62,9 @@
 							td data-title="Entry Date" = to_default_date_format(inventory.entry_date)
 							td data-title="Created By" = inventory.user.full_name
 							td.action data-title="Action"
-								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, inventory_path(inventory), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Inventory" }
+								= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, inventory_path(inventory), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Inventory" }
 								- if view_access_control('brands','destroy')
-									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, inventory_path(inventory), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, inventory_path(inventory), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 			.align-center
 				p
 					= page_entries_info @inventories, renderer: BootstrapPagination::Rails

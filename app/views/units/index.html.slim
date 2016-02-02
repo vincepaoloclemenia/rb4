@@ -1,11 +1,11 @@
 = render "partials/search"
 
-.panel.panel-primary
+.panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Units
 		.pull-right
 			- if view_access_control('units','create')
-				= link_to "<i class='icon-maxicons2-paste mr5'></i> Add Unit".html_safe, new_unit_path, class: "btn btn-default btn-round btn-outline", remote: true
+				= link_to "<i class='icon-glyph-185 f14 mr5'></i> Add Unit".html_safe, new_unit_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
 		= render "partials/filter"
 		.no-more-tables
