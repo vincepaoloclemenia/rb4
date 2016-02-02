@@ -65,6 +65,15 @@
 																										- else
 																											= ii.hidden_field :item_id, value: item.id
 																											= ii.number_field :stock_count, class: "form-control", placeholder: "0"
+
+					.alert.alert-danger.mt5 role="alert"
+						i.icon-glyph-93.mr10.f20
+						| You currently have no list of&nbsp;
+						b items
+					.alert.alert-info role="alert"
+						i.icon-glyph-73.mr10.f20
+						| To add Items: Go to
+						b  Setup > Purchase Setup > Items > Add Item
 			.row
 				.col-xs-12.mt20
 					/ .align-center.mt5
