@@ -45,8 +45,8 @@
 					- @subscriptions.each do |subscription|
 							tr
 								td data-title="Plan" = subscription.plan.name
-								td data-title="Previous payment" = to_default_date_format(subscription.start_date)
-								td data-title="Next payment" = to_default_date_format(subscription.end_date)
+								td data-title="Previous payment" = to_default_date_format(subscription.previous_payment)
+								td data-title="Next payment" = to_default_date_format(subscription.next_payment)
 								td data-title="Amount" = to_dollar subscription.amount.to_f
 								/ td data-title="Period" = subscription.period
 								td data-title="Status" = subscription.status
