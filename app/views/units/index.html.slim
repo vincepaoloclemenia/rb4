@@ -7,6 +7,14 @@
 			- if view_access_control('units','create')
 				= link_to "<i class='icon-glyph-185 f14 mr5'></i> Add Unit".html_safe, new_unit_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| Oops! You curently have no units.<br> To start tracking click&nbsp;
+					b "Add Unit"
+					| &nbsp;button
 		= render "partials/filter"
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"

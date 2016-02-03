@@ -5,12 +5,14 @@
       - if view_access_control('categories','create')
         = link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Main Category".html_safe, new_category_path, class: "btn btn-success btn-round btn-outline", remote: true
   .panel-body
-    .alert.alert-danger role="alert"
+    .alert.alert-info role="alert"
       .row
         .col-xs-1.text-right
-          i.icon-glyph-93.f25
+          i.icon-glyph-73.f25
         .col-xs-11
-          | You currently have no list of categories.<br> Create a category to get you started.
+          | Oops! You currently have no categories.<br> Create a
+          b  Category
+          |  to get you started.
     .row.mt30.mb10
       .col-xs-12
         .cf.nestable-lists

@@ -3,7 +3,7 @@
     .modal-content
       .modal-header
         button.close aria-hidden="true" data-dismiss="modal" type="button"
-          i.icon-maxicons1-exit
+          i.icon-glyph-27
         h4.modal-title Edit Branch
       .modal-body
         = form_for branch, url: brand_branch_path(brand_id: @brand.id, id: branch.id), method: :put do |f|
@@ -13,18 +13,18 @@
                 .show-image.mb5
                   img.image-size src="/img/brand.png" /
                   a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-                    i.icon-maxicons1-exit
+                    i.icon-glyph-27
                 input.mb10 type="file" /
             .col-xs-12.col-md-8.col-lg-8
               .col-xs-12.mb10
                 = f.label :name
                   | Branch
-                  small.field-req *
-                = f.text_field :name, class: "form-control", placeholder: "Name"
+                  small.field-req  *
+                = f.text_field :name, class: "form-control", placeholder: "Branch Name"
               .col-xs-12.mb10
                 = f.label :color
                   | Color
-                  small.field-req *
+                  small.field-req  *
                 br
                 = f.select :color, [["Eggplant","#60355B"],["Coral","#E26A6A"],["Pumpkin","#FF4500"],["#DC143C","#DC143C"],["#FF8C00","#FF8C00"],["#C71585","#C71585"],["#1E81B4","#1E81B4"],["#00A087","#00A087"],["#DD525B","#DD525B"],["#8CAF41","#8CAF41"],["#8F7260","#8F7260"],["#4F669D","#4F669D"],["#646464","#646464"],["#AAA786","#AAA786"],["#6F9684","#6F9684"],["#98ACD1","#98ACD1"]], {}, name: "colorpicker-option-selected", id: "init"
               .col-xs-12.mb10
@@ -42,7 +42,7 @@
               .col-xs-12.mb10
                 = f.label :email_address
                   | E-mail Address
-                  small.field-req *
+                  small.field-req  *
                 = f.text_field :email_address, class: "form-control"
               .col-xs-12.col-lg-4.mb10
                 = f.label :landline_no

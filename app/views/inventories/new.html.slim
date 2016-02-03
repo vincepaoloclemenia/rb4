@@ -37,6 +37,16 @@
 											li.dd-item
 												.dd-new-handle = category.name
 												ol.dd-list
+													.alert.alert-info role="alert"
+														.row
+															.col-sm-1.text-right
+																i.icon-glyph-73.mr10.f25
+															.col-sm-11
+																| Oops! You need to have
+																b  subcategory.
+																|  To add a subcategory:<br> Go to
+																b  Setup > Purchase Setup > Categories >&nbsp;
+																= link_to '<b>Add Subcategory</b>'.html_safe, categories_path, class:'helper-link'
 													- category.subcategories.each do |subcategory|
 														- unless subcategory.items.for_inventory.empty?
 															li.dd-item
@@ -66,14 +76,16 @@
 																											= ii.hidden_field :item_id, value: item.id
 																											= ii.number_field :stock_count, class: "form-control", placeholder: "0"
 
-					.alert.alert-danger.mt5 role="alert"
-						i.icon-glyph-93.mr10.f20
-						| You currently have no list of&nbsp;
-						b items
-					.alert.alert-info role="alert"
-						i.icon-glyph-73.mr10.f20
-						| To add Items: Go to
-						b  Setup > Purchase Setup > Items > Add Item
+																			.alert.alert-info.mt5 role="alert"
+																				.row
+																					.col-sm-1.text-right
+																						i.icon-glyph-73.mr10.f25
+																					.col-sm-11
+																						| Oops! You need to have a list of
+																						b  items.
+																						|  To add an item:<br> Go to
+																						b  Setup > Purchase Setup > Items >&nbsp;
+																						= link_to '<b>Add Item</b>'.html_safe, items_path, class:'helper-link'
 			.row
 				.col-xs-12.mt20
 					/ .align-center.mt5
