@@ -28,7 +28,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def show_branches
-  	@subscription = Subscription.find(params[:id])
+  	@subscription = Subscription.find(params[:subscription_id])
   end
 
 	def process_subscription
