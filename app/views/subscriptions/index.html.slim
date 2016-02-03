@@ -31,10 +31,10 @@
 				thead
 					tr.bg-thead
 						th width="200" Plan
+						th width="110" Branch count
 						th width="180" Previous payment
-						th width="120" Next payment
+						th width="180" Next payment
 						th width="120" Amount
-						/ th width="170" Period
 						th width="120" data-sortable="false" Status
 						th.action width="90" data-sortable="false" Action
 				tbody
@@ -45,6 +45,8 @@
 					- @subscriptions.each do |subscription|
 							tr
 								td data-title="Plan" = subscription.plan.name
+								td data-title="Branch count"
+									= link_to subscription.branches.count, show_branches_path(subscription), class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "More Info" }
 								td data-title="Previous payment" = to_default_date_format(subscription.previous_payment)
 								td data-title="Next payment" = to_default_date_format(subscription.next_payment)
 								td data-title="Amount" = to_dollar subscription.amount.to_f

@@ -1,11 +1,17 @@
 class UsersController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_user, only: [:update, :destroy]
+	before_action :set_user, only: [:edit, :update, :destroy]
 
 	def index
 		@users = current_client.users
+	end
+
+	def new
 		@user = User.new
+	end
+
+	def edit
 	end
 
 	def account
@@ -39,6 +45,7 @@ class UsersController < ApplicationController
 
 	def create
 		@user = current_client.users.new(user_params)
+		@user.skip_confirmation!
 		if @user.save
 			@user.client_user_access.update(client_user_access_params)
 			flash[:notice] = "User successfully created"

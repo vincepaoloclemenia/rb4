@@ -27,6 +27,10 @@ class SubscriptionsController < ApplicationController
     end
   end
 
+  def show_branches
+  	@subscription = Subscription.find(params[:id])
+  end
+
 	def process_subscription
 		if params[:plan_id] && params[:branches] && params[:PayerID] && params[:token]
 			@subscription = current_client.subscriptions.build(plan_id: params[:plan_id], 

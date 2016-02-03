@@ -49,7 +49,9 @@ Rails.application.routes.draw do
   resources :purchases do
     resources :purchase_items
   end
-  resources :subscriptions
+  resources :subscriptions do
+    get 'show_branches'
+  end
   resources :bills
   resources :payment_notifications
   post 'paypal_checkout' => 'subscriptions#paypal_checkout'
