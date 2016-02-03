@@ -1,19 +1,19 @@
 .row
   .col-xs-12.col-md-12.col-lg-8
-    .panel
-      .panel-heading.border.pb45 style="font-size:13px"
+    .panel.panel-primary
+      .panel-heading
         .pull-left.mt5 Sales
-        .panel-controls.no-upp
+        .panel-controls.no-upp.nave-tabs
           ul.nav.nav-tabs.btn-group data-toggle="buttons"
-            label.btn.btn-success.no-margin.active
-              input#option1 name="options" type="radio"
-                i.fa.fa-thumbs-up.mr5
-                | Branches
-            label.btn.btn-success
-              input#option2 name="options" type="radio"
-                i.fa.fa-thumbs-down.mr5
-                | Brands
-      .panel-body
+            label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
+              a data-toggle="tab" href="#brand-info"  Brand Total
+            label.btn.btn-primary class="#{brand_pane_active?('branches')}"
+              a data-toggle="tab" href="#branches-sales-list"  Branches Total 
+      .panel-body.tab-content
+        #brand-info.tab-pane class="#{brand_pane_active?('info')}"
+          = high_chart("branch_sales_stat", @brand_sales)
+        #branches-sales-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
+          = high_chart("brand_sales_stat", @branches_sales)
 
   .col-xs-12.col-md-12.col-lg-4
     / .widget.bg-danger-light
@@ -22,10 +22,10 @@
     /   p.text-white Lorem ipsum dolor sit amet, consectetur adipiscing elit. Frater et T. Sed ad bona praeterita redeamus.
     /   a.btn.btn-danger.mt5 href="javascript:;"  Update Now
 
-    .panel
-      .panel-heading.border.pb45 style="font-size:13px"
-        .pull-left.mt7 Customer Count
-        .panel-controls.no-upp
+    .panel.panel-primary
+      .panel-heading style="font-size:11px"
+        .pull-left Customer Count
+        .panel-controls.no-up
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
             i.icon-glyph-98
       .panel-body
@@ -37,10 +37,10 @@
         .pull-left.mt5 Purchase Cost Stats
         .panel-controls.no-upp.nav-tabs
           ul.nav.nav-tabs.btn-group data-toggle="buttons"
-            label.btn.btn-success.no-margin.active class="#{brand_pane_active?('info')}"
-              a data-toggle="tab" href="#brand-info"  Brand Information
-            label.btn.btn-success class="#{brand_pane_active?('branches')}"
-              a data-toggle="tab" href="#branches-list"  Branches
+            label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
+              a data-toggle="tab" href="#brand-info"  Brand Total
+            label.btn.btn-primary class="#{brand_pane_active?('branches')}"
+              a data-toggle="tab" href="#branches-list"  Branches Total 
       .panel-body.tab-content
         #brand-info.tab-pane class="#{brand_pane_active?('info')}"
           = high_chart("brand_cost_stat", @purchase_cost_stat)
@@ -71,7 +71,7 @@
               - @price_movement.each_with_index do |pm, index|
                 tr
                   td data-title="Rank" = index+1
-                  td data-title="Branch" = pm[:branch_name]
+                  td data-title="Branch" = pm[:branch_name] 
                   td data-title="Item" = pm[:item]
                   td data-title="Prev Amount" = to_peso(pm[:prev_amount])
                   td data-title="Current Amount" = to_peso(pm[:present_amount])
