@@ -1,7 +1,11 @@
 class PagesController < ApplicationController
 	
 	def index
-		redirect_to dashboard_path if user_signed_in?
+		if user_signed_in?
+			redirect_to dashboard_path
+		else
+			render layout: false
+		end
 	end
 
 	def update_role
