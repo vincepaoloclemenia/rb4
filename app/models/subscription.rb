@@ -6,6 +6,14 @@ class Subscription < ActiveRecord::Base
   has_many :branches, through: :branch_subscriptions
   has_many :payment_notifications
 
+  def self.free_trial
+    find_by_status_and_plan_id("Active", 1)
+  end
+
+  def self.except_free_trial
+    where("plan_id != ?", 1)
+  end
+
   def save_with_payment
     if valid?
       if paypal_payment_token.present?
@@ -41,7 +49,7 @@ class Subscription < ActiveRecord::Base
 
   # Remove subscription of branches with 'Cancelled' subscription
   def self.process_cancelled_subscriptions
-    subscriptions = Subscription.where(status: "Cancelled").where("next_payment >= ?", DateTime.now)
+    subscriptions = Subscription.where(status: "Cancelled").where("end_date >= ?", DateTime.now)
     if subscriptions.empty?
       puts "======== No 'Cancelled' subscriptions Found for today ========"
     else
@@ -61,7 +69,7 @@ class Subscription < ActiveRecord::Base
 
   # Change expired free trial subscription
   def self.process_free_trial_subscriptions
-    subscriptions = Subscription.where(plan_id: 1).where("next_payment >= ?", DateTime.now)
+    subscriptions = Subscription.where(plan_id: 1).where("end_date >= ?", DateTime.now)
     if subscriptions.empty?
       puts "======== No 'Expired' subscriptions found today ========"
     else
@@ -80,5 +88,9 @@ class Subscription < ActiveRecord::Base
 
   def cancelled?
     status == "Cancelled"
+  end
+
+  def is_processing?
+    status == "Processing"
   end
 end

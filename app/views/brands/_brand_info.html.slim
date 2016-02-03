@@ -1,9 +1,9 @@
 - brand = brand || @brand
 .row.mt10
-  .col-xs-12.col-lg-2
+  .col-md-12.col-lg-2
     .text-center
       = image_tag brand.avatar.url, class: "image-size-info img-circle"
-  .col-xs-12.col-lg-10
+  .col-md-12.col-lg-10
     p
     .text-light-grey
       | Name
@@ -33,15 +33,15 @@
       | Fax No.
     label.text-dark-grey
       = brand.fax_no
-.col-xs-12.mt10
-  .pull-right
-    - if current_brand.id == brand.id
-      = link_to "<i class='icon-maxicons1-check mr5'></i> Current Brand".html_safe, '#0', method: :put, class: "btn btn-sm btn-success btn-outline mr5", disabled: true
-    - else
-      = link_to "<i class='mr5'></i> Switch Brand".html_safe, change_brand_path(brand_id: brand.id), method: :put, class: "btn btn-sm btn-success btn-outline mr5"
-    - if view_access_control("brands","update")
-      a.btn.btn-sm.btn-primary.btn-outline.mr5 data-target=".edit-brand" data-toggle="modal"
-        i.icon-maxicons2-editting.mr5
-        | Edit
-    - if view_access_control("brands","destroy")
-      = link_to "<i class='icon-maxicons2-login mr5'></i> Delete Brand".html_safe, brand_path(brand), method: :delete, class: "btn btn-sm btn-danger btn-outline", data: { confirm: "Are you sure?" }
+  .col-xs-12.mt10
+    .pull-right
+      - if current_brand.id == brand.id
+        = link_to "<i class='icon-glyph-26 f14 mr5'></i> Current Brand".html_safe, '#0', method: :put, class: "btn btn-success btn-outline mr5", disabled: true
+      - else
+        = link_to "<i class='icon-glyph-5 f14 mr5'></i> Switch Brand".html_safe, change_brand_path(brand_id: brand.id), method: :put, class: "btn btn-success btn-outline mr5"
+      - if view_access_control("brands","update")
+        a.btn.btn-primary.btn-outline.mr5 data-target=".edit-brand" data-toggle="modal"
+          i.icon-glyph.f14.mr5
+          | Edit
+      - if view_access_control("brands","destroy")
+        = link_to "<i class='icon-glyph-124 f14 mr5'></i> Delete Brand".html_safe, brand_path(brand), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" }

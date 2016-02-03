@@ -6,7 +6,7 @@
       li class="#{brand_pane_active?('branches')}"
         a data-toggle="tab" href="#branches-list"  Branches
     .tab-content
-      #brand-info.tab-pane class="#{brand_pane_active?('info')}"
+      #brand-info.tab-pane class="#{brand_pane_active?('info')}" style="overflow-x:hidden"
         = render "brand_info", brand: @brand
 
       #branches-list.tab-pane class="#{brand_pane_active?('branches')}"
@@ -29,8 +29,8 @@
               a href="javascript:;"  Show All
         - if view_access_control("branches","create")
           .pull-right
-            a.btn.btn-sm.btn-primary.btn-outline data-target=".add-branch" data-toggle="modal"
-              i.icon-maxicons2-plus.mr5
+            a.btn.btn-primary.btn-outline.mb5 data-target=".add-branch" data-toggle="modal"
+              i.icon-glyph-164.f14.mr5
               | Add Branch
         .no-more-tables
           table.table.table-bordered.table-striped.mb0 data-sortable=""
@@ -53,7 +53,8 @@
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+          i.icon-glyph-27
         h4.modal-title Edit Brand
       .modal-body
         = form_for @brand, remote: true do |f|
@@ -63,7 +64,7 @@
                 .show-image.mb5
                   = image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"
                   a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-                    i.icon-maxicons1-exit
+                    i.icon-glyph-27
                 = f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
             .col-xs-12.col-md-8.col-lg-8
               .col-xs-12.mb10
@@ -101,7 +102,7 @@
     .modal-content
       .modal-header
         button.close aria-hidden="true" data-dismiss="modal" type="button"
-          i.icon-maxicons1-exit
+          i.icon-glyph-27
         h4.modal-title Add Branch
       .modal-body
         = form_for @branch, url: brand_branches_path(brand_id: @brand.id), method: :post do |f|
@@ -109,12 +110,12 @@
             .col-xs-12.mb10
               = f.label :name
                 | Branch
-                small.field-req *
+                small.field-req  *
               = f.text_field :name, class: "form-control", placeholder: "Name"
             .col-xs-12.mb10
               = f.label :color
                 | Color
-                small.field-req *
+                small.field-req  *
               br
               = f.select :color, [["Eggplant","#60355B"],["Coral","#E26A6A"],["Pumpkin","#FF4500"],["#DC143C","#DC143C"],["#FF8C00","#FF8C00"],["#C71585","#C71585"],["#1E81B4","#1E81B4"],["#00A087","#00A087"],["#DD525B","#DD525B"],["#8CAF41","#8CAF41"],["#8F7260","#8F7260"],["#4F669D","#4F669D"],["#646464","#646464"],["#AAA786","#AAA786"],["#6F9684","#6F9684"],["#98ACD1","#98ACD1"]], {}, name: "colorpicker-option-selected", id: "init"
             .col-xs-12.mb10
@@ -127,13 +128,13 @@
               = f.label :zip
                 | Zip
                 a data-original-title="What's my zip?" data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
-                  i.icon-maxicons2-question.f10.text-grey
+                  text-grey  ?
               = f.number_field :zip, class: "form-control"
             .col-xs-12.mb10
               = f.label :email_address
                 | E-mail Address
-                small.field-req *
-              = f.text_field :email_address, class: "form-control"
+                small.field-req  *
+              = f.text_field :email_address, class: "form-control", placeholder: "E-mail address of branch"
             .col-xs-12.col-lg-4.mb10
               = f.label :landline_no
               = f.number_field :landline_no, class: "form-control"
@@ -183,4 +184,3 @@ javascript:
       $("#upload_preview").replaceWith('#{image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"}');
     });
   });
-

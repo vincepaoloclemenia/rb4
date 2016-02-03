@@ -1,10 +1,18 @@
-.panel.panel-primary
+.panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Conversions
 		.pull-right
 			- if view_access_control('conversions','create')
-				= link_to "<i class='icon-maxicons2-paste mr5'></i> Add".html_safe, '#', data: { toggle: "modal", target: ".create-conversion-modal" }, class: "btn btn-default btn-round btn-outline"
+				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Conversion".html_safe, '#', data: { toggle: "modal", target: ".create-conversion-modal" }, class: "btn btn-success btn-round btn-outline"
 	.panel-body
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| Oops! You curently have no conversions.<br> To start adding conversions to your items click&nbsp;
+					b "Add Conversion"
+					| &nbsp;button
 		| Show
 		.btn-group.mb10
 		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
@@ -26,11 +34,11 @@
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="295" From Unit
-						th width="295" To Unit
+						th width="290" From Unit
+						th width="290" To Unit
 						th width="200" Factor
 						th width="120" data-sortable="false" Status
-						th width="90" data-sortable="false" Action
+						th width="100" data-sortable="false" Action
 				tbody
 					- @conversions.each do |conversion|
 						tr
@@ -58,18 +66,18 @@
 													= f.label :from_unit_id
 														| From
 														small.field-req  *
-													= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+													= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select Unit" }, class: "chosen", style: "width: 100%; display: none;"
 												.col-xs-6
 													= f.label :to_unit_id
 														| To
 														small.field-req  *
-													= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+													= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select Unit" }, class: "chosen", style: "width: 100%; display: none;"
 											.row.mb10
 												.col-xs-12
 													= f.label :factor
 														| Factor
 														small.field-req  *
-													= f.text_field :factor, class: "form-control"
+													= f.text_field :factor, class: "form-control", placeholder: "0.0"
 											.row.mb10
 												.col-xs-12
 													= f.label :is_active, "Status"
@@ -115,24 +123,29 @@
 					i.icon-maxicons1-exit
 				h4.modal-title Add Conversion
 			.modal-body
+				.alert.alert-info role="alert"
+					i.icon-glyph-73.mr10.f20
+					| To add units: Go to&nbsp;
+					b Setup > Purchase Setup > Units >&nbsp;
+					= link_to '<b>Add Unit</b>'.html_safe, units_path, class:'helper-link'
 				= form_for @conversion do |f|
 					.row.mb10
 						.col-xs-6
 							= f.label :from_unit_id
 								| From
 								small.field-req  *
-							= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+							= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select Unit" }, class: "chosen", style: "width: 100%; display: none;"
 						.col-xs-6
 							= f.label :to_unit_id
 								| To
 								small.field-req  *
-							= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%; display: none;"
+							= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select Unit" }, class: "chosen", style: "width: 100%; display: none;"
 					.row.mb10
 						.col-xs-12
 							= f.label :factor
 								| Factor
 								small.field-req  *
-							= f.text_field :factor, class: "form-control"
+							= f.text_field :factor, class: "form-control", placeholder: "0.0"
 					.row.mb10
 						.col-xs-12
 							= f.label :is_active, "Status"

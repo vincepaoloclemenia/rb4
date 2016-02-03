@@ -2953,7 +2953,7 @@ span.nav-category{
 .nav .open>a,
 .nav .open>a:focus,
 .nav .open>a:hover {
-    background-color: #46586E;
+    background-color: #fff;
     border-color: #71B75E;
 }
 
@@ -14349,7 +14349,7 @@ fieldset[disabled] .btn-default:hover {
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary {
     background-image: none;
-    border-color: #d06d27
+    border-color: #d84a3d
 }
 
 .btn-primary.active::before,
@@ -14365,8 +14365,8 @@ fieldset[disabled] .btn-default:hover {
     -moz-transform: translate3d(0, 0, 0);
     -o-transform: translate3d(0, 0, 0);
     -ms-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    background-color: #d06d27
+    transform: translate3d(0, 0);
+    background-color: #d84a3d
 }
 
 .btn-primary.active.focus,
@@ -14916,7 +14916,11 @@ fieldset[disabled] .btn-info:hover {
 .btn-danger {
     color: #fff;
     background-color: #d96557;
-    border-color: #d96557
+    border-color: #d96557;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size:11px !important;
+
 }
 
 .btn-danger:visited {

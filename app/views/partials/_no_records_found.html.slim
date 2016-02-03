@@ -1,0 +1,9 @@
+- subtitle ||= nil
+.alert.alert-info role="alert"
+	.row
+		.col-xs-1.text-right
+			i.icon-glyph-73.f25
+		.col-xs-11
+			| Oops! No records found.
+			- if subtitle
+				br = subtitle.html_safe

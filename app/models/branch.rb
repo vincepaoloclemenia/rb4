@@ -6,7 +6,7 @@ class Branch < ActiveRecord::Base
   has_many :inventories, dependent: :restrict_with_error
   has_many :purchases
   has_one :branch_subscription
-  has_one :subscription, -> { where(status: "Active") }, through: :branch_subscription
+  has_one :subscription, -> { where(status: ["Active", "Processing"]) }, through: :branch_subscription
 
 	validates :name,
 						presence: true,
@@ -18,7 +18,7 @@ class Branch < ActiveRecord::Base
   after_create :set_default_color
 
   def self.all_unsubscribed
-    select { |b| b.subscription.nil? }
+    select { |b| b.subscription.nil? || b.subscription.plan_id.eql?(1) }
   end
 
   def set_default_color

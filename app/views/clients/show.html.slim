@@ -1,5 +1,5 @@
 .panel
-	.panel-heading.border
+	.panel-heading.border.pb45
 		.pull-left.mt7 Company Information
 	.panel-body
 		.row
@@ -24,7 +24,7 @@
 				.pull-right
 					- if view_access_control('clients','update')
 						a.btn.btn-sm.btn-primary.btn-outline.mr5 data-target=".edit-company-modal" data-toggle="modal"
-							i.icon-maxicons2-editting.mr5
+							i.icon-glyph.f14.mr5
 							| Edit
 
 .modal.edit-company-modal aria-hidden="true" role="dialog" tabindex="-1"
@@ -32,7 +32,7 @@
     .modal-content
       .modal-header
         button.close aria-hidden="true" data-dismiss="modal" type="button"
-					i.icon-maxicons1-exit
+					i.icon-glyph-27
         h4.modal-title Edit Company Information
       .modal-body
         = form_for current_client do |f|
@@ -45,10 +45,10 @@
 					.row.mb10
 						.col-xs-6
 							= f.label :email, "E-mail"
-							= f.text_field :email, class: "form-control"
+							= f.text_field :email, class: "form-control", placeholder: "Company E-mail address"
 						.col-xs-6
 						  = f.label :contact, "Contact No"
-						  = f.text_field :contact, class: "form-control"
+						  = f.text_field :contact, class: "form-control", placeholder: "Company Contact No."
 					.row.mb10
 						.col-xs-12
 							= f.label :address1, "Address"
