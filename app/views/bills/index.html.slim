@@ -1,6 +1,6 @@
-.panel.panel-primary
-	.panel-heading
-		.pull-left.mt7 Bills
+.panel
+	.panel-heading.border
+		| Bills
 		.pull-right
 			/ - if view_access_control('subscriptions','create')
 			/ 	= link_to "<i class='icon-maxicons2-paste mr5'></i> Add Item".html_safe, '#', data: { toggle: "modal", target: ".create-item-modal" }, class: "btn btn-default btn-round btn-outline"
