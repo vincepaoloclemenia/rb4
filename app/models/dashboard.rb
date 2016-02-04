@@ -28,6 +28,23 @@ class Dashboard < ActiveRecord::Base
 		end
 	end
 
+	def self.get_dashboard_items(date, branch_id, brand_id)
+		where(previous_date_entry: date, branch_id: branch_id, brand_id: brand_id)
+	end
+
+	def self.check_purchase_total_index(purchase_array_amount)
+		purchase_total = Array.new
+		if purchase_array_amount.blank?
+			purchase_total = Array.new(7, 0)
+		else
+			purchase_array_amount.each_with_index do |amount, index|
+				amount.blank? ? purchase_total[index] = 0 : purchase_total[index] = amount
+			end
+		end
+
+		return purchase_total
+	end
+
 	def self.get_sales_for_dashboard
 		start_day = Date.today - 7
  		range_dates = start_day..(Date.today-1)
