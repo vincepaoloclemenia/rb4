@@ -121,7 +121,8 @@ class DashboardController < ApplicationController
 		  end
 			f.chart({defaultSeriesType: chartType})
 			f.plotOptions(bar: {
-				colorByPoint: true
+					colorByPoint: true,
+					colors: colors
 				},
 				pie: {
           allowPointSelect: true,
