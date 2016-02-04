@@ -18,19 +18,24 @@ class DashboardController < ApplicationController
 
 
 	def update_customer_count(branches)
-		arr = Array.new
+		customer_count = Array.new
 		@branches.each_with_index do |branch, index|
-			hash = Hash.new
-			customer_count = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, previous_date_entry: Date.today - 1).last
-			customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
-			hash[:name] = branch.name
-			hash[:y] = customer_count
-			# arr.append(customer_count)
-			arr[index] = hash
+			dashboard_item = Dashboard.get_dashboard_items((Date.today - 1), branch.id, current_brand.id).first
+			dashboard_item.blank? ? customer_count[index] = 0 : customer_count[index] = Dashboard.customer_count_check(dashboard_item.customer_count)
 		end
+		# arr = Array.new
+		# @branches.each_with_index do |branch, index|
+		# 	hash = Hash.new
+		# 	customer_count = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, previous_date_entry: Date.today - 1).last
+		# 	customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
+		# 	hash[:name] = branch.name
+		# 	hash[:y] = customer_count
+		# 	# arr.append(customer_count)
+		# 	arr[index] = hash
+		# end
 		a = ""
-		arr.map{|x| x[:y] == 0 ? a = "bar" : a = "pie"}
-		create_chart(current_brand.name, "Brand", @branches.pluck(:name), arr, " ", a, @branches.pluck(:color))
+		customer_count.map{|x| x == 0 ? a = "bar" : a = "pie"}
+		create_chart(current_brand.name, "Branches", @branches.pluck(:name), customer_count, " ", a, @branches.pluck(:color))
 	end
 
 	def price_movement_dashboard
@@ -58,6 +63,7 @@ class DashboardController < ApplicationController
  			dates[index] = range_date.strftime("%b %d,%Y | %a")
  			amount[index] = @total_amount
  		end
+
  		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')
 	end
 
