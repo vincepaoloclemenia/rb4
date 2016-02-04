@@ -109,9 +109,9 @@ return calendar;},renderDropdowns:function(selected,minDate,maxDate){var current
 monthHtml+="</select>";var yearHtml='<select class="yearselect">';for(var y=minYear;y<=maxYear;y++){yearHtml+='<option value="'+ y+'"'+
 (y===currentYear?' selected="selected"':'')+'>'+ y+'</option>';}
 yearHtml+='</select>';return monthHtml+ yearHtml;},renderCalendar:function(calendar,selected,minDate,maxDate,side){var html='<div class="calendar-date">';html+='<table class="table-condensed">';html+='<thead>';html+='<tr>';if(this.showWeekNumbers)
-html+='<th></th>';if(!minDate||minDate.isBefore(calendar.firstDay)){html+='<th class="prev available"><i class="fa fa-arrow-left icon icon-maxicons1-arrowleft"></i></th>';}else{html+='<th></th>';}
+html+='<th></th>';if(!minDate||minDate.isBefore(calendar.firstDay)){html+='<th class="prev available"><i class="fa icon-glyph-6 icon icon-maxicons1-arrowleft"></i></th>';}else{html+='<th></th>';}
 var dateHtml=this.locale.monthNames[calendar[1][1].month()]+ calendar[1][1].format(" YYYY");if(this.showDropdowns){dateHtml=this.renderDropdowns(calendar[1][1],minDate,maxDate);}
-html+='<th colspan="5" class="month">'+ dateHtml+'</th>';if(!maxDate||maxDate.isAfter(calendar.lastDay)){html+='<th class="next available"><i class="fa fa-arrow-right icon icon-maxicons1-arrowright"></i></th>';}else{html+='<th></th>';}
+html+='<th colspan="5" class="month">'+ dateHtml+'</th>';if(!maxDate||maxDate.isAfter(calendar.lastDay)){html+='<th class="next available"><i class="fa icon-glyph-7 icon icon-maxicons1-arrowright"></i></th>';}else{html+='<th></th>';}
 html+='</tr>';html+='<tr>';if(this.showWeekNumbers)
 html+='<th class="week">'+ this.locale.weekLabel+'</th>';$.each(this.locale.daysOfWeek,function(index,dayOfWeek){html+='<th>'+ dayOfWeek+'</th>';});html+='</tr>';html+='</thead>';html+='<tbody>';for(var row=0;row<6;row++){html+='<tr>';if(this.showWeekNumbers)
 html+='<td class="week">'+ calendar[row][0].week()+'</td>';for(var col=0;col<7;col++){var cname='available ';cname+=(calendar[row][col].month()==calendar[1][1].month())?'':'off';if(calendar[row][col].isSame(new Date(),"day")){cname+=' today ';}

@@ -29,9 +29,9 @@
 							td data-title="Mobile No" = supplier.mobile_no
 							td.action data-title="Action"
 								- if view_access_control('suppliers','update')
-									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-supplier-#{supplier.id}" }
+									= link_to "<i class='icon-glyph f14'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-supplier-#{supplier.id}" }
 								- if view_access_control('suppliers','destroy')
-									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, supplier_path(supplier), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, supplier_path(supplier), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
 						.modal class="edit-supplier-#{supplier.id}" tabindex="-1" role="dialog" aria-hidden="true"
 							.modal-dialog

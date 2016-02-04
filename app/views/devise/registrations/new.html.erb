@@ -23,11 +23,14 @@
 
                 <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control input-lg", placeholder:"Confirm Password" %>
               </div>
-              <button class="btn btn-success btn-block btn-lg mb15" type="submit" data-disable-with="<span>Creating Account.. Please wait..</span>">
+              <button class="btn btn-primary btn-block btn-lg mb15" type="submit" data-disable-with="<span>Creating Account.. Please wait..</span>">
                 <span>Create Account</span>
               </button>
               <p class="text-center">
                 By clicking create account, you agree to our <a href="terms.html">Terms of services & Policies.</a>
+              </p>
+              <p class="text-center">
+                Already have an account? <%= link_to "Login again", session_path(resource_name), class:'helper-link' %>
               </p>
              <% end %>
           </div>

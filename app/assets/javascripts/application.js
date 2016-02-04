@@ -17,8 +17,6 @@
 //= require highcharts/highcharts
 //= require turbolinks
 //= require flash
-//= require fss
-//= require fss-settings
 
 Turbolinks.enableProgressBar();
 
@@ -53,11 +51,11 @@ function retriggerFlash(){
 };
 
 $(document).ajaxError(function(event,xhr,options,exc) {
-    
+
     $('form input').each(function(){
       if($(this).parent().parent().is('.has-error')){
         $(this).parent().unwrap();
-        $(this).parent().find('.error-msgs').remove();        
+        $(this).parent().find('.error-msgs').remove();
       }
     });
 
@@ -78,5 +76,5 @@ $(document).ajaxError(function(event,xhr,options,exc) {
     if( xhr.status == 401 ){
       window.location.reload();
     }
-       
+
 });

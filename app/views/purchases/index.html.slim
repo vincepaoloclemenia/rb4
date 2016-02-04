@@ -11,10 +11,10 @@
 						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
 					.col-xs-12.col-lg-3
 						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
 					.col-xs-12.col-lg-3
 						= f.label :supplier_id_eq, "Supplier"
-						= f.select :supplier_id_eq, @suppliers, { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+						= f.select :supplier_id_eq, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
 				.row.mt10
 					.col-xs-12
 						.pull-right
@@ -83,15 +83,16 @@
 								| Supplier
 								small.field-req  *
 							= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-							.alert.alert-danger.mt5 role="alert"
-								i.icon-glyph-93.mr10.f20
-								| You currently have no list of&nbsp;
-								b suppliers
-							.alert.alert-info role="alert"
-								i.icon-glyph-166.mr10.f20
-								| To add Suppliers: Go to
-								b
-									|  Setup > Purchase Setup > Suppliers
+
+							.alert.alert-info.mt5 role="alert"
+								.row
+									.col-xs-1.text-right
+										i.icon-glyph-73.f25
+									.col-xs-11
+										| You currently have no list of suppliers.<br> Go to:&nbsp;
+										b Setup > Purchase Setup > Suppliers >&nbsp;
+										= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+
 					.row.mb10
 						.col-xs-12.mt20
 							| (
