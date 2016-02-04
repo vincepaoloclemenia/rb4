@@ -16652,7 +16652,7 @@ a.bg-danger-light:hover {
     background-color: #fff
 }
 .bg-login {
-    background: url('/img/login-bg-3.jpg') no-repeat;
+    background: url('/img/bg-restobot.png') no-repeat;
     background-size: cover;
 
 }

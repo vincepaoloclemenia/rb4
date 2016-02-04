@@ -1,9 +1,10 @@
 = @a
 - purchases = purchases || @purchases
+
 table.table.table-bordered.table-striped.mb0 data-sortable="true"
 	thead
 		tr.bg-thead
-			th width="130" Invoice No.
+			th width="130" data-sortable="false" Invoice No.
 			th width="120" Date
 			th width="130" Branch
 			th width="160" Supplier
@@ -11,7 +12,7 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 			th width="110" VAT<br>Amount
 			th width="120" Total<br>Amount
 			th width="120" data-sortable="false" Action
-	tbody
+	tbody style="font-size:12px"
 		- if purchases.empty?
 			tr
 				td colspan="8"
@@ -28,12 +29,12 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				td data-title="VAT Amount" = to_peso(nvt[:vat])
 				td data-title="Total Amount" = to_peso(nvt[:total])
 				td.action data-title="Action"
-					= link_to "<i class='icon-maxicons2-view'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
+					= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
 					- if view_access_control('purchases','update')
-						= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
+						= link_to "<i class='icon-glyph f14'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
 					- if view_access_control('purchases','destroy')
-						= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true
-						
+						= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true
+
 			div class="modal edit_purchase_#{purchase.id}" tabindex="-1" role="dialog" aria-hidden="true"
 				.modal-dialog
 					.modal-content
