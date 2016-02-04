@@ -11,3 +11,5 @@ server 'restobotv4.cloudapp.net', user: 'restobotv4', roles: %w[web app]
 set :ssh_options, {
 	forward_agent: true
 }
+
+set :whenever_environment, 'production'

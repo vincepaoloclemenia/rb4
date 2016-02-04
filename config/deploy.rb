@@ -34,6 +34,10 @@ set :log_level, :debug
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+#whenever gem
+require "whenever/capistrano"
+set :whenever_environment, defer { stage }
+set :whenever_command, 'bundle exec whenever'
 
 set :bundle_binstubs, nil
 
