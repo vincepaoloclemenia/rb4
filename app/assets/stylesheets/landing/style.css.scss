@@ -283,13 +283,13 @@
 	}
 
 	.lj-overlay-image {
-		background-image: url('./assets/bg-raw-restobot.png');
+		// background-image: url(image_path("/img/landing/bg-raw-restobot.png"));
 		background-repeat: repeat;
 	}
 
-	.lj-overlay-color {
-		background-image: url('./assets/bg-restobot.png');
-	}
+	// .lj-overlay-color {
+	// 	background-image: url(image-path("img/landing/bg-restobot.png"));
+	// }
 
 	.lj-overlay-gradient {
 		background: -moz-linear-gradient(215deg,  rgba(0,204,255,0.8) 0%, rgba(196,255,0,0.8) 100%); /* FF3.6+ */
