@@ -1,21 +1,24 @@
-h2 BASE WAGES
-table.table.table-bordered.table-striped.mb0
-	thead
-		tr.bg-head
-			th
-			th width="20%"
-			th width="20%" %
-	tbody
-		- @total_purchase_total_item_amount = []
-		- @total_percentage = []
-		- @base_wages.each do |base_wage|
-			tr
-				td = base_wage[:item_name]
-				td = to_peso(base_wage[:purchase_total_item_amount])
-				td = to_percentage(base_wage[:purchase_total_item_amount], @revenue_holder.sum)
-				- @total_purchase_total_item_amount << base_wage[:purchase_total_item_amount]
-				- @total_percentage << to_percentage(base_wage[:purchase_total_item_amount], @revenue_holder.sum)
-		tr
-			td Total Base Wages
-			td = to_peso(@total_purchase_total_item_amount.sum)
-			td = @total_percentage.sum
+.panel
+	.panel-heading.border Base Wages
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0
+				thead
+					tr.bg-thead
+						th width="300"
+						th width="350"
+						th width="350" %
+				tbody
+					- @total_purchase_total_item_amount = []
+					- @total_percentage = []
+					- @base_wages.each do |base_wage|
+						tr
+							td data-title="Title" = base_wage[:item_name]
+							td data-title="Total" = to_peso(base_wage[:purchase_total_item_amount])
+							td data-title="%" = to_percentage(base_wage[:purchase_total_item_amount], @revenue_holder.sum)
+							- @total_purchase_total_item_amount << base_wage[:purchase_total_item_amount]
+							- @total_percentage << to_percentage(base_wage[:purchase_total_item_amount], @revenue_holder.sum)
+					tr
+						td data-title="Title" Total Base Wages
+						td data-title="Total" = to_peso(@total_purchase_total_item_amount.sum)
+						td data-title="%" = @total_percentage.sum

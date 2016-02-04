@@ -1,5 +1,5 @@
 .panel
-  .panel-heading.border Sales
+  .panel-heading.border Daily Sales Report
   .panel-body
     .alert.alert-info role="alert"
       .row
@@ -35,7 +35,7 @@
 						th width="130" Vat
 						th width="190" Settlement Type Sales
 						th width="170" Cash for Deposits
-						th width="100" Action
+						th width="100" data-sortable="false" Action
         tbody
           - @sales.each do |sale|
             tr
@@ -46,9 +46,9 @@
               td data-title="Settlement Type Sales"  = to_peso(sale.total_settlement_sales)
               td data-title="Cash for Deposits" = to_peso(sale.cash_in_drawer)
               td.action data-sortable="false" data-title="Action"
-              	= link_to "<i class='icon-maxicons2-view'></i>".html_safe, sale_path(sale), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Sales" }
+              	= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, sale_path(sale), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Sales" }
               	- if view_access_control("sales","destroy")
-              		= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, sale_path(sale), method: :delete, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete" }
+              		= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, sale_path(sale), method: :delete, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete" }
 
     .align-center
       p Showing 1 to 10 of 57 entries

@@ -1,14 +1,16 @@
-h2 SALES		
-.no-more-tables
-	table.table.table-bordered.table-striped.mb0
-		thead
-			tr.bg-thead
-				th
-				th width="20%" Total
-		tbody
-			tr
-				td Customer count
-				td = @total_customer_count
-			tr
-				td Daily Average Sales
-				td = @total_daily_average_sales
+.panel
+	.panel-heading.border Sales
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0
+				thead
+					tr.bg-thead
+						th width="300"
+						th width="700" Total
+				tbody
+					tr
+						td data-title="Title" Customer count
+						td data-title="Total" = @total_customer_count
+					tr
+						td data-title="Title" Daily Average Sales
+						td data-title="Total" = @total_daily_average_sales
