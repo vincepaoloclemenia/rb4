@@ -8,19 +8,19 @@
 	nav.ps-container role="navigation"
 		ul.nav
 			li class="#{is_menu_open?('dashboard')}"
-				= link_to '<i class="fa icon-glyph-144"></i> <span>Dashboard</span>'.html_safe, dashboard_path, data: { keybinding: "h o m e" }
+				= link_to '<i class="fa icon-glyph-144"></i> <span>Dashboard</span>'.html_safe, dashboard_path
 			li.menu-accordion class="#{is_menu_open?('data_entry')}"
 				= link_to '<i class="fa icon-glyph-108"></i> <span>Data Entry</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
 					- if view_access_control('purchases','show')
 						li
-							= link_to "Purchases", purchases_path, data: { keybinding: "p u r c h" }
+							= link_to "Purchases", purchases_path
 					- if view_access_control('sales','show')
 						li
-							= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s" }
+							= link_to "Sales", new_sale_path
 					- if view_access_control('inventories','show')
 						li
-							= link_to "Inventories", inventories_path, data: { keybinding: "i n v" }
+							= link_to "Inventories", inventories_path
 			li.menu-accordion class="#{is_menu_open?('purchase_reports')}"
 				= link_to '<i class="fa icon-glyph-95"></i> <span>Purchase Reports</span>'.html_safe, 'javascript:;'
 				ul.sub-menu
@@ -43,7 +43,7 @@
 				ul.sub-menu
 					- if view_access_control("sales","show")
 						li
-							= link_to "Daily Sales Reports", sales_path, data: { keybinding: "s a l e s" }
+							= link_to "Daily Sales Reports", sales_path
 
 			li.menu-accordion class="#{is_menu_open?('management_reports')}"
 				= link_to '<i class="fa icon-glyph-63"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
@@ -63,10 +63,10 @@
 				ul.sub-menu
 					- if view_access_control("users","show")
 						li
-							= link_to "Users", company_users_path, data: { keybinding: "u s e r s" }
+							= link_to "Users", company_users_path
 					- if view_access_control("roles","show")
 						li
-							= link_to "Roles", roles_path, data: { keybinding: "r o l e s" }
+							= link_to "Roles", roles_path
 			li.menu-accordion class="#{is_menu_open?('setup')}"
 				a href="javascript:;"
 					i.fa.icon-glyph-67
@@ -77,10 +77,10 @@
 						ul.sub-menu
 							- if view_access_control("clients","show")
 								li
-									= link_to "Company", client_path, data: { keybinding: "c o m p a n y" }
+									= link_to "Company", client_path
 							- if view_access_control("brands","show")
 								li
-									= link_to "Brands", brands_path, data: { keybinding: "b r a n d s" }
+									= link_to "Brands", brands_path
 					li.menu-accordion class="#{is_menu_open?('labor_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
@@ -99,28 +99,28 @@
 								= link_to "Revenues", 'javascript:;'
 							- if view_access_control('settlements','show')
 								li
-									= link_to "Settlements", settlements_path, data: { keybinding: "s e t" }
+									= link_to "Settlements", settlements_path
 							- if view_access_control('shifts','show')
 								li
-									= link_to "Shift", shifts_path, data: { keybinding: "s h i f t s" }
+									= link_to "Shift", shifts_path
 					li.menu-accordion class="#{is_menu_open?('purchase_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Purchase Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
 							- if view_access_control('units','show')
 								li
-									= link_to "Units", units_path, data: { keybinding: "u n i t s" }
+									= link_to "Units", units_path
 							- if view_access_control('categories','show')
 								li
-									= link_to "Categories", categories_path, data: { keybinding: "c a t" }
+									= link_to "Categories", categories_path
 							- if view_access_control('items','show')
 								li
-									= link_to "Items", items_path, data: { keybinding: "i t e m s" }
+									= link_to "Items", items_path
 							- if view_access_control('conversions','show')
 								li
-									= link_to "Conversions", conversions_path, data: { keybinding: "c o n v" }
+									= link_to "Conversions", conversions_path
 							- if view_access_control('suppliers','show')
 								li
-									= link_to "Suppliers", suppliers_path, data: { keybinding: "s u p p" }
+									= link_to "Suppliers", suppliers_path
 			- if view_access_control("subscriptions","show")
 				li class="#{is_menu_open?('subscriptions')}"
 					= link_to "<i class='fa icon-glyph-170'></i> <span>Subscriptions</span>".html_safe, subscriptions_path

@@ -42,5 +42,3 @@ group :production do
 end
 
 gem 'unicorn'
-#hotkey
-gem 'mousetrap-rails'
