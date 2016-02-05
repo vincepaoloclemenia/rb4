@@ -4,38 +4,28 @@ class DashboardController < ApplicationController
 	include ReportsHelper
 
 	def index
-		# Dashboard.populate_dashboard
 		@range_date = (Date.today - 7)..(Date.today - 1)
-		@branches = current_brand.branches.order(:id)
-		@sales_per_branch_total = Array.new
+		@formatted_dates = @range_date.map{|d| d.strftime("%b %d, %Y | %a")}
+		@branches = current_brand.branches.order(:id)		
+		#Tables/Modules
 		@branches_sales = branches_sales
 		@brand_sales = brand_sales
 		@update_customer_count = update_customer_count(@branches)
-		@price_movement = price_movement_dashboard
-		@branch_cost_stat = branch_purchase_cost_stat
-		@purchase_cost_stat = purchase_cost_stat
+		# @price_movement = price_movement_dashboard
+		# @branch_cost_stat = branch_purchase_cost_stat
+		# @purchase_cost_stat = purchase_cost_stat
 	end
-
 
 	def update_customer_count(branches)
 		customer_count = Array.new
+		date = Date.today - 1
 		@branches.each_with_index do |branch, index|
-			dashboard_item = Dashboard.get_dashboard_items((Date.today - 1), branch.id, current_brand.id).first
-			dashboard_item.blank? ? customer_count[index] = 0 : customer_count[index] = Dashboard.customer_count_check(dashboard_item.customer_count)
+			dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id)
+			dashboard_item.blank? ? customer_count[index] = 0 : customer_count[index] = Dashboard.check_if_blank(dashboard_item.customer_count)
+			puts "Customer Count #{customer_count[index]}"
 		end
-		# arr = Array.new
-		# @branches.each_with_index do |branch, index|
-		# 	hash = Hash.new
-		# 	customer_count = Dashboard.select(:id, :customer_count, :created_at).order('created_at DESC').where(branch_id: branch.id, previous_date_entry: Date.today - 1).last
-		# 	customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
-		# 	hash[:name] = branch.name
-		# 	hash[:y] = customer_count
-		# 	# arr.append(customer_count)
-		# 	arr[index] = hash
-		# end
-		a = ""
-		customer_count.map{|x| x == 0 ? a = "bar" : a = "pie"}
-		create_chart(current_brand.name, "Branches", @branches.pluck(:name), customer_count, " ", a, @branches.pluck(:color))
+		create_chart(current_brand.name, date.strftime("%b %d, %Y | %a"), @branches.pluck(:name), [9,6], "Total Purchase", "line", '')
+		# create_chart("Don't Eat Bambi", date.strftime("%b %d, %Y | %a"), @branches.pluck(:name), [9,6], @branches.pluck(:name), "line", @branches.pluck(:color))
 	end
 
 	def price_movement_dashboard
@@ -63,7 +53,6 @@ class DashboardController < ApplicationController
  			dates[index] = range_date.strftime("%b %d,%Y | %a")
  			amount[index] = @total_amount
  		end
-
  		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')
 	end
 
@@ -72,46 +61,39 @@ class DashboardController < ApplicationController
 		current_brand.branches.each_with_index do |branch, index|
 			amount = Array.new
 			@range_date.each_with_index do |date, index|
-				dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id).first
-				dashboard_item.blank? ? amount[index] = 0 : amount[index] = dashboard_item.purchase_total_amount
+				dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id)
+				dashboard_item.nil? ? amount[index] = 0 : amount[index] = Dashboard.check_if_blank(dashboard_item.purchase_total_amount)
 			end
 			total_purchase[index] = amount
 		end
-
-	 	create_chart(current_brand.name, "Branches", @range_date.map{|a| a.strftime("%b %d,%Y | %a")}, total_purchase, @branches.pluck(:name), "line",  @branches.pluck(:color))
+		create_chart(current_brand.name, "Branches", @formatted_dates, total_purchase, @branches.pluck(:name), "line",  @branches.pluck(:color))
 	end
 
 	#Sales Table
- 	def branches_sales
- 		range_date = (Date.today - 7)..(Date.today - 1)
- 		sales_total_amount = Array.new
- 		current_brand.branches.each_with_index do |branch, index|
- 			amount = Array.new
- 			range_date.each_with_index do |date, index|
- 				dashboard = Dashboard.where(previous_date_entry: date, branch_id: branch.id, brand_id: current_brand.id).first
- 				if dashboard.nil?
- 					amount[index] = 0
- 				else
- 					amount[index] = dashboard.sales_total_amount.to_i
- 				end
- 			end
- 			sales_total_amount[index] = amount
+	def compute_sales_total_amount(date_range, brand, module_type)
+		sales_total_amount = Array.new
+ 		brand.branches.each_with_index do |branch, index|
+ 			sales_total_amount[index]= Dashboard.get_array_dashboard_values(date_range, brand, branch, module_type)
  		end
- 		@sales_per_branch_total = sales_total_amount
- 		create_chart(current_brand.name, "Branches", range_date.map{|a| a.strftime("%b %d, %Y | %a")}, sales_total_amount, @branches.pluck(:name), "column", @branches.pluck(:color))
+ 		return sales_total_amount
+	end
+
+ 	def branches_sales
+ 		sales_total_amount = compute_sales_total_amount(@range_date, current_brand, 'sales')
+ 		create_chart(current_brand.name, "Branches", @formatted_dates, sales_total_amount, @branches.pluck(:name), "column", @branches.pluck(:color))
  	end
 
  	def brand_sales
- 		range_date = (Date.today - 7)..(Date.today - 1)
- 		brand_total_sale = @sales_per_branch_total.transpose.map{|x| x.reduce(:+)}
- 		create_chart(current_brand.name, "Brand", range_date.map{|a| a.strftime("%b %d, %Y | %a")}, brand_total_sale, "Total Amount", "column", @branches.pluck(:color))
+ 		sales_total_amount = compute_sales_total_amount(@range_date, current_brand, 'sales')
+ 		total = sales_total_amount.transpose.map{|a| a.reduce(:+)}
+ 		create_chart(current_brand.name, "Brand", @formatted_dates, total, "Total Amount", "column", @branches.pluck(:color))
  	end
- 		
+
 	def create_chart(title, subtitle, categories, data, names, chartType, colors)
-	  LazyHighCharts::HighChart.new('graph') do |f|
+		LazyHighCharts::HighChart.new('graph') do |f|
 		  f.title(text: title)
 		  f.subtitle(text: subtitle)
-		  f.xAxis(categories: categories)
+		  f.xAxis(categories: categories)	
 		  if names.instance_of? Array
 			  data.each_with_index do |d, index|
 		  		f.series(showInLegend: false, name: names[index], data: d, colors: colors)
@@ -120,9 +102,9 @@ class DashboardController < ApplicationController
 		  	f.series(showInLegend: false, name: names, data: data, colors: colors)
 		  end
 			f.chart({defaultSeriesType: chartType})
-			f.plotOptions(bar: {
-					colorByPoint: true,
-					colors: colors
+			f.plotOptions(
+				bar: {
+					colorByPoint: true	
 				},
 				pie: {
           allowPointSelect: true,
@@ -131,8 +113,7 @@ class DashboardController < ApplicationController
             enabled: false
           },
           showInLegend: true
-      })
+      	})
 		end
 	end
-
 end
