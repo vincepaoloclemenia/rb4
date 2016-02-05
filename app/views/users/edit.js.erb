@@ -1,0 +1,9 @@
+$('#modal h4').html('Edit User');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('.chosen').chosen({
+	width: "100%"
+})
+
+$('#modal').modal("show");

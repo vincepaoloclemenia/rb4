@@ -12,6 +12,10 @@ class Category < ActiveRecord::Base
   scope :saleable, -> { where(is_active: true, track_as_sales: true) }
 
 
+  def is_subcategory?
+    parent_id.present? ? true : false
+  end
+
   def total_revenue_month_to_date(branch_id, date)
     date = Date.strptime(date, "%m/%d/%Y") rescue Date.today
     start_date, end_date = date.beginning_of_month, date

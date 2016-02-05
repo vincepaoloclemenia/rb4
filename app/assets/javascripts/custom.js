@@ -42,4 +42,45 @@ $('#nestable').nestable({
    group: 1
 });
 
+// nestable reinitiate
+(function($) {
+    var $plugin = $('<div>').nestable().data('nestable');
+
+    var extensionMethods = {
+        reinit: function() {
+            // alias
+            var list = this;
+
+            // remove expand/collapse controls
+            $.each(this.el.find(this.options.itemNodeName), function(k, el) {
+                // if has <ol> child - remove previously prepended buttons
+                if ($(el).children(list.options.listNodeName).length) {
+                    $(el).children('button').remove();
+                }
+            });
+
+            // remove delegated event handlers
+            list.el.off('click', 'button');
+
+            var hasTouch = 'ontouchstart' in document;
+            if (hasTouch) {
+                list.el.off('touchstart');
+                list.w.off('touchmove');
+                list.w.off('touchend');
+                list.w.off('touchcancel');
+            }
+
+            list.el.off('mousedown');
+            list.w.off('mousemove');
+            list.w.off('mouseup');
+
+            // call init again
+            list.init();
+        } // reinit
+    };
+
+    $.extend(true, $plugin.__proto__, extensionMethods);
+})(jQuery);
+
+
 //multiple select

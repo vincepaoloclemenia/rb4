@@ -1,7 +1,11 @@
 class PagesController < ApplicationController
 	
 	def index
-		redirect_to dashboard_path if user_signed_in?
+		if user_signed_in?
+			redirect_to dashboard_path
+		else
+			render layout: false
+		end
 	end
 
 	def update_role
@@ -36,5 +40,21 @@ class PagesController < ApplicationController
 				@units << item.unit
 			end
 		end
+	end
+
+	def get_plan_info
+		@plan = Plan.find(params[:plan_id])
+		render json: { amount: @plan.amount, period: @plan.period },
+					status: :ok
+	end
+
+	def registration_validate_email
+		@taken = User.all.pluck(:email).include? params[:email]
+		@email = params[:email]
+	end
+
+	def registration_validate_username
+		@taken = User.all.pluck(:username).include? params[:username]
+		@username = params[:username]
 	end
 end

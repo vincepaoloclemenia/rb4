@@ -24,12 +24,22 @@ class BrandsController < ApplicationController
 	end
 
 	def update
-		if @brand.update(brand_params)
-			flash[:notice] = "Brand successfully updated"
-		else
-			flash[:alert] = @brand.errors.full_messages.join(", ")
+		respond_to do |format|
+			if @brand.update(brand_params)
+				#flash[:notice] = "Brand successfully updated"
+				#format.json { render status: :unprocessable_entity, json: @brand }
+				# flash.clear
+				@success = true
+				flash[:notice] = "Successfully updated"
+			else
+				#flash[:alert] = @brand.errors.full_messages.join(", ")
+				# flash.clear
+				@success = false
+				flash[:alert] = @brand.errors.full_messages.join(", ")
+			end
+			format.js
 		end
-		redirect_to brand_path(@brand)
+		#redirect_to brand_path(@brand)
 	end
 
 	def destroy

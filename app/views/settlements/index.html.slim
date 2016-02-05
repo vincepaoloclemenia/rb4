@@ -3,96 +3,143 @@
 		.pull-left.mt7 Settlements
 		.pull-right
 			- if view_access_control('settlements','create')
-				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Settlement".html_safe, '#', data: { toggle: "modal", target: ".create-settlement-modal" }, class: "btn btn-default btn-round btn-outline"
+				= link_to "<i class='icon-maxicons2-paste mr5'></i> Add Settlement".html_safe, '#', data: { toggle: "modal", target: ".create-settlement-modal" }, class: "btn btn-default btn-round btn-outline"
 	.panel-body
+		| Show
+		.btn-group.mb10
+		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+		    span.mr5 10
+		    span.caret
+		  ul.dropdown-menu role="menu"
+		    li
+		      a href="javascript:;"  10
+		    li
+		      a href="javascript:;"  25
+		    li
+		      a href="javascript:;"  50
+		    li
+		      a href="javascript:;"  100
+		    li.divider
+		    li
+		      a href="javascript:;"  Show All
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="220" Name
-						th width="220" Description
-						th width="220" Complimentary
-						th width="220" Status
-						th width="120" data-sortable="false" Action
+						th width="260" Name
+						th width="250" data-sortable="false" Description
+						th width="200" Complimentary
+						th width="200" Status
+						th width="90" data-sortable="false" Action
 				tbody
 					- @settlements.each do |settlement|
 						tr
 							td data-title="Name" = settlement.name
 							td data-title="Description" = settlement.description
 							td data-title="Complimentary" = settlement.is_complimentary ? "Yes" : "No"
-							td data-title="Status" = settlement.is_active ? "Active" : "Inactive"
+							td data-title="Status" = settlement.is_active ? "<span class='label label-success ml2'>Active</span>".html_safe : "<span class='label label-default ml2'>Deactivated</span>".html_safe
 							td.action data-title="Action"
 								- if view_access_control('settlements','update')
-									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-settlement-#{settlement.id}" }
+									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-settlement-#{settlement.id}" }
 								- if view_access_control('settlements','destroy')
 									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, settlement_path(settlement), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
 						.modal class="edit-settlement-#{settlement.id}" tabindex="-1" role="dialog" aria-hidden="true"
-							.modal-dialog.modal-sm
+							.modal-dialog
 								.modal-content
 									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true" x
+										button.close type="button" data-dismiss="modal" aria-hidden="true"
+											i.icon-maxicons1-exit
 										h4.modal-title Edit Settlement
 									.modal-body
 										= form_for settlement do |f|
 											.row.mb10
 												.col-xs-12
 													= f.label :name
-														| Name 
-														small.field-req *
+														| Name
+														small.field-req  *
 													= f.text_field :name, class: "form-control"
+											.row.mb10
 												.col-xs-12
 													= f.label :description
-													= f.text_field :description, class: "form-control"
+													= f.text_area :description, class: "form-control", rows: "2"
+											.row.mb10
 												.col-xs-6
-													= f.label :is_active
-													= f.check_box :is_active
+													= f.label :is_complimentary, "Complimentary"
+													p
+														= f.check_box :is_complimentary, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
 												.col-xs-6
-													= f.label :is_complimentary
-													= f.check_box :is_complimentary
+													= f.label :is_active, "Status"
+													p
+														= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 											.row.mb10
 												.col-xs-12.mt20
-													| ( 
-													small.field-req *
-													|  ) 
-													i indicates field is required
+													| (
+													small.field-req  *
+													|  )
+													i  indicates field is required
 											.modal-footer.no-border
 												span.inline.float-right
 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-													|  
-													= f.submit "Update", class: "btn btn-primary"
-
+													|
+													button.btn.btn-primary type="submit" Save Changes
+		.align-center
+		  p Showing 1 to 10 of 57 entries
+		  ul.pagination
+		    li
+		      a href="javascript:;"  ←
+		    li.active
+		      a href="javascript:;"  1
+		    li
+		      a href="javascript:;"  2
+		    li
+		      a href="javascript:;"  3
+		    li
+		      a href="javascript:;"  4
+		    li
+		      a href="javascript:;"  5
+		    li
+		      a href="javascript:;"  6
+		    li
+		      a href="javascript:;"  7
+		    li
+		      a href="javascript:;"  →
 .modal.create-settlement-modal tabindex="-1" role="dialog" aria-hidden="true"
-	.modal-dialog.modal-sm
+	.modal-dialog
 		.modal-content
 			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true" x
-				h4.modal-title Create Settlement
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
+				h4.modal-title Add Settlement
 			.modal-body
 				= form_for @settlement do |f|
 					.row.mb10
 						.col-xs-12
 							= f.label :name
-								| Name 
-								small.field-req *
+								| Name
+								small.field-req  *
 							= f.text_field :name, class: "form-control"
+					.row.mb10
 						.col-xs-12
 							= f.label :description
-							= f.text_field :description, class: "form-control"
+							= f.text_area :description, class: "form-control", rows: "2"
+					.row.mb10
 						.col-xs-6
-							= f.label :is_active
-							= f.check_box :is_active
+							= f.label :is_complimentary, "Complimentary"
+							p
+								= f.check_box :is_complimentary, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
 						.col-xs-6
-							= f.label :is_complimentary
-							= f.check_box :is_complimentary
+							= f.label :is_active, "Status"
+							p
+								= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 					.row.mb10
 						.col-xs-12.mt20
-							| ( 
-							small.field-req *
-							|  ) 
-							i indicates field is required
+							| (
+							small.field-req  *
+							|  )
+							i  indicates field is required
 					.modal-footer.no-border
 						span.inline.float-right
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|  
-							= f.submit "Create", class: "btn btn-primary"
+							|
+							button.btn.btn-primary type="submit" Add Settlement

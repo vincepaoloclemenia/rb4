@@ -12,6 +12,7 @@ class Brand < ActiveRecord::Base
   has_many :inventories, through: :branches, dependent: :restrict_with_error
   has_many :conversions
   has_many :purchases
+  has_many :purchase_items, through: :purchases
   has_many :suppliers
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"

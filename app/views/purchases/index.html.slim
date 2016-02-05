@@ -8,137 +8,58 @@
 						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Search"
 					.col-xs-12.col-lg-3
 						= f.label :purchase_date_cont, "Purchase Date"
-						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search", readonly: true
+						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
 					.col-xs-12.col-lg-3
 						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
 					.col-xs-12.col-lg-3
 						= f.label :supplier_id_eq, "Supplier"
-						= f.select :supplier_id_eq, @suppliers, { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+						= f.select :supplier_id_eq, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
 				.row.mt10
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-								i.icon-maxicons2-search
+								i.icon-glyph-42
 
-.panel.panel-primary
+.panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Purchases
 		.pull-right
 			- if view_access_control('purchases','create')
-				= link_to "<i class='icon-maxicons2-paste mr5'></i> Create Purchase".html_safe, '#', data: { toggle: "modal", target: ".create-purchase-modal" }, class: "btn btn-default btn-round btn-outline"
+				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, '#', data: { toggle: "modal", target: ".create-purchase-modal" }, class: "btn btn-success btn-round btn-outline"
 	.panel-body
-		| Show
-		.btn-group.mb10
-			- params[:show] = "10" if params[:show].nil?
-			= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
-			ul.dropdown-menu role="menu"
-				li
-					= link_to "10", purchases_path(request.params.except(:action,:controller).merge(show: "10"))
-				li
-					= link_to "25", purchases_path(request.params.except(:action,:controller).merge(show: "25"))
-				li
-					= link_to "50", purchases_path(request.params.except(:action,:controller).merge(show: "50"))
-				li
-					= link_to "100", purchases_path(request.params.except(:action,:controller).merge(show: "100"))
-				li.divider
-				li
-					= link_to "Show All", purchases_path(request.params.except(:action,:controller).merge(show: "all"))
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
-				thead
-					tr.bg-thead
-						th width="130" Invoice No.
-						th width="120" Date
-						th width="130" Branch
-						th width="160" Supplier
-						th width="110" Net<br>Amount
-						th width="110" VAT<br>Amount
-						th width="120" Total<br>Amount
-						th width="120" data-sortable="false" Action
-				tbody
-					- if @purchases.empty?
-						tr
-							td colspan="8"
-								p.text-center.mt5 No Records Found
+		- if current_brand.purchases.empty?
+			= render "partials/no_records_found", subtitle: 'To start tracking your purchase click <b>"Create Purchase"</b> button'
+		- else
+			| Show
+			.btn-group.mb10
+				- params[:show] = "10" if params[:show].nil?
+				= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
+				ul.dropdown-menu role="menu"
+					li
+						= link_to "10", purchases_path(request.params.except(:action,:controller).merge(show: "10"))
+					li
+						= link_to "25", purchases_path(request.params.except(:action,:controller).merge(show: "25"))
+					li
+						= link_to "50", purchases_path(request.params.except(:action,:controller).merge(show: "50"))
+					li
+						= link_to "100", purchases_path(request.params.except(:action,:controller).merge(show: "100"))
+					li.divider
+					li
+						= link_to "Show All", purchases_path(request.params.except(:action,:controller).merge(show: "all"))
+			.no-more-tables#purchase-list
+				= render "purchase_list", purchases: @purchases
 
-					- @purchases.each do |purchase|
-						- nvt = net_vat_total_computation(purchase.purchase_items)
-						tr
-							td data-title="Invoice No." = purchase.invoice_number
-							td data-title="Date" = purchase.purchase_date.strftime("%b %d %Y")
-							td data-title="Branch" = purchase.branch.name
-							td data-title="Supplier" = purchase.supplier.name
-							td data-title="Net Amount" = to_peso(nvt[:net])
-							td data-title="VAT Amount" = to_peso(nvt[:vat])
-							td data-title="Total Amount" = to_peso(nvt[:total])
-							td.action data-title="Action"
-								= link_to "<i class='icon-maxicons2-view'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
-								- if view_access_control('purchases','update')
-									= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
-								- if view_access_control('purchases','destroy')
-									= link_to "<i class='icon-maxicons1-exit'></i>".html_safe, purchase_path(purchase), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
-
-			- if @purchases.any?
-				.align-center
-					p
-						= page_entries_info @purchases, renderer: BootstrapPagination::Rails
-					= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
-
-
-						div class="modal edit_purchase_#{purchase.id}" tabindex="-1" role="dialog" aria-hidden="true"
-							.modal-dialog
-								.modal-content
-									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true"
-											i.icon-maxicons1-exit
-										h4.modal-title Edit Purchase
-									.modal-body
-										= form_for purchase do |f|
-											.row.mb10
-												.col-xs-12
-													= f.label :branch_id
-														| Branch
-														small.field-req *
-													= f.select :branch_id, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-											.row.mb10
-												.col-xs-6
-													= f.label :invoice_number
-														| Invoice number
-														small.field-req *
-													= f.text_field :invoice_number, class: "form-control"
-												.col-xs-6
-													= f.label :purchase_date
-														| Purchase Date
-														small.field-req *
-													= f.text_field :purchase_date, readonly: true, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, readonly: true, value: to_datepicker_format(f.object.purchase_date)
-											.row.mb10
-												.col-xs-12
-													= f.label :supplier_id, "Supplier"
-														| Supplier
-														small.field-req *
-													= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-											.row.mb10
-												.col-xs-12.mt20
-													| (
-													small.field-req *
-													|  )
-													i indicates field is required
-											.modal-footer.no-border
-												span.inline.float-right
-													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-													|
-													= f.submit "Update", class: "btn btn-primary"
 
 .modal.create-purchase-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog
 		.modal-content
 			.modal-header
 				button.close type="button" data-dismiss="modal" aria-hidden="true"
-					i.icon-maxicons1-exit
+					i.icon-glyph-27
 				h4.modal-title Create Purchase
 			.modal-body
-				= form_for @purchase do |f|
+				= form_for @purchase, remote: true do |f|
 					.row.mb10
 						.col-xs-12
 							= f.label :branch_id
@@ -155,13 +76,23 @@
 							= f.label :purchase_date
 								| Purchase Date
 								small.field-req  *
-							= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+							= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
 					.row.mb10
 						.col-xs-12
 							= f.label :supplier_id, "Supplier"
 								| Supplier
 								small.field-req  *
 							= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+
+							.alert.alert-info.mt5 role="alert"
+								.row
+									.col-xs-1.text-right
+										i.icon-glyph-73.f25
+									.col-xs-11
+										| You currently have no list of suppliers.<br> Go to:&nbsp;
+										b Setup > Purchase Setup > Suppliers >&nbsp;
+										= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+
 					.row.mb10
 						.col-xs-12.mt20
 							| (
@@ -172,4 +103,4 @@
 						span.inline.float-right
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 							|
-							= f.submit "Create", class: "btn btn-primary"
+							= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }

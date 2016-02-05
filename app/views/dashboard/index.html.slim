@@ -1,86 +1,81 @@
 .row
   .col-xs-12.col-md-12.col-lg-8
-    .panel.panel-primary
-      .panel-heading style="font-size:11px"
-        .pull-left Sales
-        .panel-controls.no-upp
-          a.panel-refresh.refresh-icon data-toggle="panel-refresh" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
-      .panel-body
+    .panel
+      .panel-heading.border.pb45
+        .pull-left.mt5 Sales
+        .panel-controls.no-upp.nave-tabs
+          ul.nav.nav-tabs.btn-group data-toggle="buttons"
+            label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
+              a data-toggle="tab" href="#brand-info"  Brand Total
+            label.btn.btn-primary class="#{brand_pane_active?('branches')}"
+              a data-toggle="tab" href="#branches-sales-list"  Branches Total
+      .panel-body.tab-content
+        #brand-info.tab-pane class="#{brand_pane_active?('info')}"
+          = high_chart("branch_sales_stat", @brand_sales)
+        #branches-sales-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
+          = high_chart("brand_sales_stat", @branches_sales)
 
   .col-xs-12.col-md-12.col-lg-4
-    .panel.panel-primary
-      .panel-heading style="font-size:11px"
+    / .widget.bg-danger-light
+    /   .text-uppercase
+    /     strong New update
+    /   p.text-white Lorem ipsum dolor sit amet, consectetur adipiscing elit. Frater et T. Sed ad bona praeterita redeamus.
+    /   a.btn.btn-danger.mt5 href="javascript:;"  Update Now
+
+    .panel
+      .panel-heading.border.pb45
         .pull-left Customer Count
-        .panel-controls.no-upp
+        .panel-controls.no-up
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
+            i.icon-glyph-98
       .panel-body
-        = high_chart("customer_count", @chart)
+        = high_chart("customer_count", @update_customer_count)
 
   .col-xs-12
-    .panel.panel-primary
-      .panel-heading style="font-size:11px"
-        .pull-left Purchase Cost Stats
-        .panel-controls.no-upp
-          a.panel-refresh.refresh-icon data-toggle="panel-refresh" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
-      .panel-body
+    .panel
+      .panel-heading.border.pb45 style="font-size:13px"
+        .pull-left.mt5 Purchase Cost Stats
+        .panel-controls.no-upp.nav-tabs
+          ul.nav.nav-tabs.btn-group data-toggle="buttons"
+            label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
+              a data-toggle="tab" href="#brand-info"  Brand Total
+            label.btn.btn-primary class="#{brand_pane_active?('branches')}"
+              a data-toggle="tab" href="#branches-list"  Branches Total
+      .panel-body.tab-content
+        #brand-info.tab-pane class="#{brand_pane_active?('info')}"
+          = high_chart("brand_cost_stat", @purchase_cost_stat)
+        #branches-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
+          = high_chart("branch_cost_stat", @branch_cost_stat)
 
   .col-xs-12.col-md-12.col-md-6
-    .panel.panel-primary
-      .panel-heading style="font-size:11px"
+    .panel
+      .panel-heading.border.pb45 style="font-size:11px"
         .pull-left
           small style="font-size:8px" Price Movement<br>
           | Lowest to Highest
         .panel-controls.no-upp
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
+            i.icon-glyph-98
       .panel-body
         .no-more-tables
-    			table.table.table-bordered.table-striped.mb0
-    				thead
-    					tr.bg-thead
-    						th width="100" Rank
-    						th width="200" Branch
-    						th width="250" Item
-    						th width="150" Prev Amount
-    						th width="150" Current Amount
-    						th width="150" Price Movement
-    				tbody
-    					tr
-    						td data-title="Rank" -
-    						td data-title="Branch" -
-    						td data-title="Item" -
-    						td data-title="Prev Amount" -
-    						td data-title="Current Amount" -
-    						td data-title="Price Movement" -
+          table.table.table-bordered.table-striped.mb0
+            thead
+              tr.bg-thead
+                th width="100" Rank
+                th width="200" Branch
+                th width="250" Item
+                th width="150" Prev Amount
+                th width="150" Current Amount
+                th width="150" Price Movement
+            tbody
+              - @price_movement.each_with_index do |pm, index|
+                tr
+                  td data-title="Rank" = index+1
+                  td data-title="Branch" = pm[:branch_name]
+                  td data-title="Item" = pm[:item]
+                  td data-title="Prev Amount" = to_peso(pm[:prev_amount])
+                  td data-title="Current Amount" = to_peso(pm[:present_amount])
+                  td data-title="Price Movement" = to_peso(pm[:price_movement].abs)
 
   .col-xs-12.col-md-12.col-md-6
-    .panel.panel-primary
-      .panel-heading style="font-size:11px"
-        .pull-left
-          small style="font-size:8px" Price Movement<br>
-          | Highest to Lowest
-        .panel-controls.no-upp
-          a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-maxicons1-refresh
-      .panel-body
-        .no-more-tables
-    			table.table.table-bordered.table-striped.mb0
-    				thead
-    					tr.bg-thead
-    						th width="100" Rank
-    						th width="200" Branch
-    						th width="250" Item
-    						th width="150" Prev Amount
-    						th width="150" Current Amount
-    						th width="150" Price Movement
-    				tbody
-    					tr
-    						td data-title="Rank" -
-    						td data-title="Branch" -
-    						td data-title="Item" -
-    						td data-title="Prev Amount" -
-    						td data-title="Current Amount" -
-    						td data-title="Price Movement" -
+    = render "price_movement"

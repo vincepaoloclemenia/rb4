@@ -7,33 +7,33 @@ header.header.navbar
 	ul.nav.navbar-nav.hidden-xs
 		li
 			p.navbar-text
-				- if ["index", "price_movement_report", "invoice_entry", "invoice_entry_report","man_hours","purchase_listings"].include?(params[:action])	&& ["reports", "purchases","inventories"].include?(params[:controller])
+				- if ["index", "price_movement_report", "invoice_entry", "invoice_entry_report","man_hours","purchase_listings","purchase_summary","item_purchase_detail"].include?(params[:action])	&& ["reports", "purchases","inventories","units"].include?(params[:controller])
 					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
 						span.show-ctrls
-							i.icon-maxicons1-arrowdown-01.show-icon.mr5
+							i.icon-glyph-48.show-icon.mr5
 							| Show Search
 						span.hide-ctrls
-							i.icon-maxicons1-arrowdown-02.show-icon.mr5
+							i.icon-glyph-202.show-icon.mr5
 							| Hide Search
 
 	ul.nav.navbar-nav.navbar-right.hidden-xs
-		li
-			a href="javascript:;" data-toggle="dropdown" data-tt="tooltip"
-				i.icon-maxicons3-drop
-			ul.dropdown-menu
-				li
-					a href="javascript:;"
-						| Default
-						i.icon-maxicons1-check.pull-right.green-color
-				li
-					a href="javascript:;" Navy Blue
-		li
-			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Tour"
-				i.fa.icon-maxicons3-light
-		li
-			a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Support"
-				i.fa.icon-maxicons3-lifebuoy
+		/ li
+		/ 	a href="javascript:;" data-toggle="dropdown" data-tt="tooltip"
+		/ 		i.icon-maxicons3-drop
+		/ 	ul.dropdown-menu
+		/ 		li
+		/ 			a href="javascript:;"
+		/ 				| Default
+		/ 				i.icon-maxicons1-check.pull-right.green-color
+		/ 		li
+		/ 			a href="javascript:;" Navy Blue
 		- if wizard_done?
+			li
+				a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Helper"
+					i.fa.icon-glyph-73
+			li
+				a href="javascript:;" data-tt="tooltip" data-placement="bottom" data-original-title="Support"
+					i.fa.icon-glyph-179
 			li
 				a href="javascript:;" data-toggle="dropdown"
 					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
@@ -42,7 +42,7 @@ header.header.navbar
 						- current_client.brands.each do |brand|
 							li
 								- if current_brand.name == brand.name
-									= link_to "#{brand.name}<i class='icon-maxicons1-check pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
+									= link_to "#{brand.name}<i class='icon-glyph-26 pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
 								- else
 									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
 		li
@@ -50,8 +50,9 @@ header.header.navbar
 				/img.header-avatar.img-circle src="/img/avatar-mummy.png"
 				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle"
 			ul.dropdown-menu
-				li
-					a href="javascript:;" Manage this account
+				- if wizard_done?
+					li
+						= link_to "Manage this account", account_path(username: current_user.username)
 				li
 					= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
 

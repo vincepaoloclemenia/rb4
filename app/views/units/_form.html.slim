@@ -1,0 +1,37 @@
+= form_for @unit, remote: true, html: { role: "form" } do |f|
+	.row.mb10
+		.col-xs-12
+			= f.label :name, class: "control-label"
+				| Unit of Measure
+				small.field-req  *
+			= f.text_field :name, class: "form-control validate_name", placeholder:"e.g: Litre", autofocus: true
+	.row.mb10
+		.col-xs-12
+			= f.label :symbol, class: "control-label"
+				| Abbreviation
+				small.field-req  *
+			= f.text_field :symbol, class: "form-control validate_symbol", placeholder:"e.g: m"
+	.row.mb10
+		.col-xs-12
+			= f.label :remarks, class: "control-label"
+				| Description
+			= f.text_area :remarks, class: "form-control", rows: 2, placeholder:"e.g: Metric Measure"
+	.row.mb10
+		.col-xs-4
+			= f.label :track_as_sales, "Track as Sales"
+			p
+				= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
+		.col-xs-4
+			= f.label :is_active, "Status"
+			p
+				= f.check_box :is_active, checked: true, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
+	.row.mb10
+		.col-xs-12.mt20
+			| (
+			small.field-req  *
+			|  )
+			i  indicates field is required
+	.modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			button.btn.btn-primary type="submit" = @unit.new_record? ? "Add Unit" : "Update"

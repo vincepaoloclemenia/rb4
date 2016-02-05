@@ -11,23 +11,26 @@
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html:{class:"form-layout"}) do |f| %>
               <%= f.hidden_field :flag, value: 1 %>
               <p class="text-center mb30 mt10">
-                Welcome to Restobot. Please sign in to your account
+                Create your Account
               </p>
               <div class="form-inputs">
                 <%= f.email_field :email, autofocus: true, class:"form-control input-lg", placeholder:"Email Address" %>
-                <%= f.text_field :username, autofocus: true, class:"form-control input-lg", placeholder:"Username" %>
-                <!-- <% if @validatable %>
-                <em>(<%= @minimum_password_length %> characters minimum)</em>
-                <% end %> -->
+                <%= f.text_field :username, class:"form-control input-lg", placeholder:"Username" %>
+                <!-- <%# if @validatable %>
+                <em>(<%#= @minimum_password_length %> characters minimum)</em>
+                <%# end %> -->
                 <%= f.password_field :password, autocomplete: "off", class:"form-control input-lg", placeholder:"Password (8 characters min)" %>
 
                 <%= f.password_field :password_confirmation, autocomplete: "off", class:"form-control input-lg", placeholder:"Confirm Password" %>
               </div>
-              <button class="btn btn-success btn-block btn-lg mb15" type="submit">
+              <button class="btn btn-primary btn-block btn-lg mb15" type="submit" data-disable-with="<span>Creating Account.. Please wait..</span>">
                 <span>Create Account</span>
               </button>
               <p class="text-center">
-                By clicking signin up, you agree to our <a href="terms.html">Terms of services & Policies.</a>
+                By clicking create account, you agree to our <a href="terms.html">Terms of services & Policies.</a>
+              </p>
+              <p class="text-center">
+                Already have an account? <%= link_to "Login again", session_path(resource_name), class:'helper-link' %>
               </p>
              <% end %>
           </div>
@@ -37,38 +40,152 @@
   </div>
 </div>
 
+<script>
+  $('#user_email').blur(function(){
+    if($(this).parent().is(".has-error")){
+      $(this).parent().find('label').remove();
+      $(this).unwrap();
+    }
+    else if($(this).parent().is(".has-success")){
+      $(this).unwrap();
+    }
+    else{
+    }
+
+
+    $.ajax({
+      url: "<%= registration_validate_email_path %>",
+      data: {
+        email: $(this).val()
+      }
+    });
+  });
+
+  $('#user_username').blur(function(){
+    if($(this).parent().is(".has-error")){
+      $(this).parent().find('label').remove();
+      $(this).unwrap();
+    }
+    else if($(this).parent().is(".has-success")){
+      $(this).unwrap();
+    }
+    else{
+    }
+    $.ajax({
+      url: "<%= registration_validate_username_path %>",
+      data: {
+        username: $(this).val()
+      }
+    });
+  });
+
+  // if($('#user_email').val() != ""){
+  //   $.ajax({
+  //     url: "<%= registration_validate_email_path %>",
+  //     data: {
+  //       email: $(this).val()
+  //     }
+  //   });
+  // }
+
+  // if($('#user_username').val() != ""){
+  //   $.ajax({
+  //     url: "<%= registration_validate_username_path %>",
+  //     data: {
+  //       username: $(this).val()
+  //     }
+  //   });
+  // }
+
+  $('#user_password').blur(function(){
+    var pwLength = $(this).val().length;
+    if($(this).parent().is(".has-error")){
+      $(this).parent().find('label').remove();
+      $(this).unwrap();
+    }
+    else if($(this).parent().is(".has-success")){
+      $(this).unwrap();
+    }
+    else{
+    }
+
+    if(pwLength < 8){
+      $(this).wrap("<div class='has-error'></div>");
+      $(this).parent().prepend("<label class='control-label pull-right' for='user_password'>Password must be more than 8 characters</label>");
+    }
+    else{
+      $(this).wrap("<div class='has-success'></div>");
+    }
+  })
+
+  $('#user_password_confirmation').blur(function(){
+    var pw = $('#user_password').val();
+    var pwConfirm = $(this).val();
+
+    if($(this).parent().is(".has-error")){
+      $(this).parent().find('label').remove();
+      $(this).unwrap();
+    }
+    else if($(this).parent().is(".has-success")){
+      $(this).unwrap();
+    }
+    else{
+    }
+
+    if(pw == pwConfirm){
+      $(this).wrap("<div class='has-success'></div>");
+    }
+    else{
+      $(this).wrap("<div class='has-error'></div>");
+      $(this).parent().prepend("<label class='control-label pull-right' for='user_password'>Password confirmation doesn't match</label>");
+    }
+  })
+
+  // var successFields = 0;
+  // $('.form-inputs').find('input').blur(function(){
+  //   successFields = $('.form-inputs').find('.has-success').length;
+  //   if(successFields == 4){
+  //     $('.form-inputs').parent().find('button[type=submit]').attr('disabled',false);
+  //   }
+  //   else{
+  //     $('.form-inputs').parent().find('button[type=submit]').attr('disabled',true);
+  //   }
+  // });
+
+</script>
+
 <!-- <h2>Sign up</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :flag, value: 1 %>
+<%#= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%#= devise_error_messages! %>
+  <%#= f.hidden_field :flag, value: 1 %>
 
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%#= f.label :email %><br />
+    <%#= f.email_field :email, autofocus: true %>
   </div>
 
   <div class="field">
-    <%= f.label :username %><br />
-    <%= f.text_field :username %>
+    <%#= f.label :username %><br />
+    <%#= f.text_field :username %>
   </div>
 
   <div class="field">
-    <%= f.label :password %>
-    <% if @validatable %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
+    <%#= f.label :password %>
+    <%# if @validatable %>
+    <em>(<%#= @minimum_password_length %> characters minimum)</em>
+    <%# end %><br />
+    <%#= f.password_field :password, autocomplete: "off" %>
   </div>
 
   <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    <%#= f.label :password_confirmation %><br />
+    <%#= f.password_field :password_confirmation, autocomplete: "off" %>
   </div>
 
   <div class="actions">
-    <%= f.submit "Sign up" %>
+    <%#= f.submit "Sign up" %>
   </div>
-<% end %>
+<%# end %>
 
-<%= render "devise/shared/links" %> -->
+<%#= render "devise/shared/links" %> -->

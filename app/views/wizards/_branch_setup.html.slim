@@ -1,65 +1,122 @@
-#branch-setup-form
-	h2 Branch Setup
-	- @brand = current_user.client.brands.first if current_user.client.brands.present?
-	- if @brand.branches.empty? ||  @brand.nil?
-		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-			= f.fields_for :branch1 do |b|
-				= b.label :name
-				| &nbsp;
-				= b.text_field :name
-				br
-				= b.label :address1, "Address"
-				| &nbsp;
-				= b.text_field :address1
-				br
-			= f.fields_for :branch2 do |b|
-				= b.label :name
-				| &nbsp;
-				= b.text_field :name
-				br
-				= b.label :address1, "Address"
-				| &nbsp;
-				= b.text_field :address1
-				br
-			= f.fields_for :branch3 do |b|
-				= b.label :name
-				| &nbsp;
-				= b.text_field :name
-				br
-				= b.label :address1, "Address"
-				| &nbsp;
-				= b.text_field :address1
-				br
-			= link_to "Back", "#", id: "back-btn"
-			| &nbsp;
-			= f.submit "Save"
-	- else
-		- branch_count = @brand.branches.count
-		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-			- branches = @brand.branches.order('id asc')
-			- branches.each_with_index do |branch, index|
-				= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
-					= b.label :name
-					| &nbsp;
-					= b.text_field :name
-					br
-					= b.label :address1, "Address"
-					| &nbsp;
-					= b.text_field :address1
-					br
-			- (3 - branch_count).times do |branch|
-				= f.fields_for "branch#{branch + 1}".to_sym do |b|
-					= b.label :name
-					| &nbsp;
-					= b.text_field :name
-					br
-					= b.label :address1, "Address"
-					| &nbsp;
-					= b.text_field :address1
-					br
-			= link_to "Back", "#", id: "back-btn"
-			| &nbsp;
-			= f.submit "Save"
+.panel.panel-primary#branch-setup-form
+	.panel-heading
+		.pull-left.mt7 Tell me about the branches that your brand have
+	.panel-body
+		- @brand = current_user.client.brands.first if current_user.client.brands.present?
+		- if @brand.branches.empty? ||  @brand.nil?
+			= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+				= f.fields_for :branch1 do |b|
+					.row
+						.col-xs-12.mb5
+							= b.text_field :name, placeholder: "Name", class: "form-control"
+						.col-xs-12.mb5
+							= b.text_field :address1, placeholder: "Address", class: "form-control"
+				= f.fields_for :branch2 do |b|
+					.row
+						.col-xs-12.mb5
+							= b.text_field :name, placeholder: "Name", class: "form-control"
+						.col-xs-12.mb5
+							= b.text_field :address1, placeholder: "Address", class: "form-control"
+				= f.fields_for :branch3 do |b|
+					.row
+						.col-xs-12.mb5
+							= b.text_field :name, placeholder: "Name", class: "form-control"
+						.col-xs-12.mb5
+							= b.text_field :address1, placeholder: "Address", class: "form-control"
+				.row
+					.col-xs-12
+						.pull-left
+							= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+						.pull-right
+							= f.submit "Next", class: "btn btn-primary"
+		- else
+			- branch_count = @brand.branches.count
+			= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+				- branches = @brand.branches.order('id asc')
+				- branches.each_with_index do |branch, index|
+					= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
+						.row
+							.col-xs-12.mb5
+								= b.text_field :name, placeholder: "Name", class: "form-control"
+							.col-xs-12.mb5
+								= b.text_field :address1, placeholder: "Address", class: "form-control"
+				- (3 - branch_count).times do |branch|
+					= f.fields_for "branch#{branch + 1}".to_sym do |b|
+						.row
+							.col-xs-12.mb5
+								= b.text_field :name, placeholder: "Name", class: "form-control"
+							.col-xs-12.mb5
+								= b.text_field :address1, placeholder: "Address", class: "form-control"
+				.row
+					.col-xs-12
+						.pull-left
+							= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+						.pull-right
+							= f.submit "Next", class: "btn btn-primary"
+
+
+/ #branch-setup-form
+/ 	h2 Branch Setup
+/ 	- @brand = current_user.client.brands.first if current_user.client.brands.present?
+/ 	- if @brand.branches.empty? ||  @brand.nil?
+/ 		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+/ 			= f.fields_for :branch1 do |b|
+/ 				= b.label :name
+/ 				| &nbsp;
+/ 				= b.text_field :name
+/ 				br
+/ 				= b.label :address1, "Address"
+/ 				| &nbsp;
+/ 				= b.text_field :address1
+/ 				br
+/ 			= f.fields_for :branch2 do |b|
+/ 				= b.label :name
+/ 				| &nbsp;
+/ 				= b.text_field :name
+/ 				br
+/ 				= b.label :address1, "Address"
+/ 				| &nbsp;
+/ 				= b.text_field :address1
+/ 				br
+/ 			= f.fields_for :branch3 do |b|
+/ 				= b.label :name
+/ 				| &nbsp;
+/ 				= b.text_field :name
+/ 				br
+/ 				= b.label :address1, "Address"
+/ 				| &nbsp;
+/ 				= b.text_field :address1
+/ 				br
+/ 			= link_to "Back", "#", id: "back-btn"
+/ 			| &nbsp;
+/ 			= f.submit "Save"
+/ 	- else
+/ 		- branch_count = @brand.branches.count
+/ 		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+/ 			- branches = @brand.branches.order('id asc')
+/ 			- branches.each_with_index do |branch, index|
+/ 				= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
+/ 					= b.label :name
+/ 					| &nbsp;
+/ 					= b.text_field :name
+/ 					br
+/ 					= b.label :address1, "Address"
+/ 					| &nbsp;
+/ 					= b.text_field :address1
+/ 					br
+/ 			- (3 - branch_count).times do |branch|
+/ 				= f.fields_for "branch#{branch + 1}".to_sym do |b|
+/ 					= b.label :name
+/ 					| &nbsp;
+/ 					= b.text_field :name
+/ 					br
+/ 					= b.label :address1, "Address"
+/ 					| &nbsp;
+/ 					= b.text_field :address1
+/ 					br
+/ 			= link_to "Back", "#", id: "back-btn"
+/ 			| &nbsp;
+/ 			= f.submit "Save"
 
 javascript:
 	$(document).ready(function () {

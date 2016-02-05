@@ -21,6 +21,15 @@
 set :environment, :development
 set :output, "log/cron.log"
 
-every :day, at: '2am' do
-	runner 'Sale.update_customer_count'
+# every 1.minute do
+# 	runner 'Dashboard.sample'
+# end
+
+every :day, at: '2am' do 
+	runner 'Dashboard.populate_dashboard'
+end 
+
+every :day, :at => '4:00am' do
+	runner 'Subscription.process_cancelled_subscriptions'
+	runner 'Subscription.process_free_trial_subscriptions'
 end

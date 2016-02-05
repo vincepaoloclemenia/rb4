@@ -1,0 +1,14 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+// <% if @success %>
+// 	$('.modal').modal('hide');
+// 	$('body').removeClass('modal-open');
+// 	$('.modal-backdrop').remove();
+// 	$('#unit-list').html("<%= j render partial: 'unit_list', units: @units %>");
+// <% end %>
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+$('#unit_<%= @unit.id %>').replaceWith('<%= j render(@unit) %>');

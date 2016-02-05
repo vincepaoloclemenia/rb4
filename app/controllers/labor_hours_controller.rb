@@ -9,6 +9,7 @@ class LaborHoursController < ApplicationController
 
   def generate_pdf
     respond_to do |format|
+      format.html
       format.pdf do
         render :pdf         => "Labor Work Hours List",
                 :orientation  => 'Landscape',
@@ -16,14 +17,12 @@ class LaborHoursController < ApplicationController
                 :margin => {:top       => 1,
                              :bottom   => 1} 
       end
-      format.html
     end
   end
 
   def create
     @labor_hour = LaborHour.new(labor_hour_entries_params)
   	respond_to do |format|
-      
       if @labor_hour.save
         format.html { redirect_to(labor_hours_path, :notice => 'Labor Hour entries was successfully created.') }
         format.xml  { render :xml => labor_hours_path, :status => :created, :location => @labor_hour }

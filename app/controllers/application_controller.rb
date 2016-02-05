@@ -12,6 +12,14 @@ class ApplicationController < ActionController::Base
     current_user.client
   end
 
+  def current_settings
+    current_client.setting
+  end
+
+  def paypal_datetime_current_time_zone(datetime)
+    DateTime.strptime(datetime, "%H:%M:%S %b %e, %Y %Z").in_time_zone
+  end
+
   def current_brand
     unless session[:current_brand_id]
       if current_user.role.role_level.eql?("client")
@@ -93,4 +101,5 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
 end

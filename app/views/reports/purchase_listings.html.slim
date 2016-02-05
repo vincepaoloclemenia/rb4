@@ -3,34 +3,43 @@
 		.panel-body
 			= search_form_for @q, url: purchase_listings_path do |f|
 				.row
-					.col-xs-6.col-xs-3
+					.col-xs-6.col-xs-6.mb5
 						= f.label :invoice_number_cont, "Invoice No."
-						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Select"
-					.col-xs-6.col-xs-3
+						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Search"
+					.col-xs-6.col-xs-6.mb5
 						= f.label :purchase_date_cont, "Purchase Date"
-						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", readonly: true
-					.col-xs-6.col-xs-3
+						- if params[:q][:purchase_date_gteq].present? && params[:q][:purchase_date_lteq].present?
+							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search", value: "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+						- else
+							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
+					.col-xs-6.col-xs-6
 						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-					.col-xs-6.col-xs-3
+						= f.select :branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
+					.col-xs-6.col-xs-6
 						= f.label :supplier_id_eq, "Supplier"
-						= f.select :supplier_id_eq, @suppliers, { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+						= f.select :supplier_id_in, @suppliers, {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
 				.row.mt10
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-								i.icon-maxicons2-search
+								i.icon-glyph-42
 
-.panel.panel-primary
-	.panel-heading
+.panel
+	.panel-heading.border.pb45
 		.pull-left.mt7 Purchase List
 		.pull-right
 			- if view_access_control('purchases','create')
-				button.btn.btn-default.btn-round.btn-outline.mr10
-					i.icon-maxicons1-download.mr5
-					| Download as Excel
-				= link_to "<i class='icon-maxicons1-download mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf), class: "btn btn-default btn-round btn-outline", target: "_blank"
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as Excel".html_safe, purchase_listings_path(format: :xlsx, q: request.params[:q]), class: "btn btn-success btn-round btn-outline mr10", target: "_blank"
+				|
+				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_listings_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| Oops! There seems to be no records of purchase here.<br> Go to&nbsp;
+					b Data Entry > Purchases > Create Purchase
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead
@@ -47,40 +56,47 @@
 				tbody
 					- total_purchases_net_amount = 0
 					- total_purchases_total_amount = 0
-					- @purchases.each do |purchase|
-						- purchase_net_amount = 0
-						- purchase_total_amount = 0
-						- purchase.purchase_items.each do |pi|
-							- nvt = net_vat_total_computation([pi])
-							tr
-								td data-title="Invoice No." = purchase.invoice_number
-								td data-title="Date" = purchase.purchase_date.strftime("%b %d %Y")
-								td data-title="Branch" = purchase.branch.name
-								td data-title="Supplier" = purchase.supplier.name
-								td data-title="Item"
-									= link_to pi.item.name, 'javascript:;', class: "view-link", data: { toggle: "modal", target: ".purchase-item-info-#{pi.id}", tt: "tooltip", placement: "top", "original-title" => "More Info" }
-								td data-title="Category" = pi.item.category.name
-								td data-title="VAT Amount" = number_to_currency(nvt[:vat], unit: "")
-								td data-title="Net Amount" = number_to_currency(nvt[:net], unit: "")
-								td data-title="Total Amount" = number_to_currency(nvt[:total], unit: "")
-								- purchase_net_amount += nvt[:net]
-								- purchase_total_amount += nvt[:total]
+					- if @purchases.empty?
+						td.text-center colspan="9"
+							| No records found from &nbsp;
+							i
+								b
+									= "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+					- else
+						- @purchases.each do |purchase|
+							- purchase_net_amount = 0
+							- purchase_total_amount = 0
+							- purchase.purchase_items.each do |pi|
+								- nvt = net_vat_total_computation([pi])
+								tr
+									td data-title="Invoice No." = purchase.invoice_number
+									td data-title="Date" = purchase.purchase_date.strftime("%b %d %Y")
+									td data-title="Branch" = purchase.branch.name
+									td data-title="Supplier" = purchase.supplier.name
+									td data-title="Item"
+										= link_to pi.item.name, 'javascript:;', class: "view-link", data: { toggle: "modal", target: ".purchase-item-info-#{pi.id}", tt: "tooltip", placement: "top", "original-title" => "More Info" }
+									td data-title="Category" = pi.item.category.name
+									td data-title="VAT Amount" = number_to_currency(nvt[:vat], unit: "")
+									td data-title="Net Amount" = number_to_currency(nvt[:net], unit: "")
+									td data-title="Total Amount" = number_to_currency(nvt[:total], unit: "")
+									- purchase_net_amount += nvt[:net]
+									- purchase_total_amount += nvt[:total]
 
-						- unless purchase.purchase_items.empty?
-							tr.bg-total
-								td colspan="7"
-								td.label-total-num data-title="Net Amount"
-									= number_to_currency(purchase_net_amount, unit: "")
-								td.label-total-num data-title="Total Amount"
-									= number_to_currency(purchase_total_amount, unit: "")
-								- total_purchases_net_amount += purchase_net_amount
-								- total_purchases_total_amount += purchase_total_amount
-					tr.bg-total
-						td.text-right.label-total colspan="7" Total:
-						td.label-total-num data-title="Net Amount"
-							= number_to_currency(total_purchases_net_amount, unit: "")
-						td.label-total-num data-title="Total Amount"
-							= number_to_currency(total_purchases_total_amount, unit: "")
+							- unless purchase.purchase_items.empty?
+								tr.bg-total
+									td colspan="7"
+									td.label-total-num data-title="Net Amount"
+										= number_to_currency(purchase_net_amount, unit: "")
+									td.label-total-num data-title="Total Amount"
+										= number_to_currency(purchase_total_amount, unit: "")
+									- total_purchases_net_amount += purchase_net_amount
+									- total_purchases_total_amount += purchase_total_amount
+						tr.bg-total
+							td.text-right.label-total colspan="7" Total:
+							td.label-total-num data-title="Net Amount"
+								= number_to_currency(total_purchases_net_amount, unit: "")
+							td.label-total-num data-title="Total Amount"
+								= number_to_currency(total_purchases_total_amount, unit: "")
 
 - @purchases.each do |purchase|
 	- purchase.purchase_items.each do |pi|

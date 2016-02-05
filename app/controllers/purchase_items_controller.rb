@@ -11,19 +11,35 @@ class PurchaseItemsController < ApplicationController
 	def create
 		purchase = current_brand.purchases.find(params[:purchase_id])
 		@purchase_item = purchase.purchase_items.new(purchase_item_params)
-		if @purchase_item.save
-			flash[:notice] = "Purchase Item successfully added"
-		else
-			flash[:alert] = @purchase_item.errors.full_messages.join(", ")
+		respond_to do |format|
+			if @purchase_item.save
+				index
+				@success = true
+				flash[:notice] = "Purchase Item successfully added"
+			else
+				@success = false
+				flash[:alert] = @purchase_item.errors.full_messages.join(", ")
+			end
+			format.js
 		end
-		redirect_to purchase_purchase_items_path(purchase_id: purchase.id)
+		#redirect_to purchase_purchase_items_path(purchase_id: purchase.id)
 	end
 
 	def destroy
 		purchase = current_brand.purchases.find(params[:purchase_id])
 		@purchase_item = purchase.purchase_items.find(params[:id])
-		@purchase_item.destroy
-		redirect_to purchase_purchase_items_path(purchase_id: purchase.id), notice: "Purchase Item successfully deleted"
+		respond_to do |format|
+			if @purchase_item.destroy
+				index
+				@success = true
+				flash[:notice] = "Purchase item successfully deleted"
+			else
+				@success = false
+				flash[:alert] = @purchase_item.errors.full_messages.join(", ")
+			end
+			format.js
+		end
+		#redirect_to purchase_purchase_items_path(purchase_id: purchase.id), notice: "Purchase Item successfully deleted"
 	end
 
 	private

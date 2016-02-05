@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+  <title>Restobot | Restaurant Management made easier!</title>
+  <link rel="shortcut icon" href="./assets/favicon.png">
+  <!-- <link rel="stylesheet" href="./assets/style.css"> -->
+  <%= stylesheet_link_tag "landing/application" %>
+
+</head>
+
+<body cz-shortcut-listen="true">
+
+  <div class="lj-menu" style="height: 70px; top: 0px;">
+    <div class="row">
+      <div class="col-sm-12">
+
+        <!-- LOGO -->
+        <div class="restobot-logo">
+          <a href="#header" class="slide" title="">
+            <!-- <img src="./assets/logo.png" data-retina-src="img/logo@2x.png" style="height:50px" alt=""> -->
+            <%= image_tag "/img/landing/logo.png", style: "height: 50px", alt: "Logo" %>
+          </a>
+          <a href="#header" class="slide floating" title="">
+            <!-- <img src="./assets/logo-floating.png" data-retina-src="img/logo-floating@2x.png" style="height:50px" alt=""> -->
+            <%= image_tag "/img/landing/logo-floating.png", style: "height: 50px", alt: "Logo" %>
+          </a>
+        </div>
+
+        <!-- MOBILE MENU BUTTON -->
+        <a href="#!" class="menu-icon">
+          <span class="menu-icon__text">Show Menu</span>
+        </a>
+
+        <!-- MENU LIST -->
+        <div class="menu-list">
+          <ul>
+            <li><a href="#header" class="slide">Home</a>
+            </li>
+            <li><a href="#features" class="slide">Features</a>
+            </li>
+            <li><a href="#pricing" class="slide">Pricing</a>
+            </li>
+            <li><a href="#faq" class="slide">Q&amp;A</a>
+            </li>
+            <li><a href="#about" class="slide">About Us</a>
+            </li>
+            <li class="button ghost"><%= link_to "LOGIN", new_user_session_path %>
+            </li>
+            <li class="button"><%= link_to "Create an Account", new_user_registration_path %>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- HEADER -->
+  <header id="header">
+    <div class="lj-overlay lj-overlay-color" style="background-image: url('/img/landing/bg-raw-restobot.png');"></div>
+
+    <div class="container">
+      <div class="row">
+
+        <div class="col-sm-6">
+          <h1>Restaurant Management made easier!</h1>
+          <p>It's super easy, fast and reliable.</p>
+        </div>
+
+        <div class="col-sm-6 hidden-xs">
+          <!-- <img src="./assets/header-3.png" alt=""> -->
+          <%= image_tag "/img/landing/header-3.png", alt: "Laptop" %>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="quotes">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 quote">
+          <div class="" style="display: block;">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
+          </div>
+          <div class="" style="display: none;">
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+          </div>
+          <div class="" style="display: none;">
+            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+          <div class="" style="display: none;">
+            <p>Duis aute irure dolor in reprehenderit, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <a href="#pricing" class="slide">see pricing</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES #1 -->
+  <div id="features" class="features">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h2><i class=" "></i>It's all included!</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <ul>
+            <li>
+              <i class=" "></i><span>Lorem ipsum dolor.</span>
+            </li>
+            <li>
+              <i class=" "></i><span>Consectetur elit.</span>
+            </li>
+            <li>
+              <i class=" "></i><span>Sed do eiusmod labore.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <!-- <img src="./assets/features-1.png" alt=""> -->
+          <%= image_tag "/img/landing/features-1.png", alt: "Picture" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES #2 -->
+  <div class="features color">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <!-- <img src="./assets/features-1.png" alt=""> -->
+          <%= image_tag "/img/landing/features-1.png", alt: "" %>
+        </div>
+
+        <div class="col-md-6">
+          <h2><i class=" "></i>Optimize Records!</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <ul>
+            <li>
+              <i class="fa fa-check"></i><span>Lorem ipsum dolor.</span>
+            </li>
+            <li>
+              <i class="fa fa-check"></i><span>Consectetur elit.</span>
+            </li>
+            <li>
+              <i class="fa fa-check"></i><span>Sed do eiusmod labore.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES #3 -->
+  <div class="features">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h2><i class=" "></i>Compatible with every device!</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <ul>
+            <li>
+              <i class="fa fa-check"></i><span>Lorem ipsum dolor.</span>
+            </li>
+            <li>
+              <i class="fa fa-check"></i><span>Consectetur elit.</span>
+            </li>
+            <li>
+              <i class="fa fa-check"></i><span>Sed do eiusmod labore.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <!-- <img src="./assets/features-3.png" alt=""> -->
+          <%= image_tag "/img/landing/features-3.png", alt: "" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENTS -->
+  <div id="app" class="client-buttons" style="position: relative; z-index: 0; background-color:#7f7f7f">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul>
+            <li>
+              <a href="#!">
+                <!-- <img src="./assets/buffalo1-client.png"> -->
+                <%= image_tag "/img/landing/buffalo1-client.png", alt: "" %>
+              </a>
+            </li>
+            <li>
+              <a href="#!">
+                <!-- <img src="./assets/71-client.png"> -->
+                <%= image_tag "/img/landing/71-client.png", alt: "" %>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 346px; width: 1275px; z-index: -999998; position: absolute;">
+      <!-- <img src="./assets/bg-module.jpg" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1275px; height: 735.474px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -194.737px;"> -->
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div id="pricing" class="pricing">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <h2>Try it before you buy it!</h2>
+          <p>Start your 60-day free trial now and enjoy all features. It's easy to upgrade to any of our plans later!</p>
+        </div>
+
+        <!-- PRICING PLAN #1-->
+        <div class="col-sm-4">
+          <div class="pricing-plan">
+            <h1>Free</h1>
+            <h3>Trial</h3>
+            <ul>
+              <li><span>Lorem ipsum dolor</span>
+              </li>
+              <li><span>Consectetur elit</span>
+              </li>
+              <li><span>Sed do eiusmod labore</span>
+              </li>
+              <li><span>Sit amet adipisicing</span>
+              </li>
+              <li><span>Tempor incididunt</span>
+              </li>
+            </ul>
+            <a href="#app" class="price slide">60 Days Free Trial</a>
+          </div>
+
+        </div>
+
+        <!-- PRICING PLAN #2-->
+        <div class="col-sm-4">
+          <div class="pricing-plan">
+            <h1>$40</h1>
+            <h3>Monthly</h3>
+            <ul>
+              <li><span>Lorem ipsum dolor</span>
+              </li>
+              <li><span>Consectetur elit</span>
+              </li>
+              <li><span>Sed do eiusmod labore</span>
+              </li>
+              <li><span>Sit amet adipisicing</span>
+              </li>
+              <li><span>Tempor incididunt</span>
+              </li>
+            </ul>
+            <a href="#!" class="price">60 Days Free Trial</a>
+          </div>
+        </div>
+
+        <!-- PRICING PLAN #3-->
+        <div class="col-sm-4">
+           <div class="pricing-plan">
+             <h1>$400 <span style="font-size:16px;color:#ef5350;top:0;text-decoration:line-through">$480</span></h1>
+            <h3>Yearly</h3>
+            <ul>
+              <li><span>Lorem ipsum dolor</span>
+              </li>
+              <li><span>Consectetur elit</span>
+              </li>
+              <li><span>Sed do eiusmod labore</span>
+              </li>
+              <li><span>Sit amet adipisicing</span>
+              </li>
+              <li><span>Tempor incididunt</span>
+              </li>
+            </ul>
+            <a href="#!" class="price">60 Days Free Trial</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div id="faq" class="faq">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <h2>Have more questions?</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <ul>
+            <li>
+              <h3>What is lorem ipsum?</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-6">
+          <ul>
+            <li>
+              <h3>Where can I commodo consequat?</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <ul>
+            <li>
+              <h3>Can I adipisicing elit?</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-6">
+          <ul>
+            <li>
+              <h3>Why is nostrud exercitation?</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <ul>
+            <li>
+              <h3>How do you dolor sit?</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-sm-6">
+          <ul>
+            <li>
+              <h3>Is there a laboris?</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- READY -->
+  <div class="ready-talk" style="position: relative; z-index: 0;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <h2>Ready to talk business?</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <a href="#!">Request a Demo</a>
+        </div>
+      </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 420px; width: 1275px; z-index: -999998; position: absolute;">
+      <!-- <img src="./assets/bg-module.jpg" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1275px; height: 735.474px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -157.737px;"> -->
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <p>© All rights reserved. Restobot 2016</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- /FOOTER -->
+
+  <%= javascript_include_tag "landing/application" %>

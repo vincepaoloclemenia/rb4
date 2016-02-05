@@ -1,20 +1,23 @@
-h2 NON-CONTROLLABLE EXPENSES
-table.table.table-bordered.table-striped.mb0
-	thead
-		tr.bg-head
-			td
-			td width="20%"
-			td width="20%" %
-	tbody
-		- @total = []
-		- @category_listing2.each do |cat|
-			tr
-				td = cat.name
-				- @cat_amount = cat.cat_amount_total(@branch_id, cat.id, params[:date_entry])
-				td = to_peso(@cat_amount)
-				td
-			- @total << @cat_amount
-		tr
-			td Total Controllable
-			td = to_peso(@total.inject(:+))
-			td
+.panel
+	.panel-heading.border Non-Controllable Expenses
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0
+				thead
+					tr.bg-thead
+						th width="300"
+						th width="350"
+						th width="350" %
+				tbody
+					- @total = []
+					- @category_listing2.each do |cat|
+						tr
+							td data-title="Title" = cat.name
+							- @cat_amount = cat.cat_amount_total(@branch_id, cat.id, params[:date_entry])
+							td data-title="Total" = to_peso(@cat_amount)
+							td data-title="%"
+						- @total << @cat_amount
+					tr
+						td data-title="Title" Total Controllable
+						td data-title="Total" = to_peso(@total.inject(:+))
+						td data-title="%"

@@ -1,0 +1,4 @@
+.collapse#show-search class="#{ 'in' if params[:q].present? }"
+	.panel
+		.panel-body
+			= render "search_form"

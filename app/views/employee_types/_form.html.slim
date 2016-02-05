@@ -1,25 +1,24 @@
-.modal-dialog.modal-sm
+.modal-dialog
 	.modal-content
 		.modal-header
 			button.close type="button" data-dismiss="modal" aria-hidden="true"
 				i.icon-maxicons1-exit
-			h4.modal-title Create Purchase
+			h4.modal-title Add Employee Type
 		.modal-body
 			= form_for @employee_type do |f|
 				.row.mb10
-					.col-xs-12
+					.col-xs-6
 						= f.label :name
+							| Type
+							small.field-req  *
 						= f.text_field :name, class: 'form-control'
+					.col-xs-6
+						= f.label :dividend
+						= f.select :dividend_id, @category.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 				.row.mb10
 					.col-xs-12
 						= f.label :description
-						= f.text_field :description, class: 'form-control'
-				.row.mb10
-					.col-xs-12
-						= f.label :dividend
-						= f.select :dividend_id, @category.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+						= f.text_area :description, class: 'form-control', rows:"2"
 				.modal-footer.no-border
-					span.inline.float-right
-							= f.submit "Create", class: "btn btn-primary"
-							|
-							= link_to "Cancel", "#", class: "btn btn-default", data: {dismiss: "modal"}
+					= link_to "Cancel", "#", class: "btn btn-default", data: {dismiss: "modal"}
+					button.btn.btn-primary type="submit" Add Type

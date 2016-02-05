@@ -3,7 +3,7 @@ lock '3.2.1'
 
 set :application, 'restobotv4'
 set :repo_url, 'git@bitbucket.org:jmunts/restobot-v4.git'
-set :rvm_ruby_version, '2.2.2'
+set :rvm_ruby_version, '2.3.0'
 set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
@@ -34,6 +34,10 @@ set :log_level, :debug
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+#whenever gem
+require "whenever/capistrano"
+set :whenever_environment, defer { stage }
+set :whenever_command, 'bundle exec whenever'
 
 set :bundle_binstubs, nil
 

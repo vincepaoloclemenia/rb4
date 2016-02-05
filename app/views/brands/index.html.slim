@@ -1,9 +1,9 @@
-.panel.panel-primary
+.panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Brands
 		.pull-right
 			- if view_access_control('brands','create')
-				= link_to "<i class='icon-maxicons2-paste mr5'></i> Add Brand".html_safe, '#', data: { toggle: "modal", target: ".create-brand-modal" }, class: "btn btn-default btn-round btn-outline"
+				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Brand".html_safe, '#', data: { toggle: "modal", target: ".create-brand-modal" }, class: "btn btn-success btn-round btn-outline"
 	.panel-body
 		| Show
 		.btn-group.mb10
@@ -25,9 +25,10 @@
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
-					tr.bg-thead 
+					tr.bg-thead
 						th width="350" Brand
-						th width="550" data-sortable="false" Website
+						th width="275" data-sortable="false" Website
+						th width="275" data-sortable="false" No. of Branch
 				tbody
 					- @brands.each do |brand|
 						tr
@@ -35,12 +36,14 @@
 							  img.brand-avatar.img-circle src="#{brand.avatar.url}"
 								= link_to brand.name, brand_path(brand), class: "view-link", data: {tt:"tooltip", placement:"top", "original-title" => "View Information"}
 							td data-title="Website" = brand.website
+							td data-title="No. of Branch" 
 
 .modal.create-brand-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"  ×
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+					i.icon-glyph-27
         h4.modal-title Create Brand
       .modal-body
         = form_for @brand do |f|
@@ -50,13 +53,13 @@
                 .show-image.mb5
                   = image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"
                   a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-                    i.icon-maxicons1-exit id="remove-avatar"
+                    i.icon-glyph-27 id="remove-avatar"
                 = f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
             .col-xs-12.col-md-8.col-lg-8
               .col-xs-12.mb10
                 = f.label :name
                   | Brand
-                  small.field-req *
+                  small.field-req  *
                 = f.text_field :name, class: "form-control", placeholder: "Name"
               .col-xs-12.mb10
                 = f.label :website
@@ -88,11 +91,11 @@ javascript:
 		function readURL(input) {
 	    if (input.files && input.files[0]) {
 	      var reader = new FileReader();
-	      
+
 	      reader.onload = function (e) {
 	      	$('#upload_preview').attr('src', e.target.result);
 	      }
-	      
+
 	      reader.readAsDataURL(input.files[0]);
 	    }
 		}

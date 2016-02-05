@@ -1,0 +1,13 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+<% if @category.is_subcategory? %>
+	$('#category_<%= @category.id %>').replaceWith('<%= j render "subcategory", subcategory: @category %>')
+<% else %>
+	$('#category_<%= @category.id %>').replaceWith('<%= j render(@category) %>');
+<% end %>
+
+	$('#nestable').nestable('reinit');

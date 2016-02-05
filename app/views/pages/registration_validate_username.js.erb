@@ -1,0 +1,24 @@
+var usernameValid = validateUsername("<%= @username %>");
+var usernameLength = "<%= @username %>".length;
+
+if(usernameLength < 5 || usernameLength > 15){
+	$('#user_username').wrap("<div class='has-error'></div>");
+	$('#user_username').parent().prepend("<label class='control-label pull-right' for='user_username'>Username length must be 5-15 only</label>");
+}
+else if(usernameValid == false){
+	$('#user_username').wrap("<div class='has-error'></div>");
+	$('#user_username').parent().prepend("<label class='control-label pull-right' for='user_username'>Username must contain alphanumeric and underscores only</label>");
+}
+else{
+	<% if @taken %>
+		$('#user_username').wrap("<div class='has-error'></div>");
+		$('#user_username').parent().prepend("<label class='control-label pull-right' for='user_username'>Username is already taken</label>");
+	<% else %>
+		$('#user_username').wrap("<div class='has-success'></div>");
+	<% end %>
+}
+
+function validateUsername(username) {
+  var re = /^[a-zA-Z0-9_]+$/;
+  return re.test(username);
+}

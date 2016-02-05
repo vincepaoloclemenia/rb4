@@ -1,0 +1,8 @@
+$('#modal h4').html('<%= @category.parent_id.present? ? "Edit Subcategory" : "Edit Category" %>');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$("[data-toggle='toggle']").bootstrapToggle('destroy');
+$("[data-toggle='toggle']").bootstrapToggle();

@@ -1,7 +1,7 @@
 <div class="app layout-fixed-header bg-login usersession">
   <div class="full-height">
     <%= render "partials/flash" if flash %>
-    <div class="center-wrapper">
+    <div class="center-wrapper" style="z-index:20">
       <div class="center-content">
         <div class="row no-margin">
           <div class="text-center mb15">
@@ -16,7 +16,7 @@
                 <%= f.text_field :login, autofocus: true, class:"form-control input-lg", placeholder:"Email Address or Username" %>
                 <%= f.password_field :password, autocomplete: "off", class:"form-control input-lg", placeholder:"Password" %>
               </div>
-              <button class="btn btn-success btn-block btn-lg mb15" type="submit">
+              <button class="btn btn-primary btn-block btn-lg mb15" type="submit">
                 <span>Sign in</span>
               </button>
               <p>
@@ -28,4 +28,7 @@
       </div>
     </div>
   </div>
+</div>
+<div id="background-container" class="background-container">
+  <div id="background-output" class="background-output"></div>
 </div>

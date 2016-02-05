@@ -1,0 +1,120 @@
+= form_for @user, url: @user.new_record? ? company_users_path : company_user_path(@user) do |f|
+	.row.mb10
+		.col-xs-12.col-lg-6.mb10
+			= f.label :first_name
+				| First Name
+				small.field-req  *
+			= f.text_field :first_name, class: "form-control", placeholder: "e.g: Juan"
+		.col-xs-12.col-lg-6.mb10
+			= f.label :last_name
+				| Last Name
+				small.field-req  *
+			= f.text_field :last_name, class: "form-control", placeholder: "e.g: Dela Cruz"
+		.col-xs-12.mb10
+			= f.label :email
+				| Email Address
+				small.field-req  *
+			= f.text_field :email, class: "form-control", placeholder:"you@example.com"
+		.col-xs-12.mb10
+			= f.label :username
+				| Username
+				small.field-req  *
+			= f.text_field :username, class: "form-control", placeholder:"e.g: juandelacruz"
+		- if @user.new_record?
+			.col-xs-6.mb10
+				= f.label :password
+					| Password
+					small.field-req  *
+				= f.password_field :password, class: "form-control", placeholder:"8 characters minimum"
+			.col-xs-6
+				= f.password_field :password_confirmation, class: "form-control mt25", placeholder:"Confirm Password"
+		- client_user_access = @user.new_record? ? current_client.users.new().client_user_access : @user.client_user_access
+		= f.fields_for :client_user_access, client_user_access do |cua|
+			= hidden_field_tag :user_role_id, @user.new_record? ? "" : @user.client_user_access.branch_id
+			.col-xs-12.role_field_div.mb10
+				= cua.label :role_id
+					| Role
+					small.field-req  *
+				= cua.select :role_id, current_client.roles.pluck(:name,:id), { include_blank: true }, class: "chosen role-field", data: { placeholder: "Select" }, id: "role_field_id_new"
+			.col-xs-12.brand_field_div
+				= cua.label :brand_id
+					| Brand
+					small.field-req  *
+				= cua.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, id: "brand_field_id_new"
+				.alert.alert-info.mt5 role="alert"
+					| You can add Brands at &nbsp;
+					b Setup > Company Setup > Brands
+			.col-xs-12.branch_field_div
+				= cua.label :branch_id
+					| Branch
+					small.field-req  *
+				= cua.select :branch_id, [], { include_blank: true }, class: "chosen", data: { placeholder: "Select" }
+				.alert.alert-info.mt5 role="alert"
+					| You can add more branches at<br>
+					b Setup > Company Setup > Brands >
+					i &nbsp; Click your brand &nbsp;
+					b > Add Branch
+	.row.mb10
+		.col-xs-12.mt20
+			| (
+			small.field-req  *
+			|   )
+			i  indicates field is required
+
+	.modal-footer.no-border
+		= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+		button.btn.btn-primary type="submit" = @user.new_record? ? "Add User" : "Edit User"
+
+
+javascript:
+	$(document).ready(function () {
+		$('.role_field_div select').on('change', function(){
+			$.ajax({
+				url: "#{update_role_path}",
+				data: {
+					role_id: $(this).val(),
+					role_field_id: $(this).prop("id")
+				}
+			});
+		});
+		$('.role_field_div select').each(function(index,element){
+			if($(this).val() == ""){
+				$(this).parent().parent().find('.brand_field_div').slideUp();
+				$(this).parent().parent().find('.branch_field_div').slideUp();
+			}
+			else{
+				$.ajax({
+					url: "#{update_role_path}",
+					data: {
+						role_id: $(this).val(),
+						role_field_id: $(this).prop("id")
+					}
+				});
+			}
+		});
+		$('.brand_field_div select').on('change', function(){
+			$.ajax({
+				url: "#{update_branch_path}",
+				data: {
+					brand_id: $(this).val(),
+					brand_field_id: $(this).prop("id"),
+					selected_brand_branch_id: $(this).parent().parent().find('#user_role_id').val()
+				}
+			});
+		});
+		$('.brand_field_div select').each(function(index,element){
+			if($(this).val() == ""){
+
+			}
+			else{
+				$.ajax({
+					url: "#{update_branch_path}",
+					data: {
+						brand_id: $(this).val(),
+						brand_field_id: $(this).prop("id"),
+						selected_brand_branch_id: $(this).parent().parent().find('#user_role_id').val()
+					}
+				});
+			}
+		});
+	});

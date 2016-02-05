@@ -11,10 +11,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215072657) do
+ActiveRecord::Schema.define(version: 20160202024808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bills", force: :cascade do |t|
+    t.integer  "subscription_id"
+    t.decimal  "amount",          precision: 15, scale: 2
+    t.string   "status"
+    t.string   "payer_email"
+    t.string   "transaction_id"
+    t.string   "plan_name"
+    t.text     "branches"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.integer  "client_id"
+  end
+
+  add_index "bills", ["client_id"], name: "index_bills_on_client_id", using: :btree
+  add_index "bills", ["subscription_id"], name: "index_bills_on_subscription_id", using: :btree
+
+  create_table "branch_subscriptions", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.integer  "subscription_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "branch_subscriptions", ["branch_id"], name: "index_branch_subscriptions_on_branch_id", using: :btree
+  add_index "branch_subscriptions", ["subscription_id"], name: "index_branch_subscriptions_on_subscription_id", using: :btree
 
   create_table "branches", force: :cascade do |t|
     t.integer  "brand_id"
@@ -127,9 +155,11 @@ ActiveRecord::Schema.define(version: 20151215072657) do
     t.integer  "brand_id"
     t.integer  "branch_id"
     t.integer  "customer_count"
-    t.datetime "previous_date_entry"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.date     "previous_date_entry"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.decimal  "purchase_total_amount"
+    t.decimal  "sales_total_amount"
   end
 
   add_index "dashboards", ["branch_id"], name: "index_dashboards_on_branch_id", using: :btree
@@ -245,6 +275,18 @@ ActiveRecord::Schema.define(version: 20151215072657) do
 
   add_index "manifolds", ["client_id"], name: "index_manifolds_on_client_id", using: :btree
 
+  create_table "payment_notifications", force: :cascade do |t|
+    t.text     "params"
+    t.string   "transaction_type"
+    t.string   "status"
+    t.string   "transaction_id"
+    t.integer  "subscription_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "payment_notifications", ["subscription_id"], name: "index_payment_notifications_on_subscription_id", using: :btree
+
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
     t.integer  "section_id"
@@ -260,6 +302,19 @@ ActiveRecord::Schema.define(version: 20151215072657) do
   add_index "permissions", ["client_id"], name: "index_permissions_on_client_id", using: :btree
   add_index "permissions", ["role_id"], name: "index_permissions_on_role_id", using: :btree
   add_index "permissions", ["section_id"], name: "index_permissions_on_section_id", using: :btree
+
+  create_table "plans", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.decimal  "amount",           precision: 15, scale: 2
+    t.string   "period"
+    t.string   "plan_type"
+    t.integer  "brand_limit"
+    t.integer  "branch_limit"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "duration_in_days"
+  end
 
   create_table "purchase_items", force: :cascade do |t|
     t.integer  "item_id"
@@ -374,6 +429,17 @@ ActiveRecord::Schema.define(version: 20151215072657) do
     t.string   "name"
   end
 
+  create_table "settings", force: :cascade do |t|
+    t.string   "theme",      default: "Default"
+    t.string   "currency",   default: "Philippine Peso"
+    t.string   "language",   default: "English"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "client_id"
+  end
+
+  add_index "settings", ["client_id"], name: "index_settings_on_client_id", using: :btree
+
   create_table "settlements", force: :cascade do |t|
     t.string   "name"
     t.boolean  "is_complimentary"
@@ -395,6 +461,29 @@ ActiveRecord::Schema.define(version: 20151215072657) do
   end
 
   add_index "shifts", ["brand_id"], name: "index_shifts_on_brand_id", using: :btree
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer  "client_id"
+    t.integer  "plan_id"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "status"
+    t.string   "paypal_customer_token"
+    t.string   "paypal_recurring_profile_token"
+    t.string   "paypal_email"
+    t.string   "paypal_payment_token"
+    t.datetime "previous_payment"
+    t.datetime "next_payment"
+    t.integer  "branch_count"
+    t.string   "period"
+    t.decimal  "amount",                         precision: 15, scale: 2
+    t.decimal  "outstanding_balance",            precision: 15, scale: 2
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+  end
+
+  add_index "subscriptions", ["client_id"], name: "index_subscriptions_on_client_id", using: :btree
+  add_index "subscriptions", ["plan_id"], name: "index_subscriptions_on_plan_id", using: :btree
 
   create_table "suppliers", force: :cascade do |t|
     t.integer  "brand_id"
@@ -471,6 +560,10 @@ ActiveRecord::Schema.define(version: 20151215072657) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  add_foreign_key "bills", "clients"
+  add_foreign_key "bills", "subscriptions"
+  add_foreign_key "branch_subscriptions", "branches"
+  add_foreign_key "branch_subscriptions", "subscriptions"
   add_foreign_key "branches", "brands"
   add_foreign_key "brands", "clients"
   add_foreign_key "categories", "brands"
@@ -494,6 +587,7 @@ ActiveRecord::Schema.define(version: 20151215072657) do
   add_foreign_key "items", "units"
   add_foreign_key "labor_hours", "employees"
   add_foreign_key "manifolds", "clients"
+  add_foreign_key "payment_notifications", "subscriptions"
   add_foreign_key "permissions", "clients"
   add_foreign_key "permissions", "roles"
   add_foreign_key "permissions", "sections"
@@ -510,8 +604,11 @@ ActiveRecord::Schema.define(version: 20151215072657) do
   add_foreign_key "sale_by_settlement_entries", "sales"
   add_foreign_key "sale_by_settlement_entries", "settlements"
   add_foreign_key "sales", "branches"
+  add_foreign_key "settings", "clients"
   add_foreign_key "settlements", "clients"
   add_foreign_key "shifts", "brands"
+  add_foreign_key "subscriptions", "clients"
+  add_foreign_key "subscriptions", "plans"
   add_foreign_key "suppliers", "branches"
   add_foreign_key "suppliers", "brands"
   add_foreign_key "suppliers", "clients"

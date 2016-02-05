@@ -1,22 +1,52 @@
-h2 Labor Hours
-=  form_for @labor_hour do |f|
-	= f.submit 'Submit', class: 'button tiny success'
-	table#labor_entry_fields
-		thead
-			tr
-				th Working Date
-				th Regular
-				th Overtime
-				th Night Differential
-				th Legal Holiday
-				th Special Holiday
-				th Absent
-				th Late
-				th Rest Day
-				th Action
-		tbody
-			tr
-				= f.hidden_field :employee_id, value: params[:employee_id], class: "form-control input-sm"
-				= f.fields_for :labor_hours_entries do |labor|
-					= render 'labor_hours_entry_fields', :f=> labor
-	= link_to_add_association 'Create New', f, :labor_hours_entries, :'data-association-insertion-method' => "append", :"data-association-insertion-node" => "#labor_entry_fields tbody", class: 'button tiny'
+.panel.panel-primary
+	.panel-heading Add Labor Hours
+	.panel-body
+		.no-more-tables
+			=  form_for @labor_hour do |f|
+				table.table.table-bordered.table-striped.mb id="labor_entry_fields"
+					thead
+						tr.bg-thead
+							th width="140" Working Date
+							th width="80" Regular
+							th width="80" Overtime
+							th width="140" Night Differential
+							th width="120" Legal Holiday
+							th width="135" Special Holiday
+							th width="80" Absent
+							th width="80" Late
+							th width="100" Rest Day
+							th width="50" Action
+					tbody
+						tr
+							= f.hidden_field :employee_id, value: params[:employee_id], class: "form-control"
+							= f.fields_for :labor_hours_entries do |labor|
+								= render 'labor_hours_entry_fields', :f=> labor
+				.row
+					.col-xs-12
+						.pull-right
+							= link_to_add_association '<i class="icon-maxicons2-plus"></i> Add More'.html_safe, f, :labor_hours_entries, :'data-association-insertion-method' => "append", :"data-association-insertion-node" => "#labor_entry_fields tbody", class: 'btn btn-default btn-success btn-outline mr2'
+
+							button.btn.btn-primary.btn-outline type="submit" Submit
+
+/ h2 Labor Hours
+/ =  form_for @labor_hour do |f|
+/ 	= link_to_add_association 'Create New', f, :labor_hours_entries, :'data-association-insertion-method' => "append", :"data-association-insertion-node" => "#labor_entry_fields tbody", class: 'button tiny'
+/ 	table#labor_entry_fields
+/ 		thead
+/ 			tr
+/ 				th Working Date
+/ 				th Regular
+/ 				th Overtime
+/ 				th Night Differential
+/ 				th Legal Holiday
+/ 				th Special Holiday
+/ 				th Absent
+/ 				th Late
+/ 				th Rest Day
+/ 				th Action
+/ 		tbody
+/ 			tr
+/ 				= f.hidden_field :employee_id, value: params[:employee_id], class: "form-control input-sm"
+/ 				= f.fields_for :labor_hours_entries do |labor|
+/ 					= render 'labor_hours_entry_fields', :f=> labor
+/ 	= f.submit 'Submit', class: 'button tiny success'

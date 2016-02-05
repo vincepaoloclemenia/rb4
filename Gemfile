@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.2'
+ruby '2.3.0'
 
 gem 'rails', '4.2.5.rc2'
 gem 'pg'
@@ -20,6 +20,9 @@ gem 'ransack'
 gem 'whenever', :require => false
 gem "paperclip", "~> 4.3"
 gem 'lazy_high_charts'
+gem 'axlsx_rails'
+gem 'animate-rails'
+gem 'paypal-recurring'
 
 group :development, :test do
   gem 'byebug'
@@ -32,6 +35,10 @@ group :development, :test do
   gem 'capistrano-rvm', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano3-nginx_unicorn', require: false
+end
+
+group :production do
+  gem 'exception_notification'
 end
 
 gem 'unicorn'

@@ -1,0 +1,156 @@
+.panel.panel-primary
+  .panel-heading Employee Information
+  .panel-body
+    .row
+      .col-xs-12.col-md-4
+        p
+          .text-light-grey
+            | Name
+          label.text-dark-grey = @employee.full_name
+        p
+          .text-light-grey
+            | Date of Birth
+          label.text-dark-grey = @employee.birthdate
+        p
+          .text-light-grey
+            | Age
+          label.text-dark-grey = @employee.age
+        p
+          .text-light-grey
+            | Contact No
+          label.text-dark-grey = @employee.contact_no
+        p
+          .text-light-grey
+            | Address
+          label.text-dark-grey = @employee.address
+      .col-xs-12.col-md-4
+        p
+          .text-light-grey
+            | Position Title
+          label.text-dark-grey = @employee.position
+        p
+          .text-light-grey
+            | Employee Type
+          label.text-dark-grey = @employee.employee_type_id
+        p
+          .text-light-grey
+            | Position Type
+          label.text-dark-grey = @employee.position_type
+        p
+          .text-light-grey
+            | Date Employed
+          label.text-dark-grey = @employee.date_employed
+        p
+          .text-light-grey
+            | End Date
+          label.text-dark-grey = @employee.end_date
+      .col-xs-12.col-md-4
+        p
+          .text-light-grey
+            | SSS
+          label.text-dark-grey = @employee.sss
+        p
+          .text-light-grey
+            | TIN
+          label.text-dark-grey = @employee.tin
+        p
+          .text-light-grey
+            | Philhealth
+          label.text-dark-grey = @employee.philhealth
+        p
+          .text-light-grey
+            | HDMF
+          label.text-dark-grey = @employee.hdmf
+      .col-xs-12.mt10
+        .pull-right
+          = link_to "<i class='icon-maxicons2-editting mr2'></i> Edit".html_safe, "#", class: "btn btn-sm btn-primary btn-outline mr5", data: {tt:"tooltip", placement:"top", "original-title" => "View Information", toggle: "modal", target: ".edit-employee-modal"}
+          = link_to "<i class='icon-maxicons1-exit mr2'></i> Delete".html_safe, employee_path(@employee), method: :delete, class: 'btn btn-sm btn-danger btn-outline swal-warning-confirm', data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+
+.modal.edit-employee-modal aria-hidden="true" role="dialog" tabindex="-1"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close aria-hidden="true" data-dismiss="modal" type="button"
+					i.icon-maxicons1-exit
+        h4.modal-title Edit Employee
+      .modal-body
+				= form_for @employee do |f|
+					.row.mb10
+						.col-xs-12
+							label
+								| Branch
+								small.field-req  *
+							= f.select :branch_id, current_brand.branches.order(:name).pluck(:name, :id), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
+					.row.mb10
+						.col-xs-6
+							label
+								| First Name
+								small.field-req  *
+							= f.text_field :first_name, class: "form-control", placeholder: "e.g: Juan"
+						.col-xs-6
+							label
+								| Last Name
+								small.field-req  *
+							= f.text_field :last_name, class: "form-control", placeholder: "e.g: Dela Cruz"
+					.row.mb10
+						.col-xs-4
+							label
+								| Date of Birth
+							= f.text_field :birthdate, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+						.col-xs-4
+							label
+								| Age
+							= f.number_field :age, class: "form-control"
+						.col-xs-4
+							label Contact No
+							= f.number_field :contact_no, class: "form-control"
+					.row.mb10
+						.col-xs-12
+							label Address
+							= f.text_area :address, class: "form-control", rows:"2"
+					.row.mb10
+						.col-xs-6
+							label Position Title
+							= f.text_field :position, class: "form-control", placeholder: "e.g: Chef"
+						.col-xs-6
+							label Employee Type
+							= f.select :employee_type_id, EmployeeType.pluck(:name, :id), {include_blank: true},  class: "chosen", data: {placeholder:"Select"}
+					.row.mb10
+						.col-xs-6
+							label
+								| Position Type
+							= f.select :position_type, ["Contractual", "Regular"], {include_blank: true}, id: "position_type", class: "chosen", data: {placeholder:"Select"}
+						.col-xs-3
+							label
+								| Date Employed
+							= f.text_field :date_employed, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+						.col-xs-3
+							label
+								| End Date
+							= f.text_field :end_date, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+					.row.mb10
+						.col-xs-3
+							label
+								| SSS
+							= f.text_field :sss, class: "form-control"
+						.col-xs-3
+							label
+								| TIN
+							= f.text_field :tin, class: "form-control"
+						.col-xs-3
+							label
+								| Philhealth
+							= f.text_field :philhealth, class: "form-control"
+						.col-xs-3
+							label
+								| HDMF
+							= f.text_field :hdmf, class: "form-control"
+					.row.mb10
+						.col-xs-12.mt20
+							| (
+							small.field-req  *
+							|  )
+							i  indicates field is required
+					.modal-footer.no-border
+						button.btn.btn-default data-dismiss="modal" type="button" Close
+						button.btn.btn-primary type="submit" Save Changes

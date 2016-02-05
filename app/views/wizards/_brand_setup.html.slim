@@ -1,23 +1,46 @@
-#brand-setup-form
-	h2 Brand Setup
-	- if current_user.client.nil? 
-		- @brand = Brand.new
-	- elsif current_user.client.brands.present?
-		- @brand = current_user.client.brands.first
-	- else
-		- @brand = Brand.new
-	= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
-		= f.label :name
-		| &nbsp;
-		= f.text_field :name
-		br
-		= f.label :website
-		| &nbsp;
-		= f.text_field :website
-		br
-		= link_to "Back", "#", id: "back-btn"
-		| &nbsp;
-		= f.submit "Save"
+.panel.panel-primary#brand-setup-form
+	.panel-heading
+		.pull-left.mt7 Tell me about the brand that your company have
+	.panel-body
+		- if current_user.client.nil? 
+			- @brand = Brand.new
+		- elsif current_user.client.brands.present?
+			- @brand = current_user.client.brands.first
+		- else
+			- @brand = Brand.new
+		= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
+			.row
+				.col-xs-12.mb5
+					= f.text_field :name, placeholder: "Name", class: "form-control"
+				.col-xs-12.mb5
+					= f.text_field :website, placeholder: "Website", class: "form-control"
+			.row
+				.col-xs-12
+					.pull-left
+						= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+					.pull-right
+						= f.submit "Next", class: "btn btn-primary"
+
+/ #brand-setup-form
+/ 	h2 Brand Setup
+/ 	- if current_user.client.nil? 
+/ 		- @brand = Brand.new
+/ 	- elsif current_user.client.brands.present?
+/ 		- @brand = current_user.client.brands.first
+/ 	- else
+/ 		- @brand = Brand.new
+/ 	= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
+/ 		= f.label :name
+/ 		| &nbsp;
+/ 		= f.text_field :name
+/ 		br
+/ 		= f.label :website
+/ 		| &nbsp;
+/ 		= f.text_field :website
+/ 		br
+/ 		= link_to "Back", "#", id: "back-btn"
+/ 		| &nbsp;
+/ 		= f.submit "Save"
 
 javascript:
 	$(document).ready(function () {

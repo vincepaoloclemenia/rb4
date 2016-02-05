@@ -1,9 +1,16 @@
-.panel.panel-primary
-	.panel-heading
+.panel
+	.panel-heading.border.pb45
 		.pull-left.mt7 Labor Hours
 		.pull-right
-			= link_to "<i class='icon-maxicons1-onright mr5'></i> Export as PDF".html_safe, labor_hours_path(format: "pdf"), class: "btn btn-default btn-round btn-outline", data: { toggle: "modal", target: ".create-pdf-modal" }
+			= link_to "<i class='icon-glyph-54 mr5 f14'></i> Export as PDF".html_safe, labor_hours_path(format: "pdf"), class: "btn btn-success btn-round btn-outline", data: { toggle: "modal", target: ".create-pdf-modal" }
 	.panel-body
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| Oops! There seems to be no records of employees here. For us to track the employee labour hours: <br>Go to&nbsp;
+					b Setup > Labor Setup > Employee List
 		| Show
 		.btn-group.mb10
 		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"

@@ -1,62 +1,112 @@
-#setup-summary-form
-	h2 Setup Summary
+.panel.panel-primary#setup-summary-form
+	.panel-heading
+		.pull-left.mt7 Now to wrap everything up
+	.panel-body
+		.row
+			.col-xs-12
+				p
+					.text-light-grey
+						| Your name
+					label.text-dark-grey = "#{current_user.first_name} #{current_user.last_name}"
+				p
+					.text-light-grey
+						| Company name
+					label.text-dark-grey = current_client.name
+				p
+					.text-light-grey
+						| Company address
+					label.text-dark-grey = current_client.address1
+				p
+					.text-light-grey
+						| Company contact no.
+					label.text-dark-grey = current_client.contact
+				p
+					.text-light-grey
+						| Company email
+					label.text-dark-grey = current_client.email
+				p
+					.text-light-grey
+						| Brand name
+					label.text-dark-grey = current_client.brands.first.name
+				p
+					.text-light-grey
+						| Brand website
+					label.text-dark-grey = current_client.brands.first.website
+				- current_client.brands.first.branches.order('id asc').each_with_index do |branch,index|	
+					p
+						.text-light-grey
+							= "Branch ##{index + 1} name"
+						label.text-dark-grey = branch.name
+					p
+						.text-light-grey
+							= "Branch ##{index + 1} address"
+						label.text-dark-grey = branch.address1
+		.row
+			.col-xs-12
+				.pull-left
+					= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+				.pull-right
+					= link_to "Done", setup_summary_complete_wizard_path, method: :put, class: "btn btn-success"
 
-	section
-		h3 User Info
-		p 
-			| First name:
-			| &nbsp;
-			= current_user.first_name
-		p 
-			| Last name:
-			| &nbsp;
-			= current_user.last_name
+/ #setup-summary-form
+/ 	h2 Setup Summary
 
-	section
-		h3 Company Info
-		p
-			| Name:
-			| &nbsp;
-			= current_user.client.name
-		p
-			| Address:
-			| &nbsp;
-			= current_user.client.address1
-		p
-			| Contact:
-			| &nbsp;
-			= current_user.client.contact
-		p
-			| Email:
-			| &nbsp;
-			= current_user.client.email
+/ 	section
+/ 		h3 User Info
+/ 		p 
+/ 			| First name:
+/ 			| &nbsp;
+/ 			= current_user.first_name
+/ 		p 
+/ 			| Last name:
+/ 			| &nbsp;
+/ 			= current_user.last_name
 
-	section
-		h3 Brand Info
-		p
-			| Name:
-			| &nbsp;
-			= current_user.client.brands.first.name
-		p
-			| Website:
-			| &nbsp;
-			= current_user.client.brands.first.website
+/ 	section
+/ 		h3 Company Info
+/ 		p
+/ 			| Name:
+/ 			| &nbsp;
+/ 			= current_user.client.name
+/ 		p
+/ 			| Address:
+/ 			| &nbsp;
+/ 			= current_user.client.address1
+/ 		p
+/ 			| Contact:
+/ 			| &nbsp;
+/ 			= current_user.client.contact
+/ 		p
+/ 			| Email:
+/ 			| &nbsp;
+/ 			= current_user.client.email
 
-	section
-		h3 Branch Info
-		- current_user.client.brands.first.branches.order('id asc').each do |branch|
-			p
-				| Name:
-				| &nbsp;
-				= branch.name
-			p
-				| Address:
-				| &nbsp;
-				= branch.address1
+/ 	section
+/ 		h3 Brand Info
+/ 		p
+/ 			| Name:
+/ 			| &nbsp;
+/ 			= current_user.client.brands.first.name
+/ 		p
+/ 			| Website:
+/ 			| &nbsp;
+/ 			= current_user.client.brands.first.website
+
+/ 	section
+/ 		h3 Branch Info
+/ 		- current_user.client.brands.first.branches.order('id asc').each do |branch|
+/ 			p
+/ 				| Name:
+/ 				| &nbsp;
+/ 				= branch.name
+/ 			p
+/ 				| Address:
+/ 				| &nbsp;
+/ 				= branch.address1
 	
-	= link_to "Back", "#", id: "back-btn"
-	| &nbsp;
-	= link_to "DONE", setup_summary_complete_wizard_path, method: :put
+/ 	= link_to "Back", "#", id: "back-btn"
+/ 	| &nbsp;
+/ 	= link_to "DONE", setup_summary_complete_wizard_path, method: :put
 
 javascript:
 	$(document).ready(function (){
