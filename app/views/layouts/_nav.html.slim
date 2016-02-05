@@ -17,7 +17,7 @@
 							= link_to "Purchases", purchases_path, data: { keybinding: "p u r c h" }
 					- if view_access_control('sales','show')
 						li
-							= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s" }
+							= link_to "Sales", new_sale_path, data: { keybinding: "n s a l e s", "no-turbolink": "true" }
 					- if view_access_control('inventories','show')
 						li
 							= link_to "Inventories", inventories_path, data: { keybinding: "i n v" }
