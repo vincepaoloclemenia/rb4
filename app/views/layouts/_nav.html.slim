@@ -17,7 +17,7 @@
 							= link_to "Purchases", purchases_path
 					- if view_access_control('sales','show')
 						li
-							= link_to "Sales", new_sale_path
+							= link_to "Sales", new_sale_path, "no-turbolink" => true
 					- if view_access_control('inventories','show')
 						li
 							= link_to "Inventories", inventories_path
