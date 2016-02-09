@@ -12,8 +12,8 @@ class DashboardController < ApplicationController
 		@brand_sales = brand_sales
 		@update_customer_count = update_customer_count(@branches)
 		# @price_movement = price_movement_dashboard
-		# @branch_cost_stat = branch_purchase_cost_stat
-		# @purchase_cost_stat = purchase_cost_stat
+		@branch_purchases = branch_purchases
+		@brand_purchases = brand_purchases
 	end
 
 	def update_customer_count(branches)
@@ -37,36 +37,47 @@ class DashboardController < ApplicationController
 		return lowest_price_movement.first(5)
 	end
 
-	#Purchase Table
-	def purchase_cost_stat
-		dates = Array.new amount = Array.new
-		start_date = Date.today - 7
-		@purchase_cost = Dashboard.where(previous_date_entry: @range_date, brand_id: current_brand).order('previous_date_entry ASC')
- 		
- 		@range_date.each_with_index do |range_date, index|
- 			@total_amount = 0
- 			@purchase_cost.each do |pc|
- 				if pc.previous_date_entry == range_date 
- 					@total_amount += pc.purchase_total_amount.to_i
- 				end
- 			end
- 			dates[index] = range_date.strftime("%b %d,%Y | %a")
- 			amount[index] = @total_amount
+	def compute_purchases(date_range, brand, module_type)
+		purchases_total_amount = Array.new
+ 		brand.branches.each_with_index do |branch, index|
+ 			purchases_total_amount[index]= Dashboard.get_array_dashboard_values(date_range, brand, branch, module_type)
  		end
- 		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')
+ 		return purchases_total_amount
 	end
 
-	def branch_purchase_cost_stat
-		total_purchase = Array.new
-		current_brand.branches.each_with_index do |branch, index|
-			amount = Array.new
-			@range_date.each_with_index do |date, index|
-				dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id)
-				dashboard_item.nil? ? amount[index] = 0 : amount[index] = Dashboard.check_if_blank(dashboard_item.purchase_total_amount)
-			end
-			total_purchase[index] = amount
-		end
-		create_chart(current_brand.name, "Branches", @formatted_dates, total_purchase, @branches.pluck(:name), "line",  @branches.pluck(:color))
+	#Purchase Table
+	def brand_purchases 
+		# dates = Array.new amount = Array.new
+		# start_date = Date.today - 7
+		# @purchase_cost = Dashboard.where(previous_date_entry: @range_date, brand_id: current_brand).order('previous_date_entry ASC')
+ 		
+ 	# 	@range_date.each_with_index do |range_date, index|
+ 	# 		@total_amount = 0
+ 	# 		@purchase_cost.each do |pc|
+ 	# 			if pc.previous_date_entry == range_date 
+ 	# 				@total_amount += pc.purchase_total_amount.to_i
+ 	# 			end
+ 	# 		end
+ 	# 		dates[index] = range_date.strftime("%b %d,%Y | %a")
+ 	# 		amount[index] = @total_amount
+ 	# 	end
+ 		purchase_total_amount = compute_purchases(@range_date, current_brand, 'purchases')
+ 		total = purchase_total_amount.transpose.map{|a| a.reduce(:+)}
+ 		create_chart(current_brand.name, "Brand", @formatted_dates, total, "Total Purchase", "line", @branches.pluck(:color))
+	end
+
+	def branch_purchases
+		# total_purchase = Array.new
+		# current_brand.branches.each_with_index do |branch, index|
+		# 	amount = Array.new
+		# 	@range_date.each_with_index do |date, index|
+		# 		dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id)
+		# 		dashboard_item.nil? ? amount[index] = 0 : amount[index] = Dashboard.check_if_blank(dashboard_item.purchase_total_amount)
+		# 	end
+		# 	total_purchase[index] = amount
+		# end
+		purchase_total_amount = compute_purchases(@range_date, current_brand, 'purchases')
+		create_chart(current_brand.name, "Branches", @formatted_dates,	purchase_total_amount, @branches.pluck(:name), "line",  @branches.pluck(:color))
 	end
 
 	#Sales Table
