@@ -5,10 +5,13 @@ class Branch < ActiveRecord::Base
   has_many :employees
   has_many :inventories, dependent: :restrict_with_error
   has_many :purchases
-  has_one :branch_subscription
-  has_one :subscription, -> { where(status: ["Active", "Processing"]) }, through: :branch_subscription
+  has_many :branch_subscriptions
+  has_many :subscriptions, through: :branch_subscriptions
 
-	validates :name,
+  # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
+  # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }
+
+  validates :name,
 						presence: true,
 						length: {
 							maximum: 50
@@ -18,7 +21,37 @@ class Branch < ActiveRecord::Base
   after_create :set_default_color
 
   def self.all_unsubscribed
-    select { |b| b.subscription.nil? || b.subscription.plan_id.eql?(1) }
+    # select { |b| b.subscription.nil? || b.subscription.plan_id.eql?(1) }
+    select { |b| b.subscription.nil? || b.free_trial? }
+    # joins(:subscriptions).where.not("subscriptions.status = ?", "Active")
+  end
+
+  def self.all_unsubscribed_name_id
+    self.all_unsubscribed.collect { |b| [b.name, b.id] }
+  end
+
+  def self.all_subscribed
+    select { |b| b.subscribed? || b.free_trial? }
+  end
+  
+  def self.all_subscribed_name_id
+    self.all_subscribed.collect { |b| [b.name, b.id] }
+  end
+
+  def free_trial
+    self.subscriptions.find_by_plan_id(1)
+  end
+
+  def free_trial?
+    free_trial.present?
+  end
+
+  def subscription
+    self.subscriptions.where.not(plan_id: 1).find_by_status(["Active","Processing"])
+  end
+
+  def subscribed?
+    free_trial.present? || subscription.present?
   end
 
   def set_default_color

@@ -7,7 +7,7 @@
 				.col-xs-12.col-lg-4.mb5
 					= f.label :branch_id
 					small.field-req  *
-					= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+					= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 				.col-xs-12.col-lg-4.pull-right.mb5
 					= f.label :entry_date
 					small.field-req  *
