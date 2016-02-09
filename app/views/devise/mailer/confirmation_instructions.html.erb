@@ -31,7 +31,7 @@
                           </tr>
                           <tr>
                             <td class="aligncenter content-block">
-                              Hey <strong>Username</strong>,
+                              Hey <strong><%= @resource.username %></strong>,
                             </td>
                           </tr>
                           <tr>
@@ -41,8 +41,8 @@
                           </tr>
                           <tr>
                             <td class="aligncenter content-block">
-                              <!-- <%= link_to 'Activate my restobot account', confirmation_url(@resource, confirmation_token: @token), class:"btn-primary" %> -->
-                              <a href="#!" class="btn-primary">Activate my restobot account</a>
+                              <%= link_to 'Activate my restobot account', confirmation_url(@resource, confirmation_token: @token), class:"btn-primary" %>
+                              <!-- <a href="#!" class="btn-primary">Activate my restobot account</a> -->
                             </td>
                           </tr>
                           <tr>
@@ -71,7 +71,7 @@
                       1401 Robinsons Equitable Tower, ADB Ave., Cor Poveda Rd., Ortigaas Center, Pasig 1605</td>
                     </tr>
                     <tr>
-                      <td class="aligncenter content-block"><img src="/img/mailer/mailer-logo.png" class="logo-size"></td>
+                      <td class="aligncenter content-block"><img src="http://restobotv4.cloudapp.net/img/mailer/mailer-logo.png" class="logo-size"></td>
                     </tr>
                   </tbody>
                 </table>
