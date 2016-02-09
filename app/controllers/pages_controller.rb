@@ -57,4 +57,9 @@ class PagesController < ApplicationController
 		@taken = User.all.pluck(:username).include? params[:username]
 		@username = params[:username]
 	end
+
+	def new_password_validate_email
+		@user = User.find_by_email(params[:email])
+		@email = params[:email]
+	end
 end
