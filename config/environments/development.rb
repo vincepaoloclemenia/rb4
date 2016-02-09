@@ -52,7 +52,9 @@ Rails.application.configure do
     :user_name            => 'restobot@appsource.biz',
     :password             => '@ppsource2015'
    }
-
+  config.generators do |g| 
+    g.template_engine :slim
+  end
   # Rails.application.config.middleware.use ExceptionNotification::Rack,
   # :email => {
   #   :email_prefix => "[ERROR] ",

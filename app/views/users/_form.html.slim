@@ -20,14 +20,14 @@
 				| Username
 				small.field-req  *
 			= f.text_field :username, class: "form-control", placeholder:"e.g: juandelacruz"
-		- if @user.new_record?
-			.col-xs-6.mb10
-				= f.label :password
-					| Password
-					small.field-req  *
-				= f.password_field :password, class: "form-control", placeholder:"8 characters minimum"
-			.col-xs-6
-				= f.password_field :password_confirmation, class: "form-control mt25", placeholder:"Confirm Password"
+		/ - if @user.new_record?
+		/ 	.col-xs-6.mb10
+		/ 		= f.label :password
+		/ 			| Password
+		/ 			small.field-req  *
+		/ 		= f.password_field :password, class: "form-control", placeholder:"8 characters minimum"
+		/ 	.col-xs-6
+		/ 		= f.password_field :password_confirmation, class: "form-control mt25", placeholder:"Confirm Password"
 		- client_user_access = @user.new_record? ? current_client.users.new().client_user_access : @user.client_user_access
 		= f.fields_for :client_user_access, client_user_access do |cua|
 			= hidden_field_tag :user_role_id, @user.new_record? ? "" : @user.client_user_access.branch_id

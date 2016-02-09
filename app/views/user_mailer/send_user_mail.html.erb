@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+    <style type="text/css">
+      a {color: #4A72AF;}
+      body, #header h1, #header h2, p {margin: 0; padding: 0;}
+      #main {border: 1px solid #cccccc;}
+      img {display: block;}
+      #top-message p, #bottom-message p {color: #3f4042; font-size: 12px; }
+      #header h1 {color: #ffffff !important; font-size: 24px; margin-bottom: 0!important; padding-bottom: 0; }
+      #header h2 {color: #ffffff !important; font-size: 24px; margin-bottom: 0 !important; padding-bottom: 0; }
+      #header p {color: #ffffff !important;  font-size: 12px;  }
+      #footer { border-radius:0px 0px 6px 6px; -moz-border-radius: 0px 0px 6px 6px; -webkit-border-radius:0px 0px 6px 6px; -webkit-font-smoothing: antialiased; }
+      h1 {font-size: 28px !important; color: #0072c6 !important; }
+      h3 {font-size: 28px !important; color: #0072c6 !important; }
+      h4 {font-size: 22px !important; color: #0072c6 !important; }
+      h5 {font-size: 18px !important; color: #0072c6 !important; }
+      p  {font-size: 12px !important; color: #444444 !important; }
+      .header-content { font-size: 12px !important; color: #ffffff !important; }
+      .header-content a { font-weight: bold !important; color: #f0f0f0 !important; text-decoration: none !important; }
+      #street-address{color: #ffffff !important; text-decoration: none !important; }
+      .footer-content-left { font-size: 12px !important; line-height: 15px !important; color: #ffffff !important; margin-top: 0px !important; margin-bottom: 15px !important; }
+      .footer-content-left a { color: #ffffff; font-weight: bold; text-decoration: none; }
+      .footer-content-right { font-size: 11px !important; line-height: 16px !important; color: #ffffff; margin-top: 0px !important; margin-bottom: 15px !important; }
+      .footer-content-right a { color: #ffffff !important; font-weight: bold; text-decoration: none; }
+      #footer { background-color: #0072c6 !important; color: #ffffff !important; }
+      #footer a { color: #ffffff !important; text-decoration: none; font-weight: bold; }
+      #permission-reminder { white-space: normal; color: white !important; }
+      #street-address { color: #ffffff !important; white-space: normal; }
+      .cm-singleline{ color: #ffffff !important; font-size: 40px !important;}
+    </style>
+  <body>
+    <table width="100%" cellpadding="0" cellspacing="0" bgcolor="e4e4e4"><tr><td>
+      <table id="top-message" cellpadding="20" cellspacing="0" width="600" align="center">
+        <tr>
+          <td align="center">      
+          </td>
+        </tr>
+      </table>
+      <table id="main" width="600" align="center" cellpadding="0" cellspacing="15" bgcolor="ffffff">
+        <tr>
+          <td id="header" class="w640" width="640" align="center">
+            <table class="w640" width="640" cellpadding="0" cellspacing="0" border="0">
+              <tbody>
+                <tr>
+                  <td class="w30" width="30"></td>
+                  <td class="w580" width="580" height="30"></td>
+                  <td class="w30" width="30"></td>
+                </tr>
+                <tr>
+                  <td class="w30" width="30"></td>
+                  <td class="w580" width="580">
+                      <div align="center" id="headline">
+                          <img src="http://restobot.com/assets/restobot-logo-beta-home-fd88a0f87d966381317ae3648b91d59e.png" style="width:250px"/>
+                      </div>
+                  </td>
+                  <td class="w30" width="30"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table id="content-5" cellpadding="0" cellspacing="0" align="center">
+              <tr>
+                <td width="100%" valign="top">
+                  <table cellpadding="5" cellspacing="0" bgcolor="">
+                    <tr>
+                      <td>
+                        <h4>Congratulations!</h4>
+                        <p>Dear <%= @email %>, </p>
+                        <p>
+                          We would like to inform you that you have been selected as user of the system.
+                          <br>
+                          Below is the password provided by the system:
+                          <br>
+                          Password: <strong><%= @gen_password %></strong>
+                          <br>
+                          <br>
+                          You can follow us on this link
+                          <u>link here</u>
+                        </p>
+                        <br/>
+                        <p>If you did not register for an account in RESTOBOT, kindly ignore this 
+                                email. You can choose from when you add your content in the next step.
+                        </p>
+                        <br/>
+                        <p>Sincerely,</p>
+                        <br/>
+                        <p>The Restobot Team</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table id="footer" class="w640" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#498DBD">
+              <tbody>
+                <tr>
+                  <td class="w30" width="30"></td>
+                  <td class="w580 h0" width="360" height="30"></td>
+                  <td class="w0" width="60"></td>
+                  <td class="w0" width="160"></td>
+                  <td class="w30" width="30"></td>
+                </tr>
+                <tr>
+                  <td class="w30" width="30"></td>
+                  <td class="w580" width="360" valign="top">
+                    <span class="hide">
+                      <p id="permission-reminder" class="permission" align="left" class="footer-content-left" style="color:#fff;">
+                        <span>Unit 1401, Robinsons Equitable Tower, ADB Avenue corner Poveda Road, Ortigas Center, Pasig City 1605, Philippines </span>
+                      </p>
+                    </span>
+                  </td>
+                  <td class="hide w0" width="60"></td>
+                  <td class="hide w0" width="160" valign="top">
+                    <p id="street-address" align="right" class="footer-content-right" style="color:#fff;">
+                      <span>support_restobot@appsource.biz </span>
+                      <br>
+                      <span>+632 696 APPS </span>
+                      <br>
+                      <span>+632 914 APPS </span>
+                      <br>
+                      <span>+63 939 917 4295 </span>
+                    </p>
+                  </td>
+                  <td class="w30" width="30"></td>
+                </tr>
+                <tr>
+                  <td class="w30" width="30"></td>
+                  <td class="w580 h0" width="360" height="15"></td>
+                  <td class="w0" width="60"></td>
+                  <td class="w0" width="160"></td>
+                  <td class="w30" width="30"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </table>
+  </body>
+</html>

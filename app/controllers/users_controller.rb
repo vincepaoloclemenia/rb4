@@ -46,8 +46,11 @@ class UsersController < ApplicationController
 	def create
 		@user = current_client.users.new(user_params)
 		@user.skip_confirmation!
+		generated_password = Devise.friendly_token.first(8)
+		@user.password = generated_password
 		if @user.save
 			@user.client_user_access.update(client_user_access_params)
+			send_mail(@user.email, @user.password)
 			flash[:notice] = "User successfully created"
 		else
 			flash[:alert] = @user.errors.full_messages.join(", ")
@@ -98,4 +101,9 @@ class UsersController < ApplicationController
 	def account_params
 		params.require(:user).permit(:first_name, :last_name, :avatar)
 	end
+
+	private
+		def send_mail(email, generated_password)
+			UserMailer.send_user_mail(email, generated_password).deliver
+		end
 end
