@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  devise_for :users, controllers: { registrations: "registrations" }
+  devise_for :users, controllers: { registrations: "registrations", passwords: "passwords" }
   resources :company_users, controller: "users"
   root 'pages#index'
   get 'dashboard' => 'dashboard#index'
@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   get 'update_units' => 'pages#update_units'
   get 'registration_validate_email' => 'pages#registration_validate_email'
   get 'registration_validate_username' => 'pages#registration_validate_username'
+  get 'new_password_validate_email' => 'pages#new_password_validate_email'
   put 'change_brand' => 'pages#change_brand'
   get 'get_plan_info' => 'pages#get_plan_info'
 end

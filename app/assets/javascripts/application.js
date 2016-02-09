@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require cocoon
-//= require mousetrap
 //= require highcharts/highcharts
 //= require turbolinks
 //= require flash

@@ -1,0 +1,9 @@
+$('form').parent().removeClass('panel-refreshing');
+
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$("form").find(".form-inputs").remove();
+$("form").find("button").remove();
+
+$("form").find(".email-sent-message").show();

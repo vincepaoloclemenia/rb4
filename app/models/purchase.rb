@@ -14,19 +14,6 @@ class Purchase < ActiveRecord::Base
 	def self.get_total_purchases_per_branch(branch, date)
 		@branch_purchases = Purchase.where(branch_id: branch.id, purchase_date: date)
 		return get_total_purchases(@branch_purchases)
-		# d = Date.today - 1 
-		# purchase_array = Array.new
-		# # brands = Brand.all.pluck(:id)
-
-		# brand.branches.each_with_index do |branch, index|
-		# 	hash = Hash.new
-		# 	hash[:branch_id] = branch.id
-		# 	hash[:branch_name] = branch.name
-		# 	@branch_purchases = Purchase.where(branch_id: branch, brand_id: brand, purchase_date: d)
-		# 	hash[:total_purchases_amount] = get_total_purchases(@branch_purchases)
-		# 	purchase_array[index] = hash
-		# end
-		# return purchase_array
 	end
 
 	def self.get_total_purchases(purchases)

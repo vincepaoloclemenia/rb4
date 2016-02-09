@@ -30,19 +30,6 @@ class Sale < ActiveRecord::Base
 		net_sales / count
 	end
 
-	# def self.get_customer_count(branches, brand)
-	# 	arr = Array.new
-	# 	branches.each_with_index do |branch, index|
-	# 		hash = Hash.new
-	# 		customer_count = Sale.select(:id, :customer_count).order('created_at DESC').where(brand_id: brand.id, branch_id: branch.id, sale_date: Date.today - 1).last
-	# 		customer_count.nil? ? customer_count = 0 : customer_count = customer_count.customer_count
-	# 		hash[:branch_name] = branch.name
-	# 		hash[:customer_count] = customer_count
-	# 		arr[index] = hash
-	# 	end
-	# 	return arr
-	# end
-
 	def self.get_total_sales(branch, date)
 		sales = Sale.where(sale_date: date, branch_id: branch.id)
 		amount = 0
@@ -56,46 +43,5 @@ class Sale < ActiveRecord::Base
 		customer_count = Sale.where(sale_date: date, branch_id: branch.id).last
 		return customer_count
 	end
-
-
-	
-	# def self.get_sales(range_dates, branch)
-	# 	sales_amount = Array.new
-	# 	hash = Hash.new
-	# 	range_dates.each_with_index do |date, index|
-	# 		sales = Sale.where(sale_date: date, branch_id: branch.id)
-	# 		amount = 0
-	# 		sales.each do |sale|
-	# 			amount += sale.net_sales
-	# 		end
-	# 		sales_amount[index] = amount
-	# 	end
-	# 	hash[:branch_name] = branch.name
-	# 	hash[:sales_amount] = sales_amount
-	# 	return hash
-	# end
-
-	# def self.get_sales_for_dashboard
-	# 	start_day = Date.today - 7
- # 		range_dates = start_day..(Date.today-1)
-
- # 		@branches_sales = Array.new
- # 		current_brand.branches.each_with_index do |branch, index|
- # 			hash = Hash.new
- # 			total_day_amount = Array.new
- # 			range_dates.each_with_index do |date, index|
- # 				sales = Sale.where(sale_date: date, branch_id: branch.id)
- # 				amount = 0
- # 				sales.each do |sale|	
- # 					amount += sale.net_sales
- # 				end
- # 				total_day_amount[index] = amount.to_i
- # 			end
- # 			hash[:branch_name] = branch.name
- # 			hash[:amount] = total_day_amount
- # 			@branches_sales[index] = hash
- # 		end
- # 		return @branches_sales
-	# end
 
 end
