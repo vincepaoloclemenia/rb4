@@ -42,7 +42,7 @@
             label.btn.btn-primary class="#{brand_pane_active?('branches')}"
               a data-toggle="tab" href="#branches-purchase-list"  Branches Total
       .panel-body.tab-content
-        #brand-purchase-info.table-pane class="#{brand_pane_active?('info')}"
+        #brand-purchase-info.tab-pane class="#{brand_pane_active?('info')}"
           = high_chart("brand_purchases", @brand_purchases)
         #branches-purchase-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
           = high_chart("branch_purchases", @branch_purchases)
