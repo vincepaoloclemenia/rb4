@@ -49,9 +49,10 @@ class Dashboard < ActiveRecord::Base
  		amount = 0
  		if module_type == 'sales'
  			amount = check_value(dashboard_item.sales_total_amount)
- 		else module_type == 'purchase'
+ 		else module_type == 'purchases'
  			amount = check_value(dashboard_item.purchase_total_amount)
  		end
+ 		return amount
  	end
 end
 	

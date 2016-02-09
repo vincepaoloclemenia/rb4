@@ -38,14 +38,14 @@
         .panel-controls.no-upp.nav-tabs
           ul.nav.nav-tabs.btn-group data-toggle="buttons"
             label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
-              a data-toggle="tab" href="#brand-info"  Brand Total
+              a data-toggle="tab" href="#brand-purchase-info"  Brand Total
             label.btn.btn-primary class="#{brand_pane_active?('branches')}"
-              a data-toggle="tab" href="#branches-list"  Branches Total
+              a data-toggle="tab" href="#branches-purchase-list"  Branches Total
       .panel-body.tab-content
-        #brand-info.tab-pane class="#{brand_pane_active?('info')}"
-          / = high_chart("brand_cost_stat", @purchase_cost_stat)
-        #branches-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
-          / = high_chart("branch_cost_stat", @branch_cost_stat)
+        #brand-purchase-info.tab-pane class="#{brand_pane_active?('info')}"
+          = high_chart("brand_purchases", @brand_purchases)
+        #branches-purchase-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
+          = high_chart("branch_purchases", @branch_purchases)
 
   / .col-xs-12.col-md-12.col-md-6
   /   .panel

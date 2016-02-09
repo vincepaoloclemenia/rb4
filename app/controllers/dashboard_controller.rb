@@ -12,8 +12,16 @@ class DashboardController < ApplicationController
 		@brand_sales = brand_sales
 		@update_customer_count = update_customer_count(@branches)
 		# @price_movement = price_movement_dashboard
-		# @branch_cost_stat = branch_purchase_cost_stat
-		# @purchase_cost_stat = purchase_cost_stat
+		@branch_purchases = branch_purchases
+		@brand_purchases = brand_purchases
+	end
+
+	def get_dashboard_items(date_range, brand, module_type)
+		purchases_total_amount = Array.new
+ 		brand.branches.each_with_index do |branch, index|
+ 			purchases_total_amount[index]= Dashboard.get_array_dashboard_values(date_range, brand, branch, module_type)
+ 		end
+ 		return purchases_total_amount
 	end
 
 	def update_customer_count(branches)
@@ -22,10 +30,8 @@ class DashboardController < ApplicationController
 		@branches.each_with_index do |branch, index|
 			dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id)
 			dashboard_item.blank? ? customer_count[index] = 0 : customer_count[index] = Dashboard.check_if_blank(dashboard_item.customer_count)
-			puts "Customer Count #{customer_count[index]}"
 		end
-		create_chart(current_brand.name, date.strftime("%b %d, %Y | %a"), @branches.pluck(:name), [9,6], "Total Purchase", "line", '')
-		# create_chart("Don't Eat Bambi", date.strftime("%b %d, %Y | %a"), @branches.pluck(:name), [9,6], @branches.pluck(:name), "line", @branches.pluck(:color))
+		create_chart(current_brand.name, date.strftime("%b %d, %Y | %a"), @branches.pluck(:name), customer_count, "Total Purchase", "line", '')
 	end
 
 	def price_movement_dashboard
@@ -37,54 +43,26 @@ class DashboardController < ApplicationController
 		return lowest_price_movement.first(5)
 	end
 
-	#Purchase Table
-	def purchase_cost_stat
-		dates = Array.new amount = Array.new
-		start_date = Date.today - 7
-		@purchase_cost = Dashboard.where(previous_date_entry: @range_date, brand_id: current_brand).order('previous_date_entry ASC')
- 		
- 		@range_date.each_with_index do |range_date, index|
- 			@total_amount = 0
- 			@purchase_cost.each do |pc|
- 				if pc.previous_date_entry == range_date 
- 					@total_amount += pc.purchase_total_amount.to_i
- 				end
- 			end
- 			dates[index] = range_date.strftime("%b %d,%Y | %a")
- 			amount[index] = @total_amount
- 		end
- 		create_chart(current_brand.name, "Brand", dates, amount, "Total Purchase", "line", '')
+	#Purchases
+	def brand_purchases 
+ 		purchase_total_amount = get_dashboard_items(@range_date, current_brand, 'purchases')
+ 		total = purchase_total_amount.transpose.map{|a| a.reduce(:+)}
+ 		create_chart(current_brand.name, "Brand", @formatted_dates, total, "Total Purchase", "line", @branches.pluck(:color))
 	end
 
-	def branch_purchase_cost_stat
-		total_purchase = Array.new
-		current_brand.branches.each_with_index do |branch, index|
-			amount = Array.new
-			@range_date.each_with_index do |date, index|
-				dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id)
-				dashboard_item.nil? ? amount[index] = 0 : amount[index] = Dashboard.check_if_blank(dashboard_item.purchase_total_amount)
-			end
-			total_purchase[index] = amount
-		end
-		create_chart(current_brand.name, "Branches", @formatted_dates, total_purchase, @branches.pluck(:name), "line",  @branches.pluck(:color))
+	def branch_purchases
+		purchase_total_amount = get_dashboard_items(@range_date, current_brand, 'purchases')
+		create_chart(current_brand.name, "Branches", @formatted_dates,	purchase_total_amount, @branches.pluck(:name), "line",  @branches.pluck(:color))
 	end
 
-	#Sales Table
-	def compute_sales_total_amount(date_range, brand, module_type)
-		sales_total_amount = Array.new
- 		brand.branches.each_with_index do |branch, index|
- 			sales_total_amount[index]= Dashboard.get_array_dashboard_values(date_range, brand, branch, module_type)
- 		end
- 		return sales_total_amount
-	end
-
+	#Sales
  	def branches_sales
- 		sales_total_amount = compute_sales_total_amount(@range_date, current_brand, 'sales')
+ 		sales_total_amount = get_dashboard_items(@range_date, current_brand, 'sales')
  		create_chart(current_brand.name, "Branches", @formatted_dates, sales_total_amount, @branches.pluck(:name), "column", @branches.pluck(:color))
  	end
 
  	def brand_sales
- 		sales_total_amount = compute_sales_total_amount(@range_date, current_brand, 'sales')
+ 		sales_total_amount = get_dashboard_items(@range_date, current_brand, 'sales')
  		total = sales_total_amount.transpose.map{|a| a.reduce(:+)}
  		create_chart(current_brand.name, "Brand", @formatted_dates, total, "Total Amount", "column", @branches.pluck(:color))
  	end
