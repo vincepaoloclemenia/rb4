@@ -1,0 +1,26 @@
+.panel
+	.panel-body
+		= form_for item_cost_analysis_report_path, method: 'get' do |f|
+			.row
+				.col-xs-12.col-lg-6
+					label Branch
+					= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control', readonly: true, autocomplete: :off
+				.col-xs-12.col-lg-6
+					label Date
+					= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, readonly: true, autocomplete: :off
+			.row.mt10
+				.col-xs-12
+					.pull-right
+						button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+							i.icon-glyph-42
+.panel
+	.panel-heading.border.pb45
+		.pull-left.mt7 Invoice Entry Report
+	.panel-body
+		/ .alert.alert-info role="alert"
+		/ 	.row
+		/ 		.col-xs-1.text-right
+		/ 			i.icon-glyph-73.f25
+		/ 		.col-xs-11
+		/ 			| Oops! There seems to be no records here. To receive your invoice entry reports:<br>Go to&nbsp;
+		/ 			b Data Entry > Purchases > Create Purchase
