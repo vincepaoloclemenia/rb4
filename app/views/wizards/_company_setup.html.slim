@@ -1,55 +1,53 @@
-.panel.panel-primary#company-setup-form
-	.panel-heading
-		.pull-left.mt7 Now tell me about your Company
-	.panel-body
-		- if current_user.client
-			- @client = current_user.client
-		-	else
-			- @client = Client.new
-		= form_for @client, url: company_setup_complete_wizard_path, method: :put, remote: true do |f|
-			.row
-				.col-xs-12.mb5
-					= f.text_field :name, placeholder: "Name", class: "form-control"
-				.col-xs-12.mb5
-					= f.text_field :address1, placeholder: "Main address", class: "form-control"
-				.col-xs-12.mb5
-					= f.text_field :contact, placeholder: "Contact no.", class: "form-control"
-				.col-xs-12.mb5
-					= f.text_field :email, placeholder: "Company email", class: "form-control"
-			.row
-				.col-xs-12
-					.pull-left
-						= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
-					.pull-right
-						= f.submit "Next", class: "btn btn-primary"
-
-
-/ #company-setup-form
-/ 	h2 Company Setup
-/ 	- if current_user.client
-/ 		- @client = current_user.client
-/ 	-	else
-/ 		- @client = Client.new
-/ 	= form_for @client, url: company_setup_complete_wizard_path, method: :put, remote: true do |f|
-/ 		= f.label :name
-/ 		| &nbsp;
-/ 		= f.text_field :name
-/ 		br
-/ 		= f.label :address1, "Main address"
-/ 		| &nbsp;
-/ 		= f.text_field :address1
-/ 		br
-/ 		= f.label :contact, "Contact no."
-/ 		| &nbsp;
-/ 		= f.text_field :contact
-/ 		br
-/ 		= f.label :email, "Company email"
-/ 		| &nbsp;
-/ 		= f.text_field :email
-/ 		br
-/ 		= link_to "Back", "#", id: "back-btn"
-/ 		| &nbsp;
-/ 		= f.submit "Save"
+.content-wrap#company-setup-form
+	.wrapper
+		.panel.panel-default
+			.panel-body.no-p
+				#wizard.wizard
+					ul.steps style=("margin-left: 0")
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li.active
+							span.badge.bg-primary> 2
+							| About Your Company
+						li
+							span.badge.bg-primary> 3
+							| Step 3
+						li
+							span.badge.bg-primary> 4
+							| Step 4
+						li
+							span.badge.bg-primary> 5
+							| Step 5
+				.step-content
+				  #step2.step-pane.active
+						- if current_user.client
+							- @client = current_user.client
+						-	else
+							- @client = Client.new
+						= form_for @client, url: company_setup_complete_wizard_path, method: :put, remote: true do |f|
+							.row.mb10
+								.col-xs-12.mb5
+									label Company Name
+									span.field-req  *
+									= f.text_field :name, placeholder: "e.g: Gousteau Company", class: "form-control"
+								.col-xs-12.mb5
+									label Main Address
+									= f.text_area :address1, placeholder: "e.g: Paris, France ", class: "form-control", rows:4
+								.col-xs-12.mb5
+									label Contact No.
+									= f.text_field :contact, placeholder: "Landline/Mobile", class: "form-control"
+								.col-xs-12.mb5
+									label Company Email
+									= f.text_field :email, placeholder: "example@company.com", class: "form-control"
+							.row
+								.col-xs-12
+									.pull-left
+										= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+									.pull-right
+										button.btn.btn-primary type="submit"
+											| Next
+											i.icon-glyph-99.f14.ml5
 
 javascript:
 	$(document).ready(function () {
@@ -59,6 +57,6 @@ javascript:
 		});
 		$('#back-btn').on("click", function (e) {
 			e.preventDefault();
-			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('user_setup'))}</div>");	
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('user_setup'))}</div>");
 		});
 	});

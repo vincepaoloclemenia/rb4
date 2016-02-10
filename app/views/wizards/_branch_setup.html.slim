@@ -1,59 +1,71 @@
-.panel.panel-primary#branch-setup-form
-	.panel-heading
-		.pull-left.mt7 Tell me about the branches that your brand have
-	.panel-body
-		- @brand = current_user.client.brands.first if current_user.client.brands.present?
-		- if @brand.branches.empty? ||  @brand.nil?
-			= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-				= f.fields_for :branch1 do |b|
-					.row
-						.col-xs-12.mb5
-							= b.text_field :name, placeholder: "Name", class: "form-control"
-						.col-xs-12.mb5
-							= b.text_field :address1, placeholder: "Address", class: "form-control"
-				= f.fields_for :branch2 do |b|
-					.row
-						.col-xs-12.mb5
-							= b.text_field :name, placeholder: "Name", class: "form-control"
-						.col-xs-12.mb5
-							= b.text_field :address1, placeholder: "Address", class: "form-control"
-				= f.fields_for :branch3 do |b|
-					.row
-						.col-xs-12.mb5
-							= b.text_field :name, placeholder: "Name", class: "form-control"
-						.col-xs-12.mb5
-							= b.text_field :address1, placeholder: "Address", class: "form-control"
-				.row
-					.col-xs-12
-						.pull-left
-							= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
-						.pull-right
-							= f.submit "Next", class: "btn btn-primary"
-		- else
-			- branch_count = @brand.branches.count
-			= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-				- branches = @brand.branches.order('id asc')
-				- branches.each_with_index do |branch, index|
-					= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
-						.row
-							.col-xs-12.mb5
-								= b.text_field :name, placeholder: "Name", class: "form-control"
-							.col-xs-12.mb5
-								= b.text_field :address1, placeholder: "Address", class: "form-control"
-				- (3 - branch_count).times do |branch|
-					= f.fields_for "branch#{branch + 1}".to_sym do |b|
-						.row
-							.col-xs-12.mb5
-								= b.text_field :name, placeholder: "Name", class: "form-control"
-							.col-xs-12.mb5
-								= b.text_field :address1, placeholder: "Address", class: "form-control"
-				.row
-					.col-xs-12
-						.pull-left
-							= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
-						.pull-right
-							= f.submit "Next", class: "btn btn-primary"
-
+.content-wrap#branch-setup-form
+	.wrapper
+		.panel.panel-default
+			.panel-body.no-p
+				#wizard.wizard
+					ul.steps style=("margin-left: 0")
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li.active
+							span.badge.bg-primary> 4
+							| Branch Setup
+						li
+							span.badge.bg-primary> 5
+							| Step 5
+				.step-content
+				  #step4.step-pane.active
+						- @brand = current_user.client.brands.first if current_user.client.brands.present?
+						- if @brand.branches.empty? ||  @brand.nil?
+							= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+								= f.fields_for :branch1 do |b|
+									.row.mb10
+										.col-xs-12.mb5
+											label Branch
+											span.field-req  *
+											= b.text_field :name, placeholder: "e.g: Fort Bonifacio", class: "form-control"
+										.col-xs-12.mb5
+											label Address
+											= b.text_area :address1, placeholder: "Branch Address", class: "form-control", rows:4
+						- else
+							- branch_count = @brand.branches.count
+							= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+								- branches = @brand.branches.order('id asc')
+								- branches.each_with_index do |branch, index|
+									= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
+										.row.mb10
+											.col-xs-12.mb5
+												label Branch
+												span.field-req  *
+												= b.text_field :name, placeholder: "e.g: Fort Bonifacio", class: "form-control"
+											.col-xs-12.mb5
+												label Address
+												= b.text_area :address1, placeholder: "Branch Address", class: "form-control", rows:4
+								- (3 - branch_count).times do |branch|
+									= f.fields_for "branch#{branch + 1}".to_sym do |b|
+										.row.mb10
+											.col-xs-12.mb5
+												label Branch
+												span.field-req  *
+												= b.text_field :name, placeholder: "e.g: Fort Bonifacio", class: "form-control"
+											.col-xs-12.mb5
+												= b.text_area :address1, placeholder: "Branch Address", class: "form-control", rows:4
+								.col-xs-12.mb5.text-center
+									button.btn.btn-success.btn-outline.btn-round Add More &amp; Enjoy 60 Days Free trial
+								.row
+									.col-xs-12
+										.pull-left
+											= link_to "Go Back", "#", id: "back-btn", class: "btn btn-default"
+										.pull-right
+											button.btn.btn-primary type="submit"
+												| Next
+												i.icon-glyph-99.f14.ml5
 
 / #branch-setup-form
 / 	h2 Branch Setup
@@ -126,6 +138,6 @@ javascript:
 		});
 		$('#back-btn').on("click", function (e) {
 			e.preventDefault();
-			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('brand_setup'))}</div>");	
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('brand_setup'))}</div>");
 		});
 	});

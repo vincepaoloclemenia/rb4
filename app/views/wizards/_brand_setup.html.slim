@@ -1,46 +1,51 @@
-.panel.panel-primary#brand-setup-form
-	.panel-heading
-		.pull-left.mt7 Tell me about the brand that your company have
-	.panel-body
-		- if current_user.client.nil? 
-			- @brand = Brand.new
-		- elsif current_user.client.brands.present?
-			- @brand = current_user.client.brands.first
-		- else
-			- @brand = Brand.new
-		= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
-			.row
-				.col-xs-12.mb5
-					= f.text_field :name, placeholder: "Name", class: "form-control"
-				.col-xs-12.mb5
-					= f.text_field :website, placeholder: "Website", class: "form-control"
-			.row
-				.col-xs-12
-					.pull-left
-						= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
-					.pull-right
-						= f.submit "Next", class: "btn btn-primary"
-
-/ #brand-setup-form
-/ 	h2 Brand Setup
-/ 	- if current_user.client.nil? 
-/ 		- @brand = Brand.new
-/ 	- elsif current_user.client.brands.present?
-/ 		- @brand = current_user.client.brands.first
-/ 	- else
-/ 		- @brand = Brand.new
-/ 	= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
-/ 		= f.label :name
-/ 		| &nbsp;
-/ 		= f.text_field :name
-/ 		br
-/ 		= f.label :website
-/ 		| &nbsp;
-/ 		= f.text_field :website
-/ 		br
-/ 		= link_to "Back", "#", id: "back-btn"
-/ 		| &nbsp;
-/ 		= f.submit "Save"
+.content-wrap#brand-setup-form
+	.wrapper
+		.panel.panel-default
+			.panel-body.no-p
+				#wizard.wizard
+					ul.steps style=("margin-left: 0")
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li.active
+							span.badge.bg-primary> 3
+							| Your Brand
+						li
+							span.badge.bg-primary> 4
+							| Step 4
+						li
+							span.badge.bg-primary> 5
+							| Step 5
+				.step-content
+				  #step3.step-pane.active
+						- if current_user.client.nil?
+							- @brand = Brand.new
+						- elsif current_user.client.brands.present?
+							- @brand = current_user.client.brands.first
+						- else
+							- @brand = Brand.new
+						= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
+							.row.mb10
+								.col-xs-12.mb5
+									label Brand Name
+									span.field-req  *
+									= f.text_field :name, placeholder: "Your Restaurant's Name", class: "form-control"
+								.col-xs-12.mb5
+									label Website
+									.input-group
+										span.input-group-addon HTTP://
+										= f.text_field :website, placeholder: "Website", class: "form-control"
+							.row
+								.col-xs-12
+									.pull-left
+										= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+									.pull-right
+										button.btn.btn-primary type="submit"
+											| Next
+											i.icon-glyph-99.f14.ml5
 
 javascript:
 	$(document).ready(function () {
@@ -50,6 +55,6 @@ javascript:
 		});
 		$('#back-btn').on("click", function (e) {
 			e.preventDefault();
-			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('company_setup'))}</div>");	
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('company_setup'))}</div>");
 		});
 	});
