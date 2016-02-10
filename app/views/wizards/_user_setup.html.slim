@@ -1,40 +1,46 @@
-.panel.panel-primary#user-setup-form
-	.panel-heading
-		.pull-left.mt7 Hello there! First, tell me your name
-	.panel-body
-		- @user = current_user
-		= form_for @user, url: user_setup_complete_wizard_path, method: :put, remote: true do |f|
-			.row
-				.col-xs-12.mb5
-					.row
-						.col-xs-6
-							= f.text_field :first_name, placeholder: "First name", class: "form-control"
-						.col-xs-6
-							= f.text_field :last_name, placeholder: "Last name", class: "form-control"
-			.row
-				.col-xs-12
-					.pull-right
-						= f.submit "Next", class: "btn btn-primary"
+.content-wrap#user-setup-form
+	.wrapper
+		.panel.panel-default
+			.panel-body.no-p
+				#wizard.wizard
+					ul.steps style=("margin-left: 0")
+						li.active
+							span.badge.bg-primary> 1
+							| Tell me your name
+						li
+							span.badge.bg-primary> 2
+							| Step 2
+						li
+							span.badge.bg-primary> 3
+							| Step 3
+						li
+							span.badge.bg-primary> 4
+							| Step 4
+						li
+							span.badge.bg-primary> 5
+							| Step 5
+				.step-content
+				  #step1.step-pane.active
+						- @user = current_user
+						= form_for @user, url: user_setup_complete_wizard_path, method: :put, remote: true do |f|
+							.row.mb10
+								.col-xs-12.mb5
+									.row.mb5
+										.col-xs-12
+											label First Name
+											span.field-req  *
+											= f.text_field :first_name, placeholder: "e.g: Juan", class: "form-control"
+									.row.mb5
+										.col-xs-12
+											label Last Name
+											span.field-req  *
+											= f.text_field :last_name, placeholder: "e.g: Dela Cruz", class: "form-control"
+							.row
+								.col-xs-12
+									.pull-right
+										button.btn.btn-primary type="submit"
+											| Next
+											i.icon-glyph-99.f14.ml5
 
 
-/ #user-setup-form
-/ 	h2 User Setup
-/ 	- @user = current_user
-/ 	= form_for @user, url: user_setup_complete_wizard_path, method: :put, remote: true do |f|
-/ 		= f.label :first_name
-/ 		| &nbsp;
-/ 		= f.text_field :first_name
-/ 		br
-/ 		= f.label :last_name
-/ 		| &nbsp;
-/ 		= f.text_field :last_name
-/ 		br
-/ 		= f.submit "Save"
-
-/ javascript:
-/ 	$(document).ready(function () {
-/ 		$('.edit_user').on("ajax:error", function ( e, xhr, status, error) {
-/ 			$('p.alert').remove();
-/ 			$('.edit_user').prepend("<p class='alert'>" + xhr.responseText + "</p>");
-/ 		});
-/ 	});
+    a.exit-offscreen

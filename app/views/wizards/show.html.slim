@@ -1,71 +1,57 @@
-/ .row
-/ 	.col-xs-10	
-/ 		.pull-right
-/ 			h1 Quick Setup
-/ .row
-/ 	.col-xs-10
-/ 		.wizard-area
-/ 			- case current_user.flag
-/ 			- when 1
-/ 				= render "user_setup"
-/ 			- when 2
-/ 				= render "company_setup"
-/ 			- when 3
-/ 				= render "brand_setup"
-/ 			- when 4
-/ 				= render "branch_setup"
-/ 			- when 5
-/ 				= render "setup_summary"
-/ 			- else
-/ 				h2 
-/ 					= "Current user flag: #{current_user.flag}"
 - case current_user.flag
 - when 1
 	.row
-		.col-xs-10
-			.pull-right
-				h1 Welcome to Restobot!
+		.col-md-12.col-lg-9
+			.text-center
+				img src="/img/mailer/mailer-logo.png"
 	.row
-		.col-xs-10
+		.col-md-12.col-lg-9
+			.text-center
+				img src="/img/mailer/mailer-logo.png"
 			.wizard-area
 				= render "user_setup"
 - when 2
 	.row
-		.col-xs-10
-			.pull-right
-				h1 = "Hello there, #{current_user.first_name}!"
+		.col-md-12.col-lg-9
+			.text-center
+				img src="/img/mailer/mailer-logo.png"
+				/h1 = "Hello there, #{current_user.first_name}!"
 	.row
-		.col-xs-10
+		.col-md-12.col-lg-9
 			.wizard-area
 				= render "company_setup"
 - when 3
 	.row
-		.col-xs-10
-			.pull-right
-				h1 = current_user.client && current_user.client.name
+		.col-md-12.col-lg-9
+			.text-center
+				img src="/img/mailer/mailer-logo.png"
+				/h1 = current_user.client && current_user.client.name
 	.row
-		.col-xs-10
+		.col-md-12.col-lg-9
 			.wizard-area
 				= render "brand_setup"
 - when 4
 	.row
-		.col-xs-10
-			.pull-right
-				h1 = current_user.client && current_user.client.name
+		.col-md-12.col-lg-9
+			.text-center
+				img src="/img/mailer/mailer-logo.png"
+				/h1 = current_user.client && current_user.client.name
 	.row
-		.col-xs-10
+		.col-md-12.col-lg-9
 			.wizard-area
 				= render "branch_setup"
 - when 5
 	.row
-		.col-xs-10
-			.pull-right
-				h1 = current_user.client && current_user.client.name
+		.col-md-12.col-lg-9
+			.text-center
+				img src="/img/mailer/mailer-logo.png"
+				/h1 = current_user.client && current_user.client.name
 	.row
-		.col-xs-10
+		.col-md-12.col-lg-9
 			.wizard-area
 				= render "setup_summary"
 - else
 	.row
-		.col-xs-10
-			h1 Something went wrong, please try to relog.
+		.col-md-12.col-lg-9
+			.text-center
+				img src="/img/mailer/mailer-logo.png"

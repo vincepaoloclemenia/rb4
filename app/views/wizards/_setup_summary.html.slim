@@ -1,63 +1,82 @@
-.panel.panel-primary#setup-summary-form
-	.panel-heading
-		.pull-left.mt7 Now to wrap everything up
-	.panel-body
-		.row
-			.col-xs-12
-				p
-					.text-light-grey
-						| Your name
-					label.text-dark-grey = "#{current_user.first_name} #{current_user.last_name}"
-				p
-					.text-light-grey
-						| Company name
-					label.text-dark-grey = current_client.name
-				p
-					.text-light-grey
-						| Company address
-					label.text-dark-grey = current_client.address1
-				p
-					.text-light-grey
-						| Company contact no.
-					label.text-dark-grey = current_client.contact
-				p
-					.text-light-grey
-						| Company email
-					label.text-dark-grey = current_client.email
-				p
-					.text-light-grey
-						| Brand name
-					label.text-dark-grey = current_client.brands.first.name
-				p
-					.text-light-grey
-						| Brand website
-					label.text-dark-grey = current_client.brands.first.website
-				- current_client.brands.first.branches.order('id asc').each_with_index do |branch,index|	
-					p
-						.text-light-grey
-							= "Branch ##{index + 1} name"
-						label.text-dark-grey = branch.name
-					p
-						.text-light-grey
-							= "Branch ##{index + 1} address"
-						label.text-dark-grey = branch.address1
-		.row
-			.col-xs-12
-				.pull-left
-					= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
-				.pull-right
-					= link_to "Done", setup_summary_complete_wizard_path, method: :put, class: "btn btn-success"
+.content-wrap#setup-setup-form
+	.wrapper
+		.panel.panel-default
+			.panel-body.no-p
+				#wizard.wizard
+					ul.steps style=("margin-left: 0")
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li
+							span.badge.bg-success> ✓
+							| Done
+						li.active
+							span.badge.bg-primary> 5
+							| Finish
+				.step-content
+				  #step5.step-pane.active
+					.row
+						.col-xs-12
+							p
+								.text-light-grey
+									| Your name
+								label.text-dark-grey = "#{current_user.first_name} #{current_user.last_name}"
+							p
+								.text-light-grey
+									| Company name
+								label.text-dark-grey = current_client.name
+							p
+								.text-light-grey
+									| Company address
+								label.text-dark-grey = current_client.address1
+							p
+								.text-light-grey
+									| Company contact no.
+								label.text-dark-grey = current_client.contact
+							p
+								.text-light-grey
+									| Company email
+								label.text-dark-grey = current_client.email
+							p
+								.text-light-grey
+									| Brand name
+								label.text-dark-grey = current_client.brands.first.name
+							p
+								.text-light-grey
+									| Brand website
+								label.text-dark-grey = current_client.brands.first.website
+							- current_client.brands.first.branches.order('id asc').each_with_index do |branch,index|
+								p
+									.text-light-grey
+										= "Branch ##{index + 1} name"
+									label.text-dark-grey = branch.name
+								p
+									.text-light-grey
+										= "Branch ##{index + 1} address"
+									label.text-dark-grey = branch.address1
+					.row
+						.col-xs-12
+							.pull-left
+								= link_to "Back", "#", id: "back-btn", class: "btn btn-default"
+							.pull-right
+								= link_to "Done", setup_summary_complete_wizard_path, method: :put, class: "btn btn-success"
 
 / #setup-summary-form
 / 	h2 Setup Summary
 
 / 	section
 / 		h3 User Info
-/ 		p 
+/ 		p
 / 			| First name:
 / 			| &nbsp;
 / 			= current_user.first_name
-/ 		p 
+/ 		p
 / 			| Last name:
 / 			| &nbsp;
 / 			= current_user.last_name
@@ -103,7 +122,7 @@
 / 				| Address:
 / 				| &nbsp;
 / 				= branch.address1
-	
+
 / 	= link_to "Back", "#", id: "back-btn"
 / 	| &nbsp;
 / 	= link_to "DONE", setup_summary_complete_wizard_path, method: :put
@@ -112,6 +131,6 @@ javascript:
 	$(document).ready(function (){
 		$('#back-btn').on("click", function (e) {
 			e.preventDefault();
-			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('branch_setup'))}</div>");	
+			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('branch_setup'))}</div>");
 		});
 	});
