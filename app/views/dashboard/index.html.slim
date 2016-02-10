@@ -47,35 +47,35 @@
         #branches-purchase-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
           = high_chart("branch_purchases", @branch_purchases)
 
-  / .col-xs-12.col-md-12.col-md-6
-  /   .panel
-  /     .panel-heading.border.pb45 style="font-size:11px"
-  /       .pull-left
-  /         small style="font-size:8px" Price Movement<br>
-  /         | Lowest to Highest
-  /       .panel-controls.no-upp
-  /         a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-  /           i.icon-glyph-98
-  /     .panel-body
-  /       .no-more-tables
-  /         table.table.table-bordered.table-striped.mb0
-  /           thead
-  /             tr.bg-thead
-  /               th width="100" Rank
-  /               th width="200" Branch
-  /               th width="250" Item
-  /               th width="150" Prev Amount
-  /               th width="150" Current Amount
-  /               th width="150" Price Movement
-  /           tbody
-  /             - @price_movement.each_with_index do |pm, index|
-  /               tr
-  /                 td data-title="Rank" = index+1
-  /                 td data-title="Branch" = pm[:branch_name]
-  /                 td data-title="Item" = pm[:item]
-  /                 td data-title="Prev Amount" = to_peso(pm[:prev_amount])
-  /                 td data-title="Current Amount" = to_peso(pm[:present_amount])
-  /                 td data-title="Price Movement" = to_peso(pm[:price_movement].abs)
+  .col-xs-12.col-md-12.col-md-6
+    .panel
+      .panel-heading.border.pb45 style="font-size:11px"
+        .pull-left
+          small style="font-size:8px" Price Movement<br>
+          | Highest to Lowest 
+        .panel-controls.no-upp
+          a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
+            i.icon-glyph-98
+      .panel-body
+        .no-more-tables
+          table.table.table-bordered.table-striped.mb0
+            thead
+              tr.bg-thead
+                th width="100" Rank
+                th width="200" Branch
+                th width="250" Item
+                th width="150" Prev Amount
+                th width="150" Current Amount
+                th width="150" Price Movement
+            tbody
+              - @price_movement.each_with_index do |pm, index|
+                tr
+                  td data-title="Rank" = index+1
+                  td data-title="Branch" = pm[:branch_name]
+                  td data-title="Item" = pm[:item]
+                  td data-title="Prev Amount" = to_peso(pm[:prev_amount])
+                  td data-title="Current Amount" = to_peso(pm[:present_amount])
+                  td data-title="Price Movement" = to_peso(pm[:price_movement].abs)
 
   .col-xs-12.col-md-12.col-md-6
-    / = render "price_movement"
+    = render "price_movement"

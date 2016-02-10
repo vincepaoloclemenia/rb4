@@ -40,8 +40,8 @@ class Sale < ActiveRecord::Base
 	end
 
 	def self.get_customer_count(branch, date)
-		customer_count = Sale.where(sale_date: date, branch_id: branch.id).last
-		return customer_count
+		sale = Sale.where(sale_date: date, branch_id: branch.id).last
+		return sale.customer_count
 	end
 
 end

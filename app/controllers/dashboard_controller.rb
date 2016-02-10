@@ -4,6 +4,7 @@ class DashboardController < ApplicationController
 	include ReportsHelper
 
 	def index
+		Dashboard.populate_dashboard
 		@range_date = (Date.today - 7)..(Date.today - 1)
 		@formatted_dates = @range_date.map{|d| d.strftime("%b %d, %Y | %a")}
 		@branches = current_brand.branches.order(:id)		
@@ -11,7 +12,7 @@ class DashboardController < ApplicationController
 		@branches_sales = branches_sales
 		@brand_sales = brand_sales
 		@update_customer_count = update_customer_count(@branches)
-		# @price_movement = price_movement_dashboard
+		@price_movement = price_movement_dashboard
 		@branch_purchases = branch_purchases
 		@brand_purchases = brand_purchases
 	end
@@ -29,9 +30,9 @@ class DashboardController < ApplicationController
 		date = Date.today - 1
 		@branches.each_with_index do |branch, index|
 			dashboard_item = Dashboard.get_dashboard_items(date, branch.id, current_brand.id)
-			dashboard_item.blank? ? customer_count[index] = 0 : customer_count[index] = Dashboard.check_if_blank(dashboard_item.customer_count)
+			dashboard_item.blank? ? customer_count[index] = 0 : customer_count[index] = Dashboard.check_value(dashboard_item.customer_count)
 		end
-		create_chart(current_brand.name, date.strftime("%b %d, %Y | %a"), @branches.pluck(:name), customer_count, "Total Purchase", "line", '')
+		create_chart(current_brand.name, date.strftime("%b %d, %Y | %a"), @branches.pluck(:name), customer_count, "Total Purchase", "pie", @branches.pluck(:color))
 	end
 
 	def price_movement_dashboard
