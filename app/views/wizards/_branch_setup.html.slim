@@ -21,114 +21,59 @@
 							| Step 5
 				.step-content
 				  #step4.step-pane.active
-						- @brand = current_user.client.brands.first if current_user.client.brands.present?
-						- if @brand.branches.empty? ||  @brand.nil?
-							= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-								= f.fields_for :branch1 do |b|
-									.row.mb10
-										.col-xs-12.mb5
-											label Branch
-											span.field-req  *
-											= b.text_field :name, placeholder: "e.g: Fort Bonifacio", class: "form-control"
-										.col-xs-12.mb5
-											label Address
-											= b.text_area :address1, placeholder: "Branch Address", class: "form-control", rows:4
-						- else
-							- branch_count = @brand.branches.count
-							= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-								- branches = @brand.branches.order('id asc')
-								- branches.each_with_index do |branch, index|
-									= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
-										.row.mb10
-											.col-xs-12.mb5
-												label Branch
-												span.field-req  *
-												= b.text_field :name, placeholder: "e.g: Fort Bonifacio", class: "form-control"
-											.col-xs-12.mb5
-												label Address
-												= b.text_area :address1, placeholder: "Branch Address", class: "form-control", rows:4
-								- (3 - branch_count).times do |branch|
-									= f.fields_for "branch#{branch + 1}".to_sym do |b|
-										.row.mb10
-											.col-xs-12.mb5
-												label Branch
-												span.field-req  *
-												= b.text_field :name, placeholder: "e.g: Fort Bonifacio", class: "form-control"
-											.col-xs-12.mb5
-												= b.text_area :address1, placeholder: "Branch Address", class: "form-control", rows:4
-								.col-xs-12.mb5.text-center
-									button.btn.btn-success.btn-outline.btn-round Add More &amp; Enjoy 60 Days Free trial
-								.row
-									.col-xs-12
-										.pull-left
-											= link_to "Go Back", "#", id: "back-btn", class: "btn btn-default"
-										.pull-right
-											button.btn.btn-primary type="submit"
-												| Next
-												i.icon-glyph-99.f14.ml5
+				  	- @brand = current_user.client.brands.first if current_user.client.brands.present?
+				  	= form_for @brand, url: branch_setup_complete_wizard_path, method: :put, remote: true do |f|
+				  		#branches
+				  			= f.fields_for :branches do |branch|
+				  				= render "branch_fields", f: branch
+				  			.links.col-xs-12.mb5.text-center
+									= link_to_add_association "Add More &amp; Enjoy 60 Days Free trial".html_safe, f, :branches, class: "btn btn-success btn-outline btn-round", id: "add-more-btn"
+									p.text-danger#maximum-branch-message style="display:none;" 
+										strong Maximum branch count reached
+							.row
+								.col-xs-12
+									.pull-left
+										= link_to "Go Back", "#", id: "back-btn", class: "btn btn-default"
+									.pull-right
+										button.btn.btn-primary type="submit"
+											| Next
+											i.icon-glyph-99.f14.ml5
+						/ - @brand = current_user.client.brands.first if current_user.client.brands.present?
+						/ - if @brand.branches.empty? ||  @brand.nil?
+						/ 	= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+						/ 		= f.fields_for :branch1 do |b|
+						/ 			= render "branch_field", b: b
+						/ 		.col-xs-12.mb5.text-center
+						/ 			button.btn.btn-success.btn-outline.btn-round#add-more-btn Add More &amp; Enjoy 60 Days Free trial
+						/ 		.row
+						/ 			.col-xs-12
+						/ 				.pull-left
+						/ 					= link_to "Go Back", "#", id: "back-btn", class: "btn btn-default"
+						/ 				.pull-right
+						/ 					button.btn.btn-primary type="submit"
+						/ 						| Next
+						/ 						i.icon-glyph-99.f14.ml5
+						/ - else
+						/ 	- branch_count = @brand.branches.count
+						/ 	= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
+						/ 		- branches = @brand.branches.order('id asc')
+						/ 		- branches.each_with_index do |branch, index|
+						/ 			= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
+						/ 				= render "branch_field", b: b
+						/ 		- (3 - branch_count).times do |branch|
+						/ 			= f.fields_for "branch#{branch + 1}".to_sym do |b|
+						/ 				= render "branch_field", b: b
+						/ 		.col-xs-12.mb5.text-center
+						/ 			button.btn.btn-success.btn-outline.btn-round#add-more-btn Add More &amp; Enjoy 60 Days Free trial
+						/ 		.row
+						/ 			.col-xs-12
+						/ 				.pull-left
+						/ 					= link_to "Go Back", "#", id: "back-btn", class: "btn btn-default"
+						/ 				.pull-right
+						/ 					button.btn.btn-primary type="submit"
+						/ 						| Next
+						/ 						i.icon-glyph-99.f14.ml5
 
-/ #branch-setup-form
-/ 	h2 Branch Setup
-/ 	- @brand = current_user.client.brands.first if current_user.client.brands.present?
-/ 	- if @brand.branches.empty? ||  @brand.nil?
-/ 		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-/ 			= f.fields_for :branch1 do |b|
-/ 				= b.label :name
-/ 				| &nbsp;
-/ 				= b.text_field :name
-/ 				br
-/ 				= b.label :address1, "Address"
-/ 				| &nbsp;
-/ 				= b.text_field :address1
-/ 				br
-/ 			= f.fields_for :branch2 do |b|
-/ 				= b.label :name
-/ 				| &nbsp;
-/ 				= b.text_field :name
-/ 				br
-/ 				= b.label :address1, "Address"
-/ 				| &nbsp;
-/ 				= b.text_field :address1
-/ 				br
-/ 			= f.fields_for :branch3 do |b|
-/ 				= b.label :name
-/ 				| &nbsp;
-/ 				= b.text_field :name
-/ 				br
-/ 				= b.label :address1, "Address"
-/ 				| &nbsp;
-/ 				= b.text_field :address1
-/ 				br
-/ 			= link_to "Back", "#", id: "back-btn"
-/ 			| &nbsp;
-/ 			= f.submit "Save"
-/ 	- else
-/ 		- branch_count = @brand.branches.count
-/ 		= form_for :branches, url: branch_setup_complete_wizard_path, method: :put, remote: true, html: { id: "new_branches" } do |f|
-/ 			- branches = @brand.branches.order('id asc')
-/ 			- branches.each_with_index do |branch, index|
-/ 				= f.fields_for "existing_branch#{branch.id}".to_sym, branch do |b|
-/ 					= b.label :name
-/ 					| &nbsp;
-/ 					= b.text_field :name
-/ 					br
-/ 					= b.label :address1, "Address"
-/ 					| &nbsp;
-/ 					= b.text_field :address1
-/ 					br
-/ 			- (3 - branch_count).times do |branch|
-/ 				= f.fields_for "branch#{branch + 1}".to_sym do |b|
-/ 					= b.label :name
-/ 					| &nbsp;
-/ 					= b.text_field :name
-/ 					br
-/ 					= b.label :address1, "Address"
-/ 					| &nbsp;
-/ 					= b.text_field :address1
-/ 					br
-/ 			= link_to "Back", "#", id: "back-btn"
-/ 			| &nbsp;
-/ 			= f.submit "Save"
 
 javascript:
 	$(document).ready(function () {
@@ -139,5 +84,52 @@ javascript:
 		$('#back-btn').on("click", function (e) {
 			e.preventDefault();
 			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('brand_setup'))}</div>");
+		});
+
+		if($('.nested-fields:visible').size() >= 3){
+			$('#add-more-btn').hide();
+			$('#maximum-branch-message').show();
+		}
+
+		if($('.nested-fields:visible').size() == 1){
+			$('.remove_fields').hide();
+		}
+
+		$('#add-more-btn').on('click',function(e){
+			if($('.nested-fields:visible').size() >= 2){
+				$('#add-more-btn').hide();
+				$('#maximum-branch-message').show();
+			}
+
+			if($('.nested-fields:visible').size() == 1){
+				$('.remove_fields').show();
+			}
+		});
+
+		$('body').on('click', '.remove_fields', function(){
+			if($('.nested-fields:visible').size() == 3){
+				$('#maximum-branch-message').hide();
+				$('#add-more-btn').show();
+			}
+			
+			if($('.nested-fields:visible').size() == 2){
+				$('.remove_fields').hide();
+			}
+			else{
+				$('.remove_fields').show();
+			}
+		});
+
+		$('form').submit(function(e){
+			var errors = 0;
+			$('.required').each(function(){
+				if($(this).val().trim() == ""){
+					$(this).parent().addClass('has-error');
+					errors = errors + 1;
+				}
+			});
+			if(errors > 0){
+				return false;
+			}
 		});
 	});

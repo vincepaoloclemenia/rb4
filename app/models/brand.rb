@@ -27,5 +27,5 @@ class Brand < ActiveRecord::Base
 						},
             uniqueness: { scope: :client_id, message: "already exist", case_sensitive: false }
 
-  accepts_nested_attributes_for :branches
+  accepts_nested_attributes_for :branches, reject_if: :all_blank, allow_destroy: true
 end

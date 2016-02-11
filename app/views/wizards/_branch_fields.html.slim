@@ -1,0 +1,10 @@
+.row.mb10.nested-fields
+	.col-xs-10.mb5
+		label.control-label Branch
+		span.field-req  *
+		= f.text_field :name, placeholder: "e.g: Fort Bonifacio", class: "form-control branch_name required"
+	.col-xs-2.mb5
+		= link_to_remove_association "Remove branch", f
+	.col-xs-12.mb5
+		label Address
+		= f.text_area :address1, placeholder: "Branch Address", class: "form-control", rows:4

@@ -27,14 +27,14 @@
 								.col-xs-12.mb5
 									.row.mb5
 										.col-xs-12
-											label First Name
+											label.control-label First Name
 											span.field-req  *
-											= f.text_field :first_name, placeholder: "e.g: Juan", class: "form-control"
+											= f.text_field :first_name, placeholder: "e.g: Juan", class: "form-control required"
 									.row.mb5
 										.col-xs-12
-											label Last Name
+											label.control-label Last Name
 											span.field-req  *
-											= f.text_field :last_name, placeholder: "e.g: Dela Cruz", class: "form-control"
+											= f.text_field :last_name, placeholder: "e.g: Dela Cruz", class: "form-control required"
 							.row
 								.col-xs-12
 									.pull-right
@@ -44,3 +44,19 @@
 
 
     a.exit-offscreen
+
+javascript:
+	$(document).ready(function(){
+		$('form').submit(function(e){
+			var errors = 0;
+			$('.required').each(function(){
+				if($(this).val().trim() == ""){
+					$(this).parent().addClass('has-error');
+					errors = errors + 1;
+				}
+			});
+			if(errors > 0){
+				return false;
+			}
+		});
+	});

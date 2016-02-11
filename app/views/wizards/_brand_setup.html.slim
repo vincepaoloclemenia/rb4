@@ -30,9 +30,9 @@
 						= form_for @brand, url: brand_setup_complete_wizard_path, method: :put, remote: true do |f|
 							.row.mb10
 								.col-xs-12.mb5
-									label Brand Name
+									label.control-label Brand Name
 									span.field-req  *
-									= f.text_field :name, placeholder: "Your Restaurant's Name", class: "form-control"
+									= f.text_field :name, placeholder: "Your Restaurant's Name", class: "form-control required"
 								.col-xs-12.mb5
 									label Website
 									.input-group
@@ -56,5 +56,18 @@ javascript:
 		$('#back-btn').on("click", function (e) {
 			e.preventDefault();
 			$('.wizard-area').replaceWith("<div class='wizard-area'>#{escape_javascript(render('company_setup'))}</div>");
+		});
+
+		$('form').submit(function(e){
+			var errors = 0;
+			$('.required').each(function(){
+				if($(this).val().trim() == ""){
+					$(this).parent().addClass('has-error');
+					errors = errors + 1;
+				}
+			});
+			if(errors > 0){
+				return false;
+			}
 		});
 	});

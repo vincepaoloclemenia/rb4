@@ -97,8 +97,11 @@ class WizardsController < ApplicationController
 		#redirect_to setup_summary_wizard_path
 		
 		respond_to do |format|
-			branch_create_or_update
-			if @errors.empty?
+			# branch_create_or_update
+			brand = current_user.client.brands.first
+			brand.update(brand_params)
+			puts brand_params
+			if brand.errors.empty?
 				format.js
 			else
 				format.json { render json: @errors.join(", "), status: :unprocessable_entity }
@@ -183,6 +186,6 @@ class WizardsController < ApplicationController
 	end
 
 	def brand_params
-		params.require(:brand).permit(:name, :website)
+		params.require(:brand).permit(:name, :website, branches_attributes: [:id, :name, :address1, :_destroy])
 	end
 end
