@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'item_cost_analysis_reports/index'
+
   devise_for :users, controllers: { registrations: "registrations", passwords: "passwords" }
   resources :company_users, controller: "users"
   root 'pages#index'
@@ -9,7 +11,6 @@ Rails.application.routes.draw do
   get 'item_purchase_detail' => 'reports#item_purchase_detail'
   get 'price_movement_report' => 'reports#price_movement_report'
   get 'invoice_entry_report' => 'reports#invoice_entry_report'
-  get 'item_cost_analysis_report' => 'reports#item_cost_analysis_report'
   get 'update_item' => 'reports#update_item'
   get 'man_hours' => 'reports#man_hours'
   get 'profit_and_losses' => 'profit_and_losses#index'
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
   resources :categories do
     get 'new_subcategory' =>'categories#new_subcategory'
   end
+  resources :item_cost_analysis_reports
   resources :shifts, only: [:index,:create,:update,:destroy]
   resources :sales
   resources :units

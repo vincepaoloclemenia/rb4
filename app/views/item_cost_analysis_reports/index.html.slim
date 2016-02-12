@@ -1,6 +1,6 @@
 .panel
 	.panel-body
-		= form_for item_cost_analysis_report_path, method: 'get' do |f|
+		= form_for item_cost_analysis_reports_path, method: 'get' do |f|
 			.row
 				.col-xs-12.col-lg-6
 					label Branch
@@ -44,7 +44,18 @@
 						th Amount
 						th %
 				tbody
-					td
-					td
-					td
-					td
+					- @beginning_inventory.each do |bi|
+						tr
+							td.danger colspan="21" 
+								strong
+									= category_name(bi[:category_id])
+						- bi[:sub_categories].each do |si|
+							tr
+								td.info colspan="21" = category_name(si)
+								- items_per_sub_category(si).each do |item|
+									tr
+										td.tab-space = item.name
+										td.tab-space = item.unit.name
+							
+
+					

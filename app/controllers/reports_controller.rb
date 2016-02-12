@@ -102,11 +102,7 @@ class ReportsController < ApplicationController
 		@items = Item.where(category_id: params[:category_id])
 	end
 
-	#ITEM COST ANALYSIS REPORT
-	def item_cost_analysis_report
-		
-	end
-
+	
 	#INVOICE ENTRY REPORT
 	def invoice_entry_report
 		@date_range = drp_strip_date(params[:date_range])
