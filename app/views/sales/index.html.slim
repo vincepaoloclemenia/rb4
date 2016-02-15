@@ -3,10 +3,10 @@
     .panel-body
       = search_form_for @q do |f|
         .row
-          .col-xs-12.col-lg-3
+          .col-xs-12.col-lg-6
             = f.label :branch_id_eq, "Branch"
             = f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: "Select Branch" }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
-          .col-xs-12.col-lg-3
+          .col-xs-12.col-lg-6
             = f.label :sale_date_eq, "Sale Date"
             - if params[:q] && params[:q][:sale_date_eq]
               = f.text_field :sale_date_eq, class: "form-control", placeholder: "Select date", data: { provide: "datepicker" }, value: params[:q][:sale_date_eq].to_date.strftime("%m/%d/%Y")

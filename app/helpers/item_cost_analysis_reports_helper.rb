@@ -8,4 +8,6 @@ module ItemCostAnalysisReportsHelper
 		items = Item.where(category_id: category_id)
 		return items
 	end
+
+	
 end
