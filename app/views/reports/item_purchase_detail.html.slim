@@ -33,79 +33,81 @@
 				|
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, item_purchase_detail_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
-		.alert.alert-info role="alert"
-			.row
-				.col-xs-1.text-right
-					i.icon-glyph-73.f25
-				.col-xs-11
-					| Oops! There seems to be no records of purchase here.<br> Go to&nbsp;
-					b Data Entry > Purchases > Create Purchase
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0
-				thead
-					tr.bg-thead
-						th Branch
-						th Invoice Date
-						th Supplier
-						th Item name
-						th Quantity
-						th Unit Amount
-						th Total Amount
-				tbody
-					- @purchase_items = @purchases.group_by{|t| t.purchase_id }
-					- if @purchase_items.empty?
-						td.text-center colspan="7"
-							| No records found from &nbsp;
-							i
-								b
-									= "#{to_datepicker_format(params[:q][:purchase_purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_purchase_date_lteq])}"
-					- @purchase_items.each do |test, purchase_items|
-					  - @total_unit_amount = 0
-					  - @total_quantity = 0
+		- if current_brand.purchases.empty?
+			.alert.alert-info role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11
+						| Oops! There seems to be no records of purchase here.<br> Go to&nbsp;
+						b Data Entry > Purchases > Create Purchase
+		- else
+			.no-more-tables
+				table.table.table-bordered.table-striped.mb0
+					thead
+						tr.bg-thead
+							th Branch
+							th Invoice Date
+							th Supplier
+							th Item name
+							th Quantity
+							th Unit Amount
+							th Total Amount
+					tbody
+						- @purchase_items = @purchases.group_by{|t| t.purchase_id }
+						- if @purchase_items.empty?
+							td.text-center colspan="7"
+								| No records found from &nbsp;
+								i
+									b
+										= "#{to_datepicker_format(params[:q][:purchase_purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_purchase_date_lteq])}"
+						- @purchase_items.each do |test, purchase_items|
+						  - @total_unit_amount = 0
+						  - @total_quantity = 0
 
-					  - purchase_items.each do |listing|
-					    - vcs = vat_computation_summary([listing])
-					    /-# For Each @purchases Generate one of each Invoice Amount, Net Amount, Purchase Amount
-					    /-# vcs = vat_computation_summary(purchase) %> <%# computations for VAT %>
-					    - @quantity = number_with_precision(listing.quantity, precision: 2)
-					    - @net_amount = vcs[0]
-					    - @nonideal_amount = vcs[2]
-					    - @total_purchase_amount = vcs[2]
-					    - @vat_amount = vcs[1]
-					    - if listing.vat_type == "VAT-Exclusive"
-					      - @unit_price = @net_amount.to_f / @quantity.to_f
-					    - else
-					      - @total_purchase_amount = vcs[2]
-					      - @unit_price = @net_amount.to_f / @quantity.to_f
-
-						  tr
-						    td class="text-right" = listing.purchase.branch.name
-						    td class="text-right" = to_default_date_format(listing.purchase.purchase_date)
-						    td class="text-right" = listing.purchase.supplier.name
-						    td class="text-right" = listing.item.name
-						    td class="text-right" = number_with_precision(@quantity, precision: 2)
-						    td class="text-right" = number_to_currency(@unit_price, precision: 2, unit: '')
-						    td class="text-right" = number_to_currency(@total_purchase_amount, precision: 2, unit: '')
-						    - @total_quantity += @quantity.to_f
-						    - @total_purchase += @total_purchase_amount
-						    - @total_amount += @net_amount
-						    - @total_unit_amount += @unit_price
-
-						  tr
-						    - if purchase_items.count != 1
-						      td colspan="4"
-						      - sum = vat_computation_summary(purchase_items)
-						      td class="text-right" style="background-color: #DFDFDF;"
-						      	b
-						       	= number_with_precision(@total_quantity, precision: 2, unit: '')
-						      td class="text-right" style="background-color: #DFDFDF;"
-						        b
-						        	= number_to_currency(sum[2] / @total_quantity , precision: 2, unit: '')
-						      td class="text-right" style="background-color: #DFDFDF;"
-						        b
-						        	= number_to_currency(sum[2], precision: 2, unit: '')
+						  - purchase_items.each do |listing|
+						    - vcs = vat_computation_summary([listing])
+						    /-# For Each @purchases Generate one of each Invoice Amount, Net Amount, Purchase Amount
+						    /-# vcs = vat_computation_summary(purchase) %> <%# computations for VAT %>
+						    - @quantity = number_with_precision(listing.quantity, precision: 2)
+						    - @net_amount = vcs[0]
+						    - @nonideal_amount = vcs[2]
+						    - @total_purchase_amount = vcs[2]
+						    - @vat_amount = vcs[1]
+						    - if listing.vat_type == "VAT-Exclusive"
+						      - @unit_price = @net_amount.to_f / @quantity.to_f
 						    - else
-						      td colspan="14"
+						      - @total_purchase_amount = vcs[2]
+						      - @unit_price = @net_amount.to_f / @quantity.to_f
 
-			.align-center
-				= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
+							  tr
+							    td class="text-right" = listing.purchase.branch.name
+							    td class="text-right" = to_default_date_format(listing.purchase.purchase_date)
+							    td class="text-right" = listing.purchase.supplier.name
+							    td class="text-right" = listing.item.name
+							    td class="text-right" = number_with_precision(@quantity, precision: 2)
+							    td class="text-right" = number_to_currency(@unit_price, precision: 2, unit: '')
+							    td class="text-right" = number_to_currency(@total_purchase_amount, precision: 2, unit: '')
+							    - @total_quantity += @quantity.to_f
+							    - @total_purchase += @total_purchase_amount
+							    - @total_amount += @net_amount
+							    - @total_unit_amount += @unit_price
+
+							  tr
+							    - if purchase_items.count != 1
+							      td colspan="4"
+							      - sum = vat_computation_summary(purchase_items)
+							      td class="text-right" style="background-color: #DFDFDF;"
+							      	b
+							       	= number_with_precision(@total_quantity, precision: 2, unit: '')
+							      td class="text-right" style="background-color: #DFDFDF;"
+							        b
+							        	= number_to_currency(sum[2] / @total_quantity , precision: 2, unit: '')
+							      td class="text-right" style="background-color: #DFDFDF;"
+							        b
+							        	= number_to_currency(sum[2], precision: 2, unit: '')
+							    - else
+							      td colspan="14"
+
+				.align-center
+					= will_paginate @purchases, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"

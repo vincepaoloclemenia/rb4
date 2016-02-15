@@ -3,7 +3,16 @@ class SalesController < ApplicationController
 	before_action :access_control
 
 	def index
-		@sales = current_brand.sales
+		if params[:q]
+			if params[:q][:sale_date_eq].present?
+				params[:q][:sale_date_eq] = Date.strptime(params[:q][:sale_date_eq], "%m/%d/%Y").to_s
+			else
+				params[:q][:sale_date_eq] = Date.today.to_s
+			end
+		end
+		@q = current_brand.sales.ransack(params[:q])
+		@sales = @q.result.paginate(page: params[:page], per_page: per_page)
+		# @sales = current_brand.sales
 	end
 
 	def show
@@ -44,5 +53,9 @@ class SalesController < ApplicationController
 																:credit_card_sales, :cash_in_drawer, :gc_redeemed, :delivery_sales, :gc_sales, :other_income,
 																sale_by_category_entries_attributes: [:id, :category_id, :amount],
 																sale_by_settlement_entries_attributes: [:id, :settlement_id, :amount])
+	end
+
+	def per_page
+		
 	end
 end

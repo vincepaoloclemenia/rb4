@@ -11,7 +11,7 @@
 						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
 					.col-xs-12.col-lg-3
 						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: "Select Branch" }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
 					.col-xs-12.col-lg-3
 						= f.label :supplier_id_eq, "Supplier"
 						= f.select :supplier_id_eq, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"

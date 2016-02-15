@@ -27,42 +27,44 @@
 				|
 				= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_summary_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
 	.panel-body
-		.alert.alert-info role="alert"
-			.row
-				.col-xs-1.text-right
-					i.icon-glyph-73.f25
-				.col-xs-11
-					| Oops! There seems to be no records of purchase here.<br> Go to&nbsp;
-					b Data Entry > Purchases > Create Purchase
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0
-				thead
-					tr.bg-thead
-						th width="130" Rank
-						th width="120" Branch
-						th width="120" Item
-						th width="110" Unit
-						th width="120" Quantity
-						th width="110" Unit Cost
-						th width="110" Net Amount
-				tbody
-					- @rank_number = rank_number(params[:page].to_i)
-					- if @purchase_items.empty?
-						td.text-center colspan="7"
-							| No records found from &nbsp;
-							i
-								b
-									= "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
-					- @purchase_items.each do |pi|
-						tr
-							td = @rank_number
-							td = pi[:branch].to_s
-							td = pi[:name].to_s
-							td = pi[:unit].to_s
-							td = number_with_precision(pi[:quantity], precision: 2)
-							td = to_peso(pi[:cost])
-							td = to_peso(pi[:net_amount])
-							- @rank_number += 1
+		- if current_brand.purchases.empty?
+			.alert.alert-info role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11
+						| Oops! There seems to be no records of purchase here.<br> Go to&nbsp;
+						b Data Entry > Purchases > Create Purchase
+		- else
+			.no-more-tables
+				table.table.table-bordered.table-striped.mb0
+					thead
+						tr.bg-thead
+							th width="130" Rank
+							th width="120" Branch
+							th width="120" Item
+							th width="110" Unit
+							th width="120" Quantity
+							th width="110" Unit Cost
+							th width="110" Net Amount
+					tbody
+						- @rank_number = rank_number(params[:page].to_i)
+						- if @purchase_items.empty?
+							td.text-center colspan="7"
+								| No records found from &nbsp;
+								i
+									b
+										= "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+						- @purchase_items.each do |pi|
+							tr
+								td = @rank_number
+								td = pi[:branch].to_s
+								td = pi[:name].to_s
+								td = pi[:unit].to_s
+								td = number_with_precision(pi[:quantity], precision: 2)
+								td = to_peso(pi[:cost])
+								td = to_peso(pi[:net_amount])
+								- @rank_number += 1
 
 			.align-center
 				p
