@@ -26,12 +26,16 @@ module ItemCostAnalysisReportsHelper
     	unit_cost += pi.purchase_item_amount
     end
     hash = Hash.new
-    unit_cost = unit_cost.to_f / purchase_items.count
+    unit_cost = unit_cost.to_f/ purchase_items.count
     hash[:quantity] = quantity
-    hash[:unit_cost] = unit_cost
-    hash[:total_cost] = quantity * unit_cost
+    hash[:unit_cost] = check_value_if_nan(unit_cost.round(2).to_f)
+    hash[:total_cost] = check_value_if_nan(quantity * unit_cost)
     return hash
   end
 
+  def check_value_if_nan(variable)
+    variable.is_a?(Float) && variable.nan? ? variable = 0.00 : variable = variable
+    return variable
+  end
 
 end

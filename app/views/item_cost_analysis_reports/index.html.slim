@@ -70,10 +70,11 @@
 										td = to_peso(item_amount)
 										td = to_peso(@total_beginning_inventory[index] = (qty * item_amount).to_f)
 										td = get_purchases(Date.today, item.id)[:quantity].to_f
-										td = get_purchases(Date.today, item.id)[:unit_cost].round(2).to_f.nan? ? to_peso(0.0) : to_peso(get_purchases(Date.today, item.id)[:unit_cost].round(2))
-										- @total_purchases[index] = get_purchases(Date.today, item.id)[:total_cost].round(2).to_f.nan? ? 0.0 : get_purchases(Date.today, item.id)[:total_cost].round(2)
-										td = to_peso(@total_purchases[index])
+										td = to_peso(get_purchases(Date.today, item.id)[:unit_cost])
+										td = to_peso(get_purchases(Date.today, item.id)[:total_cost])
 							tr
-								td Total Per Sub Category	
-								td = to_peso(@total_beginning_inventory.sum)
-								td = to_peso(@total_purchases.sum)
+								td Total Per SubCat
+								td colspan="3"
+								/ td = to_peso(@total_beginning_inventory.sum)
+								td colspan="2"
+								/ td = to_peso(@total_purchases.sum)
