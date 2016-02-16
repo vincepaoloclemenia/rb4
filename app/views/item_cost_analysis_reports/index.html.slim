@@ -32,29 +32,48 @@
 						th Unit
 						th Qty
 						th Cost
-						th Amount
+						th Total
 						th Qty
 						th Cost
 						th Amount
 						th %
 						th Qty
 						th Cost
-						th Amount
+						th Total
 						th Qty
 						th Cost
 						th Amount
 						th %
 				tbody
-					- @beginning_inventory.each do |bi|
+					- @total_beginning_inventory = Array.new
+					- @total_purchases = Array.new
+					- @categories.each do |cat|
 						tr
-							td.danger colspan="21" 
+							td.danger colspan="21"
 								strong
-									= category_name(bi[:category_id])
-						- bi[:sub_categories].each do |si|
-							tr
-								td.info colspan="21" = category_name(si)
-								- items_per_sub_category(si).each do |item|
+									= cat.name
+						- cat.subcategories.each do |subcat|
+							- unless subcat.items.blank?
+								tr
+									td.info colspan="21"
+										strong
+											= subcat.name
+							- subcat.items.each_with_index do |item, index|
+								- if @inventory_items.include?(item.id) 
 									tr
-										td.tab-space = item.name
-										td.tab-space = item.unit.name
-										td.tab-space 
+										td
+											strong
+												= item.name
+										td = item.unit.name
+										td = qty = get_inventory_item(@inventory_items[index]).stock_count
+										- item_amount = item.item_value.to_f
+										td = to_peso(item_amount)
+										td = to_peso(@total_beginning_inventory[index] = (qty * item_amount).to_f)
+										td = get_purchases(Date.today, item.id)[:quantity].to_f
+										td = get_purchases(Date.today, item.id)[:unit_cost].round(2).to_f.nan? ? to_peso(0.0) : to_peso(get_purchases(Date.today, item.id)[:unit_cost].round(2))
+										- @total_purchases[index] = get_purchases(Date.today, item.id)[:total_cost].round(2).to_f.nan? ? 0.0 : get_purchases(Date.today, item.id)[:total_cost].round(2)
+										td = to_peso(@total_purchases[index])
+							tr
+								td Total Per Sub Category	
+								td = to_peso(@total_beginning_inventory.sum)
+								td = to_peso(@total_purchases.sum)
