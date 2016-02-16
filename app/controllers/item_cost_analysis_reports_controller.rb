@@ -1,8 +1,7 @@
 class ItemCostAnalysisReportsController < ApplicationController
   def index
-    if params[:q][:date_entry_eq].present?
-      raise
-    end
+    # raise
+    # end
     # raise
   	# @beginning_inventory = beginning_inventory
   	@beginning_inventory = get_categories
