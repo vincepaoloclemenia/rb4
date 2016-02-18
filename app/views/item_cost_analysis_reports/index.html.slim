@@ -1,14 +1,14 @@
 .collapse#show-search class="#{ 'in' if params[:q].present? }"
 	.panel
 		.panel-body
-			= form_for item_cost_analysis_reports_path, method: 'get' do |f|
+			= form_for item_cost_analysis_reports_path, method: 'get' do
 				.row
 					.col-xs-12.col-lg-6
 						label Branch
-						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control', readonly: true, autocomplete: :off
+						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
 					.col-xs-12.col-lg-6
 						label Date
-						= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, readonly: true, autocomplete: :off
+						= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  data: { provide: "datepicker" }, readonly: true, autocomplete: :off
 				.row.mt10
 					.col-xs-12
 						.pull-right
@@ -45,36 +45,58 @@
 						th Amount
 						th %
 				tbody
-					- @total_beginning_inventory = Array.new
-					- @total_purchases = Array.new
-					- @categories.each do |cat|
+					- if @inventory_items.empty?
 						tr
-							td.danger colspan="21"
-								strong
-									= cat.name
-						- cat.subcategories.each do |subcat|
-							- unless subcat.items.blank?
+							td colspan="8"
+								p.text-center.mt5 No Records Found
+					- else
+						- @categories.each do |category|
+							tr
+								td.danger colspan="21"
+									strong
+										= category.name
+							- get_subcategory_and_items(category, @inventory_items).each do |subcategory|
 								tr
 									td.info colspan="21"
 										strong
-											= subcat.name
-							- subcat.items.each_with_index do |item, index|
-								- if @inventory_items.include?(item.id) 
+											= subcategory[:subcategory].name
+								- get_items(subcategory[:item_ids]).each do |item|
 									tr
-										td
-											strong
-												= item.name
+										td 
+											strong 
+											= item.name
 										td = item.unit.name
-										td = qty = get_inventory_item(@inventory_items[index]).stock_count
+										/ Beginning Inventory
 										- item_amount = item.item_value.to_f
-										td = to_peso(item_amount)
-										td = to_peso(@total_beginning_inventory[index] = (qty * item_amount).to_f)
-										td = get_purchases(Date.today, item.id)[:quantity].to_f
-										td = to_peso(get_purchases(Date.today, item.id)[:unit_cost])
-										td = to_peso(get_purchases(Date.today, item.id)[:total_cost])
-							tr
-								td Total Per SubCat
-								td colspan="3"
-								/ td = to_peso(@total_beginning_inventory.sum)
-								td colspan="2"
-								/ td = to_peso(@total_purchases.sum)
+										- qty = get_inventory_item(item.id).stock_count
+										td = qty.round(2)
+										- bg_total = get_total(qty, item_amount)
+										td = to_peso(check_value_if_nan(item_amount))
+										td = to_peso(bg_total)
+										/ Purchases
+										- purchases = get_purchases(Date.today, item.id)
+										- p_qty = purchases[:quantity].to_i
+										- p_total = purchases[:total_cost]
+										- p_unit_cost = get_unit_cost(p_total, p_qty)
+										td = check_value_if_nan(p_qty.round(2))
+										td = to_peso(check_value_if_nan(p_unit_cost))
+										td = to_peso(p_total)
+										td 
+										/Ending Inventory
+										- e_qty = get_ending_inventory_item_stock_count(item.id, @ending_inventory_items)
+										- e_unit_cost = get_unit_cost((bg_total+p_total), (qty + p_qty))
+										- e_total = get_total(e_qty, e_unit_cost)
+										td = e_qty
+										td = to_peso(e_unit_cost)
+										td = to_peso(e_total)
+										//COGS
+										- cogs_qty = ((qty + p_qty) - e_qty)
+										- cogs_amount = ((bg_total + p_total) - e_total)
+										- cogs_unit_cost = get_unit_cost(cogs_amount, cogs_qty)
+										td = cogs_qty
+										td = to_peso(check_value_if_nan(cogs_unit_cost))
+										td = to_peso(check_value_if_nan(cogs_amount))
+								tr
+									td Total
+									td 
+									/ = to_peso(get_subcategory_item_total(subcategory[:subcategory]))
