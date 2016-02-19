@@ -1,18 +1,20 @@
 module ItemCostAnalysisReportsHelper
 
-  def get_purchase(all_purchase, item_id)
-    all_purchase.each do |purchase|
-      if purchase[:item_id] == item_id
-        return purchase
+  def get_information(array, item_id)
+    array.each do |a|
+      if a[:item_id] == item_id
+        puts a
+        return a
       end
     end
   end
 
   def all_purchases(subcategory)
     purchases_array = Array.new
-    a = Date.today
+    a = Date.strptime(params[:date_entry], "%m/%d/%Y")
+    a = a-1.month
     item_ids = subcategory.items.pluck(:id)
-    purchases = Purchase.where(purchase_date: a.beginning_of_month..a).pluck(:id)
+    purchases = Purchase.where(purchase_date: a.beginning_of_month..a.end_of_month).pluck(:id)
     item_ids.each do |id|
       purchase_items = PurchaseItem.where(purchase_id: purchases, item_id: id)
       quantity = 0
@@ -26,59 +28,60 @@ module ItemCostAnalysisReportsHelper
       hash[:item_id] = id
       hash[:quantity] = quantity.to_f
       hash[:unit_cost] = check_value_if_nan(unit_cost.round(2).to_f)
-      hash[:total_cost] = check_value_if_nan(get_total(quantity, unit_cost).round(2).to_f)
+      hash[:total] = check_value_if_nan(get_total(quantity, unit_cost).round(2).to_f)
       purchases_array << hash
     end
-    subcategory_total = 0
-    purchases_array.each do |pa|
-      subcategory_total += pa[:total_cost]
-    end
+    purchases_array << get_summation_of_amount(purchases_array)
+    return purchases_array
 
-    purchases_array << subcategory_total
   end
 
+  def get_summation_of_amount(array)
+    total = 0
+    array.each do |a|
+      total += a[:total]
+    end
+    return check_value_if_nan(total)
+  end
 
+  def get_ending_inventories(item_ids, inventory_items, all_purchase)
+    arr = Array.new
+    items = get_items(item_ids)
+    items.is_a?(Array) ? items = items : items = [items]
+    items.each do |item|
+      hash = Hash.new
+      hash[:item_id] = item.id
+      if inventory_items.blank?
+        hash[:quantity] = 0.0
+      else
+        hash[:quantity] = get_ending_inventory_item_stock_count(item.id, inventory_items)
+      end
+      subcat_item = get_subcat_items(item.id).first
+      purchase = get_information(all_purchase, item.id)
+      total = subcat_item[:total] + purchase[:total]
+      qty = subcat_item[:quantity] + purchase[:quantity]
+      hash[:unit_cost] = get_unit_cost(total, qty)
+      hash[:total] = get_total(hash[:quantity], hash[:unit_cost])
+      arr << hash
+    end
 
-	# def get_purchases(purchase_date, item_id)
- #    quantity = 0
- #    unit_cost = 0
- #    total_cost = 0
- #    purchase_info = Array.new
- #    # purchases = Purchase.where(purchase_date: purchase_date.beginning_of_month..purchase_date).pluck(:id)
- #    # purchase_items = PurchaseItem.where(purchase_id: purchases, item_id: item_id)
- #    purchase_items = get_purchase_items(purchase_date, item_id)
- #    purchase_items.each do |pi|
- #    	quantity += pi.quantity
- #    	unit_cost += pi.purchase_item_amount
- #    end
- #    hash = Hash.new
- #    unit_cost = unit_cost.to_f/purchase_items.count
- #    hash[:quantity] = quantity
- #    hash[:unit_cost] = check_value_if_nan(unit_cost.round(2).to_f)
- #    hash[:total_cost] = check_value_if_nan(quantity * unit_cost)
- #    return hash
- #  end
+    return arr
+  end
 
-  # def get_purchase_items(purchase_date, item_ids)
-  #   purchases = Purchase.where(purchase_date: purchase_date.beginning_of_month..purchase_date).pluck(:id)
-  #   purchase_items = PurchaseItem.where(purchase_id: purchases, item_id: item_ids)
-  #   return purchase_items
-  # end
-
-  # def get_purchase_total(purchase_date, subcategory)
-  #   purchase_total = 0
-  #   item_ids = subcategory.items.pluck(item_id)
-  #   purchase_items = get_purchase_items(purchase_date, item_ids)
-  #   purchase_items.each do |pi|
-  #     purchase_total += pi
-  #   end
-  # end
-
-  # def get_subcategory_total(subcategory)
-  #   item_ids = subcategory.items.pluck(item_ids)
-  #   items = get_items(item_ids)
-  #   item
-  # end
+  def get_subcat_items(item_ids)
+    arr = Array.new
+    items = get_items(item_ids)
+    items.is_a?(Array) ? items = items : items = [items] 
+    items.each do |item|
+      hash = Hash.new
+      hash[:item_info] = item 
+      hash[:quantity] = get_inventory_item(item.id).stock_count
+      hash[:unit_cost] = item.item_value.to_f
+      hash[:total] = get_total(hash[:quantity], hash[:unit_cost])
+      arr << hash
+    end
+    return arr
+  end
   
   def get_subcategory_and_items(category, inventory_items)
     if inventory_items.blank?
@@ -104,19 +107,32 @@ module ItemCostAnalysisReportsHelper
   end
 
   def get_ending_inventory_item_stock_count(item_id, inventory_items)
-    if inventory_items.blank?
+    if inventory_items.blank? 
       return 0.0
     else
       inventory_items.each do |ii|
         if ii.item.id == item_id
-          puts "Inventory Item #{ii.id}"
-          print "stock_count #{ii.stock_count}"
-          puts "Item name #{ii.item.name}"
-          puts "Item id #{ii.item.id}"
           return ii.stock_count
         end
       end
     end
+  end
+
+  def get_cost_of_total_goods(purchases, ending_inventories, item_ids)
+    arr = Array.new
+    item_ids.each do |item|
+      subcat_item = get_subcat_items(item).first
+      purchase = get_information(purchases, item)
+      ending_inventory = get_information(ending_inventories, item)
+      hash = Hash.new
+      hash[:item_id] = item
+      hash[:quantity] = (subcat_item[:quantity] + purchase[:quantity]) - ending_inventory[:quantity]
+      hash[:total] = check_value_if_nan((subcat_item[:total] + purchase[:total]) - ending_inventory[:total])
+      hash[:unit_cost] = get_unit_cost(hash[:total], hash[:quantity])
+      arr << hash
+    end
+    arr << get_summation_of_amount(arr)
+    return arr
   end
 
   def get_items(item_ids)
@@ -127,11 +143,6 @@ module ItemCostAnalysisReportsHelper
   def get_inventory_item(item_id)
     inventory_item = InventoryItem.find_by_item_id(item_id)
     return inventory_item
-  end
-
-  def check_value_if_nan(variable)
-    variable.is_a?(Float) && variable.nan? ? variable = 0.00 : variable = variable
-    return variable
   end
 
   def get_unit_cost(amount, qty)
@@ -147,5 +158,4 @@ module ItemCostAnalysisReportsHelper
     end
     return total
   end
-
 end
