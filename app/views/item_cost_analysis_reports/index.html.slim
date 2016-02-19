@@ -60,6 +60,7 @@
 									td.info colspan="21"
 										strong
 											= subcategory[:subcategory].name
+								- purchases = all_purchases(subcategory[:subcategory])
 								- get_items(subcategory[:item_ids]).each do |item|
 									tr
 										td 
@@ -74,14 +75,15 @@
 										td = to_peso(check_value_if_nan(item_amount))
 										td = to_peso(bg_total)
 										/ Purchases
-										- purchases = get_purchases(Date.today, item.id)
-										- p_qty = purchases[:quantity].to_i
-										- p_total = purchases[:total_cost]
-										- p_unit_cost = get_unit_cost(p_total, p_qty)
+										- purchase = get_purchase(purchases, item.id)
+										- p_qty = purchase[:quantity]
+										- p_total = purchase[:total_cost]
+										- p_unit_cost = purchase[:unit_cost]
 										td = check_value_if_nan(p_qty.round(2))
 										td = to_peso(check_value_if_nan(p_unit_cost))
 										td = to_peso(p_total)
-										td 
+										td = to_percentage(p_total, purchases.last)
+										- puts 
 										/Ending Inventory
 										- e_qty = get_ending_inventory_item_stock_count(item.id, @ending_inventory_items)
 										- e_unit_cost = get_unit_cost((bg_total+p_total), (qty + p_qty))
@@ -98,5 +100,4 @@
 										td = to_peso(check_value_if_nan(cogs_amount))
 								tr
 									td Total
-									td 
-									/ = to_peso(get_subcategory_item_total(subcategory[:subcategory]))
+									td = to_peso(all_purchases(subcategory[:subcategory]).last)

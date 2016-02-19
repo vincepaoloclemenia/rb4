@@ -109,8 +109,14 @@ module ApplicationHelper
 
 	def to_percentage(first_value, second_value)
 		val = (((first_value/second_value) * 100).round(2)).abs
+		val = check_value_if_nan(val)
 		return val.to_s + '%'
 	end
+
+	def check_value_if_nan(variable)
+    variable.is_a?(Float) && variable.nan? ? variable = 0.00 : variable = variable
+    return variable
+  end
 
 	def brand_pane_active?(pane_name)
 		if params[:brand_pane] && pane_name.eql?('branches')
