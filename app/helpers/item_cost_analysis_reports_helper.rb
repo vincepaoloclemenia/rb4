@@ -1,19 +1,10 @@
 module ItemCostAnalysisReportsHelper
 
-  def get_information(array, item_id)
-    array.each do |a|
-      if a[:item_id] == item_id
-        puts a
-        return a
-      end
-    end
-  end
-
-  def all_purchases(subcategory)
+  def all_purchases(item_ids)
     purchases_array = Array.new
     a = Date.strptime(params[:date_entry], "%m/%d/%Y")
-    a = a-1.month
-    item_ids = subcategory.items.pluck(:id)
+    a = a - 1.month
+
     purchases = Purchase.where(purchase_date: a.beginning_of_month..a.end_of_month).pluck(:id)
     item_ids.each do |id|
       purchase_items = PurchaseItem.where(purchase_id: purchases, item_id: id)
@@ -33,15 +24,6 @@ module ItemCostAnalysisReportsHelper
     end
     purchases_array << get_summation_of_amount(purchases_array)
     return purchases_array
-
-  end
-
-  def get_summation_of_amount(array)
-    total = 0
-    array.each do |a|
-      total += a[:total]
-    end
-    return check_value_if_nan(total)
   end
 
   def get_ending_inventories(item_ids, inventory_items, all_purchase)
@@ -54,7 +36,7 @@ module ItemCostAnalysisReportsHelper
       if inventory_items.blank?
         hash[:quantity] = 0.0
       else
-        hash[:quantity] = get_ending_inventory_item_stock_count(item.id, inventory_items)
+        hash[:quantity] = get_information(inventory_items, item.id).stock_count
       end
       subcat_item = get_subcat_items(item.id).first
       purchase = get_information(all_purchase, item.id)
@@ -64,7 +46,6 @@ module ItemCostAnalysisReportsHelper
       hash[:total] = get_total(hash[:quantity], hash[:unit_cost])
       arr << hash
     end
-
     return arr
   end
 
@@ -83,11 +64,8 @@ module ItemCostAnalysisReportsHelper
     return arr
   end
   
-  def get_subcategory_and_items(category, inventory_items)
-    if inventory_items.blank?
-      return
-    else
-      subcat_info = Array.new
+  def get_subcategory_and_item_ids(category, inventory_items)
+    subcat_info = Array.new
       category.subcategories.each do |subcategory|
         hash = Hash.new
         if subcategory.items.present?
@@ -102,20 +80,7 @@ module ItemCostAnalysisReportsHelper
         end
         subcat_info << hash unless hash.blank?
       end
-      return subcat_info
-    end
-  end
-
-  def get_ending_inventory_item_stock_count(item_id, inventory_items)
-    if inventory_items.blank? 
-      return 0.0
-    else
-      inventory_items.each do |ii|
-        if ii.item.id == item_id
-          return ii.stock_count
-        end
-      end
-    end
+    return subcat_info
   end
 
   def get_cost_of_total_goods(purchases, ending_inventories, item_ids)
@@ -133,6 +98,23 @@ module ItemCostAnalysisReportsHelper
     end
     arr << get_summation_of_amount(arr)
     return arr
+  end
+
+  def get_summation_of_amount(array)
+    total = 0
+    array.each do |a|
+      total += a[:total]
+    end
+    return check_value_if_nan(total)
+  end
+
+  def get_information(array, item_id)
+    array.each do |a|
+      if a[:item_id] == item_id
+        puts a
+        return a
+      end
+    end
   end
 
   def get_items(item_ids)

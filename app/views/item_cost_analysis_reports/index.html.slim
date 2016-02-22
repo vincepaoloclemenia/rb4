@@ -55,12 +55,12 @@
 								td.danger colspan="21"
 									strong
 										= category.name
-							- get_subcategory_and_items(category, @inventory_items).each do |subcategory|
+							- get_subcategory_and_item_ids(category, @inventory_items).each do |subcategory|
 								tr
 									td.info colspan="21"
 										strong
 											= subcategory[:subcategory].name
-								- item_ids = subcategory[:subcategory].items.pluck(:id)
+								- item_ids = subcategory[:item_ids]
 								- get_subcat_items(item_ids).each do |subcategory_item|
 									- item = get_items(subcategory_item[:item_info].id)
 									tr
@@ -69,7 +69,7 @@
 										td = subcategory_item[:quantity]
 										td = to_peso(subcategory_item[:unit_cost])
 										td = to_peso(subcategory_item[:total])
-										- purchases = all_purchases(subcategory[:subcategory])
+										- purchases = all_purchases(item_ids)
 										- purchase = get_information(purchases, item.id)
 										td = purchase[:quantity]
 										td = to_peso(purchase[:unit_cost])
@@ -89,5 +89,5 @@
 								tr
 									td Total
 									td colspan="6" 
-									td colspan="7	" = to_peso(a = all_purchases(subcategory[:subcategory]).last)
+									td colspan="7	" = to_peso(a = all_purchases(item_ids).last)
 									td = to_peso(@total_cog)
