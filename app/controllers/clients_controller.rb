@@ -2,6 +2,10 @@ class ClientsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
 
+	def edit
+		@client = current_client
+	end
+
 	def update
 		client = current_client
 		if client.update(client_params)

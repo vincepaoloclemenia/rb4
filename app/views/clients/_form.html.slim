@@ -1,0 +1,27 @@
+= form_for @client do |f|
+	.row.mb10
+	  .col-xs-12
+	    label
+				| Company
+				small.field-req  *
+	    = f.text_field :name, class: "form-control"
+	.row.mb10
+		.col-xs-6
+			= f.label :email, "E-mail"
+			= f.text_field :email, class: "form-control", placeholder: "Company E-mail address"
+		.col-xs-6
+		  = f.label :contact, "Contact No"
+		  = f.text_field :contact, class: "form-control", placeholder: "Company Contact No."
+	.row.mb10
+		.col-xs-12
+			= f.label :address1, "Address"
+			= f.text_area :address1, class: "form-control", rows: "3"
+	.row.mb10
+	  .col-xs-12
+	    | (
+	    small.field-req  *
+	    |  )
+	    i  indicates field is required
+	.modal-footer.no-border
+	  button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+	  button.btn.btn-primary type="submit"  Save Changes
