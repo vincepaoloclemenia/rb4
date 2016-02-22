@@ -1,0 +1,31 @@
+.alert.alert-info.mt5 role="alert"
+	| You can manage permissions of the role after creating.<br>
+	i Click the role &nbsp;
+	b > Manage Permission
+
+= form_for @role do |f|
+	.row.mb10
+		.col-xs-12.mb10
+			= f.label :name
+				| Role
+				small.field-req  *
+			= f.text_field :name, class: "form-control", placeholder: "e.g: Administrator"
+		.col-xs-12.mb10
+			= f.label :role_level
+				| Role Level
+				small.field-req  *
+			= f.select :role_level, [["Company","client"], ["Brand","brand"], ["Branch","branch"]], {include_blank:true}, class: "chosen", data:{placeholder:"Select"}
+		.col-xs-12.mb10
+			= f.label :description
+			= f.text_area :description, class: "form-control", placeholder:"e.g: Full access to the whole company", rows: 3
+	.row.mb10
+		.col-xs-12
+			| (
+			small.field-req  *
+			|   )
+			i  indicates field is required
+	.modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			button.btn.btn-primary type="submit" = @role.new_record? ? "Create" : "Update"

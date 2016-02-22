@@ -3,7 +3,7 @@
 		.pull-left.mt7 Roles
 		.pull-right
 			- if view_access_control('roles','create')
-				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Create Role".html_safe, '#', data: { toggle: "modal", target: ".create-role-modal" }, class: "btn btn-success btn-round btn-outline"
+				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Create Role".html_safe, new_role_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
@@ -22,113 +22,115 @@
 							td data-title="Description" = role.description
 							td.action data-title="Action"
 								- if view_access_control('roles','update')
-									= link_to "<i class='icon-glyph f14'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-role-#{role.id}" }
+									= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_role_path(role), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
 								- if view_access_control('roles','destroy')
 									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, role_path(role), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-						.modal class="edit-role-#{role.id}" tabindex="-1" role="dialog" aria-hidden="true"
-							.modal-dialog
-								.modal-content
-									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true"
-											i.icon-maxicons1-exit
-										h4.modal-title Edit Role
-									.modal-body
-										= form_for role do |f|
-											.row.mb10
-												.col-xs-12.mb10
-													= f.label :name
-														| Name
-														small.field-req  *
-													= f.text_field :name, class: "form-control"
-												.col-xs-12.mb10
-													= f.label :role_level
-														| Role Level
-														small.field-req  *
-													= f.select :role_level, [["Company","client"], ["Brand","brand"], ["Branch","branch"]], {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
-												.col-xs-12.mb10
-													= f.label :description
-													= f.text_area :description, class: "form-control", rows: 2
-											.row.mb10
-												.col-xs-12
-													| (
-													small.field-req  *
-													|   )
-													i  indicates field is required
-											.modal-footer.no-border
-												span.inline.float-right
-													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-													button.btn.btn-primary type="submit" Save Changes
+= render "partials/modal"
 
-.modal.create-role-modal tabindex="-1" role="dialog" aria-hidden="true"
-	.modal-dialog
-		.modal-content
-			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true"
-					i.icon-glyph-27
-				h4.modal-title Create Role
-			.modal-body
-				.alert.alert-info.mt5 role="alert"
-					| You can manage permissions of the role after creating.<br>
-					i Click the role &nbsp;
-					b > Manage Permission
+/ 						.modal class="edit-role-#{role.id}" tabindex="-1" role="dialog" aria-hidden="true"
+/ 							.modal-dialog
+/ 								.modal-content
+/ 									.modal-header
+/ 										button.close type="button" data-dismiss="modal" aria-hidden="true"
+/ 											i.icon-maxicons1-exit
+/ 										h4.modal-title Edit Role
+/ 									.modal-body
+/ 										= form_for role do |f|
+/ 											.row.mb10
+/ 												.col-xs-12.mb10
+/ 													= f.label :name
+/ 														| Name
+/ 														small.field-req  *
+/ 													= f.text_field :name, class: "form-control"
+/ 												.col-xs-12.mb10
+/ 													= f.label :role_level
+/ 														| Role Level
+/ 														small.field-req  *
+/ 													= f.select :role_level, [["Company","client"], ["Brand","brand"], ["Branch","branch"]], {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
+/ 												.col-xs-12.mb10
+/ 													= f.label :description
+/ 													= f.text_area :description, class: "form-control", rows: 2
+/ 											.row.mb10
+/ 												.col-xs-12
+/ 													| (
+/ 													small.field-req  *
+/ 													|   )
+/ 													i  indicates field is required
+/ 											.modal-footer.no-border
+/ 												span.inline.float-right
+/ 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+/ 													button.btn.btn-primary type="submit" Save Changes
 
-				= form_for @role do |f|
-					.row.mb10
-						.col-xs-12.mb10
-							= f.label :name
-								| Role
-								small.field-req  *
-							= f.text_field :name, class: "form-control", placeholder: "e.g: Administrator"
-						.col-xs-12.mb10
-							= f.label :role_level
-								| Role Level
-								small.field-req  *
-							= f.select :role_level, [["Company","client"], ["Brand","brand"], ["Branch","branch"]], {include_blank:true}, class: "chosen", data:{placeholder:"Select"}
-						.col-xs-12.mb10
-							= f.label :description
-							= f.text_area :description, class: "form-control", placeholder:"e.g: Full access to the whole company", rows: 3
-					.row.mb10
-						.col-xs-12
-							| (
-							small.field-req  *
-							|   )
-							i  indicates field is required
-					.modal-footer.no-border
-						span.inline.float-right
-							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|
-							button.btn.btn-primary type="submit" Create
+/ .modal.create-role-modal tabindex="-1" role="dialog" aria-hidden="true"
+/ 	.modal-dialog
+/ 		.modal-content
+/ 			.modal-header
+/ 				button.close type="button" data-dismiss="modal" aria-hidden="true"
+/ 					i.icon-glyph-27
+/ 				h4.modal-title Create Role
+/ 			.modal-body
+/ 				.alert.alert-info.mt5 role="alert"
+/ 					| You can manage permissions of the role after creating.<br>
+/ 					i Click the role &nbsp;
+/ 					b > Manage Permission
 
-- @roles.each do |role|
-	.modal class="show-role-#{role.id}" tabindex="-1" role="dialog" aria-hidden="true"
-		.modal-dialog
-			.modal-content
-				.modal-header
-					button.close type="button" data-dismiss="modal" aria-hidden="true"
-						i.icon-maxicons1-exit
-					h4.modal-title = role.name
-				.modal-body
-					.row.mb10
-						.col-xs-12
-							.no-more-tables
-								table.table.table-bordered.table-striped.mb0 data-sortable="true"
-									thead
-										tr.bg-thead
-											th width="400" Section
-											th width="150" data-sortable="false" Read
-											th width="150" data-sortable="false" Create
-											th width="150" data-sortable="false" Edit
-											th width="150" data-sortable="false" Delete
-									tbody
-										- role.permissions.each do |p|
-											tr
-												td data-title="Section" = p.section.page
-												td data-title="Read" = p.is_read ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-												td data-title="Create" = p.is_create ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-												td data-title="Update" = p.is_update ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-												td data-title="Destroy" = p.is_destroy ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-					.modal-footer.no-border
-						= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-						- if view_access_control('roles','update')
-							= link_to "Manage Permissions", role_manage_permissions_path(role_id: role.id), class: "btn btn-primary btn-outline"
+/ 				= form_for @role do |f|
+/ 					.row.mb10
+/ 						.col-xs-12.mb10
+/ 							= f.label :name
+/ 								| Role
+/ 								small.field-req  *
+/ 							= f.text_field :name, class: "form-control", placeholder: "e.g: Administrator"
+/ 						.col-xs-12.mb10
+/ 							= f.label :role_level
+/ 								| Role Level
+/ 								small.field-req  *
+/ 							= f.select :role_level, [["Company","client"], ["Brand","brand"], ["Branch","branch"]], {include_blank:true}, class: "chosen", data:{placeholder:"Select"}
+/ 						.col-xs-12.mb10
+/ 							= f.label :description
+/ 							= f.text_area :description, class: "form-control", placeholder:"e.g: Full access to the whole company", rows: 3
+/ 					.row.mb10
+/ 						.col-xs-12
+/ 							| (
+/ 							small.field-req  *
+/ 							|   )
+/ 							i  indicates field is required
+/ 					.modal-footer.no-border
+/ 						span.inline.float-right
+/ 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+/ 							|
+/ 							button.btn.btn-primary type="submit" Create
+
+/ - @roles.each do |role|
+/ 	.modal class="show-role-#{role.id}" tabindex="-1" role="dialog" aria-hidden="true"
+/ 		.modal-dialog
+/ 			.modal-content
+/ 				.modal-header
+/ 					button.close type="button" data-dismiss="modal" aria-hidden="true"
+/ 						i.icon-maxicons1-exit
+/ 					h4.modal-title = role.name
+/ 				.modal-body
+/ 					.row.mb10
+/ 						.col-xs-12
+/ 							.no-more-tables
+/ 								table.table.table-bordered.table-striped.mb0 data-sortable="true"
+/ 									thead
+/ 										tr.bg-thead
+/ 											th width="400" Section
+/ 											th width="150" data-sortable="false" Read
+/ 											th width="150" data-sortable="false" Create
+/ 											th width="150" data-sortable="false" Edit
+/ 											th width="150" data-sortable="false" Delete
+/ 									tbody
+/ 										- role.permissions.each do |p|
+/ 											tr
+/ 												td data-title="Section" = p.section.page
+/ 												td data-title="Read" = p.is_read ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+/ 												td data-title="Create" = p.is_create ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+/ 												td data-title="Update" = p.is_update ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+/ 												td data-title="Destroy" = p.is_destroy ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+/ 					.modal-footer.no-border
+/ 						= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+/ 						- if view_access_control('roles','update')
+/ 							= link_to "Manage Permissions", role_manage_permissions_path(role_id: role.id), class: "btn btn-primary btn-outline"

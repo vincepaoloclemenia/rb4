@@ -18,45 +18,47 @@
 	.panel-heading.border.pb45
 		.pull-left.mt7 Invoice Entry Report
 	.panel-body
-		.alert.alert-info role="alert"
-			.row
-				.col-xs-1.text-right
-					i.icon-glyph-73.f25
-				.col-xs-11
-					| Oops! There seems to be no records here. To receive your invoice entry reports:<br>Go to&nbsp;
-					b Data Entry > Purchases > Create Purchase
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
-				thead
-					tr.bg-thead
-						th width="120" Invoice No.
-						th width="130" Invoice Date
-						th Branch
-						th Supplier
-						th Vat<br>Amount
-						th Total<br>Amount
-						th Net<br>Amount
-						th Entry<br>Date
-						th Created<br>By
-				tbody
-					- if @purchases.empty?
-						tr
-							td colspan="9"
-								p.text-center.mt5
-									i.icon-maxicons3-danger.mr5.text-orange
-									| No Records Found
-					- @purchases.each do |purchase|
-						- nvtc = net_vat_total_computation(purchase.purchase_items)
-						tr
-							td data-title="Invoice No." = purchase.invoice_number
-							td data-title="Invoice Date"  = to_default_date_format(purchase.purchase_date)
-							td data-title="Branch"  = purchase.branch.name
-							td data-title="Supplier"  = purchase.supplier.name
-							td data-title="Vat Amount" = to_peso(nvtc[:vat])
-							td data-title="Total Amount" = to_peso(nvtc[:total])
-							td data-title="Net Amount"  = to_peso(nvtc[:net])
-							td data-title="Entry Date" = to_default_date_format(purchase.created_at)
-							td data-title="Created By" = purchase.created_by.full_name
+		- if current_brand.purchases.empty?
+			.alert.alert-info role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11
+						| Oops! There seems to be no records here. To receive your invoice entry reports:<br>Go to&nbsp;
+						b Data Entry > Purchases > Create Purchase
+		- else
+			.no-more-tables
+				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+					thead
+						tr.bg-thead
+							th width="120" Invoice No.
+							th width="130" Invoice Date
+							th Branch
+							th Supplier
+							th Vat<br>Amount
+							th Total<br>Amount
+							th Net<br>Amount
+							th Entry<br>Date
+							th Created<br>By
+					tbody
+						- if @purchases.empty?
+							tr
+								td colspan="9"
+									p.text-center.mt5
+										i.icon-maxicons3-danger.mr5.text-orange
+										| No Records Found
+						- @purchases.each do |purchase|
+							- nvtc = net_vat_total_computation(purchase.purchase_items)
+							tr
+								td data-title="Invoice No." = purchase.invoice_number
+								td data-title="Invoice Date"  = to_default_date_format(purchase.purchase_date)
+								td data-title="Branch"  = purchase.branch.name
+								td data-title="Supplier"  = purchase.supplier.name
+								td data-title="Vat Amount" = to_peso(nvtc[:vat])
+								td data-title="Total Amount" = to_peso(nvtc[:total])
+								td data-title="Net Amount"  = to_peso(nvtc[:net])
+								td data-title="Entry Date" = to_default_date_format(purchase.created_at)
+								td data-title="Created By" = purchase.created_by.full_name
 
 javascript:
 	$('#search-btn').on('click', function () {

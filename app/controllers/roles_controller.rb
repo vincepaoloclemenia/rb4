@@ -1,10 +1,13 @@
 class RolesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_role, only: [:update, :destroy]
+	before_action :set_role, only: [:show, :edit, :update, :destroy]
 
 	def index
 		@roles = current_client.roles.order('id asc')
+	end
+
+	def new
 		@role = Role.new
 	end
 
