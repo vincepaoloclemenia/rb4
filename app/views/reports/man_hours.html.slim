@@ -8,22 +8,24 @@
 	.panel-heading.border.pb45
 		.pull-left.mt7 Man Hours
 	.panel-body
-		.alert.alert-info.text-center role="alert"
-			| Oops! There seems to be no records of employee types here.<br> To track employee labour hours: <br> Please go to
-			b
-				|  Setup > Labor Setup > Employee Type
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
-				thead
-					tr.bg-thead
-						th Employee Type
-						th Total # of Hours
-						th Sales
-						th Salary Per Man Hour
-				tbody
-					- @man_hours.each do |man_hour|
-						tr
-							th = link_to man_hour[:name], "#", class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "View Profile" }
-							th = man_hour[:hour]
-							th = man_hour[:amount]
-							th = man_hour[:spmh]
+		- if @man_hours.empty?
+			.alert.alert-info.text-center role="alert"
+				| Oops! There seems to be no records of employee types here.<br> To track employee labour hours: <br> Please go to
+				b
+					|  Setup > Labor Setup > Employee Type
+		- else
+			.no-more-tables
+				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+					thead
+						tr.bg-thead
+							th Employee Type
+							th Total # of Hours
+							th Sales
+							th Salary Per Man Hour
+					tbody
+						- @man_hours.each do |man_hour|
+							tr
+								th = link_to man_hour[:name], "#", class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "View Profile" }
+								th = man_hour[:hour]
+								th = man_hour[:amount]
+								th = man_hour[:spmh]
