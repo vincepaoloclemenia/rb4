@@ -8,7 +8,7 @@
 						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
 					.col-xs-12.col-lg-6
 						label Date
-						= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  data: { provide: "datepicker" }, readonly: true, autocomplete: :off
+						= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  data: { provide: "datepicker" }, readonly: true, autocomplete: :off, value: Date.today.strftime("%m/%d/%Y")
 				.row.mt10
 					.col-xs-12
 						.pull-right
@@ -47,7 +47,7 @@
 				tbody
 					- if @inventory_items.empty?
 						tr
-							td colspan="8"
+							td colspan="16"
 								p.text-center.mt5 No Records Found
 					- else
 						- @categories.each do |category|
@@ -88,5 +88,6 @@
 										td = to_percentage(@total_cog = cost_of_goods.last, cog[:total])
 								tr
 									td Total
-									td colspan="3" = to_peso(a = all_purchases(subcategory[:subcategory]).last)
+									td colspan="6" 
+									td colspan="7	" = to_peso(a = all_purchases(subcategory[:subcategory]).last)
 									td = to_peso(@total_cog)
