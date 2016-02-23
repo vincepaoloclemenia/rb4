@@ -8,7 +8,7 @@
 						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
 					.col-xs-12.col-lg-6
 						label Date
-						= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  data: { provide: "datepicker" }, readonly: true, autocomplete: :off
+						= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  data: { provide: "datepicker" }, readonly: true, autocomplete: :off, value: Date.today.strftime("%m/%d/%Y")
 				.row.mt10
 					.col-xs-12
 						.pull-right
@@ -47,7 +47,7 @@
 				tbody
 					- if @inventory_items.empty?
 						tr
-							td colspan="8"
+							td colspan="16"
 								p.text-center.mt5 No Records Found
 					- else
 						- @categories.each do |category|
@@ -55,49 +55,39 @@
 								td.danger colspan="21"
 									strong
 										= category.name
-							- get_subcategory_and_items(category, @inventory_items).each do |subcategory|
+							- get_subcategory_and_item_ids(category, @inventory_items).each do |subcategory|
 								tr
 									td.info colspan="21"
 										strong
 											= subcategory[:subcategory].name
-								- purchases = all_purchases(subcategory[:subcategory])
-								- get_items(subcategory[:item_ids]).each do |item|
+								- item_ids = subcategory[:item_ids]
+								- get_subcat_items(item_ids).each do |subcategory_item|
+									- item = get_items(subcategory_item[:item_info].id)
 									tr
-										td 
-											strong 
-											= item.name
+										td = item.name
 										td = item.unit.name
-										/ Beginning Inventory
-										- item_amount = item.item_value.to_f
-										- qty = get_inventory_item(item.id).stock_count
-										td = qty.round(2)
-										- bg_total = get_total(qty, item_amount)
-										td = to_peso(check_value_if_nan(item_amount))
-										td = to_peso(bg_total)
-										/ Purchases
-										- purchase = get_purchase(purchases, item.id)
-										- p_qty = purchase[:quantity]
-										- p_total = purchase[:total_cost]
-										- p_unit_cost = purchase[:unit_cost]
-										td = check_value_if_nan(p_qty.round(2))
-										td = to_peso(check_value_if_nan(p_unit_cost))
-										td = to_peso(p_total)
-										td = to_percentage(p_total, purchases.last)
-										- puts 
-										/Ending Inventory
-										- e_qty = get_ending_inventory_item_stock_count(item.id, @ending_inventory_items)
-										- e_unit_cost = get_unit_cost((bg_total+p_total), (qty + p_qty))
-										- e_total = get_total(e_qty, e_unit_cost)
-										td = e_qty
-										td = to_peso(e_unit_cost)
-										td = to_peso(e_total)
-										//COGS
-										- cogs_qty = ((qty + p_qty) - e_qty)
-										- cogs_amount = ((bg_total + p_total) - e_total)
-										- cogs_unit_cost = get_unit_cost(cogs_amount, cogs_qty)
-										td = cogs_qty
-										td = to_peso(check_value_if_nan(cogs_unit_cost))
-										td = to_peso(check_value_if_nan(cogs_amount))
+										td = subcategory_item[:quantity]
+										td = to_peso(subcategory_item[:unit_cost])
+										td = to_peso(subcategory_item[:total])
+										- purchases = all_purchases(item_ids)
+										- purchase = get_information(purchases, item.id)
+										td = purchase[:quantity]
+										td = to_peso(purchase[:unit_cost])
+										td = to_peso(purchase[:total])
+										td = to_percentage(purchase[:total], purchases.last)
+										- ending_inventories = get_ending_inventories(item_ids, @ending_inventory_items, purchases)
+										- ending_inventory = get_information(ending_inventories, item.id)
+										td = ending_inventory[:quantity]
+										td = to_peso(ending_inventory[:unit_cost])
+										td = to_peso(ending_inventory[:total])
+										- cost_of_goods = get_cost_of_total_goods(purchases, ending_inventories, item_ids)
+										- cog = get_information(cost_of_goods, item.id)
+										td = cog[:quantity]
+										td = to_peso(cog[:unit_cost])
+										td = to_peso(cog[:total])
+										td = to_percentage(@total_cog = cost_of_goods.last, cog[:total])
 								tr
 									td Total
-									td = to_peso(all_purchases(subcategory[:subcategory]).last)
+									td colspan="6" 
+									td colspan="7	" = to_peso(a = all_purchases(item_ids).last)
+									td = to_peso(@total_cog)

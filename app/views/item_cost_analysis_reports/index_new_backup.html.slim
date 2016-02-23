@@ -1,0 +1,102 @@
+.collapse#show-search class="#{ 'in' if params[:q].present? }"
+	.panel
+		.panel-body
+			= form_for item_cost_analysis_reports_path, method: 'get' do
+				.row
+					.col-xs-12.col-lg-6
+						label Branch
+						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
+					.col-xs-12.col-lg-6
+						label Date
+						= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  data: { provide: "datepicker" }, readonly: true, autocomplete: :off
+				.row.mt10
+					.col-xs-12
+						.pull-right
+							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
+							i.icon-glyph-42
+.panel
+	.panel-heading.border.pb45
+		.pull-left.mt7 Item Cost Analysis Report
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0
+				thead
+					tr.big-thead
+						th colspan="2" = (Date.today).strftime("%B")
+						th.ica-primary-thead colspan="3" Beginning Inventory
+						th.ica-primary-thead colspan="4" Total Purchases	
+						th.ica-primary-thead colspan="3" Ending Inventory
+						th.ica-primary-thead colspan="4" 	Cost of Goods Sold
+					tr.big-thead
+						th Name
+						th Unit
+						th Qty
+						th Cost
+						th Total
+						th Qty
+						th Cost
+						th Amount
+						th %
+						th Qty
+						th Cost
+						th Total
+						th Qty
+						th Cost
+						th Amount
+						th %
+				tbody
+					- if @inventory_items.empty?
+						tr
+							td colspan="8"
+								p.text-center.mt5 No Records Found
+					- else
+						- @categories.each do |category|
+							tr
+								td.danger colspan="21"
+									strong
+										= category.name
+							- get_subcategory_and_items(category, @inventory_items).each do |subcategory|
+								tr
+									td.info colspan="21"
+										strong
+											= subcategory[:subcategory].name
+								- purchases = all_purchases(subcategory[:subcategory])
+								- get_items(subcategory[:item_ids]).each do |item|
+									tr
+										td 
+											strong 
+											= item.name
+										td = item.unit.name
+										/ Beginning Inventory
+										- item_amount = item.item_value.to_f
+										- qty = get_inventory_item(item.id).stock_count
+										td = qty.round(2)
+										- bg_total = get_total(qty, item_amount)
+										td = to_peso(check_value_if_nan(item_amount))
+										td = to_peso(bg_total)
+										/ Purchases
+										- purchase = get_purchase(purchases, item.id)
+										- p_qty = purchase[:quantity]
+										- p_total = purchase[:total_cost]
+										- p_unit_cost = purchase[:unit_cost]
+										td = check_value_if_nan(p_qty.round(2))
+										td = to_peso(check_value_if_nan(p_unit_cost))
+										td = to_peso(p_total)
+										td = to_percentage(p_total, purchases.last)
+										/Ending Inventory
+										- e_qty = get_ending_inventory_item_stock_count(item.id, @ending_inventory_items)
+										- e_unit_cost = get_unit_cost((bg_total+p_total), (qty + p_qty))
+										- e_total = get_total(e_qty, e_unit_cost)
+										td = e_qty
+										td = to_peso(e_unit_cost)
+										td = to_peso(e_total)
+										//COGS
+										- cogs_qty = ((qty + p_qty) - e_qty)
+										- cogs_amount = ((bg_total + p_total) - e_total)
+										- cogs_unit_cost = get_unit_cost(cogs_amount, cogs_qty)
+										td = cogs_qty
+										td = to_peso(check_value_if_nan(cogs_unit_cost))
+										td = to_peso(check_value_if_nan(cogs_amount))
+								tr
+									td Total
+									td = to_peso(all_purchases(subcategory[:subcategory]).last)
