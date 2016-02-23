@@ -5,31 +5,33 @@
 			- if view_access_control('shifts','create')
 				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Shift".html_safe, '#', data: { toggle: "modal", target: ".create-shift-modal" }, class: "btn btn-success btn-round btn-outline"
 	.panel-body
-		.alert.alert-info role="alert"
-			.row
-				.col-xs-1.text-right
-					i.icon-glyph-73.f25
-				.col-xs-11
-					| Oops! No records found.<br> To start tracking your labor hours click&nbsp;
-					b "Add Shift"
-					| &nbsp;button
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
-				thead
-					tr.bg-thead
-						th width="500" Name
-						th width="410" data-sortable="false" Description
-						th width="90" data-sortable="false" Action
-				tbody
-					- @shifts.each do |shift|
-						tr
-							td data-title="Name" = shift.name
-							td data-title="Description"
-							td.action data-title="Action"
-								- if view_access_control('shifts','update')
-									= link_to "<i class='icon-glyph f14'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-shift-#{shift.id}" }
-								- if view_access_control('shifts','destroy')
-									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, shift_path(shift), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+		- if current_brand.shifts.empty?
+			.alert.alert-info role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11
+						| Oops! No records found.<br> To start tracking your labor hours click&nbsp;
+						b "Add Shift"
+						| &nbsp;button
+		- else
+			.no-more-tables
+				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+					thead
+						tr.bg-thead
+							th width="500" Name
+							th width="410" data-sortable="false" Description
+							th width="90" data-sortable="false" Action
+					tbody
+						- @shifts.each do |shift|
+							tr
+								td data-title="Name" = shift.name
+								td data-title="Description"
+								td.action data-title="Action"
+									- if view_access_control('shifts','update')
+										= link_to "<i class='icon-glyph f14'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-shift-#{shift.id}" }
+									- if view_access_control('shifts','destroy')
+										= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, shift_path(shift), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
 						.modal class="edit-shift-#{shift.id}" tabindex="-1" role="dialog" aria-hidden="true"
 							.modal-dialog

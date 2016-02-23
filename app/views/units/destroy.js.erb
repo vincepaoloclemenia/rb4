@@ -18,3 +18,11 @@ $('#units').html('<%= j render @units %>');
 // }
 
 $('#pagination').html('<%= j render "partials/pagination", collection: @units %>');
+
+<% if current_brand.units.not_deleted.empty? %>
+	$('.empty-warning').css("display","block");
+	$('.table-area').css("display","none");
+<% else %>
+	$('.empty-warning').css("display","none");
+	$('.table-area').css("display","block");
+<% end %>
