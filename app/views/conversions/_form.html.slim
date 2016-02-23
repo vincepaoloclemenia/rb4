@@ -1,0 +1,34 @@
+= form_for @conversion do |f|
+	.row.mb10
+		.col-xs-6
+			= f.label :from_unit_id
+				| From
+				small.field-req  *
+			= f.select :from_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select Unit" }, class: "chosen", style: "width: 100%; display: none;"
+		.col-xs-6
+			= f.label :to_unit_id
+				| To
+				small.field-req  *
+			= f.select :to_unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, data: { placeholder: "Select Unit" }, class: "chosen", style: "width: 100%; display: none;"
+	.row.mb10
+		.col-xs-12
+			= f.label :factor
+				| Factor
+				small.field-req  *
+			= f.text_field :factor, class: "form-control", placeholder: "0.0"
+	.row.mb10
+		.col-xs-12
+			= f.label :is_active, "Status"
+			p
+				= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
+	.row.mb10
+		.col-xs-12.mt20
+			| (
+			small.field-req  *
+			|  )
+			i  indicates field is required
+	.modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			button.btn.btn-primary type="Submit" = @conversion.new_record? ? "Add" : "Save Changes"
