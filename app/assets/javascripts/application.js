@@ -72,8 +72,11 @@ $(document).ajaxError(function(event,xhr,options,exc) {
       field.parent().wrap("<div class='has-error'></div>");
     });
 
-    if( xhr.status == 401 ){
-      window.location.reload();
-    }
+});
 
+$(document).on("ajax:error", function(event,xhr,options,exc){
+  console.log(event);
+  if( xhr.status == 401 ){
+    window.location.reload();
+  }
 });
