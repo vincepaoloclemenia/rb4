@@ -4,3 +4,11 @@ retriggerFlash();
 <% unless @errors %>
 	$('#category_<%= @category_id %>').fadeOut();
 <% end %>
+
+<% if current_brand.categories.main.empty? %>
+	$('.empty-warning').css("display","block");
+	$('.table-area').css("display","none");
+<% else %>
+	$('.empty-warning').css("display","none");
+	$('.table-area').css("display","block");
+<% end %>
