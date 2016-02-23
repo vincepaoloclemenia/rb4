@@ -25,3 +25,6 @@
 		/ li.divider
 		/ li
 		/ 	= link_to "Show All", units_path(request.params.except(:action,:controller).merge(show: "all"))
+
+javascript:
+	$('.dropdown-toggle').dropdown();

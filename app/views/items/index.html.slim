@@ -3,242 +3,46 @@
 		.pull-left.mt7 Items
 		.pull-right
 			- if view_access_control('items','create')
-				= link_to "<i class='icon-glyph-185 f14 mr5'></i> Add Item".html_safe, '#', data: { toggle: "modal", target: ".create-item-modal" }, class: "btn btn-success btn-round btn-outline"
+				= link_to "<i class='icon-glyph-185 f14 mr5'></i> Add Item".html_safe, new_item_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
-		.alert.alert-info role="alert"
-			.row
-				.col-xs-1.text-right
-					i.icon-glyph-73.f25
-				.col-xs-11
-					| Oops! You curently have no items.<br> To start tracking your items click&nbsp;
-					b "Add Item"
-					| &nbsp;button
-		| Show
-		.btn-group.mb10
-		  button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
-		    span.mr5 10
-		    span.caret
-		  ul.dropdown-menu role="menu"
-		    li
-		      a href="javascript:;"  10
-		    li
-		      a href="javascript:;"  25
-		    li
-		      a href="javascript:;"  50
-		    li
-		      a href="javascript:;"  100
-		    li.divider
-		    li
-		      a href="javascript:;"  Show All
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
-				thead
-					tr.bg-thead
-						th width="200" Item
-						th width="180" Category
-						th width="120" Unit
-						th width="120" Type
-						th width="170" Track as Sales
-						th width="120" data-sortable="false" Status
-						th.action width="90" data-sortable="false" Action
-				tbody
-					- @items.each do |item|
-						tr
-							td data-title="Item" = item.name
-							td data-title="Category" = item.category.name
-							td data-title="Unit" = item.unit.name
-							td data-title="Type" = item.item_type
-							td data-title="Track as Sales" = item.track_as_sales ? "Yes" : "No"
-							td data-title="Status" = item.is_active ? "<span class='label label-success ml2'>Active</span>".html_safe : "<span class='label label-default ml2'>Deactivated</span>".html_safe
-							td data-title="Action"
-								- if view_access_control('items','update')
-									= link_to "<i class='icon-glyph f14'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-item-#{item.id}" }
-								- if view_access_control('items','destroy')
-									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, item_path(item), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+		- if current_brand.items.empty?
+			.alert.alert-info role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11
+						| Oops! You curently have no items.<br> To start tracking your items click&nbsp;
+						b "Add Item"
+						| &nbsp;button
+		- else
+			= render "partials/filter"
+			.no-more-tables
+				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+					thead
+						tr.bg-thead
+							th width="200" Item
+							th width="180" Category
+							th width="120" Unit
+							th width="120" Type
+							th width="170" Track as Sales
+							th width="120" data-sortable="false" Status
+							th.action width="90" data-sortable="false" Action
+					tbody
+						- @items.each do |item|
+							tr
+								td data-title="Item" = item.name
+								td data-title="Category" = item.category.name
+								td data-title="Unit" = item.unit.name
+								td data-title="Type" = item.item_type
+								td data-title="Track as Sales" = item.track_as_sales ? "Yes" : "No"
+								td data-title="Status" = item.is_active ? "<span class='label label-success ml2'>Active</span>".html_safe : "<span class='label label-default ml2'>Deactivated</span>".html_safe
+								td data-title="Action"
+									- if view_access_control('items','update')
+										= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_item_path(item), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
+									- if view_access_control('items','destroy')
+										= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, item_path(item), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-						.modal class="edit-item-#{item.id}" tabindex="-1" role="dialog" aria-hidden="true"
-							.modal-dialog
-								.modal-content
-									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true"
-											i.icon-maxicons1-exit
-										h4.modal-title Edit Item
-									.modal-body
-										= form_for item do |f|
-											.row.mb10
-												.col-xs-12
-													= f.label :name
-														| Item
-														small.field-req  *
-													= f.text_field :name, class: "form-control"
-											.row.mb10
-												.col-xs-12
-													= f.label :category_id
-														| Category
-														small.field-req  *
-													= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, { include_blank: true }, class: "chosen", style: "width: 100%; display: none;"
-											.row.mb10
-												.col-xs-6
-													= f.label :unit_id
-														| Unit
-														small.field-req  *
-													= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, class: "chosen", style: "width: 100%; display: none;"
-												.col-xs-6
-													= f.label :item_type
-														| Item Type
-														small.field-req *
-													= f.select :item_type, @item_types, { include_blank: "Select" }, class: "chosen"
-												.unit_cost_div
-													.col-xs-12.mt10
-														= f.label :item_value
-															| Item Value
-															small.field-req  *
-														= f.text_field :item_value, class: "form-control", placeholder: "Price of the Item"
-											.row.mt10.mb10
-												.col-xs-12
-													= f.label :item_code
-													= f.text_field :item_code, class: "form-control"
-											.row.mb10
-												.col-xs-4
-													= f.label :track_as_sales
-													p
-														= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
-												.col-xs-4
-													= f.label :is_active, "Status"
-													p
-														= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
-											.row.mb10
-												.col-xs-12.mt20
-													| (
-													small.field-req  *
-													|  )
-													i  indicates field is required
-											.modal-footer.no-border
-												span.inline.float-right
-													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-													|
-													button.btn.btn-primary type="submit" Save Changes
-			.align-center
-			  p Showing 1 to 10 of 57 entries
-			  ul.pagination
-			    li
-			      a href="javascript:;"  ←
-			    li.active
-			      a href="javascript:;"  1
-			    li
-			      a href="javascript:;"  2
-			    li
-			      a href="javascript:;"  3
-			    li
-			      a href="javascript:;"  4
-			    li
-			      a href="javascript:;"  5
-			    li
-			      a href="javascript:;"  6
-			    li
-			      a href="javascript:;"  7
-			    li
-			      a href="javascript:;"  →
-.modal.create-item-modal tabindex="-1" role="dialog" aria-hidden="true"
-	.modal-dialog
-		.modal-content
-			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true"
-					i.icon-glyph-27
-				h4.modal-title New Item
-			.modal-body
-				= form_for @item do |f|
-					.row.mb10
-						.col-xs-12
-							= f.label :name
-								| Item
-								small.field-req  *
-							= f.text_field :name, class: "form-control"
-					.row
-						.col-xs-12
-							= f.label :category_id
-								| Category
-								small.field-req  *
-							= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+				.align-center
+					= render "partials/pagination", collection: @items
 
-							.alert.alert-danger.mt5 role="alert"
-								i.icon-glyph-93.f14.mr10
-								| You currently have no list of
-								b  categories&nbsp;
-								| yet
-							.alert.alert-info role="alert"
-								i.icon-glyph-73.mr10.f20
-								| To add Categories: Go to
-								b
-								|  Categories > Add Main Category
-					.row.mb10
-						.col-xs-6
-							= f.label :unit_id
-								| Unit
-								small.field-req  *
-							= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-						.col-xs-6
-							= f.label :item_type
-								| Item Type
-								small.field-req  *
-							= f.select :item_type, @item_types, { include_blank: true }, class: "chosen", data: {placeholder:"Select"}
-						.unit_cost_div
-							.col-xs-12.mt10
-								= f.label :item_value
-									| Item Value
-									small.field-req  *
-								= f.text_field :item_value, class: "form-control", placeholder: "Price of the Item"
-					.row.mt10.mb10
-						.col-xs-12
-							= f.label :item_code
-							= f.text_field :item_code, class: "form-control"
-					.row.mb10
-						.col-xs-4
-							= f.label :track_as_sales, "Track as Sales"
-							p
-								= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
-						.col-xs-4
-							= f.label :is_active, "Status"
-							p
-								= f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
-					.row.mb10
-						.col-xs-12.mt20
-							| (
-							small.field-req  *
-							|  )
-							i  indicates field is required
-					.modal-footer.no-border
-						span.inline.float-right
-							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|
-							button.btn.btn-primary type="submit" Add Item
-
-javascript:
-	$(document).ready(function () {
-	  $('#item_category_id').children().each(function(){
-	    var optgroupChildrenCount = $(this).children().length;
-	    if(optgroupChildrenCount == 0){
-	      $(this).remove();
-	    }
-	  });
-
-	  $('.unit_cost_div').each(function(){
-		  if($(this).parent().find('#item_item_type').val() == "Prepared"){
-	      $(this).slideDown();
-		  }
-		  else{
-	      $(this).slideUp();
-		  }
-		});
-
-		$('select[id=item_item_type]').on("change", function(){
-	    if($(this).val() == "Prepared"){
-	      $(this).parent().parent().find('.unit_cost_div').slideDown();
-	      $(this).parent().parent().find('#item_item_value').val("");
-	    }
-	    else{
-	      $(this).parent().parent().find('.unit_cost_div').slideUp();
-	      $(this).parent().parent().find('#item_item_value').val("");
-	    }
-	  });
-	});
+= render "partials/modal"

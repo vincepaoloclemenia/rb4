@@ -3,8 +3,16 @@ class ItemsController < ApplicationController
 	before_action :access_control
 
 	def index
-		@items = current_brand.items
+		@items = current_brand.items.paginate(page: params[:page], per_page: per_page)
+	end
+
+	def new
 		@item = current_brand.items.new
+		@item_types = [['Inventory', 'Inventory'], ['Non-Inventory', 'Non-Inventory'], ['Prepared', 'Prepared']]
+	end
+
+	def edit
+		@item = current_brand.items.find(params[:id])
 		@item_types = [['Inventory', 'Inventory'], ['Non-Inventory', 'Non-Inventory'], ['Prepared', 'Prepared']]
 	end
 
@@ -35,6 +43,11 @@ class ItemsController < ApplicationController
 	private
 
 	def item_params
-		params.require(:item).permit(:category_id, :unit_id, :name, :item_type, :item_code, :item_value)
+		params.require(:item).permit(:category_id, :unit_id, :name, :item_type, :item_code, :item_value, :track_as_sales, :is_active)
+	end
+
+	def per_page
+		return 10 if params[:show].blank?
+		params[:show].eql?('all') ? current_brand.units.not_deleted.count : params[:show]
 	end
 end

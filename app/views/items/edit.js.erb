@@ -1,0 +1,38 @@
+$('#modal h4').html('Edit Item');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
+
+$('#item_category_id').children().each(function(){
+  var optgroupChildrenCount = $(this).children().length;
+  if(optgroupChildrenCount == 0){
+    $(this).remove();
+  }
+});
+
+$('.unit_cost_div').each(function(){
+  if($(this).parent().find('#item_item_type').val() == "Prepared"){
+    $(this).slideDown();
+  }
+  else{
+    $(this).slideUp();
+  }
+});
+
+$('select[id=item_item_type]').on("change", function(){
+  if($(this).val() == "Prepared"){
+    $(this).parent().parent().find('.unit_cost_div').slideDown();
+    $(this).parent().parent().find('#item_item_value').val("");
+  }
+  else{
+    $(this).parent().parent().find('.unit_cost_div').slideUp();
+    $(this).parent().parent().find('#item_item_value').val("");
+  }
+});
