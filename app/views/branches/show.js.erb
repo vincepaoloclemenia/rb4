@@ -1,0 +1,5 @@
+$('#modal h4').html('<%= @branch.name %>');
+
+$('.modal-body').html('<%= j render("branches/show_branch_info", branch: @branch) %>');
+
+$('#modal').modal("show");

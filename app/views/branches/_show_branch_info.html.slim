@@ -1,0 +1,48 @@
+.row
+  .col-xs-12
+    .row.mb10.mt10
+      .col-xs-6
+        .text-light-grey
+          | Branch
+        label.text-dark-grey
+          span.label.label-primary style="background-color: #{branch.color};" = branch.name
+      .col-xs-6
+        .text-light-grey
+          | Landline
+        label.text-dark-grey = branch.landline_no
+    .row.mb10
+      .col-xs-6
+        .text-light-grey
+          | Address
+        label.text-dark-grey
+          = branch.address1
+      .col-xs-6
+        .text-light-grey
+          | Mobile No.
+        label.text-dark-grey = branch.mobile_no
+    .row.mb10
+      .col-xs-6
+        .text-light-grey
+          | City
+        label.text-dark-grey
+          = branch.city
+      .col-xs-6
+        .text-light-grey
+          | Fax No.
+        label.text-dark-grey = branch.fax_no
+    .row.mb10
+      .col-xs-6
+        .text-light-grey
+          | Zip
+        label.text-dark-grey
+          = branch.zip
+      .col-xs-6
+        .text-light-grey
+          | E-mail Address
+        label.text-dark-grey = branch.email_address
+.modal-footer.no-border
+  a.btn.btn-default.pull-left data-dismiss="modal" type="button"  Cancel
+  - if view_access_control("branches","update")
+    = link_to "<i class='icon-glyph f14 mr5'></i> Edit".html_safe, edit_brand_branch_path(branch, brand_id: @brand), class: "btn btn-primary btn-outline", remote: true
+  - if view_access_control("branches","destroy")
+    = link_to "<i class='icon-glyph-124 f14 mr5'></i> Delete Branch".html_safe, brand_branch_path(id: branch.id, brand_id: @brand.id), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" }

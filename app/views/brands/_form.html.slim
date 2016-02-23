@@ -1,0 +1,38 @@
+= form_for @brand do |f|
+  .row
+    .col-xs-12.col-md-4.col-lg-4
+      .col-xs-12
+        .show-image.mb5
+          = image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"
+          a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
+            i.icon-glyph-27 id="remove-avatar"
+        = f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
+    .col-xs-12.col-md-8.col-lg-8
+      .col-xs-12.mb10
+        = f.label :name
+          | Brand
+          small.field-req  *
+        = f.text_field :name, class: "form-control", placeholder: "Name"
+      .col-xs-12.mb10
+        = f.label :website
+        = f.text_field :website, class: "form-control"
+      .col-xs-12.mb10
+        = f.label :description
+        = f.text_area :description, class: "form-control", placeholder:"Description of Brand", rows: "2"
+      .col-xs-12.col-lg-4.mb10
+        = f.label :landline_no
+        = f.number_field :landline_no, class: "form-control"
+      .col-xs-12.col-lg-4.mb10
+        = f.label :mobile_no
+        = f.number_field :mobile_no, class: "form-control"
+      .col-xs-12.col-lg-4.mb10
+        = f.label :fax_no
+        = f.number_field :fax_no, class: "form-control"
+      .col-xs-12
+        | (
+        small.field-req  *
+        |  )
+        i  indicates field is required
+  .modal-footer.no-border
+    button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+    button.btn.btn-primary type="submit" = @brand.new_record? ? "Create" : "Save Changes"

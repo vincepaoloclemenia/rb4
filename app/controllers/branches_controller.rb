@@ -2,7 +2,14 @@ class BranchesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
 	before_action :set_brand
-	before_action :set_branch, only: [:update, :destroy]
+	before_action :set_branch, only: [:show, :edit, :update, :destroy]
+
+	def show
+	end
+
+	def new
+		@branch = Branch.new
+	end
 
 	def create
 		@branch = @brand.branches.new(branch_params)

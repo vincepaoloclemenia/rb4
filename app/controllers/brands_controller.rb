@@ -1,16 +1,18 @@
 class BrandsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :set_brand, only: [:show, :update, :destroy]
+	before_action :set_brand, only: [:show, :edit, :update, :destroy]
 
 	def index
 		@brands = current_client.brands
-		@brand = Brand.new
 	end
 
 	def show
 		@branches = @brand.branches
-		@branch = Branch.new
+	end
+
+	def new
+		@brand = Brand.new
 	end
 
 	def create
@@ -24,22 +26,21 @@ class BrandsController < ApplicationController
 	end
 
 	def update
-		respond_to do |format|
-			if @brand.update(brand_params)
-				#flash[:notice] = "Brand successfully updated"
-				#format.json { render status: :unprocessable_entity, json: @brand }
-				# flash.clear
-				@success = true
-				flash[:notice] = "Successfully updated"
-			else
-				#flash[:alert] = @brand.errors.full_messages.join(", ")
-				# flash.clear
-				@success = false
-				flash[:alert] = @brand.errors.full_messages.join(", ")
-			end
-			format.js
+		# respond_to do |format|
+		# 	if @brand.update(brand_params)
+		# 		@success = true
+		# 		flash[:notice] = "Successfully updated"
+		# 	else
+		# 		@success = false
+		# 		flash[:alert] = @brand.errors.full_messages.join(", ")
+		# 	end
+		# 	format.js
+		# end
+		if @brand.update(brand_params)
+			redirect_to brand_path(@brand), notice: "Brand successfully updated"
+		else
+			redirect_to brand_path(@brand), alert: @brand.errors.full_messages.join(", ")
 		end
-		#redirect_to brand_path(@brand)
 	end
 
 	def destroy

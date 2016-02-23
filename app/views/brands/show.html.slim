@@ -29,158 +29,160 @@
               a href="javascript:;"  Show All
         - if view_access_control("branches","create")
           .pull-right
-            a.btn.btn-primary.btn-outline.mb5 data-target=".add-branch" data-toggle="modal"
-              i.icon-glyph-164.f14.mr5
-              | Add Branch
-        .no-more-tables
-          table.table.table-bordered.table-striped.mb0 data-sortable=""
-            thead
-              tr.bg-thead
-                th width="300"  Branch
-                th data-sortable="false" width="700"  Address
-            tbody
-              - @branches.each do |branch|
-                tr
-                  td data-title="Branch"
-                    a.view-link data-original-title="View Information" data-placement="top" data-target=".branch-info-#{branch.id}" data-toggle="modal" data-tt="tooltip"
-                      span.label.label-primary style="background-color: #{branch.color}" = branch.name
-                  td data-title="Description" = branch.address1
+            = link_to "<i class='icon-glyph-164 f14 mr5'></i>Add Branch".html_safe, new_brand_branch_path(@brand), class: "btn btn-primary btn-outline mb5", remote: true
+        - if @branches.empty?
+          = render "partials/no_records_found"
+        - else
+          .no-more-tables
+            table.table.table-bordered.table-striped.mb0 data-sortable=""
+              thead
+                tr.bg-thead
+                  th width="300"  Branch
+                  th data-sortable="false" width="700"  Address
+              tbody
+                - @branches.each do |branch|
+                  tr
+                    td data-title="Branch"
+                      = link_to "<span class='label label-primary' style='background-color: #{branch.color}'>#{branch.name}</span>".html_safe, brand_branch_path(branch, brand_id: @brand), class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "View Information" }, remote: true
+                    td data-title="Description" = branch.address1
 
-                = render "show_branch_modal", branch: branch
-                = render "edit_branch_modal", branch: branch
+                  / = render "show_branch_modal", branch: branch
+                  / = render "edit_branch_modal", branch: branch
 
-.modal.edit-brand aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog.modal-lg
-    .modal-content
-      .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"
-          i.icon-glyph-27
-        h4.modal-title Edit Brand
-      .modal-body
-        = form_for @brand, remote: true do |f|
-          .row
-            .col-xs-12.col-md-4.col-lg-4
-              .col-xs-12
-                .show-image.mb5
-                  = image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"
-                  a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-                    i.icon-glyph-27
-                = f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
-            .col-xs-12.col-md-8.col-lg-8
-              .col-xs-12.mb10
-                = f.label :name
-                  | Brand
-                  small.field-req *
-                = f.text_field :name, class: "form-control", placeholder: "Name"
-              .col-xs-12.mb10
-                = f.label :website
-                = f.text_field :website, class: "form-control"
-              .col-xs-12.mb10
-                = f.label :description
-                = f.text_area :description, class: "form-control", placeholder:"Description of Brand", rows: "2"
-              .col-xs-12.col-lg-4.mb10
-                = f.label :landline_no
-                = f.number_field :landline_no, class: "form-control"
-              .col-xs-12.col-lg-4.mb10
-                = f.label :mobile_no
-                = f.number_field :mobile_no, class: "form-control"
-              .col-xs-12.col-lg-4.mb10
-                = f.label :fax_no
-                = f.number_field :fax_no, class: "form-control"
-              .col-xs-12
-                | (
-                small.field-req  *
-                |  )
-                i  indicates field is required
-          .modal-footer.no-border
-            button.btn.btn-default data-dismiss="modal" type="button"  Cancel
-            button.btn.btn-primary type="submit"  Save Changes
+= render "brand_modal"
 
-
-.modal.add-branch aria-hidden="true" role="dialog" tabindex="-1"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button.close aria-hidden="true" data-dismiss="modal" type="button"
-          i.icon-glyph-27
-        h4.modal-title Add Branch
-      .modal-body
-        = form_for @branch, url: brand_branches_path(brand_id: @brand.id), method: :post do |f|
-          .row
-            .col-xs-12.mb10
-              = f.label :name
-                | Branch
-                small.field-req  *
-              = f.text_field :name, class: "form-control", placeholder: "Name"
-            .col-xs-12.mb10
-              = f.label :color
-                | Color
-                small.field-req  *
-              br
-              = f.select :color, [["Eggplant","#60355B"],["Coral","#E26A6A"],["Pumpkin","#FF4500"],["#DC143C","#DC143C"],["#FF8C00","#FF8C00"],["#C71585","#C71585"],["#1E81B4","#1E81B4"],["#00A087","#00A087"],["#DD525B","#DD525B"],["#8CAF41","#8CAF41"],["#8F7260","#8F7260"],["#4F669D","#4F669D"],["#646464","#646464"],["#AAA786","#AAA786"],["#6F9684","#6F9684"],["#98ACD1","#98ACD1"]], {}, name: "colorpicker-option-selected", id: "init"
-            .col-xs-12.mb10
-              = f.label :address1, "Address"
-              = f.text_area :address1, placeholder: "Address of Branch", rows: 2, class: "form-control"
-            .col-xs-6.mb10
-              = f.label :city
-              = f.text_field :city, class: "form-control"
-            .col-xs-6.mb10
-              = f.label :zip
-                | Zip
-                a data-original-title="What's my zip?" data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
-                  text-grey  ?
-              = f.number_field :zip, class: "form-control"
-            .col-xs-12.mb10
-              = f.label :email_address
-                | E-mail Address
-                small.field-req  *
-              = f.text_field :email_address, class: "form-control", placeholder: "E-mail address of branch"
-            .col-xs-12.col-lg-4.mb10
-              = f.label :landline_no
-              = f.number_field :landline_no, class: "form-control"
-            .col-xs-12.col-lg-4.mb10
-              = f.label :mobile_no
-              = f.number_field :mobile_no, class: "form-control"
-            .col-xs-12.col-lg-4.mb10
-              = f.label :fax_no
-              = f.number_field :fax_no, class: "form-control"
-            .col-xs-12
-              | (
-              small.field-req  *
-              |  )
-              i  indicates field is required
-          .modal-footer.no-border
-            button.btn.btn-default data-dismiss="modal" type="button"  Cancel
-            button.btn.btn-primary type="submit"  Add Branch
+/ .modal.edit-brand aria-hidden="true" role="dialog" tabindex="-1"
+/   .modal-dialog.modal-lg
+/     .modal-content
+/       .modal-header
+/         button.close aria-hidden="true" data-dismiss="modal" type="button"
+/           i.icon-glyph-27
+/         h4.modal-title Edit Brand
+/       .modal-body
+/         = form_for @brand, remote: true do |f|
+/           .row
+/             .col-xs-12.col-md-4.col-lg-4
+/               .col-xs-12
+/                 .show-image.mb5
+/                   = image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"
+/                   a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
+/                     i.icon-glyph-27
+/                 = f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
+/             .col-xs-12.col-md-8.col-lg-8
+/               .col-xs-12.mb10
+/                 = f.label :name
+/                   | Brand
+/                   small.field-req *
+/                 = f.text_field :name, class: "form-control", placeholder: "Name"
+/               .col-xs-12.mb10
+/                 = f.label :website
+/                 = f.text_field :website, class: "form-control"
+/               .col-xs-12.mb10
+/                 = f.label :description
+/                 = f.text_area :description, class: "form-control", placeholder:"Description of Brand", rows: "2"
+/               .col-xs-12.col-lg-4.mb10
+/                 = f.label :landline_no
+/                 = f.number_field :landline_no, class: "form-control"
+/               .col-xs-12.col-lg-4.mb10
+/                 = f.label :mobile_no
+/                 = f.number_field :mobile_no, class: "form-control"
+/               .col-xs-12.col-lg-4.mb10
+/                 = f.label :fax_no
+/                 = f.number_field :fax_no, class: "form-control"
+/               .col-xs-12
+/                 | (
+/                 small.field-req  *
+/                 |  )
+/                 i  indicates field is required
+/           .modal-footer.no-border
+/             button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+/             button.btn.btn-primary type="submit"  Save Changes
 
 
+/ .modal.add-branch aria-hidden="true" role="dialog" tabindex="-1"
+/   .modal-dialog
+/     .modal-content
+/       .modal-header
+/         button.close aria-hidden="true" data-dismiss="modal" type="button"
+/           i.icon-glyph-27
+/         h4.modal-title Add Branch
+/       .modal-body
+/         = form_for @branch, url: brand_branches_path(brand_id: @brand.id), method: :post do |f|
+/           .row
+/             .col-xs-12.mb10
+/               = f.label :name
+/                 | Branch
+/                 small.field-req  *
+/               = f.text_field :name, class: "form-control", placeholder: "Name"
+/             .col-xs-12.mb10
+/               = f.label :color
+/                 | Color
+/                 small.field-req  *
+/               br
+/               = f.select :color, [["Eggplant","#60355B"],["Coral","#E26A6A"],["Pumpkin","#FF4500"],["#DC143C","#DC143C"],["#FF8C00","#FF8C00"],["#C71585","#C71585"],["#1E81B4","#1E81B4"],["#00A087","#00A087"],["#DD525B","#DD525B"],["#8CAF41","#8CAF41"],["#8F7260","#8F7260"],["#4F669D","#4F669D"],["#646464","#646464"],["#AAA786","#AAA786"],["#6F9684","#6F9684"],["#98ACD1","#98ACD1"]], {}, name: "colorpicker-option-selected", id: "init"
+/             .col-xs-12.mb10
+/               = f.label :address1, "Address"
+/               = f.text_area :address1, placeholder: "Address of Branch", rows: 2, class: "form-control"
+/             .col-xs-6.mb10
+/               = f.label :city
+/               = f.text_field :city, class: "form-control"
+/             .col-xs-6.mb10
+/               = f.label :zip
+/                 | Zip
+/                 a data-original-title="What's my zip?" data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
+/                   text-grey  ?
+/               = f.number_field :zip, class: "form-control"
+/             .col-xs-12.mb10
+/               = f.label :email_address
+/                 | E-mail Address
+/                 small.field-req  *
+/               = f.text_field :email_address, class: "form-control", placeholder: "E-mail address of branch"
+/             .col-xs-12.col-lg-4.mb10
+/               = f.label :landline_no
+/               = f.number_field :landline_no, class: "form-control"
+/             .col-xs-12.col-lg-4.mb10
+/               = f.label :mobile_no
+/               = f.number_field :mobile_no, class: "form-control"
+/             .col-xs-12.col-lg-4.mb10
+/               = f.label :fax_no
+/               = f.number_field :fax_no, class: "form-control"
+/             .col-xs-12
+/               | (
+/               small.field-req  *
+/               |  )
+/               i  indicates field is required
+/           .modal-footer.no-border
+/             button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+/             button.btn.btn-primary type="submit"  Add Branch
 
-javascript:
-  $(document).ready(function() {
-    $('#init').on('click', function() {
-      $('select[name="colorpicker-option-selected"]').simplecolorpicker({theme: 'glyphicons'});
-    });
-    $('#init').trigger('click');
 
-    function readURL(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
 
-        reader.onload = function (e) {
-          $('#upload_preview').attr('src', e.target.result);
-        }
+/ javascript:
+/   $(document).ready(function() {
+/     $('#init').on('click', function() {
+/       $('select[name="colorpicker-option-selected"]').simplecolorpicker({theme: 'glyphicons'});
+/     });
+/     $('#init').trigger('click');
 
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
+/     function readURL(input) {
+/       if (input.files && input.files[0]) {
+/         var reader = new FileReader();
 
-    $("#avatar_file_field").change(function(){
-      readURL(this);
-    });
+/         reader.onload = function (e) {
+/           $('#upload_preview').attr('src', e.target.result);
+/         }
 
-    $("#remove-avatar").click(function(){
-      var new_avatar = $("#avatar_file_field");
-      new_avatar.replaceWith( new_avatar.val('').clone( true ) );
-      $("#upload_preview").replaceWith('#{image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"}');
-    });
-  });
+/         reader.readAsDataURL(input.files[0]);
+/       }
+/     }
+
+/     $("#avatar_file_field").change(function(){
+/       readURL(this);
+/     });
+
+/     $("#remove-avatar").click(function(){
+/       var new_avatar = $("#avatar_file_field");
+/       new_avatar.replaceWith( new_avatar.val('').clone( true ) );
+/       $("#upload_preview").replaceWith('#{image_tag @brand.avatar.url, class: "image-size", id: "upload_preview"}');
+/     });
+/   });

@@ -1,0 +1,10 @@
+$('#modal h4').html('Create Branch');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$('#init').on('click', function() {
+	$('select[name="colorpicker-option-selected"]').simplecolorpicker({theme: 'glyphicons'});
+});
+$('#init').trigger('click');

@@ -1,0 +1,29 @@
+$('#modal h4').html('Edit Brand');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$(document).ready(function(){
+	function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+      	$('#upload_preview').attr('src', e.target.result);
+      }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+	}
+
+	$("#avatar_file_field").change(function(){
+		readURL(this);
+	});
+
+	$("#remove-avatar").click(function(){
+		var new_avatar = $("#avatar_file_field");
+		new_avatar.replaceWith( new_avatar.val('').clone( true ) );
+		$("#upload_preview").replaceWith('<%= image_tag @brand.avatar.url, class: "image-size", id: "upload_preview" %>');
+	});
+});

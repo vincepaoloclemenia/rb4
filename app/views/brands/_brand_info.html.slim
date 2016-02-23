@@ -40,8 +40,6 @@
       - else
         = link_to "<i class='icon-glyph-5 f14 mr5'></i> Switch Brand".html_safe, change_brand_path(brand_id: brand.id), method: :put, class: "btn btn-success btn-outline mr5"
       - if view_access_control("brands","update")
-        a.btn.btn-primary.btn-outline.mr5 data-target=".edit-brand" data-toggle="modal"
-          i.icon-glyph.f14.mr5
-          | Edit
+        = link_to "<i class='icon-glyph f14 mr5'></i>Edit".html_safe, edit_brand_path(brand), class: "btn btn-primary btn-outline mr5", remote: true
       - if view_access_control("brands","destroy")
         = link_to "<i class='icon-glyph-124 f14 mr5'></i> Delete Brand".html_safe, brand_path(brand), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" }
