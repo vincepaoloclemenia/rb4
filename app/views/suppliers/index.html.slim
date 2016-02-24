@@ -3,220 +3,224 @@
 		.pull-left.mt7 Suppliers
 		.pull-right
 			- if view_access_control('suppliers','create')
-				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Supplier".html_safe, '#', data: { toggle: "modal", target: ".create-supplier-modal" }, class: "btn btn-success btn-round btn-outline"
+				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Supplier".html_safe, new_supplier_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
-		.alert.alert-info role="alert"
-			.row
-				.col-xs-1.text-right
-					i.icon-glyph-73.f25
-				.col-xs-11
-					| Oops! You curently have no suppliers.<br> To start adding suppliers click&nbsp;
-					b "Add Supplier"
-					| &nbsp;button
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
-				thead
-					tr.bg-thead
-						th width="310" Supplier
-						th width="300" Person to Contact
-						th width="300" Mobile no
-						th width="90" data-sortable="false" Action
-				tbody
-					- @suppliers.each do |supplier|
-						tr
-							td data-title="Name" = supplier.name
-							td data-title="Person to Contact" = supplier.contact_person
-							td data-title="Mobile No" = supplier.mobile_no
-							td.action data-title="Action"
-								- if view_access_control('suppliers','update')
-									= link_to "<i class='icon-glyph f14'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-supplier-#{supplier.id}" }
-								- if view_access_control('suppliers','destroy')
-									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, supplier_path(supplier), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+		- if current_client.suppliers.not_deleted.empty?
+			.alert.alert-info role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11
+						| Oops! You curently have no suppliers.<br> To start adding suppliers click&nbsp;
+						b "Add Supplier"
+						| &nbsp;button
+		- else
+			.no-more-tables
+				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+					thead
+						tr.bg-thead
+							th width="310" Supplier
+							th width="300" Person to Contact
+							th width="300" Mobile no
+							th width="90" data-sortable="false" Action
+					tbody
+						- @suppliers.each do |supplier|
+							tr
+								td data-title="Name" = supplier.name
+								td data-title="Person to Contact" = supplier.contact_person
+								td data-title="Mobile No" = supplier.mobile_no
+								td.action data-title="Action"
+									- if view_access_control('suppliers','update')
+										= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_supplier_path(supplier), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
+									- if view_access_control('suppliers','destroy')
+										= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, supplier_path(supplier), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
-						.modal class="edit-supplier-#{supplier.id}" tabindex="-1" role="dialog" aria-hidden="true"
-							.modal-dialog
-								.modal-content
-									.modal-header
-										button.close type="button" data-dismiss="modal" aria-hidden="true"
-											i.icon-maxicons1-exit
-										h4.modal-title Edit Supplier
-									.modal-body
-										= form_for supplier do |f|
-											.row.mb10
-												.col-xs-12
-													= f.label :name
-														| Supplier
-														small.field-req  *
-													= f.text_field :name, required: true, class: "form-control"
-											.row.mb10
-												.col-xs-12
-													= f.label :assigned_to
-														| Assigned to:
-														small.field-req  *
-													= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]], {}, class: "form-control"
-											.row.mb10
-												.col-xs-6.p_brand_field
-													= f.label :brand_id
-														| Brand
-														small.field-req  *
-													= f.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%, display: none;"
-												.col-xs-6.p_branch_field
-													= f.label :branch_id, "Branch"
-														| Branch
-														small.field-req  *
-													= f.select :branch_id, [], { include_blank: true }, data: { placeholder: "Select" }, class: "form-control"
-											.row.mb10
-												.col-xs-12
-													= f.label :address, "Supplier Address"
-													= f.text_area :address, class: "form-control", rows:"3"
-											.row.mb10
-												.col-xs-12
-													= f.label :contact_person, "Person to Contact"
-													= f.text_field :contact_person, class: "form-control", placeholder: "Full Name"
-											.row.mb10
-												.col-xs-12
-													= f.label :contact_title
-													= f.text_field :contact_title, class: "form-control", placeholder: "Position of Person in the Company"
-											.row.mb10
-												.col-xs-3
-													= f.label :tin, "TIN"
-													= f.text_field :tin, class: "form-control"
-												.col-xs-3
-													= f.label :landline_no
-													= f.text_field :landline_no, class: "form-control"
-												.col-xs-3
-													= f.label :mobile_no
-													= f.text_field :mobile_no, class: "form-control"
-												.col-xs-3
-													= f.label :fax_no
-													= f.text_field :fax_no, class: "form-control"
-											.row.mb10
-												.col-xs-12.mt20
-													| (
-													small.field-req  *
-													|  )
-													i  indicates field is required
-											.modal-footer.no-border
-												span.inline.float-right
-													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-													|
-													button.btn.btn-primary type="submit" Save Changes
+= render "partials/modal"
 
-.modal.create-supplier-modal tabindex="-1" role="dialog" aria-hidden="true"
-	.modal-dialog
-		.modal-content
-			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true"
-					i.icon-glyph-27
-				h4.modal-title New Supplier
-			.modal-body
-				= form_for @supplier do |f|
-					.row.mb10
-						.col-xs-12
-							= f.label :name
-								| Supplier
-								small.field-req  *
-							= f.text_field :name, required: true, class: "form-control", placeholder:"Supplier Name"
-					.row.mb10
-						.col-xs-12
-							= f.label :assigned_to
-								| Assigned to:
-								small.field-req  *
-							= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]], {}, class: "form-control"
-					.row.mb10
-						.col-xs-6.p_brand_field
-							= f.label :brand_id
-								| Brand
-								small.field-req  *
-							= f.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%, display: none;"
-						.col-xs-6.p_branch_field
-							= f.label :branch_id, "Branch"
-								| Branch
-								small.field-req  *
-							= f.select :branch_id, [], { include_blank: true }, data: { placeholder: "Select" }, class: "form-control"
-					.row.mb10
-						.col-xs-12
-							= f.label :address, "Supplier Address"
-							= f.text_area :address, class: "form-control", rows:"3"
-					.row.mb10
-						.col-xs-12
-							= f.label :contact_person, "Person to Contact"
-							= f.text_field :contact_person, class: "form-control", placeholder: "Full Name"
-					.row.mb10
-						.col-xs-12
-							= f.label :contact_title
-							= f.text_field :contact_title, class: "form-control", placeholder: "Position of Person in the Company"
-					.row.mb10
-						.col-xs-3
-							= f.label :tin, "TIN"
-							= f.text_field :tin, class: "form-control"
-						.col-xs-3
-							= f.label :landline_no
-							= f.text_field :landline_no, class: "form-control"
-						.col-xs-3
-							= f.label :mobile_no
-							= f.text_field :mobile_no, class: "form-control"
-						.col-xs-3
-							= f.label :fax_no
-							= f.text_field :fax_no, class: "form-control"
-					.row.mb10
-						.col-xs-12.mt20
-							| (
-							small.field-req  *
-							|  )
-							i  indicates field is required
-					.modal-footer.no-border
-						span.inline.float-right
-							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|
-							button.btn.btn-primary type="submit" Add Supplier
+/ 						.modal class="edit-supplier-#{supplier.id}" tabindex="-1" role="dialog" aria-hidden="true"
+/ 							.modal-dialog
+/ 								.modal-content
+/ 									.modal-header
+/ 										button.close type="button" data-dismiss="modal" aria-hidden="true"
+/ 											i.icon-maxicons1-exit
+/ 										h4.modal-title Edit Supplier
+/ 									.modal-body
+/ 										= form_for supplier do |f|
+/ 											.row.mb10
+/ 												.col-xs-12
+/ 													= f.label :name
+/ 														| Supplier
+/ 														small.field-req  *
+/ 													= f.text_field :name, required: true, class: "form-control"
+/ 											.row.mb10
+/ 												.col-xs-12
+/ 													= f.label :assigned_to
+/ 														| Assigned to:
+/ 														small.field-req  *
+/ 													= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]], {}, class: "form-control"
+/ 											.row.mb10
+/ 												.col-xs-6.p_brand_field
+/ 													= f.label :brand_id
+/ 														| Brand
+/ 														small.field-req  *
+/ 													= f.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%, display: none;"
+/ 												.col-xs-6.p_branch_field
+/ 													= f.label :branch_id, "Branch"
+/ 														| Branch
+/ 														small.field-req  *
+/ 													= f.select :branch_id, [], { include_blank: true }, data: { placeholder: "Select" }, class: "form-control"
+/ 											.row.mb10
+/ 												.col-xs-12
+/ 													= f.label :address, "Supplier Address"
+/ 													= f.text_area :address, class: "form-control", rows:"3"
+/ 											.row.mb10
+/ 												.col-xs-12
+/ 													= f.label :contact_person, "Person to Contact"
+/ 													= f.text_field :contact_person, class: "form-control", placeholder: "Full Name"
+/ 											.row.mb10
+/ 												.col-xs-12
+/ 													= f.label :contact_title
+/ 													= f.text_field :contact_title, class: "form-control", placeholder: "Position of Person in the Company"
+/ 											.row.mb10
+/ 												.col-xs-3
+/ 													= f.label :tin, "TIN"
+/ 													= f.text_field :tin, class: "form-control"
+/ 												.col-xs-3
+/ 													= f.label :landline_no
+/ 													= f.text_field :landline_no, class: "form-control"
+/ 												.col-xs-3
+/ 													= f.label :mobile_no
+/ 													= f.text_field :mobile_no, class: "form-control"
+/ 												.col-xs-3
+/ 													= f.label :fax_no
+/ 													= f.text_field :fax_no, class: "form-control"
+/ 											.row.mb10
+/ 												.col-xs-12.mt20
+/ 													| (
+/ 													small.field-req  *
+/ 													|  )
+/ 													i  indicates field is required
+/ 											.modal-footer.no-border
+/ 												span.inline.float-right
+/ 													= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+/ 													|
+/ 													button.btn.btn-primary type="submit" Save Changes
 
-javascript:
-	$(document).ready(function (){
-		$("select#supplier_assigned_to").each(function(){
-			var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
-			if(assignedToValue == 2){
-				$(this).parent().parent().find(".p_brand_field").show();
-				$(this).parent().parent().find(".p_branch_field").hide();
-			}
-			else if(assignedToValue == 3){
-				$(this).parent().parent().find(".p_brand_field").show();
-				$(this).parent().parent().find(".p_branch_field").show();
-			}
-			else{
-				$(this).parent().parent().find(".p_brand_field").hide();
-				$(this).parent().parent().find(".p_branch_field").hide();
-			}
-		});
+/ .modal.create-supplier-modal tabindex="-1" role="dialog" aria-hidden="true"
+/ 	.modal-dialog
+/ 		.modal-content
+/ 			.modal-header
+/ 				button.close type="button" data-dismiss="modal" aria-hidden="true"
+/ 					i.icon-glyph-27
+/ 				h4.modal-title New Supplier
+/ 			.modal-body
+/ 				= form_for @supplier do |f|
+/ 					.row.mb10
+/ 						.col-xs-12
+/ 							= f.label :name
+/ 								| Supplier
+/ 								small.field-req  *
+/ 							= f.text_field :name, required: true, class: "form-control", placeholder:"Supplier Name"
+/ 					.row.mb10
+/ 						.col-xs-12
+/ 							= f.label :assigned_to
+/ 								| Assigned to:
+/ 								small.field-req  *
+/ 							= f.select :assigned_to, [["Client",1],["Brand",2],["Branch",3]], {}, class: "form-control"
+/ 					.row.mb10
+/ 						.col-xs-6.p_brand_field
+/ 							= f.label :brand_id
+/ 								| Brand
+/ 								small.field-req  *
+/ 							= f.select :brand_id, current_client.brands.pluck(:name,:id), { include_blank: true }, data: { placeholder: "Select" }, class: "chosen", style: "width: 100%, display: none;"
+/ 						.col-xs-6.p_branch_field
+/ 							= f.label :branch_id, "Branch"
+/ 								| Branch
+/ 								small.field-req  *
+/ 							= f.select :branch_id, [], { include_blank: true }, data: { placeholder: "Select" }, class: "form-control"
+/ 					.row.mb10
+/ 						.col-xs-12
+/ 							= f.label :address, "Supplier Address"
+/ 							= f.text_area :address, class: "form-control", rows:"3"
+/ 					.row.mb10
+/ 						.col-xs-12
+/ 							= f.label :contact_person, "Person to Contact"
+/ 							= f.text_field :contact_person, class: "form-control", placeholder: "Full Name"
+/ 					.row.mb10
+/ 						.col-xs-12
+/ 							= f.label :contact_title
+/ 							= f.text_field :contact_title, class: "form-control", placeholder: "Position of Person in the Company"
+/ 					.row.mb10
+/ 						.col-xs-3
+/ 							= f.label :tin, "TIN"
+/ 							= f.text_field :tin, class: "form-control"
+/ 						.col-xs-3
+/ 							= f.label :landline_no
+/ 							= f.text_field :landline_no, class: "form-control"
+/ 						.col-xs-3
+/ 							= f.label :mobile_no
+/ 							= f.text_field :mobile_no, class: "form-control"
+/ 						.col-xs-3
+/ 							= f.label :fax_no
+/ 							= f.text_field :fax_no, class: "form-control"
+/ 					.row.mb10
+/ 						.col-xs-12.mt20
+/ 							| (
+/ 							small.field-req  *
+/ 							|  )
+/ 							i  indicates field is required
+/ 					.modal-footer.no-border
+/ 						span.inline.float-right
+/ 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+/ 							|
+/ 							button.btn.btn-primary type="submit" Add Supplier
 
-		$("select#supplier_assigned_to").on("change", function(){
-			var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
-			if(assignedToValue == 2){
-				$(this).parent().parent().find(".p_brand_field").slideDown();
-				$(this).parent().parent().find(".p_branch_field").slideUp();
-				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",true);
-				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",false);
-			}
-			else if(assignedToValue == 3){
-				$(this).parent().parent().find(".p_brand_field").slideDown();
-				$(this).parent().parent().find(".p_branch_field").slideDown();
-				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",true);
-				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",true);
-			}
-			else{
-				$(this).parent().parent().find(".p_brand_field").slideUp();
-				$(this).parent().parent().find(".p_branch_field").slideUp();
-				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",false);
-				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",false);
-			}
-		});
+/ javascript:
+/ 	$(document).ready(function (){
+/ 		$("select#supplier_assigned_to").each(function(){
+/ 			var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
+/ 			if(assignedToValue == 2){
+/ 				$(this).parent().parent().find(".p_brand_field").show();
+/ 				$(this).parent().parent().find(".p_branch_field").hide();
+/ 			}
+/ 			else if(assignedToValue == 3){
+/ 				$(this).parent().parent().find(".p_brand_field").show();
+/ 				$(this).parent().parent().find(".p_branch_field").show();
+/ 			}
+/ 			else{
+/ 				$(this).parent().parent().find(".p_brand_field").hide();
+/ 				$(this).parent().parent().find(".p_branch_field").hide();
+/ 			}
+/ 		});
 
-		$("select#supplier_brand_id").on("change", function(){
-			$.ajax({
-				url: "#{update_branch_path}",
-				data: {
-					brand_id: $(this).val()
-				}
-			});
-		});
-	});
+/ 		$("select#supplier_assigned_to").on("change", function(){
+/ 			var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
+/ 			if(assignedToValue == 2){
+/ 				$(this).parent().parent().find(".p_brand_field").slideDown();
+/ 				$(this).parent().parent().find(".p_branch_field").slideUp();
+/ 				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",true);
+/ 				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",false);
+/ 			}
+/ 			else if(assignedToValue == 3){
+/ 				$(this).parent().parent().find(".p_brand_field").slideDown();
+/ 				$(this).parent().parent().find(".p_branch_field").slideDown();
+/ 				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",true);
+/ 				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",true);
+/ 			}
+/ 			else{
+/ 				$(this).parent().parent().find(".p_brand_field").slideUp();
+/ 				$(this).parent().parent().find(".p_branch_field").slideUp();
+/ 				$(this).parent().parent().find(".p_brand_field").find("select").prop("required",false);
+/ 				$(this).parent().parent().find(".p_branch_field").find("select").prop("required",false);
+/ 			}
+/ 		});
+
+/ 		$("select#supplier_brand_id").on("change", function(){
+/ 			$.ajax({
+/ 				url: "#{update_branch_path}",
+/ 				data: {
+/ 					brand_id: $(this).val()
+/ 				}
+/ 			});
+/ 		});
+/ 	});

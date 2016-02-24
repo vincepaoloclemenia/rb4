@@ -4,7 +4,14 @@ class SuppliersController < ApplicationController
 
 	def index
 		@suppliers = current_client.suppliers.not_deleted
+	end
+
+	def new
 		@supplier = current_client.suppliers.new
+	end
+
+	def edit
+		@supplier = current_client.suppliers.not_deleted.find(params[:id])
 	end
 
 	def create
