@@ -43,7 +43,7 @@ set :bundle_binstubs, nil
 
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-set :unicorn_pid, '/home/restobotv4/shared/tmp/pids/unicorn.pid'
+set :unicorn_pid, '/home/RestoBotV4/shared/tmp/pids/unicorn.pid'
 
 
 namespace :deploy do
