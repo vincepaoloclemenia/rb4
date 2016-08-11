@@ -197,8 +197,8 @@
 	}
 
 	.lj-menu .menu-list .button a {
-		border: 2px solid #E75649;
-		background-color: #E75649;
+		border: 2px solid #ff9800;
+		background-color: #ff9800;
 		border-radius: 40px;
 		-webkit-border-radius: 40px;
 		-moz-border-radius: 40px;
@@ -214,11 +214,12 @@
 	}
 
 	.lj-menu .menu-list .button.ghost a {
-		color: #fff;
+		color: #ff6633;
 		background-color: transparent;
 		text-transform: uppercase;
-		font-weight: 700;
-		font-size: 11px
+		font-weight: 800;
+		font-size: 11px;
+		border-color: #ff6633;
 	}
 
 	.lj-menu.floating .menu-list .button.ghost a {
