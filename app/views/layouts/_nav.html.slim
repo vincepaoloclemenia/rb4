@@ -80,7 +80,7 @@
 									= link_to "Company", client_path
 							- if view_access_control("brands","show")
 								li
-									= link_to "Brands", brands_path
+									= link_to "Brands & Branches", brands_path
 					li.menu-accordion class="#{is_menu_open?('labor_setup')}"
 						= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
@@ -140,6 +140,10 @@
 				/ 	li
 				/ 		a href="javascript:;"
 				/ 			span Billing
+			li.visible-xs
+				a href="!"
+					i.fa.icon-glyph-73
+					span Support
 			.pg-scrollbar-x-rail style="left: 0px; bottom: 3px; display: block;"
 				.ps-scrollbar-x style="left: 0px; width: 0px;"
 			.pg-scrollbar-y-rail style="top: 0px; height: 639px; right: 0px; display: block;"

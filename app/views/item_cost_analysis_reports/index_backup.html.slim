@@ -13,7 +13,7 @@
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-							i.icon-glyph-42
+								| Search
 .panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Item Cost Analysis Report
@@ -24,7 +24,7 @@
 					tr.big-thead
 						th colspan="2" = (Date.today).strftime("%B")
 						th.ica-primary-thead colspan="3" Beginning Inventory
-						th.ica-primary-thead colspan="4" Total Purchases	
+						th.ica-primary-thead colspan="4" Total Purchases
 						th.ica-primary-thead colspan="3" Ending Inventory
 						th.ica-primary-thead colspan="4" 	Cost of Goods Sold
 					tr.big-thead
@@ -57,35 +57,35 @@
 										= subcategory[:subcategory].name
 							- get_items(subcategory[:item_ids]).each do |item|
 								tr
-									td 
-										strong 
+									td
+										strong
 										= item.name
 									td = item.unit.name
 									td = qty = get_inventory_item(item.id).stock_count
-									
+
 									- item_amount = item.item_value.to_f
 									td = to_peso(check_value_if_nan(item_amount))
-									
+
 									- bg_total = qty * item_amount
 									td = to_peso(bg_total)
-									
+
 									- purchases = get_purchases(Date.today, item.id)
 									- p_qty = purchases[:quantity].to_i
 									td = p_qty
-									
+
 									- p_unit_cost = purchases[:unit_cost]
 									td = to_peso(p_unit_cost)
-									
+
 									- p_total = purchases[:total_cost]
 									td = to_peso(p_total)
 									td
 									/Ending Inventory
 									td
 									td = to_peso(get_ending_inventory_unit_cost(bg_total, p_total, qty, p_qty))
-									td 
+									td
 							tr
 								td Total
-								
+
 						/ - cat.subcategories.each do |subcat|
 						/ 	- unless subcat.items.blank?
 						/ 		tr

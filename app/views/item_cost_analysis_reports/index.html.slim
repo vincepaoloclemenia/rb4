@@ -13,7 +13,7 @@
 					.col-xs-12
 						.pull-right
 							button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-								i.icon-glyph-42
+								| Search
 .panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Item Cost Analysis Report
@@ -24,7 +24,7 @@
 					tr.big-thead
 						th colspan="2" = (Date.today).strftime("%B")
 						th.ica-primary-thead colspan="3" Beginning Inventory
-						th.ica-primary-thead colspan="4" Total Purchases	
+						th.ica-primary-thead colspan="4" Total Purchases
 						th.ica-primary-thead colspan="3" Ending Inventory
 						th.ica-primary-thead colspan="4" 	Cost of Goods Sold
 					tr.big-thead
@@ -88,6 +88,6 @@
 										td = to_percentage(@total_cog = cost_of_goods.last, cog[:total])
 								tr
 									td Total
-									td colspan="6" 
+									td colspan="6"
 									td colspan="7	" = to_peso(a = all_purchases(item_ids).last)
 									td = to_peso(@total_cog)

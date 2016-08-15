@@ -26,17 +26,17 @@
 			table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				thead
 					tr.bg-thead
-						th width="350" Brand
-						th width="275" data-sortable="false" Website
-						th width="275" data-sortable="false" No. of Branch
+						th width="30%" Brand
+						//th width="275" data-sortable="false" Website
+						th width="70%" data-sortable="false" No. of Branch
 				tbody
 					- @brands.each do |brand|
 						tr
 							td data-title="Brand"
 							  img.brand-avatar.img-circle src="#{brand.avatar.url}"
 								= link_to brand.name, brand_path(brand), class: "view-link", data: {tt:"tooltip", placement:"top", "original-title" => "View Information"}
-							td data-title="Website" = brand.website
-							td data-title="No. of Branch" 
+							//td data-title="Website" = brand.website
+							td data-title="No. of Branch"
 
 = render "brand_modal"
 
