@@ -3,7 +3,7 @@ class EmployeesController < ApplicationController
   before_action :set_employee, only: [:edit, :destroy, :update]
 
   def index
-    @employees = Employee.all
+    @employees = Employee.all.paginate(page: params[:page], per_page: per_page)
     @employee = Employee.new
   end
 
@@ -51,5 +51,10 @@ class EmployeesController < ApplicationController
 
     def employee_params
       params.require(:employee).permit(:branch_id, :first_name, :last_name, :address, :birthdate, :age, :contact_no, :position, :employee_type_id, :position_type, :date_employed, :end_date, :tin, :sss, :hdmf, :philhealth)
+    end
+
+    def per_page
+      return 10 if params[:show].blank?
+      params[:show].eql?('all') ? current_brand.units.not_deleted.count : params[:show]
     end
 end

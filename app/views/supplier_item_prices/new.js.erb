@@ -1,0 +1,59 @@
+$('#modal h4').html('Add Supplier');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
+
+var assignedToValue = $("select#supplier_assigned_to").val();
+if(assignedToValue == 2){
+	$(".p_brand_field").show();
+	$(".p_branch_field").hide();
+}
+else if(assignedToValue == 3){
+	$(".p_brand_field").show();
+	$(".p_branch_field").show();
+}
+else{
+	$(".p_brand_field").hide();
+	$(".p_branch_field").hide();
+}
+
+$("select#supplier_assigned_to").on("change", function(){
+	var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
+	if(assignedToValue == 2){
+		$(".p_brand_field").slideDown();
+		$(".p_branch_field").slideUp();
+		$(".p_brand_field").find("select").prop("required",true);
+		$(".p_branch_field").find("select").prop("required",false);
+	}
+	else if(assignedToValue == 3){
+		$(".p_brand_field").slideDown();
+		$(".p_branch_field").slideDown();
+		$(".p_brand_field").find("select").prop("required",true);
+		$(".p_branch_field").find("select").prop("required",true);
+	}
+	else{
+		$(".p_brand_field").slideUp();
+		$(".p_branch_field").slideUp();
+		$(".p_brand_field").find("select").prop("required",false);
+		$(".p_branch_field").find("select").prop("required",false);
+	}
+
+	$('.chosen').trigger("chosen:updated");
+});
+
+$("select#supplier_brand_id").on("change", function(){
+	$.ajax({
+		url: "<%= update_branch_path %>",
+		data: {
+			brand_id: $(this).val(),
+			brand_field_id: $(this).prop("id")
+		}
+	});
+});

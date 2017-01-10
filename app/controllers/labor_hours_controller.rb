@@ -3,7 +3,7 @@ class LaborHoursController < ApplicationController
   before_action only: [:create]
 
   def index
-  	@employees = current_client.employees
+  	@employees = current_client.employees.paginate(page: params[:page], per_page: per_page)
     generate_pdf
   end
 
@@ -46,5 +46,10 @@ class LaborHoursController < ApplicationController
 
     def labor_hour_entries_params
       params.require(:labor_hour).permit(:employee_id, labor_hours_entries_attributes: [:labor_hour_id, :working_date,:regular, :overtime, :night_differential, :legal_holiday, :special_holiday, :absent, :late, :rest_day])
+    end
+
+    def per_page
+      return 10 if params[:show].blank?
+      params[:show].eql?('all') ? current_brand.units.not_deleted.count : params[:show]
     end
 end

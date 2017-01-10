@@ -60,7 +60,9 @@ Rails.application.routes.draw do
   post 'paypal_checkout' => 'subscriptions#paypal_checkout'
   get 'process_subscription' => 'subscriptions#process_subscription'
   delete 'subscription/:id/cancel', to: 'subscriptions#cancel', as: 'cancel_subscription'
-
+  
+  resources :supplier_item_prices
+  
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'
     get 'company_setup' => 'wizards#company_setup'

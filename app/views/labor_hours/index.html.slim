@@ -46,28 +46,29 @@
 							td data-title="Contact No." = employee.contact_no
 							td.action data-title="Action"
 								= link_to "<i class='icon-glyph-144 f14'></i>".html_safe, labor_hour_work_hours_list_path(employee), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Work Hours" }
-
 		.align-center
-		  p Showing 1 to 10 of 57 entries
-		  ul.pagination
-		    li
-		      a href="javascript:;"  ←
-		    li.active
-		      a href="javascript:;"  1
-		    li
-		      a href="javascript:;"  2
-		    li
-		      a href="javascript:;"  3
-		    li
-		      a href="javascript:;"  4
-		    li
-		      a href="javascript:;"  5
-		    li
-		      a href="javascript:;"  6
-		    li
-		      a href="javascript:;"  7
-		    li
-		      a href="javascript:;"  →
+			= render "partials/pagination", collection: @employees
+		/ .align-center
+		/   p Showing 1 to 10 of 57 entries
+		/   ul.pagination
+		/     li
+		/       a href="javascript:;"  ←
+		/     li.active
+		/       a href="javascript:;"  1
+		/     li
+		/       a href="javascript:;"  2
+		/     li
+		/       a href="javascript:;"  3
+		/     li
+		/       a href="javascript:;"  4
+		/     li
+		/       a href="javascript:;"  5
+		/     li
+		/       a href="javascript:;"  6
+		/     li
+		/       a href="javascript:;"  7
+		/     li
+		/       a href="javascript:;"  →
 
 .modal.create-pdf-modal tabindex="-1" role="dialog" aria-hidden="true"
 	.modal-dialog

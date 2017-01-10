@@ -34,6 +34,8 @@
 										= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_supplier_path(supplier), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
 									- if view_access_control('suppliers','destroy')
 										= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, supplier_path(supplier), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+									- if view_access_control('suppliers','create')
+										= link_to "<i class='icon-glyph-4 f14'></i>".html_safe, supplier_item_prices_path, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "View Item Pricing" }
 
 = render "partials/modal"
 

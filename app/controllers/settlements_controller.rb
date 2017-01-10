@@ -31,6 +31,7 @@ class SettlementsController < ApplicationController
 
 	def destroy
 		begin
+			.
 			@settlement.destroy
 			redirect_to settlements_path, notice: "Settlement successfully deleted"
 		rescue ActiveRecord::InvalidForeignKey => e
