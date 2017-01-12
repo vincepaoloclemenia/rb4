@@ -1,0 +1,26 @@
+= form_for @supplier_item_price do |f|
+	.row.mb10
+		.col-xs-12
+			= f.label :item_id
+				| Choose Item:
+				small.field-req  *
+			= f.select :item_id, @items.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+	.row.mb10
+		.col-xs-12
+			= f.label :supplier_amount
+			  | Price:
+			  small.field-req  *
+			= f.text_field :supplier_amount, class: "form-control", placeholder: "Supplier Price"
+	    = f.hidden_field :supplier_id, value: @sp_id
+	.row.mb10
+		.col-xs-12.mt20
+			| (
+			small.field-req  *
+			|  )
+			i  indicates field is required
+	.modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			/ button.btn.btn-primary type="submit" = @supplier.new_record? ? "Add Supplier" : "Save Changes"
+			= f.submit "Create", class: "btn btn-primary", data: { "disable-wth" => "Creating.." }
