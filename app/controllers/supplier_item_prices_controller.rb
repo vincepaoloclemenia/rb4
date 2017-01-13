@@ -17,14 +17,14 @@ class SupplierItemPricesController < ApplicationController
 	end
 
 	def create
-		raise
+		# raise
 		@supplier_item_price = SupplierItemPrice.new(supplier_params)
 		if @supplier_item_price.save
 			flash[:notice] = "Supplier successfully created"
 		else
 			flash[:alert] = @supplier_item_price.errors.full_messages.join(", ")
 		end
-		redirect_to supplier_item_prices_path
+		redirect_to supplier_item_prices_path(sp: supplier_params['supplier_id'])
 	end
 
 	def update

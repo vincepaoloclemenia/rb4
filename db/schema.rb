@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170109021634) do
+ActiveRecord::Schema.define(version: 20170113032351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,6 +274,18 @@ ActiveRecord::Schema.define(version: 20170109021634) do
   end
 
   add_index "manifolds", ["client_id"], name: "index_manifolds_on_client_id", using: :btree
+
+  create_table "order_per_suppliers", force: :cascade do |t|
+    t.integer  "supplier_id"
+    t.integer  "item_id"
+    t.decimal  "price_selected", precision: 16, scale: 2
+    t.integer  "branch_id"
+    t.integer  "quantity"
+    t.string   "unit"
+    t.text     "remarks"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
 
   create_table "payment_notifications", force: :cascade do |t|
     t.text     "params"

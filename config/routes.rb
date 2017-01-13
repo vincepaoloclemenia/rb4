@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   delete 'subscription/:id/cancel', to: 'subscriptions#cancel', as: 'cancel_subscription'
   
   resources :supplier_item_prices
+  resources :order_per_suppliers
   
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'

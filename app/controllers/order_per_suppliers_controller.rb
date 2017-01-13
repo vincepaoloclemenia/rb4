@@ -1,0 +1,2 @@
+class OrderPerSuppliersController < ApplicationController
+end

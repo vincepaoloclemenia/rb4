@@ -11,7 +11,7 @@
 			  | Price:
 			  small.field-req  *
 			= f.text_field :supplier_amount, class: "form-control", placeholder: "Supplier Price"
-	    = f.hidden_field :supplier_id, value: @sp_id
+	    = f.hidden_field :supplier_id, value: @sp_id.to_i
 	.row.mb10
 		.col-xs-12.mt20
 			| (
