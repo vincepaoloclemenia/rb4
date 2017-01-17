@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170113032351) do
+ActiveRecord::Schema.define(version: 20170117030801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -275,6 +275,16 @@ ActiveRecord::Schema.define(version: 20170113032351) do
 
   add_index "manifolds", ["client_id"], name: "index_manifolds_on_client_id", using: :btree
 
+  create_table "order_lists", force: :cascade do |t|
+    t.datetime "po_date"
+    t.string   "po_number"
+    t.text     "terms"
+    t.text     "remarks"
+    t.integer  "supplier_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "order_per_suppliers", force: :cascade do |t|
     t.integer  "supplier_id"
     t.integer  "item_id"
@@ -285,6 +295,7 @@ ActiveRecord::Schema.define(version: 20170113032351) do
     t.text     "remarks"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.integer  "order_list_id"
   end
 
   create_table "payment_notifications", force: :cascade do |t|
@@ -298,6 +309,14 @@ ActiveRecord::Schema.define(version: 20170113032351) do
   end
 
   add_index "payment_notifications", ["subscription_id"], name: "index_payment_notifications_on_subscription_id", using: :btree
+
+  create_table "per_brand_orders", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.integer  "order_list_id"
+    t.integer  "order_per_supplier_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
 
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id"
