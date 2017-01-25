@@ -8,3 +8,4 @@ class CreatePerBrandOrders < ActiveRecord::Migration
     end
   end
 end
+

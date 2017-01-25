@@ -1,8 +1,107 @@
+/ .collapse#show-search class="#{ 'in' if params[:q].present? }"
+/ 	.panel
+/ 		.panel-body
+/ 			= search_form_for @q do |f|
+/ 				.row
+/ 					.col-xs-12.col-lg-3
+/ 						= f.label :invoice_number_cont, "Invoice No."
+/ 						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Search"
+/ 					.col-xs-12.col-lg-3
+/ 						= f.label :purchase_date_cont, "Purchase Date"
+/ 						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
+/ 					.col-xs-12.col-lg-3
+/ 						= f.label :branch_id_eq, "Branch"
+/ 						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: "Select Branch" }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+/ 					.col-xs-12.col-lg-3
+/ 						= f.label :supplier_id_eq, "Supplier"
+/ 						= f.select :supplier_id_eq, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+/ 				.row.mt10
+/ 					.col-xs-12
+/ 						.pull-right
+/ 							button.btn.btn-primary data-tt="tooltip" data-placement="top"
+/ 								| Search
+
 .panel
 	.panel-heading.border.pb45
-		.pull-left.mt7 Supplier Item Order List
+		.pull-left.mt7 Order Lists
 		.pull-right
-			- if view_access_control('suppliers','create')
-				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Supplier".html_safe, new_supplier_path, class: "btn btn-success btn-round btn-outline", remote: true
+			= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Order".html_safe, '#', data: { toggle: "modal", target: ".create-purchase-modal" }, class: "btn btn-success btn-round btn-outline"
 	.panel-body
-	
+		- if @order_lists.empty?
+			= render "partials/no_records_found", subtitle: 'To view the order list click <b>"Create Order"</b> button'
+		- else
+			| Show
+			.btn-group.mb10
+				- params[:show] = "10" if params[:show].nil?
+				= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
+				ul.dropdown-menu role="menu"
+					li
+						= link_to "10", order_lists_path(request.params.except(:action,:controller).merge(show: "10"))
+					li
+						= link_to "25", order_lists_path(request.params.except(:action,:controller).merge(show: "25"))
+					li
+						= link_to "50", order_lists_path(request.params.except(:action,:controller).merge(show: "50"))
+					li
+						= link_to "100", order_lists_path(request.params.except(:action,:controller).merge(show: "100"))
+					li.divider
+					li
+						= link_to "Show All", order_lists_path(request.params.except(:action,:controller).merge(show: "all"))
+			.no-more-tables#purchase-list
+				= render "order_lists", order_lists: @order_lists
+
+
+.modal.create-purchase-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-glyph-27
+				h4.modal-title Create Order
+			.modal-body
+				= form_for @order_list, remote: true do |f|
+					/ .row.mb10
+					/ 	.col-xs-12
+					/ 		= f.label :branch_id
+					/ 			| Branch
+					/ 			small.field-req  *
+					/ 		= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+					.row.mb10
+						.col-xs-6
+							= f.label :po_number
+								| PO No.
+								small.field-req  *
+							= f.text_field :po_number, class: "form-control"
+						.col-xs-6
+							= f.label :po_date
+								| PO Date
+								small.field-req  *
+							= f.text_field :po_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+					.row.mb10
+						.col-xs-12
+							= f.label :supplier_id, "Supplier"
+								| Supplier
+								small.field-req  *
+							= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+
+							- if @suppliers.nil?
+
+								.alert.alert-info.mt5 role="alert"
+									.row
+										.col-xs-1.text-right
+											i.icon-glyph-73.f25
+										.col-xs-11
+											| You currently have no list of suppliers.<br> Go to:&nbsp;
+											b Setup > Purchase Setup > Suppliers >&nbsp;
+											= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+
+					.row.mb10
+						.col-xs-12.mt20
+							| (
+							small.field-req   *
+							|  )
+							i  indicates field is required
+					.modal-footer.no-border
+						span.inline.float-right
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							|
+							= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }

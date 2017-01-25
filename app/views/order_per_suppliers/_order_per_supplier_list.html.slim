@@ -1,0 +1,25 @@
+- @order_per_suppliers = @order_per_suppliers || order_per_suppliers
+- @order_list =  @order_list || order_list
+table.table.table-bordered.table-striped.mb0 data-sortable="true"
+	thead
+		tr.bg-thead
+			th width="145" Item Name
+			th width="145" Item Remarks
+			th width="110" Quantity
+			th width="115" Unit
+			th width="120" Unit Price
+			th width="60" data-sortable="false" Action
+	tbody
+		- @order_per_suppliers.each do |ops|
+			tr
+				td data-title="Item Name" = ops.item.name
+				td data-title="Item Description" = ops.remarks
+				td data-title="Quantity" = ops.quantity.to_s
+				td data-title="Unit" = ops.unit
+				td data-title="Unit Price" = to_peso(ops.price_selected)
+				td.action data-title="Action"
+					= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, order_per_supplier_path(order_list_id: @order_list.id, id: ops.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+.align-center
+	p
+		= page_entries_info @order_per_suppliers, renderer: BootstrapPagination::Rails
+	= will_paginate @order_per_suppliers, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
