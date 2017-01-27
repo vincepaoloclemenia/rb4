@@ -88,7 +88,7 @@ Rails.application.configure do
     :port                 => '587',
     :domain               => 'restobot.com',
     :authentication       => :login,
-    :user_name            => 'restobot@appsource.biz',
+    :user_name            => 'restobot@talentium.ph',
     :password             => '@ppsource2015'
    }
 
