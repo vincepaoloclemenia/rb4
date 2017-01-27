@@ -78,35 +78,20 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # config.action_mailer.default_url_options = { :host => 'restobotv4.cloudapp.net' }
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.perform_deliveries = true
-  # config.action_mailer.raise_delivery_errors = true
-  # config.action_mailer.smtp_settings = {
-  #   :enable_starttls_auto => true,
-  #   :address              => "smtp.office365.com",
-  #   :port                 => '587',
-  #   :domain               => 'restobot.com',
-  #   :authentication       => :login,
-  #   :user_name            => 'restobot@appsource.biz',
-  #   :password             => '@ppsource2015'
-  #  }
-  
-
-  # reconfiggure
-  config.action_mailer.default_url_options = { :host => 'http://v4test.herokuapp.com/' }
+  config.action_mailer.default_url_options = { :host => 'restobotv4.cloudapp.net' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
     :enable_starttls_auto => true,
-    :address              => "smtp.gmail.com",
+    :address              => "smtp.office365.com",
     :port                 => '587',
-    :domain               => 'v4test.herokuapp.com',
+    :domain               => 'restobot.com',
     :authentication       => :login,
-    :user_name            => 'reynan.albaredo@gmail.com',
-    :password             => 'daddylang2016'
+    :user_name            => 'restobot@appsource.biz',
+    :password             => '@ppsource2015'
    }
+
   Rails.application.config.middleware.use ExceptionNotification::Rack,
   :email => {
     :email_prefix => "[ERROR] ",
