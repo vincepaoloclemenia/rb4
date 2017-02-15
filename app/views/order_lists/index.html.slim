@@ -67,10 +67,11 @@
 					/ 		= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 					.row.mb10
 						.col-xs-6
+							- @po_number = po_number_format
 							= f.label :po_number
 								| PO No.
 								small.field-req  *
-							= f.text_field :po_number, class: "form-control"
+							= f.text_field :po_number, value: @po_number, class: "form-control", readonly: true
 						.col-xs-6
 							= f.label :po_date
 								| PO Date
