@@ -21,11 +21,10 @@
 			= f.label :track_as_sales, "Track as Sales"
 			p
 				= f.check_box :track_as_sales, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
-				= f.hidden_field :is_active, value: true
-		/ .col-xs-4
-		/ 	= f.label :is_active, "Status"
-		/ 	p
-		/ 		= f.check_box :is_active, checked: true, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
+		.col-xs-4
+			= f.label :is_active, "Status"
+			p
+				= f.check_box :is_active, checked: true, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
 	.row.mb10
 		.col-xs-12.mt20
 			| (

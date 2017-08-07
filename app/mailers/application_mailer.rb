@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "restobot@appsource.biz"
+  default from: "restobot@talentium.ph"
 
   # def send_user_mail
   # 	@my_email = 'reynan.albaredo@gmail.com'

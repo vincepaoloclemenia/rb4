@@ -19,7 +19,7 @@
 						| &nbsp;button
 		- table_visibility = current_brand.units.not_deleted.empty? ? "none" : "block"				
 		.table-area style="display: #{table_visibility}"
-			= render "partials/filter"
+			/= render "partials/filter"
 			.no-more-tables
 				table.table.table-bordered.table-striped.mb0 data-sortable="true"
 					thead
@@ -34,6 +34,6 @@
 						= render @units
 
 				.align-center#pagination
-					= render "partials/pagination", collection: @units
+					/ = render "partials/pagination", collection: @units
 
 = render "partials/modal"

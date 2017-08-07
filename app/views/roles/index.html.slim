@@ -102,35 +102,35 @@
 / 							|
 / 							button.btn.btn-primary type="submit" Create
 
-/ - @roles.each do |role|
-/ 	.modal class="show-role-#{role.id}" tabindex="-1" role="dialog" aria-hidden="true"
-/ 		.modal-dialog
-/ 			.modal-content
-/ 				.modal-header
-/ 					button.close type="button" data-dismiss="modal" aria-hidden="true"
-/ 						i.icon-maxicons1-exit
-/ 					h4.modal-title = role.name
-/ 				.modal-body
-/ 					.row.mb10
-/ 						.col-xs-12
-/ 							.no-more-tables
-/ 								table.table.table-bordered.table-striped.mb0 data-sortable="true"
-/ 									thead
-/ 										tr.bg-thead
-/ 											th width="400" Section
-/ 											th width="150" data-sortable="false" Read
-/ 											th width="150" data-sortable="false" Create
-/ 											th width="150" data-sortable="false" Edit
-/ 											th width="150" data-sortable="false" Delete
-/ 									tbody
-/ 										- role.permissions.each do |p|
-/ 											tr
-/ 												td data-title="Section" = p.section.page
-/ 												td data-title="Read" = p.is_read ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-/ 												td data-title="Create" = p.is_create ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-/ 												td data-title="Update" = p.is_update ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-/ 												td data-title="Destroy" = p.is_destroy ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
-/ 					.modal-footer.no-border
-/ 						= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-/ 						- if view_access_control('roles','update')
-/ 							= link_to "Manage Permissions", role_manage_permissions_path(role_id: role.id), class: "btn btn-primary btn-outline"
+- @roles.each do |role|
+	.modal class="show-role-#{role.id}" tabindex="-1" role="dialog" aria-hidden="true"
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close type="button" data-dismiss="modal" aria-hidden="true"
+						i.icon-maxicons1-exit
+					h4.modal-title = role.name
+				.modal-body
+					.row.mb10
+						.col-xs-12
+							.no-more-tables
+								table.table.table-bordered.table-striped.mb0 data-sortable="true"
+									thead
+										tr.bg-thead
+											th width="400" Section
+											th width="150" data-sortable="false" Read
+											th width="150" data-sortable="false" Create
+											th width="150" data-sortable="false" Edit
+											th width="150" data-sortable="false" Delete
+									tbody
+										- role.permissions.each do |p|
+											tr
+												td data-title="Section" = p.section.page
+												td data-title="Read" = p.is_read ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+												td data-title="Create" = p.is_create ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+												td data-title="Update" = p.is_update ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+												td data-title="Destroy" = p.is_destroy ? "<i class='icon-maxicons1-check green-color'></i>".html_safe : "<i class='icon-maxicons1-exit red-color'></i>".html_safe
+					.modal-footer.no-border
+						= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+						- if view_access_control('roles','update')
+							= link_to "Manage Permissions", role_manage_permissions_path(role_id: role.id), class: "btn btn-primary btn-outline"

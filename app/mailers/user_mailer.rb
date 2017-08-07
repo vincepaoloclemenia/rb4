@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-	default from: "restobot@appsource.biz"
+	default from: "restobot@talentium.ph"
   
   def send_user_mail(email, generated_password)
   	@email = email

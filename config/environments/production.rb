@@ -97,6 +97,6 @@ Rails.application.configure do
   :email => {
     :email_prefix => "[ERROR] ",
     :sender_address => %{"notifier" <notifier@example.com>},
-    :exception_recipients => %w{ralbaredo@appsource.biz kdegracia@appsource.biz}
+    :exception_recipients => %w{ralbaredo@talentium.ph kdegracia@talentium.ph}
   }
 end
