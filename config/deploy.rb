@@ -4,6 +4,8 @@ lock '3.2.1'
 set :application, 'restobotv4'
 # set :repo_url, 'git@bitbucket.org:jmunts/restobot-v4.git'
 set :repo_url, 'https://reynan_albaredo@bitbucket.org/reynan_albaredo/rv4.git'
+set :git_https_username, 'chezca1228'
+set :git_https_password, 'chezca102409TOKS'
 set :rvm_ruby_version, '2.3.0'
 set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 # Default branch is :master
