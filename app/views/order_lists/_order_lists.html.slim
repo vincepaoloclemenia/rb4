@@ -3,9 +3,10 @@
 table.table.table-bordered.table-striped.mb0 data-sortable="true"
 	thead
 		tr.bg-thead
-			th width="130" data-sortable="false" PO No.
-			th width="120" PO Date
+			th width="130" data-sortable="false" PR No.
+			th width="120" PR Date
 			th width="160" Supplier
+			th width="160" Status
 			th width="120" data-sortable="false" Action
 	tbody style="font-size:13px"
 		- if order_lists.empty?
@@ -15,19 +16,21 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 
 		- order_lists.each do |order_list|
 			tr
-				td data-title="PO No." = order_list.po_number
-				td data-title="PO Date" = order_list.po_date.nil? ? "---" : order_list.po_date.strftime("%b %d %Y")
+				td data-title="PO No." = order_list.pr_number
+				td data-title="PO Date" = order_list.pr_date.nil? ? "---" : order_list.pr_date.strftime("%b %d %Y")
 				/ td data-title="Branch" = order_list.branch.name
 				td data-title="Supplier" = order_list.supplier.name
 				/ td data-title="Net Amount" = to_peso(nvt[:net])
 				/ td data-title="VAT Amount" = to_peso(nvt[:vat])
 				/ td data-title="Total Amount" = to_peso(nvt[:total])
+				td.action data-title="Status" = order_list.status
 				td.action data-title="Action"
 					= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, order_per_suppliers_path(order_list_id: order_list.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View order_list Items" }
 					/ - if view_access_control('order_lists','update')
 					= link_to "<i class='icon-glyph f14'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_order_list_#{order_list.id}" }
 					/ - if view_access_control('order_lists','destroy')
 					= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, order_list_path(order_list), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true
+					= link_to "<i class='icon-glyph-23 f14'></i>".html_safe, order_list_update_status_path(order_list, oli: order_list.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Notify Admin" }
 
 			/ div class="modal edit_order_list_#{order_list.id}" tabindex="-1" role="dialog" aria-hidden="true"
 			/ 	.modal-dialog

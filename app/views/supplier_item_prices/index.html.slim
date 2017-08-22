@@ -19,13 +19,18 @@
 					thead
 						tr.bg-thead
 							th width="310" Items
+							th width="300" Unit
+							th width="300" Packaging
 							th width="300" Price
+
 							th width="90" data-sortable="false" Action
 					tbody
 						- @supplier_item_prices.each do |supplier_item_price|
 							tr
 								td data-title="Name" = supplier_item_price.item.name
-								td data-title="Person to Contact" = supplier_item_price.supplier_amount
+								td data-title="Name" = supplier_item_price.supplier_item_unit
+								td data-title="Name" = supplier_item_price.packaging
+								td data-title="Person to Contact" = number_to_currency(supplier_item_price.supplier_amount, unit: "")
 								td.action data-title="Action"
 									/ - if view_access_control('supplier_item_prices','update')
 									= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_supplier_item_price_path(supplier_item_price), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true

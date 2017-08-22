@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117030801) do
+ActiveRecord::Schema.define(version: 20170816015019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -283,6 +283,9 @@ ActiveRecord::Schema.define(version: 20170117030801) do
     t.integer  "supplier_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "status"
+    t.string   "pr_number"
+    t.datetime "pr_date"
   end
 
   create_table "order_per_suppliers", force: :cascade do |t|
@@ -519,9 +522,11 @@ ActiveRecord::Schema.define(version: 20170117030801) do
   create_table "supplier_item_prices", force: :cascade do |t|
     t.integer  "supplier_id"
     t.integer  "item_id"
-    t.decimal  "supplier_amount", precision: 16, scale: 2
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.decimal  "supplier_amount",    precision: 16, scale: 2
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.string   "supplier_item_unit"
+    t.string   "packaging"
   end
 
   create_table "suppliers", force: :cascade do |t|

@@ -1,5 +1,5 @@
 set :rails_env, :production
-set :branch, :production
+set :branch, :master
 set :deploy_to, '/home/RestoBotV4'
 set :user, :RestoBotV4
 set :nginx_server_name, '13.76.100.242'

@@ -63,7 +63,9 @@ Rails.application.routes.draw do
   
   resources :supplier_item_prices
   resources :order_per_suppliers
-  resources :order_lists
+  resources :order_lists do
+    get 'update_status' => 'order_lists#update_status'
+  end
   
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'

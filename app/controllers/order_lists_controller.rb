@@ -30,9 +30,35 @@ class OrderListsController < ApplicationController
 					@success = false
 					flash[:alert] = @order_list.errors.full_messages.join(", ")
 				end
-				format.js
+				redirect_to order_lists_path, notice: "Create Successful"
 			end
 		end
+
+	def update
+    if @order_list.update(order_list_params)
+      redirect_to order_lists_path(), notice: "Edit Successful"
+    else
+      flash[:alert] = @order_list.errors.full_messages.join(', ')
+      render 'new'
+    end
+  end
+
+  def destroy
+    @order_list = OrderList.find(params[:id])
+    if @order_list.present?
+      @order_list.destroy
+    end
+    redirect_to order_lists_path, notice: 'Successfully Deleted'
+  end
+
+  def update_status
+  	@order_list = OrderList.find(params[:oli])
+  	
+  	#create mail notification
+  	
+  	redirect_to order_lists_path(), notice: 'Notify the admin about new purchase order.'
+  	
+  end
 
 		private
 
@@ -40,7 +66,7 @@ class OrderListsController < ApplicationController
 			# if params[:order_list][:order_list_date].present?
 			# 	params[:order_list][:order_list_date] = Date.strptime(params[:order_list][:order_list_date], "%m/%d/%Y").to_s
 			# end
-			params.require(:order_list).permit(:po_date, :po_number, :terms, :remarks, :supplier_id)
+			params.require(:order_list).permit(:po_date, :po_number, :terms, :remarks, :supplier_id, :pr_date, :pr_number, :status)
 		end
 
 		def per_page

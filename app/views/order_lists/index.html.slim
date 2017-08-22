@@ -68,15 +68,17 @@
 					.row.mb10
 						.col-xs-6
 							- @po_number = po_number_format
-							= f.label :po_number
-								| PO No.
+							= f.label :pr_number
+								| Purchase Requisition No.
 								small.field-req  *
-							= f.text_field :po_number, value: @po_number, class: "form-control", readonly: true
+							= f.text_field :pr_number, value: @po_number, class: "form-control", readonly: true
 						.col-xs-6
-							= f.label :po_date
-								| PO Date
+							= f.label :pr_date
+								| Purchase Requisition Date
 								small.field-req  *
-							= f.text_field :po_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+							/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+							= f.text_field :pr_date, value: Date.today, class: "form-control", readonly: true
+							= f.hidden_field :status, value: 'Pending'
 					.row.mb10
 						.col-xs-12
 							= f.label :supplier_id, "Supplier"

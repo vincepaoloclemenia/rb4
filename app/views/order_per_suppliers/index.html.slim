@@ -10,21 +10,21 @@
 			table.table.table-bordered.table-striped.mb0
 				thead
 					tr.bg-thead
-						th PO Date
-						th PO No.
+						th PR Number
+						th PR Date
 						th Supplier
 						th
 				tbody
 
 					tr
-						td data-title="PO No." = @order_list.po_number
-						td data-title="PO Date" = @order_list.po_date.nil? ? "---" : @order_list.po_date.strftime("%b %d %Y")
+						td data-title="PR No." = @order_list.pr_number
+						td data-title="PR Date" = @order_list.pr_date.nil? ? "---" : @order_list.pr_date.strftime("%b %d %Y")
 						/ td data-title="Branch" = order_list.branch.name
 						td data-title="Supplier" = @order_list.supplier.name
-						td data-title="Email to Supplier"
-							= link_to "<i class='icon-glyph-130 f14'></i>".html_safe, order_per_suppliers_path(), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Email Supplier" }
+						/ td data-title="Email to Supplier"
+						/ 	= link_to "<i class='icon-glyph-130 f14'></i>".html_safe, order_per_suppliers_path(), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "E" }
 .panel
-	.panel-heading.border Purchase Items
+	.panel-heading.border Order Item List
 	.panel-body
 		| Show
 		.btn-group.mb10
@@ -52,7 +52,7 @@
 			.modal-header
 				button.close type="button" data-dismiss="modal" aria-hidden="true"
 					i.icon-maxicons1-exit
-				h4.modal-title Add Purchase Item
+				h4.modal-title Add Order Item
 			.modal-body
 				= form_for @order_per_supplier, remote: true do |f|
 					.row.mb10
@@ -96,7 +96,7 @@
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 							|
 							= f.submit "Add", class: "btn btn-primary"
-
+							
 / javascript:
 / 	$('#order_per_supplier_quantity').on("keyup",function(){
 / 		if($(this).val() > 0){

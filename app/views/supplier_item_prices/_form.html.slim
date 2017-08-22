@@ -7,11 +7,23 @@
 			= f.select :item_id, @items.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 	.row.mb10
 		.col-xs-12
+			= f.label :supplier_item_unit
+			  | Unit:
+			  small.field-req  *
+			= f.text_field :supplier_item_unit, class: "form-control", placeholder: "Unit"
+	    = f.hidden_field :supplier_id, value: @sp_id.to_i
+	.row.mb10
+		.col-xs-12
+			= f.label :packaging
+			  | Packaging:
+			  small.field-req  *
+			= f.text_field :packaging, class: "form-control", placeholder: "Packaging"
+	.row.mb10
+		.col-xs-12
 			= f.label :supplier_amount
 			  | Price:
 			  small.field-req  *
 			= f.text_field :supplier_amount, class: "form-control", placeholder: "Supplier Price"
-	    = f.hidden_field :supplier_id, value: @sp_id.to_i
 	.row.mb10
 		.col-xs-12.mt20
 			| (

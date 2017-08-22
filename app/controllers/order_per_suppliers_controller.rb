@@ -1,30 +1,25 @@
 class OrderPerSuppliersController < ApplicationController
 	
 	def index
-		
-		
-	end
-
-	def index
 		@order_list = OrderList.find params[:order_list_id]
-		@order_per_suppliers = OrderPerSupplier.paginate(page: params[:page], per_page: per_page)
+		@order_per_suppliers = OrderPerSupplier.where(order_list_id: params[:order_list_id]).paginate(page: params[:page], per_page: per_page)
 		@order_per_supplier = OrderPerSupplier.new
 	end
 
 	def create
 		# @order_list = OrderList.find params[:order_list_id]
 		@order_per_supplier = OrderPerSupplier.new(order_per_supplier_params)
-		respond_to do |format|
-			if @order_per_supplier.save
-				index
-				@success = true
-				flash[:notice] = "Purchase Item successfully added"
-			else
-				@success = false
-				flash[:alert] = @order_per_supplier.errors.full_messages.join(", ")
-			end
-			format.js
+		# respond_to do |format|
+		if @order_per_supplier.save
+			index
+			@success = true
+			flash[:notice] = "Purchase Item successfully added"
+		else
+			@success = false
+			flash[:alert] = @order_per_supplier.errors.full_messages.join(", ")
 		end
+		redirect_to order_per_suppliers_path(order_list_id: @order_per_supplier.order_list_id)
+		# end
 		#redirect_to purchase_order_per_suppliers_path(purchase_id: purchase.id)
 	end
 

@@ -23,9 +23,9 @@
 								- else
 									= employee_type.dividend.name + " " + " / # of total hours of work" unless employee_type.dividend.nil?
 							td data-title="Action"
-								= link_to "<i class='icon-maxicons2-editting'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_employee_type_#{employee_type.id}" }
+								= link_to "<i class='icon-glyph f14'></i>".html_safe, 'javascript:;', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_employee_type_#{employee_type.id}" }
 
-								= link_to "<i class= 'icon-maxicons1-exit'></i>".html_safe, employee_type_path(employee_type), method: :delete, class: 'btn btn-default btn-xs mb10 mr2 swal-warning-confirm', data: {tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?"}
+								= link_to "<i class= 'icon-glyph-76 f14'></i>".html_safe, employee_type_path(employee_type), method: :delete, class: 'btn btn-default btn-xs mb10 mr2 swal-warning-confirm', data: {tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?"}
 
 						div class="modal edit_employee_type_#{employee_type.id}" tabindex="-1" role="dialog" aria-hidden="true"
 							.modal-dialog
