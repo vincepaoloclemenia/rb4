@@ -53,9 +53,11 @@ class OrderListsController < ApplicationController
 
   def update_status
   	@order_list = OrderList.find(params[:oli])
-  	
+  	@order_list.status = 'Notified'
+  	@order_list.save
+  	@order_per_suppliers = OrderPerSupplier.find_by_order_list_id(@order_list.id)
   	#create mail notification
-  	
+  	UserMailer.send_status_notification(@order_list, @order_per_suppliers)
   	redirect_to order_lists_path(), notice: 'Notify the admin about new purchase order.'
   	
   end
