@@ -10,6 +10,7 @@ class UserMailer < ApplicationMailer
   def send_status_notification(order_list, order_per_suppliers)
   	@order_list = order_list
   	@order_per_suppliers = order_per_suppliers
+  	@user_email = User.
   	mail(to: @my_emails, subject: 'Purchase Requirement Notification')
   end
 end
