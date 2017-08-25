@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170816015019) do
+ActiveRecord::Schema.define(version: 20170825054019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -367,6 +367,33 @@ ActiveRecord::Schema.define(version: 20170816015019) do
   add_index "purchase_items", ["item_id"], name: "index_purchase_items_on_item_id", using: :btree
   add_index "purchase_items", ["purchase_id"], name: "index_purchase_items_on_purchase_id", using: :btree
   add_index "purchase_items", ["unit_id"], name: "index_purchase_items_on_unit_id", using: :btree
+
+  create_table "purchase_order_items", force: :cascade do |t|
+    t.integer  "item_id"
+    t.integer  "unit_id"
+    t.integer  "purchase_order_id"
+    t.decimal  "quantity"
+    t.decimal  "price_selected",    precision: 16, scale: 2
+    t.string   "remarks"
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
+
+  create_table "purchase_orders", force: :cascade do |t|
+    t.integer  "client_id"
+    t.integer  "brand_id"
+    t.integer  "branch_id"
+    t.date     "po_date"
+    t.date     "pr_date"
+    t.string   "po_number"
+    t.string   "pr_number"
+    t.text     "remarks"
+    t.text     "terms"
+    t.string   "status"
+    t.integer  "supplier_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "purchases", force: :cascade do |t|
     t.integer  "client_id"

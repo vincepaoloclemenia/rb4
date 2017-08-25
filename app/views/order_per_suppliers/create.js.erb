@@ -5,7 +5,7 @@ retriggerFlash();
 	$('.modal').modal('hide');
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
-	// $('#purchase-item-list').html("<%= j render partial: 'order_per_supplier_list', @order_per_suppliers: @order_per_suppliers %>");
+	$('#purchase-item-list').html("<%= j render partial: 'order_per_supplier_list', order_per_suppliers: @order_per_suppliers, order_list: @order_list %>");
 	// $('.chosen').chosen({
 	// 	width: "100%"
 	// });
