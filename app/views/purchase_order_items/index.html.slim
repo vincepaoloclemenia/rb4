@@ -1,0 +1,136 @@
+.panel
+	.panel-heading.border.pb45
+		.pull-left.mt7 Purchase Order
+		
+		.pull-right
+			button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-order-item-modal"
+				i.icon-maxicons2-paste.mr5
+				| Add Order Item
+		.pull-right
+			= link_to "Back To Purchase Order", purchase_orders_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
+	.panel-body
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0
+				thead
+					tr.bg-thead
+						th PR Date
+						th PR No.
+						th PO Date
+						th PO No.
+						th Supplier
+				tbody
+					tr
+						td data-title="PR Date" = @purchase_order.pr_date
+						td data-title="PR No." = @purchase_order.pr_number
+						td data-title="PO Date" = @purchase_order.po_date
+						td data-title="PO No." = @purchase_order.po_number
+						td data-title="Supplier" = @purchase_order.supplier.name
+
+.panel
+	.panel-heading.border Purchase Order Items
+	.panel-body
+		| Show
+		.btn-group.mb10
+			- params[:show] = "10" if params[:show].nil?
+			= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
+			ul.dropdown-menu role="menu"
+				li
+					= link_to "10", purchase_order_purchase_order_items_path(show: "10", purchase_order_id: @purchase_order.id)
+				li
+					= link_to "25", purchase_order_purchase_order_items_path(show: "25", purchase_order_id: @purchase_order.id)
+				li
+					= link_to "50", purchase_order_purchase_order_items_path(show: "50", purchase_order_id: @purchase_order.id)
+				li
+					= link_to "100", purchase_order_purchase_order_items_path(show: "100", purchase_order_id: @purchase_order.id)
+				li.divider
+				li
+					= link_to "Show All", purchase_order_purchase_order_items_path(show: "all", purchase_order_id: @purchase_order.id)
+		.no-more-tables#purchase-order-item-list
+			= render "purchase_order_item_list", purchase_order_items: @purchase_order_items, purchase_order: @purchase_order
+
+
+.modal.add-purchase-order-item-modal tabindex="-1" role="dialog" aria-hidden="true"
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close type="button" data-dismiss="modal" aria-hidden="true"
+					i.icon-maxicons1-exit
+				h4.modal-title Add Purchase Item
+			.modal-body
+				= form_for [@purchase_order, @purchase_order_item], remote: true do |f|
+					.row.mb10
+						.col-xs-12
+							= f.label :item_id
+								| Item
+								small.field-req  *
+							= f.select :item_id, Item.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+					.row.mb10
+						.col-xs-12
+							= f.label :unit_id
+								| Unit
+								small.field-req  *
+							/= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+							= f.select :unit_id, Unit.pluck(:name, :id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+					.row.mb10
+						.col-xs-12.col-lg-4.mt5
+							= f.label :quantity
+								| Quantity
+								small.field-req  *
+							= f.number_field :quantity, class: "form-control", placeholder: "0"
+						.col-xs-6.col-lg-4.mt5
+							= f.label :price_selected
+								| Supplier Price
+								small.field-req  *
+							.input-group
+								span.input-group-addon PHP
+								= f.text_field :price_selected, class: "form-control", placeholder: "0.00"
+					.row.mb10
+						.col-xs-12
+							= f.label :remarks
+							= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2
+					.row.mb10
+						.col-xs-12.mt20
+							| (
+							small.field-req   *
+							|  )
+							i  indicates field is required
+					.modal-footer.no-border
+						span.inline.float-right
+							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+							|
+							= f.submit "Add", class: "btn btn-primary"
+
+javascript:
+	// $('#purchase_item_quantity').on("keyup",function(){
+	// 	if($(this).val() > 0){
+	// 		$('#purchase_item_purchase_item_amount').prop('readonly',false);
+	// 		$('#purchase_item_purchase_item_total_amount').prop('readonly',false);
+	// 		var qty = $('#purchase_item_quantity').val();
+	// 		var itemAmount = $('#purchase_item_purchase_item_amount').val();
+	// 		$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
+	// 	}
+	// });
+	// $('#purchase_item_purchase_item_amount').on("keyup",function(){
+	// 	if($(this).val().length > 0){
+	// 		$('#purchase_item_purchase_item_total_amount').prop('readonly',true);
+	// 		var qty = $('#purchase_item_quantity').val();
+	// 		var itemAmount = $('#purchase_item_purchase_item_amount').val();
+	// 		$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
+	// 	}
+	// });
+	// $('#purchase_item_purchase_item_total_amount').on("keyup",function(){
+	// 	if($(this).val().length > 0){
+	// 		$('#purchase_item_purchase_item_amount').prop('readonly',true);
+	// 		var qty = $('#purchase_item_quantity').val();
+	// 		var totalItemAmount = $('#purchase_item_purchase_item_total_amount').val();
+	// 		$('#purchase_item_purchase_item_amount').prop('value',totalItemAmount / qty);
+	// 	}
+	// });
+	$('#purchase_order_item_item_id').change(function(){
+		$.ajax({
+	    url: "#{update_units_path}",
+	    data: {
+	      item_id : $('#purchase_order_item_item_id').val()
+	    }
+	  });
+	});

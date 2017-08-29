@@ -32,60 +32,35 @@
       .cm-singleline{ color: #ffffff !important; font-size: 40px !important;}
     </style>
   <body>
-    <table width="100%" cellpadding="0" cellspacing="0" bgcolor="e4e4e4"><tr><td>
-      <table id="top-message" cellpadding="20" cellspacing="0" width="600" align="center">
-        <tr>
-          <td align="center">      
-          </td>
-        </tr>
-      </table>
-      <table id="main" width="600" align="center" cellpadding="0" cellspacing="15" bgcolor="ffffff">
-        <tr>
-          <td id="header" class="w640" width="640" align="center">
-            <table class="w640" width="640" cellpadding="0" cellspacing="0" border="0">
-              <tbody>
-                <tr>
-                  <td class="w30" width="30"></td>
-                  <td class="w580" width="580" height="30"></td>
-                  <td class="w30" width="30"></td>
-                </tr>                
-              </tbody>
-            </table>
-          </td>
-        </tr>
+    <h2>Order List</h2>
+
+    <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+      <tr>
+        <td>Item Name</td>
+        <td>Remarks</td>
+        <td>Quantity</td>
+        <td>Unit</td>
+        <td>Price</td>
+      </tr>
+      <% @purchase_order_items.each do |pi| %>
         <tr>
           <td>
-            <table id="content-5" cellpadding="0" cellspacing="0" align="center">
-              <tr>
-                <td width="100%" valign="top">
-                  <table cellpadding="5" cellspacing="0" bgcolor="">
-                    <tr>
-                      <td>
-                        
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
+            <%= pi.item.name %>
           </td>
-        </tr>
-        <tr>
           <td>
-            <table id="footer" class="w640" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#498DBD">
-              <tbody>
-                <tr>
-                  <td class="w30" width="30"></td>
-                  <td class="w580 h0" width="360" height="30"></td>
-                  <td class="w0" width="60"></td>
-                  <td class="w0" width="160"></td>
-                  <td class="w30" width="30"></td>
-                </tr>
-              </tbody>
-            </table>
+            <%= pi.remarks %>
+          </td>
+          <td>
+            <%= pi.quantity.to_s %>
+          </td>
+          <td>
+            <%= pi.unit.name%>
+          </td>
+          <td>
+            <%= number_to_currency(pi.price_selected, unit: "₱ ") %>
           </td>
         </tr>
-      </table>
+      <% end %>
     </table>
   </body>
 </html>

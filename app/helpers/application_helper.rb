@@ -189,8 +189,8 @@ module ApplicationHelper
 	end
 
 	def po_number_format
-    @order_lists = OrderList.all
-    @order_list_id = OrderList.all.select(:id).order("id ASC").last
+    @order_lists = PurchaseOrder.all
+    @order_list_id = PurchaseOrder.all.select(:id).order("id ASC").last
 
     if @order_list_id.nil? 
       @my_id = 1
@@ -204,7 +204,7 @@ module ApplicationHelper
     @id = @my_id
     @id = @id + 1
     @n = "%07d" % @id
-    @title = "BWNT-PO"
+    @title = "PRN"
     # return @title.to_s+''+@year.to_s+'-'+@month.to_s+'-'+@day_1.to_s+'-'+@day_2.to_s+'-'+@n.to_s
     return @title.to_s+'-'+@n.to_s
     

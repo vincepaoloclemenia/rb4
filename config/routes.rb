@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   end
   resources :purchase_orders do
     resources :purchase_order_items
+    get 'update_status' => 'purchase_orders#update_status'
   end
   
   resource :wizard, only: [:show] do
