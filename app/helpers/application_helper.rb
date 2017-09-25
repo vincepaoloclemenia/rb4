@@ -17,6 +17,10 @@ module ApplicationHelper
 		date.to_date.strftime("%m/%d/%Y")
 	end
 
+	def what_controller?(name, action)
+		controller.controller_name == name && controller.action_name == action ? 'active-link' : ''
+	end
+
 	def to_default_date_format(date)
 		return " - " if date.blank?
 		date.strftime("%b %d, %Y")
@@ -43,7 +47,7 @@ module ApplicationHelper
 			"open" if current_pages?(sales_path) ||
 								(controller.eql?('sales') && action.eql?('show'))
 		when "management_reports"
-			"open" if current_pages?(directionals_path, invoice_entry_report_path, price_movement_report_path, profit_and_losses_path)
+			"open" if current_pages?(directionals_path, item_cost_analysis_reports_path, invoice_entry_report_path, price_movement_report_path, profit_and_losses_path)
 		when "accounts_management"
 			"open" if current_pages?(company_users_path, roles_path) ||
 								(controller.eql?('roles') && action.eql?('manage_permissions'))
