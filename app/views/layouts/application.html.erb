@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <title>Restobot</title>
+  <title><%= content_for?(:title) ? yield(:title) : 'Restobot' %></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
 
@@ -13,7 +13,7 @@
 	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body cz-shortcut-listen="true">
+<body cz-shortcut-listen="true" <%= "data-no-turbolinks='true'".html_safe if ["index", "price_movement_report", "invoice_entry", "invoice_entry_report","man_hours","purchase_listings","purchase_summary","item_purchase_detail"].include?(params[:action]) && ["reports", "purchases","inventories","units","sales", "item_cost_analysis_reports"].include?(params[:controller]) %> >
 	<%= render "partials/flash" if flash %>
 	<% if user_signed_in? %>
 		<div class="app layout-fixed-header">

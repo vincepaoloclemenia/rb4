@@ -14267,7 +14267,7 @@ fieldset[disabled] .btn-default:hover {
 /*.btn-default.btn-outline:focus,*/
 .btn-default.btn-outline:hover {
     background-color: #fff;
-    color: #313567
+    color: #E75649;
 }
 
 .btn-default.btn-outline {
@@ -16102,8 +16102,8 @@ a.list-group-item-danger.active:hover {
 
 .panel-primary>.panel-heading {
     color: #fff;
-    background-color: #313567;
-    border-color: #313567
+    background-color: #E75649;
+    border-color: #fff
 }
 
 .panel-primary>.panel-heading+.panel-collapse .panel-body {

@@ -8,7 +8,7 @@ header.header.navbar
 		li
 			p.navbar-text
 				- if ["index", "price_movement_report", "invoice_entry", "invoice_entry_report","man_hours","purchase_listings","purchase_summary","item_purchase_detail"].include?(params[:action])	&& ["reports", "purchases","inventories","units","sales", "item_cost_analysis_reports"].include?(params[:controller])
-					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search"
+					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search" data-no-turbolinks="true"
 						span.show-ctrls
 							i.icon-glyph-48.show-icon.mr5
 							| Show Search
