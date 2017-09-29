@@ -1,7 +1,8 @@
 class Sale < ActiveRecord::Base
-  belongs_to :branch
 
-	has_many :sale_by_category_entries, :dependent => :destroy
+  belongs_to :branch
+	
+  has_many :sale_by_category_entries, :dependent => :destroy
   accepts_nested_attributes_for :sale_by_category_entries, :reject_if => :all_blank, :allow_destroy=> true
 
   has_many :sale_by_settlement_entries, :dependent => :destroy
@@ -10,7 +11,11 @@ class Sale < ActiveRecord::Base
   has_many :sale_by_manifold_entries, :dependent => :destroy
   accepts_nested_attributes_for :sale_by_manifold_entries, :reject_if => :all_blank, :allow_destroy=> true
 
-	validates :sale_date, :branch, :vat, :service_charge, :gc_sales, presence: true
+  has_attached_file :daily_sales_record
+  validates_attachment :daily_sales_record,
+	  :content_type => { content_type: /^application\/(pdf)/, message: "Only accepts pdf" }
+
+  validates :sale_date, :branch, :vat, :service_charge, :gc_sales, presence: true
 
 	def net_sales
 		self.sale_by_category_entries.pluck(:amount).sum

@@ -16,7 +16,10 @@
 //= require highcharts/highcharts
 //= require turbolinks
 //= require flash
-
+//= require react
+//= require react_ujs
+//= require components
+//= require react_bootstrap
 Turbolinks.enableProgressBar();
 
 function getParameterByName(name) {
@@ -80,6 +83,4 @@ $(document).on("ajax:error", function(event,xhr,options,exc){
     window.location.reload();
   }
 });
-//= require react
-//= require react_ujs
-//= require components
+

@@ -48,7 +48,7 @@ class SalesController < ApplicationController
 	private
 
 	def sale_params
-		params.require(:sale).permit(:branch_id, :sale_date, :shift_id, :customer_count, :transaction_count, :delivery_transaction_count,
+		params.require(:sale).permit(:branch_id, :sale_date, :shift_id, :customer_count, :transaction_count, :delivery_transaction_count, :daily_sales_record,
 																:credit_card_transaction_count, :first_time_guest, :repeat_guest, :vat, :service_charge, 
 																:credit_card_sales, :cash_in_drawer, :gc_redeemed, :delivery_sales, :gc_sales, :other_income,
 																sale_by_category_entries_attributes: [:id, :category_id, :amount],

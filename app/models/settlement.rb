@@ -5,4 +5,6 @@ class Settlement < ActiveRecord::Base
 	validates :name, :client_id, presence: true
 
 	scope :saleable, -> { where(is_active: true) }
+
+	default_scope -> { order(created_at: :desc)}
 end

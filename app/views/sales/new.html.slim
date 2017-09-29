@@ -13,7 +13,11 @@
 				.col-xs-12.col-lg-4.mb5
 					= f.label :shift_id, "Shift".html_safe
 					= f.select :shift_id, current_brand.shifts.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-
+			.row
+				.col
+					center
+						= f.label :daily_sales_record 
+						= f.file_field :daily_sales_record, accept: "application/pdf"
 	.panel
 		.panel-heading.border Statistics
 		.panel-body
@@ -101,19 +105,34 @@
 						span.input-group-addon PHP
 						= f.number_field :other_income, class: "form-control", placeholder: "0.00"
 
-	.panel
-		.panel-heading.border Sales by Category
-		.panel-body
-			.row
-				- @categories.each do |category|
-					= f.fields_for :sale_by_category_entries do |sbce|
-						= sbce.hidden_field :category_id, value: category.id
-						.col-xs-12.col-lg-3.mb5
-							= sbce.label :amount, "#{category.name}"
-							.input-group
-								span.input-group-addon PHP
-								= sbce.number_field :amount, class: "form-control", placeholder: "0.00"
-
-	.row
-		.col-xs-12
-			= f.submit "Add Sales", class: "btn btn-lg btn-primary btn-outline pull-right w180"
+	- if @categories.any? 
+		.panel
+			.panel-heading.border Sales by Category
+			.panel-body
+				.row
+					- @categories.each do |category| 
+						= f.fields_for :sale_by_category_entries do |sbce|
+							= sbce.hidden_field :category_id, value: category.id
+							.col-xs-12.col-lg-3.mb5
+								= sbce.label :amount, "#{category.name}"
+								.input-group
+									span.input-group-addon PHP
+									= sbce.number_field :amount, class: "form-control", placeholder: "0.00"
+	- else
+		.panel
+			.panel-body
+				- empty_warning = current_brand.categories.main.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have no categories.<br> Click 
+								b
+									u  =link_to 'here', categories_path 
+								|  to create sale category.
+		
+		.row
+			.col-xs-12
+				= f.submit "Add Sales", class: "btn btn-lg btn-primary btn-outline pull-right w180"
