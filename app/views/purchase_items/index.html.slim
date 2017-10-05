@@ -57,60 +57,73 @@
 					i.icon-maxicons1-exit
 				h4.modal-title Add Purchase Item
 			.modal-body
-				= form_for [@purchase, @purchase_item], remote: true do |f|
+				- unless @purchase.supplier.items.empty?
+					= form_for [@purchase, @purchase_item], remote: true do |f|
+						.row.mb10
+							.col-xs-12							
+								= f.label :item_id
+									| Item
+									small.field-req  *
+							
+								= f.select :item_id, @purchase.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }								
+						.row.mb10
+							.col-xs-12
+								= f.label :unit_id
+									| Unit
+									small.field-req  *
+								= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+						.row.mb10
+							.col-xs-12.col-lg-4.mt5
+								= f.label :quantity
+									| Quantity
+									small.field-req  *
+								= f.number_field :quantity, class: "form-control", placeholder: "0", step: :any
+							.col-xs-6.col-lg-4.mt5
+								= f.label :purchase_item_amount
+									| Unit Price
+									small.field-req  *
+								.input-group
+									span.input-group-addon PHP
+									= f.number_field :purchase_item_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
+							.col-xs-6.col-lg-4.mt5
+								= f.label :purchase_item_total_amount
+									| Total Amount
+									small.field-req  *
+								.input-group
+									span.input-group-addon PHP
+									= f.number_field :purchase_item_total_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
+						.row.mb10
+							.col-xs-12
+								= f.label :vat_type
+									| VAT Type
+									small.field-req  *
+								= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control"
+						.row.mb10
+							.col-xs-12
+								= f.label :remarks
+								= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2
+						.row.mb10
+							.col-xs-12.mt20
+								| (
+								small.field-req   *
+								|  )
+								i  indicates field is required
+						.modal-footer.no-border
+							span.inline.float-right
+								= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+								|
+								= f.submit "Add", class: "btn btn-primary"
+				- else
 					.row.mb10
-						.col-xs-12
-							= f.label :item_id
-								| Item
-								small.field-req  *
-							= f.select :item_id, @purchase.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
-					.row.mb10
-						.col-xs-12
-							= f.label :unit_id
-								| Unit
-								small.field-req  *
-							= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
-					.row.mb10
-						.col-xs-12.col-lg-4.mt5
-							= f.label :quantity
-								| Quantity
-								small.field-req  *
-							= f.number_field :quantity, class: "form-control", placeholder: "0", step: :any
-						.col-xs-6.col-lg-4.mt5
-							= f.label :purchase_item_amount
-								| Unit Price
-								small.field-req  *
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :purchase_item_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
-						.col-xs-6.col-lg-4.mt5
-							= f.label :purchase_item_total_amount
-								| Total Amount
-								small.field-req  *
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :purchase_item_total_amount, readonly: true, class: "form-control", placeholder: "0", readonly: true
-					.row.mb10
-						.col-xs-12
-							= f.label :vat_type
-								| VAT Type
-								small.field-req  *
-							= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control"
-					.row.mb10
-						.col-xs-12
-							= f.label :remarks
-							= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2
-					.row.mb10
-						.col-xs-12.mt20
-							| (
-							small.field-req   *
-							|  )
-							i  indicates field is required
-					.modal-footer.no-border
-						span.inline.float-right
-							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|
-							= f.submit "Add", class: "btn btn-primary"
+						.alert.alert-danger.mt5 role="alert" style='width: 90%; margin-left: 5%'
+							i.icon-glyph-93.f14.mr10
+							| Oops! Sorry. You currently have no items for 
+							b  '#{@purchase.supplier.name}'&nbsp;
+							| yet
+						.alert.alert-info role="alert" style='width: 90%; margin-left: 5%'
+							i.icon-glyph-73.mr10.f20
+							| To add item: please click 
+							b = link_to 'here', items_path				
 
 javascript:
 	$('#purchase_item_quantity').on("change",function(){

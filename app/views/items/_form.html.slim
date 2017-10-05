@@ -11,6 +11,7 @@
 				| Category
 				small.field-req  *
 			= f.grouped_collection_select :category_id, current_brand.categories.main, 'subcategories', :name, :id, :name, {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+	br
 	.row
 		.col-xs-12		
 			= f.label :supplier_ids
@@ -29,7 +30,7 @@
 					| To add Categories: Go to
 					b
 					|  Categories > Add Main Category > Add Sub Category
-
+	br
 	.row.mb10
 		.col-xs-6
 			= f.label :unit_id
