@@ -28,7 +28,7 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				td data-title="VAT Amount" = to_peso(nvt[:vat])
 				td data-title="Total Amount" = to_peso(nvt[:total])
 				td.action data-title="Action"
-					= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
+					= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, purchase_purchase_items_path(purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
 					- if view_access_control('purchases','update')
 						= link_to "<i class='icon-glyph f14'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_#{purchase.id}" }
 					- if view_access_control('purchases','destroy')

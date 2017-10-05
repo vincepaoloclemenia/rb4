@@ -5,7 +5,9 @@ class Purchase < ActiveRecord::Base
   belongs_to :supplier
   has_many :purchase_items, dependent: :destroy
 	belongs_to :created_by, class_name: 'User', :foreign_key => 'user_created_by_id'
-  belongs_to :modified_by, class_name: 'User', foreign_key: 'user_modified_by_id'
+	belongs_to :modified_by, class_name: 'User', foreign_key: 'user_modified_by_id'
+	
+	default_scope -> { order(created_at: :desc)}
 
   accepts_nested_attributes_for :purchase_items,  :reject_if => :all_blank, :allow_destroy => :true
 
@@ -25,4 +27,6 @@ class Purchase < ActiveRecord::Base
 		end
 		return total_amount
 	end
+
+	
 end

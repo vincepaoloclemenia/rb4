@@ -48,6 +48,7 @@
 						- total_revenues = vat_percentage + service_charge_percentage
 						td.label-total-num data-title="Percentage" = number_to_percentage(total_revenues, precision: 2)
 
+- if @sale.sale_by_settlement_entries.any?
 .panel
 	.panel-heading.border	Sales by Settlement
 	.panel-body

@@ -1,7 +1,7 @@
 class Sale < ActiveRecord::Base
 
   belongs_to :branch
-	
+
   has_many :sale_by_category_entries, :dependent => :destroy
   accepts_nested_attributes_for :sale_by_category_entries, :reject_if => :all_blank, :allow_destroy=> true
 
@@ -26,13 +26,17 @@ class Sale < ActiveRecord::Base
 	end
 
 	def total_sales_by_settlement_type
-		total_settlement_entries = 0
-		total_settlement_entries = self.sale_by_settlement_entries.where.not(amount: nil).pluck(:amount).sum
-		total_settlement_entries += [credit_card_sales, cash_in_drawer, gc_redeemed, delivery_sales].sum
+		if self.sale_by_settlement_entries.where(amount: nil).any?
+			total_settlement_entries = 0
+		else
+			total_settlement_entries = 0
+			total_settlement_entries = self.sale_by_settlement_entries.where.not(amount: nil).pluck(:amount).sum
+			total_settlement_entries += [credit_card_sales, cash_in_drawer, gc_redeemed, delivery_sales].sum
+		end
 	end
 
 	def sale_per_person_average(count)
-		net_sales / count
+		net_sales / count unless count.nil?
 	end
 
 	def self.get_total_sales(branch, date)

@@ -4,16 +4,19 @@ class ItemsController < ApplicationController
 
 	def index
 		@items = current_brand.items.paginate(page: params[:page], per_page: per_page)
+		
 	end
 
 	def new
 		@item = current_brand.items.new
-		@item_types = [['Inventory', 'Inventory'], ['Non-Inventory', 'Non-Inventory'], ['Prepared', 'Prepared']]
+		@item_types = [['Inventory', 'Inventory'], ['Non-Inventory', 'Non-Inventory'], ['Prepared', 'Prepared']]	
+		@suppliers = current_client.suppliers.pluck(:name, :id).uniq
 	end
 
 	def edit
 		@item = current_brand.items.find(params[:id])
 		@item_types = [['Inventory', 'Inventory'], ['Non-Inventory', 'Non-Inventory'], ['Prepared', 'Prepared']]
+		@suppliers = current_client.suppliers.pluck(:name, :id).uniq
 	end
 
 	def create
@@ -43,7 +46,7 @@ class ItemsController < ApplicationController
 	private
 
 	def item_params
-		params.require(:item).permit(:category_id, :unit_id, :name, :item_type, :item_code, :item_value, :track_as_sales, :is_active)
+		params.require(:item).permit(:category_id, :unit_id, :name, :item_type, :item_code, :price, :item_value, :track_as_sales, :is_active, supplier_ids: [])
 	end
 
 	def per_page

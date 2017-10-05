@@ -84,7 +84,7 @@
 								| Supplier
 								small.field-req  *
 							= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-
+						- if @suppliers.nil?
 							.alert.alert-info.mt5 role="alert"
 								.row
 									.col-xs-1.text-right

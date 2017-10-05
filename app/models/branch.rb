@@ -62,4 +62,5 @@ class Branch < ActiveRecord::Base
       self.update color: color_set.sample
     end
   end
+
 end

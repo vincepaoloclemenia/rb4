@@ -13,11 +13,7 @@
 				.col-xs-12.col-lg-4.mb5
 					= f.label :shift_id, "Shift".html_safe
 					= f.select :shift_id, current_brand.shifts.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-			.row
-				.col
-					center
-						= f.label :daily_sales_record 
-						= f.file_field :daily_sales_record, accept: "application/pdf"
+	
 	.panel
 		.panel-heading.border Statistics
 		.panel-body

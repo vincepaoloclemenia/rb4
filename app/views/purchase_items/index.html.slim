@@ -63,7 +63,7 @@
 							= f.label :item_id
 								| Item
 								small.field-req  *
-							= f.select :item_id, current_brand.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+							= f.select :item_id, @purchase.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
 					.row.mb10
 						.col-xs-12
 							= f.label :unit_id
@@ -75,7 +75,7 @@
 							= f.label :quantity
 								| Quantity
 								small.field-req  *
-							= f.number_field :quantity, class: "form-control", placeholder: "0"
+							= f.number_field :quantity, class: "form-control", placeholder: "0", step: :any
 						.col-xs-6.col-lg-4.mt5
 							= f.label :purchase_item_amount
 								| Unit Price
