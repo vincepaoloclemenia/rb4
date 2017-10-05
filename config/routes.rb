@@ -90,6 +90,7 @@ Rails.application.routes.draw do
   get 'update_role' => 'pages#update_role'
   get 'update_branch' => 'pages#update_branch'
   get 'update_units' => 'pages#update_units'
+  get 'update_price' => 'pages#update_price', as: 'price'
   get 'registration_validate_email' => 'pages#registration_validate_email'
   get 'registration_validate_username' => 'pages#registration_validate_username'
   get 'new_password_validate_email' => 'pages#new_password_validate_email'

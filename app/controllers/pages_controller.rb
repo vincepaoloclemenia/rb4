@@ -42,6 +42,19 @@ class PagesController < ApplicationController
 		end
 	end
 
+	def update_price
+		if params[:item_id].empty?
+			render json: { price: 0.00 }
+		else
+			@item = current_brand.items.find(params[:item_id])
+			if @item.price.nil? 
+				render json: { price: 0.00 }
+			else
+				render json: { price: @item.price }
+			end
+		end
+	end
+
 	def get_plan_info
 		@plan = Plan.find(params[:plan_id])
 		render json: { amount: @plan.amount, period: @plan.period },

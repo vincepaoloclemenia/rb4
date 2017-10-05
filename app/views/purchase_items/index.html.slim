@@ -113,9 +113,9 @@
 							= f.submit "Add", class: "btn btn-primary"
 
 javascript:
-	$('#purchase_item_quantity').on("keyup",function(){
+	$('#purchase_item_quantity').on("change",function(){
 		if($(this).val() > 0){
-			$('#purchase_item_purchase_item_amount').prop('readonly',false);
+			//$('#purchase_item_purchase_item_amount').prop('readonly',false);
 			$('#purchase_item_purchase_item_total_amount').prop('readonly',false);
 			var qty = $('#purchase_item_quantity').val();
 			var itemAmount = $('#purchase_item_purchase_item_amount').val();
@@ -142,7 +142,18 @@ javascript:
 		$.ajax({
 	    url: "#{update_units_path}",
 	    data: {
-	      item_id : $('#purchase_item_item_id').val()
-	    }
-	  });
+			item_id: $('#purchase_item_item_id').val()
+	    	}
+	  	});
+		
+		
+		$.ajax({
+			url: '#{price_path}',
+			data: {
+				item_id: $('#purchase_item_item_id').val()
+			},
+			success: (data) => {
+				$('#purchase_item_purchase_item_amount').val(data.price);
+			}
+		});	  	
 	});
