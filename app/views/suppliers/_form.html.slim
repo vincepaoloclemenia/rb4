@@ -32,6 +32,12 @@
 			= f.text_field :contact_person, class: "form-control", placeholder: "Full Name"
 	.row.mb10
 		.col-xs-12
+			= f.label :item_ids
+				| Add Items
+				small.field-req  *
+			= f.select :item_ids, @items, {}, class: "chosen", data: { placeholder: "Select Items" }, style: "width: 100%; display: none;", multiple: true
+	.row.mb10
+		.col-xs-12
 			= f.label :contact_title
 			= f.text_field :contact_title, class: "form-control", placeholder: "Position of Person in the Company"
 	.row.mb10

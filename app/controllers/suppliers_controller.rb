@@ -8,10 +8,13 @@ class SuppliersController < ApplicationController
 
 	def new
 		@supplier = current_client.suppliers.new
+		@items = current_brand.filtered_items
+		
 	end
 
 	def edit
 		@supplier = current_client.suppliers.not_deleted.find(params[:id])
+		@items = current_brand.filtered_items
 	end
 
 	def create
@@ -44,6 +47,6 @@ class SuppliersController < ApplicationController
 
 	def supplier_params
 		params.require(:supplier).permit(:name, :address, :contact_person, :contact_title, :tin, :mobile_no, :fax_no, :landline_no,
-																		:is_active, :assigned_to, :brand_id, :branch_id)
+																		:is_active, :assigned_to, :brand_id, :branch_id, item_ids: [])
 	end
 end
