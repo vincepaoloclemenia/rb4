@@ -17,6 +17,8 @@
 						| &nbsp;button
 		- else
 			= render "partials/filter"
+			.pull-right
+				=react_component('SearchContainer')
 			.no-more-tables
 				table.table.table-bordered.table-striped.mb0 data-sortable="true"
 					thead

@@ -305,7 +305,6 @@ DEPENDENCIES
   ransack
   react-bootstrap-rails
   react-rails
-  responders
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   slim-rails

@@ -34,7 +34,7 @@
 		.col-xs-12
 			= f.label :item_ids
 				| Add Items
-				small.field-req  *
+				small.field-req  * #{'Some items were not available for selection due to incomplete detail' if @items.size != current_brand.items.size}
 			= f.select :item_ids, @items, {}, class: "chosen", data: { placeholder: "Select Items" }, style: "width: 100%; display: none;", multiple: true
 	.row.mb10
 		.col-xs-12

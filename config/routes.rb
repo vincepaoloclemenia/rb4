@@ -98,6 +98,6 @@ Rails.application.routes.draw do
   get 'get_plan_info' => 'pages#get_plan_info'
 
   namespace :api do
-    resources :settlements
+    resources :items, only: :index
   end
 end
