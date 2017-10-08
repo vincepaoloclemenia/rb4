@@ -4,7 +4,11 @@ class ItemsController < ApplicationController
 
 	def index
 		@items = current_brand.items.paginate(page: params[:page], per_page: per_page)
-		
+		@items = if params[:search]
+			current_brand.items.search(params[:search]).paginate(page: params[:page], per_page: per_page)
+		  else
+			current_brand.items.paginate(page: params[:page], per_page: per_page)
+		end
 	end
 
 	def new
