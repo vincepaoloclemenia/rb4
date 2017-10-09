@@ -4,6 +4,11 @@ class SuppliersController < ApplicationController
 
 	def index
 		@suppliers = current_client.suppliers.not_deleted
+		@suppliers = if params[:search]
+			current_brand.suppliers.search(params[:search])
+		else
+			@suppliers = current_client.suppliers.not_deleted
+		end
 	end
 
 	def new

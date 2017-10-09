@@ -14,4 +14,12 @@ class Supplier < ActiveRecord::Base
     name.capitalize!
   end
 
+  def self.search(term)
+    if term
+      where('name LIKE ? OR contact_person LIKE ?', "%#{term}%", "%#{term}%")
+    else
+      all
+    end
+  end
+
 end

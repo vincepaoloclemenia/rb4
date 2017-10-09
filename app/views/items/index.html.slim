@@ -19,11 +19,11 @@
 			= render "partials/filter"
 			.pull-right
 				= form_tag(items_path, method: :get, id: 'search-form') do
-					= text_field_tag :search, params[:search], placeholder: "Search Posts"
+					= text_field_tag :search, params[:search], placeholder: "Search Items"
 					=  submit_tag 'Search', class: 'btn btn-primary'
 				- if params.has_key?(:search)	
 					center
-						p Results for <b>"#{params[:search]}"
+						p #{@items.empty? ? 'No result found for ': 'Results for '} <b>"#{params[:search]}"
 			.no-more-tables
 				table.table.table-bordered.table-striped.mb0 data-sortable="true"
 					thead

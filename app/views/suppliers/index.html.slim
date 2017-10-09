@@ -5,7 +5,15 @@
 		.pull-right
 			- if view_access_control('suppliers','create')
 				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Supplier".html_safe, new_supplier_path, class: "btn btn-success btn-round btn-outline", remote: true
+	
 	.panel-body
+		.pull-right
+			= form_tag(suppliers_path, method: :get, id: 'search-form') do
+				= text_field_tag :search, params[:search], onkeyup: 'filterSupplierName()', placeholder: "Search Items"
+				=  submit_tag 'Search', class: 'btn btn-primary'
+			- if params.has_key?(:search) || !params[:search].blank?	
+				center
+					p#indicator #{@suppliers.empty? ? 'No result found for ': 'Results for '} <b>"#{params[:search]}"
 		- if current_client.suppliers.not_deleted.empty?
 			.alert.alert-info role="alert"
 				.row
@@ -15,9 +23,10 @@
 						| Oops! You curently have no suppliers.<br> To start adding suppliers click&nbsp;
 						b "Add Supplier"
 						| &nbsp;button
+			
 		- else
-			.no-more-tables
-				table.table.table-bordered.table-striped.mb0 data-sortable="true"
+			.no-more-tables 
+				table.table.table-bordered.table-striped.mb0 data-sortable="true" id='supplier-table'
 					thead
 						tr.bg-thead
 							th width="310" Supplier
@@ -40,6 +49,28 @@
 
 = render "partials/modal"
 
+javascript:
+
+	function filterSupplierName() {
+	
+		var input, filter, table, tr, td, i;
+		input = document.getElementById("search");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("supplier-table");
+		tr = table.getElementsByTagName("tr");
+
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[0];
+			td2 = tr[i].getElementsByTagName("td")[1];
+			if (td || td2) {
+				if (td.innerHTML.toUpperCase().indexOf(filter) > -1 || td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			} 
+		}
+	}
 / 						.modal class="edit-supplier-#{supplier.id}" tabindex="-1" role="dialog" aria-hidden="true"
 / 							.modal-dialog
 / 								.modal-content
@@ -178,7 +209,10 @@
 / 							|
 / 							button.btn.btn-primary type="submit" Add Supplier
 
-/ javascript:
+/javascript:
+/	$('#search').on('change', function(){
+/		$(this).length() > 0 ? $('#supplier-table').hide() : $('#supplier-table').show()
+/	});
 / 	$(document).ready(function (){
 / 		$("select#supplier_assigned_to").each(function(){
 / 			var assignedToValue = $(this).val();	// 1 - Client; 2 - Supplier; 3 - Branch;
