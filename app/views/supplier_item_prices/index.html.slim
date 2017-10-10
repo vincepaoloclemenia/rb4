@@ -10,9 +10,9 @@
 					.col-xs-1.text-right
 						i.icon-glyph-73.f25
 					.col-xs-11
-						| Oops! You curently have no supplier_item_prices.<br> To start adding supplier_item_prices click&nbsp;
-						b "Add Supplier"
-						| &nbsp;button
+						| Oops! You curently have no price for <b>#{@supplier.name}</b>'s items.<br> To start adding supplier_item_prices click&nbsp;
+						b "Add Item Price" 
+						| &nbsp;button on the upper-right corner
 		- else
 			.no-more-tables
 				table.table.table-bordered.table-striped.mb0 data-sortable="true"
@@ -33,7 +33,7 @@
 								td data-title="Person to Contact" = number_to_currency(supplier_item_price.supplier_amount, unit: "")
 								td.action data-title="Action"
 									/ - if view_access_control('supplier_item_prices','update')
-									= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_supplier_item_price_path(supplier_item_price), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
+									= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_supplier_item_price_path(supplier_item_price, sp: supplier_item_price.supplier), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
 									/ - if view_access_control('supplier_item_prices','destroy')
 									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, supplier_item_price_path(supplier_item_price), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 

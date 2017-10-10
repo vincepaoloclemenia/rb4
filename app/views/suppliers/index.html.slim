@@ -9,7 +9,7 @@
 	.panel-body
 		.pull-right
 			= form_tag(suppliers_path, method: :get, id: 'search-form') do
-				= text_field_tag :search, params[:search], onkeyup: 'filterSupplierName()', placeholder: "Search Items"
+				= text_field_tag :search, params[:search], onkeyup: 'filterSupplierName()', placeholder: "Name or Contact"
 				=  submit_tag 'Search', class: 'btn btn-primary'
 			- if params.has_key?(:search) || !params[:search].blank?	
 				center

@@ -4,16 +4,19 @@ class SupplierItemPricesController < ApplicationController
 
 	def index
 		@supplier_item_prices = SupplierItemPrice.where(supplier_id: params[:sp])
+		@supplier = Supplier.find(params[:sp])
 	end
 
 	def new
 		@supplier_item_price = SupplierItemPrice.new
-		@items = Item.all
 		@sp_id = params[:sp]
+		@items = Supplier.find(@sp_id).items	
 	end
 
 	def edit
 		@supplier_item_price = SupplierItemPrice.find(params[:id])
+		@sp_id = params[:sp]
+		@items = Supplier.find(@sp_id).items
 	end
 
 	def create

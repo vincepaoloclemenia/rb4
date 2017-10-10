@@ -63,8 +63,7 @@
 							.col-xs-12							
 								= f.label :item_id
 									| Item
-									small.field-req  *
-							
+									small.field-req  *							
 								= f.select :item_id, @purchase.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }								
 						.row.mb10
 							.col-xs-12
@@ -158,8 +157,7 @@ javascript:
 			item_id: $('#purchase_item_item_id').val()
 	    	}
 	  	});
-		
-		
+			
 		$.ajax({
 			url: '#{price_path}',
 			data: {

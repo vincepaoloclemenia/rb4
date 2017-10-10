@@ -10,3 +10,14 @@ $('.chosen').chosen({
 
 $("[data-toggle='toggle']").bootstrapToggle();
 
+$('#supplier_item_price_id_chosen').change(function(){			
+	$.ajax({
+		url: '#{price_path}',
+		data: {
+			item_id: $(this).val()
+		},
+		success: (data) => {
+			$('#supplier-amount').val(data.price);
+		}
+	});	  	
+});
