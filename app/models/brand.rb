@@ -29,8 +29,5 @@ class Brand < ActiveRecord::Base
 
   accepts_nested_attributes_for :branches, reject_if: :all_blank, allow_destroy: true
 
-  def filtered_items
-    items.where.not(price: nil).pluck(:name,:id)
-  end
 
 end

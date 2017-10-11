@@ -13,13 +13,13 @@ class SuppliersController < ApplicationController
 
 	def new
 		@supplier = current_client.suppliers.new
-		@items = current_brand.filtered_items
+		@items = current_brand.items.pluck(:name,:id)
 		
 	end
 
 	def edit
 		@supplier = current_client.suppliers.not_deleted.find(params[:id])
-		@items = current_brand.filtered_items
+		@items = current_brand.items.pluck(:name,:id)
 	end
 
 	def create
