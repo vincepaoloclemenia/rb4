@@ -32,7 +32,7 @@ group :development, :test do
   gem 'spring'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'capistrano', '~> 3.2.1'
+  gem 'capistrano'
   gem 'capistrano-secrets-yml', '~> 1.0.0'
   gem 'capistrano-rvm', require: false
   gem 'capistrano-rails', require: false
