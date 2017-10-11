@@ -29,28 +29,38 @@ class PagesController < ApplicationController
 	end
 
 	def update_units
-		if params[:item_id].empty?
+		if params[:item_id].empty? && params[:controller_name].empty?
 			@units = current_brand.units.none
 		else
-			item = current_brand.items.find(params[:item_id])
-			conversions = current_brand.conversions.where("from_unit_id = ? OR to_unit_id = ?", item.unit_id, item.unit_id)
+			@controller = params[:controller_name]
+			if @controller == 'purchase_items'
+				item = current_brand.items.find(params[:item_id])
+				conversions = current_brand.conversions.where("from_unit_id = ? OR to_unit_id = ?", item.unit_id, item.unit_id)
 
-			@units = current_brand.units.find(conversions.pluck(:from_unit_id, :to_unit_id).flatten.uniq)
-			if @units.empty?
-				@units << item.unit
+				@units = current_brand.units.find(conversions.pluck(:from_unit_id, :to_unit_id).flatten.uniq)
+				if @units.empty?
+					@units << item.unit
+				end
+			elsif @controller == 'supplier_item_prices'
+				@item = current_brand.items.find(params[:item_id])
+				@unit = item.unit.name
+				render json: { unit: @unit }
 			end
 		end
 	end
 
 	def update_price
-		if params[:item_id].empty?
+		if params[:item_id].empty? && params[:purchase_id].empty?
 			render json: { price: 0.00 }
 		else
+			@purchase = Purchase.find(params[:purchase_id])
 			@item = current_brand.items.find(params[:item_id])
-			if @item.price.nil? 
-				render json: { price: 0.00 }
+			@amount = @item.supplier_item_prices.find_by_supplier_id_and_item_id(@purchase.supplier, @item)
+			@price = @amount.supplier_amount unless @amount.nil?
+			if @price
+				render json: { price: @price }
 			else
-				render json: { price: @item.price }
+				render json: { price: 0.00 }		
 			end
 		end
 	end

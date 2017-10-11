@@ -150,18 +150,20 @@ javascript:
 			$('#purchase_item_purchase_item_amount').prop('value',totalItemAmount / qty);
 		}
 	});
-	$('#purchase_item_item_id').change(function(){
+	$('#purchase_item_item_id').on('change',function(){
 		$.ajax({
 	    url: "#{update_units_path}",
 	    data: {
-			item_id: $('#purchase_item_item_id').val()
+			item_id: $(this).val(),
+			controller_name: '#{controller.controller_name}'
 	    	}
 	  	});
 			
 		$.ajax({
 			url: '#{price_path}',
 			data: {
-				item_id: $('#purchase_item_item_id').val()
+				item_id: $(this).val(),
+				purchase_id: '#{params[:purchase_id]}'
 			},
 			success: (data) => {
 				$('#purchase_item_purchase_item_amount').val(data.price);

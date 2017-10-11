@@ -50,7 +50,7 @@ class ItemsController < ApplicationController
 	private
 
 	def item_params
-		params.require(:item).permit(:category_id, :unit_id, :name, :item_type, :item_code, :price, :item_value, :track_as_sales, :is_active, supplier_ids: [])
+		params.require(:item).permit(:category_id, :unit_id, :name, :item_type, :item_code, :item_value, :track_as_sales, :is_active, supplier_ids: [])
 	end
 
 	def per_page

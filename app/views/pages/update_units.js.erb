@@ -1,5 +1,9 @@
-var select = $('#purchase_item_unit_id');
-select.empty();
-<% @units.each do |unit| %>
-	select.append("<option value='<%= unit.id %>'><%= unit.name %></option>");
+<% if @controller == 'purchase_items' %>
+	var select = $('#purchase_item_unit_id');
+	select.empty();
+	<% @units.each do |unit| %>
+		select.append("<option value='<%= unit.id %>'><%= unit.name %></option>");
+	<% end %>
+<% elsif @controller == 'supplier_item_prices'%>
+	$('#supplier-unit').val('<%= @unit %>')
 <% end %>

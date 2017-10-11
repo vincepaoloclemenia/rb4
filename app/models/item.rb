@@ -13,7 +13,6 @@ class Item < ActiveRecord::Base
   validates :brand_id, :category_id, :name, :supplier_ids, :unit_id, :item_type, presence: true
   validates :name,           length: { maximum: 50 }
   validates :item_type,      length: { maximum: 50 }
-  validates :price, format: { with: /\A\d{1,4}(\.\d{0,2})\Z/ }, presence: true
   scope :for_inventory, -> { where(is_active: true, item_type: "Inventory") }
 
   def capitalize_item

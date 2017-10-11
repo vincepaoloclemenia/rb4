@@ -200,9 +200,7 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     rdoc (4.3.0)
-    react-bootstrap-rails (0.30.2)
-      rails (>= 3.1)
-    react-rails (2.2.1)
+    react-rails (2.3.0)
       babel-transpiler (>= 0.7.0)
       connection_pool
       execjs
@@ -303,8 +301,7 @@ DEPENDENCIES
   pg (~> 0.20.0)
   rails (= 4.2.5.rc2)
   ransack
-  react-bootstrap-rails
-  react-rails
+  react-rails (~> 2.3)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   slim-rails
