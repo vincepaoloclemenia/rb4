@@ -29,18 +29,15 @@ class PagesController < ApplicationController
 	end
 
 	def update_units
-		if params[:item_id].empty? && params[:controller_name].empty?
+		if params[:item_id].empty? && params[:controller_name].empty? && params[:purchase_id].empty?
 			@units = current_brand.units.none
 		else
 			@controller = params[:controller_name]
 			if @controller == 'purchase_items'
 				item = current_brand.items.find(params[:item_id])
-				conversions = current_brand.conversions.where("from_unit_id = ? OR to_unit_id = ?", item.unit_id, item.unit_id)
-
-				@units = current_brand.units.find(conversions.pluck(:from_unit_id, :to_unit_id).flatten.uniq)
-				if @units.empty?
-					@units << item.unit
-				end
+				purchase = Purchase.find(params[:purchase_id])
+				supplier_unit = purchase.supplier.prices.find_by_supplier_id_and_item_id(purchase.supplier, item).unit_id
+				@unit = Unit.find(supplier_unit)
 			elsif @controller == 'supplier_item_prices'
 				@item = current_brand.items.find(params[:item_id])
 				@unit = item.unit.name

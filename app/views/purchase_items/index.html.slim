@@ -155,6 +155,7 @@ javascript:
 	    url: "#{update_units_path}",
 	    data: {
 			item_id: $(this).val(),
+			purchase_id: '#{params[:purchase_id]}',
 			controller_name: '#{controller.controller_name}'
 	    	}
 	  	});

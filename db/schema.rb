@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171011010958) do
+ActiveRecord::Schema.define(version: 20171012071820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 20171011010958) do
     t.integer  "borrowed_from_id"
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
+    t.string   "unit_name"
   end
 
   add_index "purchase_items", ["item_id"], name: "index_purchase_items_on_item_id", using: :btree
@@ -560,12 +561,14 @@ ActiveRecord::Schema.define(version: 20171011010958) do
   create_table "supplier_item_prices", force: :cascade do |t|
     t.integer  "supplier_id"
     t.integer  "item_id"
-    t.decimal  "supplier_amount",    precision: 16, scale: 2
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.string   "supplier_item_unit"
+    t.decimal  "supplier_amount", precision: 16, scale: 2
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "packaging"
+    t.integer  "unit_id"
   end
+
+  add_index "supplier_item_prices", ["unit_id"], name: "index_supplier_item_prices_on_unit_id", using: :btree
 
   create_table "suppliers", force: :cascade do |t|
     t.integer  "brand_id"

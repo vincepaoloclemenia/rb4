@@ -3,6 +3,7 @@ class Supplier < ActiveRecord::Base
   belongs_to :client
   belongs_to :branch
   has_and_belongs_to_many :items
+  has_many :prices, class_name: 'SupplierItemPrice'
   validates :client_id, presence: true
   validates :name, presence: true, uniqueness: { case_sensitive: false, message: ' already exists' }
   default_scope -> { order(name: :asc) }
@@ -20,6 +21,10 @@ class Supplier < ActiveRecord::Base
     else
       all
     end
+  end
+
+  def remaining_items
+    items.where.not(id: prices.pluck(:item_id)).pluck(:name, :id)
   end
 
 end

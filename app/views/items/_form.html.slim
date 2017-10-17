@@ -36,7 +36,7 @@
 			= f.label :unit_id
 				| Inventory Unit
 				small.field-req  *
-			= f.select :unit_id, options_for_select(current_brand.units.not_deleted.pluck(:name, :id), current_brand.units.find(1).id ),  { include_blank: true }, class: "chosen", data: { placeholder: current_brand.units.find_by_name('Kilogram').name }, style: "width: 100%; display: none;"
+			= f.select :unit_id, options_for_select(current_brand.units.not_deleted.pluck(:name, :id), current_brand.units.first ),  { include_blank: true }, class: "chosen", data: { placeholder: current_brand.units.find_by_name('Kilogram').name }, style: "width: 100%; display: none;"
 		.col-xs-6
 			= f.label :item_type
 				| Item Type

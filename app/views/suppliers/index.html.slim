@@ -1,19 +1,16 @@
 - content_for :title, 'Restobot | Suppliers'
 .panel
 	.panel-heading.border.pb45
-		.pull-left.mt7 Suppliers
+		.pull-left.mt7 Suppliers <span class="gap"></span>
 		.pull-right
 			- if view_access_control('suppliers','create')
 				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Supplier".html_safe, new_supplier_path, class: "btn btn-success btn-round btn-outline", remote: true
-	
+		= form_tag(suppliers_path, method: :get, id: 'search-form') do
+			= text_field_tag :search, params[:search], onkeyup: 'filterSupplierName()', placeholder: "Name or Contact"
+			=  submit_tag 'Search', class: 'btn btn-primary'
+		- if params.has_key?(:search) || !params[:search].blank?	
+			p#indicator #{@suppliers.empty? ? 'No result found for ': 'Results for '} <b>"#{params[:search]}"
 	.panel-body
-		.pull-right
-			= form_tag(suppliers_path, method: :get, id: 'search-form') do
-				= text_field_tag :search, params[:search], onkeyup: 'filterSupplierName()', placeholder: "Name or Contact"
-				=  submit_tag 'Search', class: 'btn btn-primary'
-			- if params.has_key?(:search) || !params[:search].blank?	
-				center
-					p#indicator #{@suppliers.empty? ? 'No result found for ': 'Results for '} <b>"#{params[:search]}"
 		- if current_client.suppliers.not_deleted.empty?
 			.alert.alert-info role="alert"
 				.row

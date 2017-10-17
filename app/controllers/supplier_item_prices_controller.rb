@@ -10,6 +10,7 @@ class SupplierItemPricesController < ApplicationController
 	def new
 		@supplier_item_price = SupplierItemPrice.new
 		@sp_id = params[:sp]
+		@supplier = Supplier.find(@sp_id)
 		@items = Supplier.find(@sp_id).items	
 	end
 
@@ -43,12 +44,12 @@ class SupplierItemPricesController < ApplicationController
 	def destroy
 		@supplier_item_price = SupplierItemPrice.find(params[:id])
 		@supplier_item_price.destroy
-		redirect_to supplier_item_prices_path, notice: "Supplier successfully deleted"
+		redirect_to supplier_item_prices_path(sp: params[:sp]), notice: "Supplier successfully deleted"
 	end
 
 	private
 
 	def supplier_params
-		params.require(:supplier_item_price).permit(:supplier_id, :item_id, :supplier_amount, :supplier_item_unit, :packaging)
+		params.require(:supplier_item_price).permit(:supplier_id, :item_id, :supplier_amount, :packaging, :unit_id)
 	end
 end
