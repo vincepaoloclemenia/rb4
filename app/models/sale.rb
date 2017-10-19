@@ -31,7 +31,11 @@ class Sale < ActiveRecord::Base
 		else
 			total_settlement_entries = 0
 			total_settlement_entries = self.sale_by_settlement_entries.where.not(amount: nil).pluck(:amount).sum
-			total_settlement_entries += [credit_card_sales, cash_in_drawer, gc_redeemed, delivery_sales].sum
+			total_settlement_entries += [
+				credit_card_sales.nil? ? 0 : credit_card_sales, 
+				cash_in_drawer.nil? ? 0 : cash_in_drawer,
+				gc_redeemed.nil? ? 0 : gc_redeemed, 
+				delivery_sales.nil? ? 0 : delivery_sales].sum
 		end
 	end
 

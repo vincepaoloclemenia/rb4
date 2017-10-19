@@ -8,5 +8,14 @@ li.active-link{
     }
     &:hover{
         background-color: #E75649;
+        transition: 0.5s;
     }
+}
+
+li.menu-accordion {
+    &.open{
+        li {
+            animation: navEffect 1s;
+        }
+    }    
 }

@@ -1,3 +1,4 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
 @import "chosen.min";
 @import "style";
 @import "font-icons";
@@ -8,6 +9,8 @@
 @import "navigation/navs";
 @import "module/search";
 @import "module/table";
+@import "module/keyframes";
+@import "module/button";
 
 html.turbolinks-progress-bar::before {
   background-color: #558B2F !important;

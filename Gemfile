@@ -25,6 +25,7 @@ gem 'axlsx_rails'
 gem 'animate-rails'
 gem 'paypal-recurring'
 gem 'pdf-reader', '~> 2.0'
+gem "chartkick"
 
 group :development, :test do
   gem 'byebug'

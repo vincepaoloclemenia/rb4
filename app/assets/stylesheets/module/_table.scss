@@ -1,4 +1,17 @@
 .no-more-tables{
     max-width: 1000px;
     overflow-x: auto;
+    tr.animated-row{ animation: fadeEffect 1s; /* Fading effect takes 1 second */ }
+    ul { margin-top: 2em }
+    li{
+        list-style: none;
+        a.see-more-table{
+            cursor: pointer;
+            margin-left: 45%;
+            font-weight: 900;
+            color: tomato;
+            text-decoration: none;
+        }
+    
+    } 
 }
