@@ -11,7 +11,8 @@ class SalesController < ApplicationController
 			end
 		end
 		@q = current_brand.sales.ransack(params[:q])
-		@sales = @q.result.paginate(page: params[:page], per_page: per_page)
+		#@sales = @q.result.paginate(page: params[:page], per_page: per_page)
+		@branches = current_brand.branches.includes(:sales)
 		# @sales = current_brand.sales
 	end
 
@@ -40,22 +41,21 @@ class SalesController < ApplicationController
 	end
 
 	def destroy
-		@sale = current_brand.sales.find(params[:id])
-		@sale.destroy
+		current_brand.sales.find(params[:id]).destroy
 		redirect_to sales_path, notice: "Sale successfully deleted"
 	end
 
 	private
 
-	def sale_params
-		params.require(:sale).permit(:branch_id, :sale_date, :shift_id, :customer_count, :transaction_count, :delivery_transaction_count, :daily_sales_record,
-																:credit_card_transaction_count, :first_time_guest, :repeat_guest, :vat, :service_charge, 
-																:credit_card_sales, :cash_in_drawer, :gc_redeemed, :delivery_sales, :gc_sales, :other_income,
-																sale_by_category_entries_attributes: [:id, :category_id, :amount],
-																sale_by_settlement_entries_attributes: [:id, :settlement_id, :amount])
-	end
+		def sale_params
+			params.require(:sale).permit(:branch_id, :sale_date, :shift_id, :customer_count, :transaction_count, :delivery_transaction_count, :daily_sales_record,
+																	:credit_card_transaction_count, :first_time_guest, :repeat_guest, :vat, :service_charge, 
+																	:credit_card_sales, :cash_in_drawer, :gc_redeemed, :delivery_sales, :gc_sales, :other_income,
+																	sale_by_category_entries_attributes: [:id, :category_id, :amount],
+																	sale_by_settlement_entries_attributes: [:id, :settlement_id, :amount])
+		end
 
-	def per_page
-		
-	end
+		def per_page
+			
+		end
 end

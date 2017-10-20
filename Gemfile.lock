@@ -116,6 +116,8 @@ GEM
     ffi (1.9.18)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
+    groupdate (3.2.0)
+      activesupport (>= 3)
     hash-deep-merge (0.1.1)
     hashery (2.1.2)
     htmlentities (4.3.4)
@@ -298,6 +300,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise (~> 3.4.1)
   exception_notification
+  groupdate (~> 3.2)
   jbuilder (~> 2.0)
   jquery-rails
   lazy_high_charts

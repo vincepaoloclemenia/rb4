@@ -11,6 +11,8 @@
 @import "module/table";
 @import "module/keyframes";
 @import "module/button";
+@import "module/tabs";
+@import "module/charts";
 
 html.turbolinks-progress-bar::before {
   background-color: #558B2F !important;

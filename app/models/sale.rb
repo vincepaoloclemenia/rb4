@@ -8,8 +8,8 @@ class Sale < ActiveRecord::Base
   has_many :sale_by_settlement_entries, :dependent => :destroy
   accepts_nested_attributes_for :sale_by_settlement_entries, :reject_if => :all_blank, :allow_destroy=> true
 
-  has_many :sale_by_manifold_entries, :dependent => :destroy
-  accepts_nested_attributes_for :sale_by_manifold_entries, :reject_if => :all_blank, :allow_destroy=> true
+  #has_many :sale_by_manifold_entries, :dependent => :destroy
+  #accepts_nested_attributes_for :sale_by_manifold_entries, :reject_if => :all_blank, :allow_destroy=> true
 
   has_attached_file :daily_sales_record
   validates_attachment :daily_sales_record,

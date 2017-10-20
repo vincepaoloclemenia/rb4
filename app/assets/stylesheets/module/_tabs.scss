@@ -1,0 +1,32 @@
+div.tab, div.toggle {
+    overflow: hidden;
+    border: none;
+    background-color: transparent;
+    button{
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        &:hover{
+            background-color: lighten(#E75649, 20%);
+            transition: 0.5s;
+        }
+        &.active{
+            background-color: #E75649;
+            color: white;
+        }
+    }
+}
+
+/* Style the tab content */
+.tabcontent, .togglecontent {
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 1s; /* Fading effect takes 1 second */
+    display: none;
+    padding: 6px 12px;
+    border: none;
+    border-top: none;
+}
