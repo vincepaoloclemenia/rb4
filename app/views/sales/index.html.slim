@@ -24,10 +24,23 @@
 .panel
     .panel-heading.border Daily Sales Report
     .panel-body
+        .pull-right
+            | Search Sales
+            /= react_component 'SalesSearch'
+            = form_tag sales_path, method: :get do
+                .col-xs-12.col-lg-6       
+                    = text_field_tag :date_from, nil, id: 'from', placeholder: "Select date"
+                .col-xs-12.col-lg-6                    
+                    = text_field_tag :date_to, nil, id: 'to', placeholder: "Select date"
+                    
         
-        h4 Total Sales
-        = line_chart @branches.map { |branch| { name: branch.name, colors: branch.color, data: branch.sales.group_by_day_of_week(:created_at, format: "%a").maximum(:customer_count) } }
-
+        h4 Total Sales 
+        h5 id="sales-label" #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }
+        
+        /= react_component 'SalesSearch'
+        /div id="chart"
+        = line_chart daily_sales_charts_path, id: 'sales-chart'
+        
         br
         
         h4 Branches
@@ -47,8 +60,8 @@
                 .row
                     .togglecontent id="chart-view-#{branch.name.remove("'")}"
                         h5 Chart View for #{branch.name}'s Sales
-                        = area_chart branch.sales.group_by_day_of_week(:created_at, format: "%a").maximum(:customer_count), min: 1, max: 10000
-                br
+                        h5 #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }
+                        = area_chart sales_per_branch_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :sunday).strftime), label: "Total Sales"
 
                 .row
                     .togglecontent id="table-view-#{branch.name.remove("'")}"
@@ -57,50 +70,35 @@
 
 
 javascript:
-    function openBranch(evt, branchName, toggleView) {
-        // Declare all variables
-        var i, tabcontent, tablinks;
-
-        // Get all elements with class="tabcontent" and hide them
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // Get all elements with class="tablinks" and remove the class "active"
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-
-        // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(branchName).style.display = "block";
-        evt.currentTarget.className += " active";
-        document.getElementById(toggleView).click();
-    }
-
-    function toggleView(evt, branchName) {
-        // Declare all variables
-        var i, tabcontent, tablinks;
-
-        // Get all elements with class="tabcontent" and hide them
-        tabcontent = document.getElementsByClassName("togglecontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // Get all elements with class="tablinks" and remove the class "active"
-        tablinks = document.getElementsByClassName("togglelinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-
-        // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(branchName).style.display = "block";
-        evt.currentTarget.className += " active";
-        evt.preventDefault();
-    }
-
     var tablinks = document.getElementsByClassName("tablinks");
     tablinks[0].click();
+    $('#from').datepicker({}).on('change', function(){
+        if($(this).val() === '' || $(this).val() > $('#to').val())
+            $('#to').val('');
+    });
+    $('#to').datepicker({}).on('change',function(){    
+        if($(this).val() === '' || $('#from').val() === '' || $(this).val() < $('#from').val())
+            { 
+                alert("Please make sure your 'From' field has value and less than the other.")
+                $(this).val('');
+            }
+        else {    
+            dfrom = $('#from').val();
+            dto = $(this).val();           
+            new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {})                                                       
+            $.ajax({
+                url: '/charts/get_dates?from='+dfrom+'&to='+dto,
+                method: 'GET',
+                success: (data) => {
+                     $('#sales-label').text(data.label)
+                }
+            })           
+        } 
+           
+    });
 
+    
+
+
+
+    

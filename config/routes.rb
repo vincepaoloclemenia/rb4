@@ -98,6 +98,14 @@ Rails.application.routes.draw do
   get 'get_plan_info' => 'pages#get_plan_info'
 
   namespace :api do
-    resources :sales, only: :index
+    resources :sales, only: :index do
+      get :searched_sales, on: :collection
+    end
+  end
+  
+  resources :charts, only: [] do
+    get :daily_sales, on: :collection
+    get :sales_per_branch, on: :collection
+    get :get_dates, on: :collection
   end
 end

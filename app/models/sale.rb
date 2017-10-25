@@ -16,9 +16,11 @@ class Sale < ActiveRecord::Base
 	  :content_type => { content_type: /^application\/(pdf)/, message: "Only accepts pdf" }
 
   validates :sale_date, :branch, :vat, :service_charge, :gc_sales, presence: true
+  validates_uniqueness_of :sale_date, scope: :branch
+
 
 	def net_sales
-		self.sale_by_category_entries.pluck(:amount).sum
+		sale_by_category_entries.pluck(:amount).sum
 	end
 
 	def total_settlement_sales

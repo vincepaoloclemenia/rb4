@@ -21,6 +21,8 @@
 //= require components
 //= require Chart.bundle
 //= require chartkick
+//= require sales
+//= require bootstrap-datepicker
 Turbolinks.enableProgressBar();
 
 function getParameterByName(name) {

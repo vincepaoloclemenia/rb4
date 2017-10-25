@@ -33,8 +33,8 @@
             | Oops! There seems to be no records of sales here. For us to track your daily sales report: <br>Go to&nbsp;
             b Data Entry > Sales
     - else
-      = react_component 'SalesTable'
-/      .no-more-tables
+      /= react_component 'SalesTable'
+      .no-more-tables
         table.table.table-bordered.table-striped.mb0 data-sortable=""
           thead
   					tr.bg-thead
