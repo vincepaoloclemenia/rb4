@@ -107,5 +107,6 @@ Rails.application.routes.draw do
     get :daily_sales, on: :collection
     get :sales_per_branch, on: :collection
     get :get_dates, on: :collection
+    get :get_average, on: :collection
   end
 end

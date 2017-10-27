@@ -25,21 +25,36 @@
     .panel-heading.border Daily Sales Report
     .panel-body
         .pull-right
-            | Search Sales
+            h4 Sales Search <button class="reset" data-tt="tooltip" id="reset" data-original-title="Reset"><i class="fa fa-retweet" aria-hidden="true" id="reset-btn"></i></button>
             /= react_component 'SalesSearch'
             = form_tag sales_path, method: :get do
                 .col-xs-12.col-lg-6       
                     = text_field_tag :date_from, nil, id: 'from', placeholder: "Select date"
                 .col-xs-12.col-lg-6                    
                     = text_field_tag :date_to, nil, id: 'to', placeholder: "Select date"
-                    
-        
-        h4 Total Sales 
-        h5 id="sales-label" #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }
-        
+
+        h4 Sales for all Branches
+        h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
+        h4 id='average-sales'
         /= react_component 'SalesSearch'
         /div id="chart"
         = line_chart daily_sales_charts_path, id: 'sales-chart'
+        
+        br
+
+            .no-more-tables
+                table.table.table-bordered.table-striped.mb0 data-sortable="true" id='summary'
+                    thead
+                        tr.bg-thead
+                            th width="310" Branch Name
+                            th width="300" Daily Average Sales
+                            th id='average-per-date' width="300" Average Sales Per Date Range (Current Week)
+                    tbody
+                        - @branches.map do |branch|
+                            tr 
+                                td.branch-sample branch="#{branch.name.remove("'")}" data-title="Name" = branch.name
+                                td data-title="Daily Average Sales" = branch.sales.invalid_sales? ? branch.daily_average_sales : to_peso(branch.daily_average_sales)
+                                td.branch id="#{branch.name.downcase.reverse.gsub(/[' ]/, '')}" data-title="Average Based From Date Range" 
         
         br
         
@@ -72,11 +87,48 @@
 javascript:
     var tablinks = document.getElementsByClassName("tablinks");
     tablinks[0].click();
+    
+    $.ajax({
+        url: '/charts/get_average',
+        method: 'GET',
+        success: (data) => {
+            $.each(data.branches, function(i, branch){
+                $('td#'+branch.reverse).text(branch.average)
+            })
+        }
+    })    
+    
     $('#from').datepicker({}).on('change', function(){
         if($(this).val() === '' || $(this).val() > $('#to').val())
-            $('#to').val('');
+            {   $('#to').val('')    }
+        else {
+                dfrom = $(this).val();
+                dto = $('#to').val();           
+                new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {})
+                $.ajax({
+                    url: '/charts/get_dates?from='+dfrom+'&to='+dto,
+                    method: 'GET',
+                    success: (data) => {
+                        $('#sales-label').text(data.label);
+                        $('#average-per-date').text(data.title);                     
+                        $('#reset').show(); 
+                    }
+                });
+
+                $.ajax({
+                    url: '/charts/get_average?from='+dfrom+'&to='+dto,
+                    method: 'GET',
+                    success: (data) => {
+                    $.each(data.branches, function(i, branch){
+                            $('td#'+branch.reverse).text(branch.average)
+                        })
+                    }
+                })
+        }
     });
-    $('#to').datepicker({}).on('change',function(){    
+
+    $('#to').datepicker({}).on('change',function(){
+
         if($(this).val() === '' || $('#from').val() === '' || $(this).val() < $('#from').val())
             { 
                 alert("Please make sure your 'From' field has value and less than the other.")
@@ -84,18 +136,51 @@ javascript:
             }
         else {    
             dfrom = $('#from').val();
-            dto = $(this).val();           
+            dto = $(this).val();
+            name = $('.branch').text()           
             new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {})                                                       
             $.ajax({
                 url: '/charts/get_dates?from='+dfrom+'&to='+dto,
                 method: 'GET',
                 success: (data) => {
-                     $('#sales-label').text(data.label)
+                     $('#sales-label').text(data.label);
+                     $('#average-per-date').text(data.title);                     
+                     $('#reset').show(); 
                 }
-            })           
-        } 
+            });
+            
+            $.ajax({
+                url: '/charts/get_average?from='+dfrom+'&to='+dto,
+                method: 'GET',
+                success: (data) => {
+                   $.each(data.branches, function(i, branch){
+                        $('td#'+branch.reverse).text(branch.average)
+                    })
+                }
+            })
+        }        
            
     });
+
+    $('#reset').on('click',function(){
+        dfrom = $('#from').val();
+        dto = $('#to').val();
+        new Chartkick.LineChart('sales-chart', '#{daily_sales_charts_path}', {})       
+        $('#sales-label').text('#{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }')
+        $('#average-per-date').text('Average Sales Per Date Range (Current Week)')
+        $('#reset').hide();
+        $('#to').val('');
+        $('#from').val(''); 
+        $.ajax({
+            url: '/charts/get_average?from='+dfrom+'&to='+dto,
+            method: 'GET',
+            success: (data) => {
+            $.each(data.branches, function(i, branch){
+                    $('td#'+branch.reverse).text(branch.average)
+                })
+            }
+        })
+    })
 
     
 

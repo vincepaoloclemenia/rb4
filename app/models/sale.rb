@@ -59,4 +59,13 @@ class Sale < ActiveRecord::Base
 		return sale.customer_count
 	end
 
+	def self.daily_average_sales
+		from = first.sale_date.strftime("%Y%m%d").to_i
+		to = last.sale_date.strftime("%Y%m%d").to_i
+		where(sale_date: first.sale_date..last.sale_date).pluck(:net_total_sales).sum / (from - to)
+	end
+
+	def self.invalid_sales?
+		all.where(sale_date: nil).size > 0 || all.empty?
+	end
 end

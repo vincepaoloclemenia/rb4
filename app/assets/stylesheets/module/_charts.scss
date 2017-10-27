@@ -1,3 +1,17 @@
 .chart-kicks{
     margin: 3em, 3em, 3em, 3em;
 }
+button#reset{ 
+    display: none;
+    height: 20px;
+    font-size: 9px;
+    width: 20px;
+    border-radius: 50%;
+    border: none;
+    background-color: #E75649;
+    padding: 0, 1em, 0, 0; 
+    color: #fff;
+    i#reset-btn {
+        margin-right: 50%;
+    }
+}

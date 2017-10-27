@@ -9,7 +9,7 @@ class ChartsController < ApplicationController
         else    
             @date_from = Date.today.at_beginning_of_week(start_day = :sunday).strftime
             @date_to = Date.today.at_end_of_week(end_day = :sunday).strftime
-            render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, library: { colors: [ branch.color ]}, data: branch.sales.group_by_day_of_week(:sale_date, default_value: "missing", range: @date_from..@date_to, format: "%a" ).maximum(:net_total_sales) } }        
+            render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day_of_week(:sale_date, default_value: "missing", range: @date_from..@date_to, format: "%a" ).maximum(:net_total_sales) } }        
         end
     end
 
@@ -24,7 +24,16 @@ class ChartsController < ApplicationController
         @from = Date.strptime(params[:from], '%m/%d/%Y')
         @to = Date.strptime(params[:to], '%m/%d/%Y')
         @label = "Sales from: #{@from.strftime('%b %d, %Y')} to #{@to.strftime('%b %d,%Y')}"
-        render json: { label: @label }
+        @title = "Average Sales Per Date Range (#{@from.strftime('%b %d, %Y')} - #{@to.strftime('%b %d,%Y')})"
+        render json: { label: @label, title: @title }
+    end
+
+    def get_average
+        @from = params[:from].present? ? Date.strptime(params[:from], '%m/%d/%Y') : Date.today.at_beginning_of_week(start_day = :sunday)
+        @to = params[:to].present? ? Date.strptime(params[:to], '%m/%d/%Y') : Date.today.at_end_of_week(end_day = :sunday)
+        @branches = current_brand.branches.includes(:sales)   
+        #@averages = current_brand.branches.map {|branch| [branch.id, branch.average_sales(@from, @to)] }.to_h        
+        #render json: { ave: @average }
     end
 
 end
