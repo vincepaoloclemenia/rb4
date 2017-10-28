@@ -58,7 +58,9 @@
         
         br
         
-        h4 Branches
+        .panel-heading.border Branches
+        .panel-body
+        
         .tab
             - @branches.map do |branch|
                 button.tablinks onclick="openBranch(event, '#{branch.name.remove("'")}', 'chart-toggle-#{branch.name.remove("'")}')" #{branch.name}
@@ -94,6 +96,17 @@ javascript:
         success: (data) => {
             $.each(data.branches, function(i, branch){
                 $('td#'+branch.reverse).text(branch.average)
+                $('td#'+branch.reverse).text(branch.average)
+                    if(branch.status === "Good"){
+                        $('td#'+branch.reverse).addClass("fine")
+                        $('td#'+branch.reverse).removeClass("fail");
+                    }else if(branch.status === "Unwell"){
+                        $('td#'+branch.reverse).addClass("fail");
+                        $('td#'+branch.reverse).removeClass("fine");
+                    }else{
+                        $('td#'+branch.reverse).removeClass("fine");
+                        $('td#'+branch.reverse).removeClass("fail");
+                    }
             })
         }
     })    
@@ -121,6 +134,16 @@ javascript:
                     success: (data) => {
                     $.each(data.branches, function(i, branch){
                             $('td#'+branch.reverse).text(branch.average)
+                            if(branch.status === "Good"){
+                                $('td#'+branch.reverse).addClass("fine");
+                                $('td#'+branch.reverse).removeClass("fail");
+                            }else if(branch.status === "Unwell"){
+                                $('td#'+branch.reverse).addClass("fail");
+                                $('td#'+branch.reverse).removeClass("fine");
+                            }else{
+                                $('td#'+branch.reverse).removeClass("fine");
+                                $('td#'+branch.reverse).removeClass("fail");
+                            }
                         })
                     }
                 })
@@ -155,6 +178,16 @@ javascript:
                 success: (data) => {
                    $.each(data.branches, function(i, branch){
                         $('td#'+branch.reverse).text(branch.average)
+                        if(branch.status === "Good"){
+                            $('td#'+branch.reverse).addClass("fine");
+                            $('td#'+branch.reverse).removeClass("fail");
+                        }else if(branch.status === "Unwell"){
+                            $('td#'+branch.reverse).addClass("fail");
+                            $('td#'+branch.reverse).removeClass("fine");
+                        }else{
+                            $('td#'+branch.reverse).removeClass("fine");
+                            $('td#'+branch.reverse).removeClass("fail");
+                        }
                     })
                 }
             })
@@ -163,8 +196,6 @@ javascript:
     });
 
     $('#reset').on('click',function(){
-        dfrom = $('#from').val();
-        dto = $('#to').val();
         new Chartkick.LineChart('sales-chart', '#{daily_sales_charts_path}', {})       
         $('#sales-label').text('#{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }')
         $('#average-per-date').text('Average Sales Per Date Range (Current Week)')
@@ -172,11 +203,21 @@ javascript:
         $('#to').val('');
         $('#from').val(''); 
         $.ajax({
-            url: '/charts/get_average?from='+dfrom+'&to='+dto,
+            url: '/charts/get_average',
             method: 'GET',
             success: (data) => {
             $.each(data.branches, function(i, branch){
                     $('td#'+branch.reverse).text(branch.average)
+                    if(branch.status === "Good"){
+                        $('td#'+branch.reverse).addClass("fine");
+                        $('td#'+branch.reverse).removeClass("fail");
+                    }else if(branch.status === "Unwell"){
+                        $('td#'+branch.reverse).addClass("fail");
+                        $('td#'+branch.reverse).removeClass("fine");
+                    }else{
+                        $('td#'+branch.reverse).removeClass("fine");
+                        $('td#'+branch.reverse).removeClass("fail");
+                    }
                 })
             }
         })

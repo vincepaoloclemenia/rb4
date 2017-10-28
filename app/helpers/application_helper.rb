@@ -212,6 +212,14 @@ module ApplicationHelper
     # return @title.to_s+''+@year.to_s+'-'+@month.to_s+'-'+@day_1.to_s+'-'+@day_2.to_s+'-'+@n.to_s
     return @title.to_s+'-'+@n.to_s
     
-  end
+	end
+	
+	def sales_status(branch, from, to)
+		if branch.sales.invalid_sales?
+			return "NA"
+		else
+			branch.daily_average_sales <= branch.average_sales(from, to) ? "Good" : "Unwell"
+		end
+	end
 
 end

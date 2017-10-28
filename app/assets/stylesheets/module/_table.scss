@@ -13,6 +13,10 @@
             text-decoration: none;
         }
     
+    }
+    td.branch{
+        &.fine{ color: #8DB600 }
+        &.fail{ color: tomato }
     } 
 }
 

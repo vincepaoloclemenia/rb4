@@ -30,6 +30,10 @@ class BranchesController < ApplicationController
 		redirect_to brand_path(id: @brand.id, brand_pane: true)
 	end
 
+	def show
+		
+	end
+
 	def destroy
 		begin
 			@branch.destroy
