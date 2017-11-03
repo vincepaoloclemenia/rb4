@@ -132,11 +132,11 @@ select {
 }
 
 a.helper-link {
-    color: #EA6153 !important;
+    color: #1D75A1 !important;
     text-decoration: underline;
 }
 a.helper-link:hover {
-    color: #d62c1a !important;
+    color: #00aced !important;
     text-decoration: underline;
 }
 
@@ -16693,17 +16693,23 @@ a.bg-danger-light:hover {
 }
 
 .bg-white {
-    color: #616161;
-    background-color: #fff
+    color: #fff;
+    background-color: transparent;
 }
-.bg-login {
-    background: url('/img/landing/bg-rb-colored.png') no-repeat;
-    background-size: cover;
 
+.bg-login {
+    background: linear-gradient( /* somewhat transparent film on top of the BG to make it look darker. */
+    rgba(0,0,0, 0.7),
+    rgba(0, 0, 0, 0.52)
+    ), url("/img/landing/bg-restobot.png") no-repeat center center fixed; /* only display once, center horizontal and vertical, dont let scroll change position. */
+    -webkit-background-size: cover;
+    -moz-background-size: cover; /* cover the whole html element. */
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 a.bg-white:hover {
-    background-color: #e6e6e6
+    background-color: #fff
 }
 
 .bg-dark {
