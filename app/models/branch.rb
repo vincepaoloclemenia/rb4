@@ -66,8 +66,8 @@ class Branch < ActiveRecord::Base
   def daily_average_sales
     unless valid_branch?
       @sales = sales.all.order(sale_date: :asc)
-      num_of_days = (Date.today - @sales.first.sale_date).to_i      
-      sales.all.where(sale_date: @sales.first.sale_date..@sales.last.sale_date).pluck(:net_total_sales).sum / num_of_days
+      num_of_days = (Date.today - created_at.to_date).to_i      
+      sales.all.where(sale_date: created_at.to_date..Date.today).pluck(:net_total_sales).sum / num_of_days
     else
       return "Incomplete Sales Information"
     end
@@ -77,17 +77,13 @@ class Branch < ActiveRecord::Base
     unless valid_branch?
       num_of_days = (date_to - date_from).to_i
       sales.where(sale_date: date_from..date_to).pluck(:net_total_sales).sum / num_of_days
-    else
-      return "Unable to calculate"
+    else      
+      return"Unable to calculate"
     end
 	end
 
   def valid_branch?
     sales.invalid_sales?
-  end
-
-  def to_params
-    name
   end
 
 end

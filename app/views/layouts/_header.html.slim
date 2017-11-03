@@ -1,24 +1,14 @@
 header.header.navbar
 	.brand.visible-xs
-		.toggle-offscreen
+		.toggle-offscreen 
 			a.hamburger-icon.visible-xs data-toggle="offscreen" data-move="ltr"
-				i.icon-menu.menu-icon
+				i.icon-menu.menu-icon 
+	
 
-	ul.nav.navbar-nav.hidden-xs
-		li
-			p.navbar-text
-				- if ["index", "price_movement_report", "invoice_entry", "invoice_entry_report","man_hours","purchase_listings","purchase_summary","item_purchase_detail"].include?(params[:action])	&& ["reports", "purchases","inventories","units","sales", "item_cost_analysis_reports"].include?(params[:controller])
-					button.btn.btn-default.btn-round.collapsed data-toggle="collapse" data-target="#show-search" data-no-turbolinks="true"
-						span.show-ctrls
-							i.icon-glyph-48.show-icon.mr5
-							| Show Search
-						span.hide-ctrls
-							i.icon-glyph-202.show-icon.mr5
-							| Hide Search
-
-	ul.nav.navbar-nav.navbar-right.hidden-xs
+	
+	ul.nav.navbar-nav.navbar-right
 		- if wizard_done?
-			li
+			li.user-menu 
 				a href="javascript:;" data-toggle="dropdown"
 					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
 				- if current_user.role.role_level == 'client'
@@ -29,15 +19,15 @@ header.header.navbar
 									= link_to "#{brand.name}<i class='icon-glyph-26 pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
 								- else
 									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
-		li
-			a href="javascript:;" data-toggle="dropdown"
+		li.user-menu 
+			a href="javascript:;" data-toggle="dropdown" 
 				/img.header-avatar.img-circle src="/img/avatar-mummy.png"
 				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle"
 			ul.dropdown-menu
-				- if wizard_done?
-					li
-						= link_to "Manage this account", account_path(username: current_user.username)
+
 				li
+					= link_to "Manage this account", account_path(username: current_user.username)
+				li.dropdown-submenu
 					= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
 
 javascript:
@@ -57,11 +47,14 @@ javascript:
       }, delay);
     	})
     	.on('mousemove', function (inEvent) {
-          if(Math.abs(theLastPosition.x - inEvent.ScreenX) > 4 ||
-             Math.abs(theLastPosition.y - inEvent.ScreenY) > 4)
+          if(Math.abs(theLastPosition.x - inEvent.ScreenX) > 100 ||
+             Math.abs(theLastPosition.y - inEvent.ScreenY) > 100 )
           {
-              theLastPosition.x = inEvent.ScreenX;
+              
+							theLastPosition.x = inEvent.ScreenX;
+							console.log(theLastPosition.x)
               theLastPosition.y = inEvent.ScreenY;
+							console.log(theLastPosition.y)
               return;
           }
 
@@ -78,4 +71,4 @@ javascript:
         theElement.removeClass('open');
       }, delay);
     	});
-  })(jQuery, window, 200); // 200 is the delay in milliseconds
+  })(jQuery, window, 100); // 200 is the delay in milliseconds

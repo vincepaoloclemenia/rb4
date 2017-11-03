@@ -1,9 +1,21 @@
-.loader {
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 11px solid #E75649; /* Blue */
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    animation: spin 1.5s linear infinite;
+.centered { 
+    margin-left: 48%;
+    display: none;
+    z-index: 9999;
+    &.show{ 
+        display: block;
+        i.fa-spinner{
+            color: #1D75A1;
+            
+        } 
+    }
+    
 }
+
+#sales-chart{
+    &.blurry{
+        opacity:0.5;
+    }
+}
+
 

@@ -11,11 +11,12 @@ div.tab, div.toggle {
         padding: 14px 16px;
         transition: 0.3s;
         &:hover{
-            background-color: lighten(#E75649, 20%);
+            background-color: lighten(#10374D, 20%);
+            color: white;
             transition: 0.5s;
         }
         &.active{
-            background-color: #E75649;
+            background-color: #10374D;
             color: white;
         }
     }

@@ -1,21 +1,44 @@
-li.active-link{
-    background-color: #444;
-    a { color: #fff;
-        &:hover{
-            background-color: transparent;
-            color: #fff;
+.nav{
+    background-color: #1D75A1;
+
+    li a { color: #fff;}
+
+    ul.sub-menu{
+
+        li {
+
+            a {
+                color: #1D75A1;
+                &:hover{ color: #10374D }
+            }
+
+            &.active-link{
+                background-color: #fff;
+                a { color: #10374D }
+            }
         }
     }
-    &:hover{
-        background-color: #E75649;
-        transition: 0.5s;
+
+    li.user-menu{
+        background-color: #10374D;
+        li.dropdown-submenu {
+            &:hover{
+                background-color: #1D75A1;
+                color: #fff;
+            }
+        }
+        a { color: #10374D }
     }
+
+    
+
+    li.menu-accordion {
+        color: #1D75A1;
+        &.open{
+            li {
+                animation: navEffect 1s;
+            }
+        }    
+    }   
 }
 
-li.menu-accordion {
-    &.open{
-        li {
-            animation: navEffect 1s;
-        }
-    }    
-}

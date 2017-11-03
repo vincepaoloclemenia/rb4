@@ -29,17 +29,19 @@
             /= react_component 'SalesSearch'
             = form_tag sales_path, method: :get do
                 .col-xs-12.col-lg-6       
-                    = text_field_tag :date_from, nil, id: 'from', placeholder: "Select date"
+                    = text_field_tag :date_from, nil, id: 'from', placeholder: "From"
                 .col-xs-12.col-lg-6                    
-                    = text_field_tag :date_to, nil, id: 'to', placeholder: "Select date"
+                    = text_field_tag :date_to, nil, id: 'to', placeholder: "To"
 
         h4 Sales for all Branches
         h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
         h4 id='average-sales'
         /= react_component 'SalesSearch'
         /div id="chart"
-        = line_chart daily_sales_charts_path, id: 'sales-chart'
-        
+        = line_chart daily_sales_charts_path, id: 'sales-chart', min: 100, max: 100000
+            .centered
+                i.fa.fa-spinner.fa-spin.fa-3x.fa-fw id="fuck"
+                 
         br
 
             .no-more-tables
@@ -58,8 +60,9 @@
         
         br
         
-        .panel-heading.border Branches
-        .panel-body
+.panel        
+    .panel-heading.border Branches
+    .panel-body
         
         .tab
             - @branches.map do |branch|
@@ -78,7 +81,7 @@
                     .togglecontent id="chart-view-#{branch.name.remove("'")}"
                         h5 Chart View for #{branch.name}'s Sales
                         h5 #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }
-                        = area_chart sales_per_branch_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :sunday).strftime), label: "Total Sales"
+                        = area_chart sales_per_branch_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 100000, colors: [branch.color], label: "Total Sales"
 
                 .row
                     .togglecontent id="table-view-#{branch.name.remove("'")}"
@@ -89,140 +92,6 @@
 javascript:
     var tablinks = document.getElementsByClassName("tablinks");
     tablinks[0].click();
-    
-    $.ajax({
-        url: '/charts/get_average',
-        method: 'GET',
-        success: (data) => {
-            $.each(data.branches, function(i, branch){
-                $('td#'+branch.reverse).text(branch.average)
-                $('td#'+branch.reverse).text(branch.average)
-                    if(branch.status === "Good"){
-                        $('td#'+branch.reverse).addClass("fine")
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }else if(branch.status === "Unwell"){
-                        $('td#'+branch.reverse).addClass("fail");
-                        $('td#'+branch.reverse).removeClass("fine");
-                    }else{
-                        $('td#'+branch.reverse).removeClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }
-            })
-        }
-    })    
-    
-    $('#from').datepicker({}).on('change', function(){
-        if($(this).val() === '' || $(this).val() > $('#to').val())
-            {   $('#to').val('')    }
-        else {
-                dfrom = $(this).val();
-                dto = $('#to').val();           
-                new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {})
-                $.ajax({
-                    url: '/charts/get_dates?from='+dfrom+'&to='+dto,
-                    method: 'GET',
-                    success: (data) => {
-                        $('#sales-label').text(data.label);
-                        $('#average-per-date').text(data.title);                     
-                        $('#reset').show(); 
-                    }
-                });
-
-                $.ajax({
-                    url: '/charts/get_average?from='+dfrom+'&to='+dto,
-                    method: 'GET',
-                    success: (data) => {
-                    $.each(data.branches, function(i, branch){
-                            $('td#'+branch.reverse).text(branch.average)
-                            if(branch.status === "Good"){
-                                $('td#'+branch.reverse).addClass("fine");
-                                $('td#'+branch.reverse).removeClass("fail");
-                            }else if(branch.status === "Unwell"){
-                                $('td#'+branch.reverse).addClass("fail");
-                                $('td#'+branch.reverse).removeClass("fine");
-                            }else{
-                                $('td#'+branch.reverse).removeClass("fine");
-                                $('td#'+branch.reverse).removeClass("fail");
-                            }
-                        })
-                    }
-                })
-        }
-    });
-
-    $('#to').datepicker({}).on('change',function(){
-
-        if($(this).val() === '' || $('#from').val() === '' || $(this).val() < $('#from').val())
-            { 
-                alert("Please make sure your 'From' field has value and less than the other.")
-                $(this).val('');
-            }
-        else {    
-            dfrom = $('#from').val();
-            dto = $(this).val();
-            name = $('.branch').text()           
-            new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {})                                                       
-            $.ajax({
-                url: '/charts/get_dates?from='+dfrom+'&to='+dto,
-                method: 'GET',
-                success: (data) => {
-                     $('#sales-label').text(data.label);
-                     $('#average-per-date').text(data.title);                     
-                     $('#reset').show(); 
-                }
-            });
-            
-            $.ajax({
-                url: '/charts/get_average?from='+dfrom+'&to='+dto,
-                method: 'GET',
-                success: (data) => {
-                   $.each(data.branches, function(i, branch){
-                        $('td#'+branch.reverse).text(branch.average)
-                        if(branch.status === "Good"){
-                            $('td#'+branch.reverse).addClass("fine");
-                            $('td#'+branch.reverse).removeClass("fail");
-                        }else if(branch.status === "Unwell"){
-                            $('td#'+branch.reverse).addClass("fail");
-                            $('td#'+branch.reverse).removeClass("fine");
-                        }else{
-                            $('td#'+branch.reverse).removeClass("fine");
-                            $('td#'+branch.reverse).removeClass("fail");
-                        }
-                    })
-                }
-            })
-        }        
-           
-    });
-
-    $('#reset').on('click',function(){
-        new Chartkick.LineChart('sales-chart', '#{daily_sales_charts_path}', {})       
-        $('#sales-label').text('#{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }')
-        $('#average-per-date').text('Average Sales Per Date Range (Current Week)')
-        $('#reset').hide();
-        $('#to').val('');
-        $('#from').val(''); 
-        $.ajax({
-            url: '/charts/get_average',
-            method: 'GET',
-            success: (data) => {
-            $.each(data.branches, function(i, branch){
-                    $('td#'+branch.reverse).text(branch.average)
-                    if(branch.status === "Good"){
-                        $('td#'+branch.reverse).addClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }else if(branch.status === "Unwell"){
-                        $('td#'+branch.reverse).addClass("fail");
-                        $('td#'+branch.reverse).removeClass("fine");
-                    }else{
-                        $('td#'+branch.reverse).removeClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }
-                })
-            }
-        })
-    })
-
     
 
 

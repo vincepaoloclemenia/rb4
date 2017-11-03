@@ -215,8 +215,8 @@ module ApplicationHelper
 	end
 	
 	def sales_status(branch, from, to)
-		if branch.sales.invalid_sales?
-			return "NA"
+		if branch.sales.invalid_sales? || branch.daily_average_sales == 0
+			return "NA"				
 		else
 			branch.daily_average_sales <= branch.average_sales(from, to) ? "Good" : "Unwell"
 		end

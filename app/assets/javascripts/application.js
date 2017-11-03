@@ -21,9 +21,8 @@
 //= require components
 //= require Chart.bundle
 //= require chartkick
-//= require sales
 //= require bootstrap-datepicker
-Turbolinks.enableProgressBar();
+//= require module
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

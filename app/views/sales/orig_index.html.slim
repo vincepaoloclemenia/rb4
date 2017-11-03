@@ -89,3 +89,14 @@
       /       a href="javascript:;"  7
       /     li
       /       a href="javascript:;"  →
+      /li
+              a href="javascript:;" data-toggle="dropdown"
+                = image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
+              - if current_user.role.role_level == 'client'
+                ul.dropdown-menu
+                  - current_client.brands.each do |brand|
+                    li
+                      - if current_brand.name == brand.name
+                        = link_to "#{brand.name}<i class='icon-glyph-26 pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
+                      - else
+                        = link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
