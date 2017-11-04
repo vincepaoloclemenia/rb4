@@ -5,15 +5,16 @@
       .panel-heading.border.pb45
         .pull-left.mt5 Sales
         .panel-controls.no-upp.nave-tabs
-          ul.nav.nav-tabs.btn-group data-toggle="buttons"
-            label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
-              a data-toggle="tab" href="#brand-info"  Brand Total
-            label.btn.btn-primary class="#{brand_pane_active?('branches')}"
-              a data-toggle="tab" href="#branches-sales-list"  Branches Total
+          .tab
+            button.tablinks onclick="openTab(event, 'today')" Today
+            button.tablinks onclick="openTab(event, 'week')" Week
+            button.tablinks onclick="openTab(event, 'month')" Month
       .panel-body.tab-content
-        #brand-info.tab-pane class="#{brand_pane_active?('info')}"
-          = high_chart("branch_sales_stat", @brand_sales)
-        #branches-sales-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
+        .tabcontent id="today"
+          = bar_chart get_dashboard_today_charts_path, id: "today-sales", min: 1, max: 100000
+        .tabcontent id="week"
+          = high_chart("brand_sales_stat", @branches_sales)
+        .tabcontent id="month"
           = high_chart("brand_sales_stat", @branches_sales)
 
   .col-xs-12.col-md-12.col-lg-4
@@ -80,3 +81,7 @@
 
   .col-xs-12.col-md-12.col-md-6
     = render "price_movement"
+
+javascript:
+  var tablinks = document.getElementsByClassName("tablinks");
+  tablinks[0].click();

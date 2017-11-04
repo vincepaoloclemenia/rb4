@@ -27,7 +27,7 @@
 						tr
 							td data-title="Sales by Category" = sbce.category.name
 							td data-title="Amount" = to_peso(sbce.amount)
-							td data-title="Percentage" = number_to_percentage(sbce.amount.to_f / @sale.net_sales.to_f * 100.0, precision: 2)
+							td data-title="Percentage" = number_to_percentage(@sale.percentage_per_category(sbce), precision: 2)
 					tr
 						td data-title="Sales by Category" Net Sales
 						td data-title="Amount" = to_peso(@sale.net_sales)
@@ -35,18 +35,15 @@
 					tr
 						td data-title="Sales by Category" VAT
 						td data-title="Amount" = to_peso(@sale.vat)
-						- vat_percentage = ((@sale.vat / (@sale.net_sales + @sale.vat + @sale.service_charge)) * 100.0)
-						td data-title="Percentage" = number_to_percentage(vat_percentage, precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.percentage_value_as_per("vat"), precision: 2)
 					tr
 						td data-title="Sales by Category" Service Charge
 						td data-title="Amount" = to_peso(@sale.service_charge)
-						- service_charge_percentage = ((@sale.service_charge / (@sale.net_sales + @sale.vat + @sale.service_charge)) * 100.0)
-						td data-title="Percentage" = number_to_percentage(service_charge_percentage, precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.percentage_value_as_per("service_charge"), precision: 2)
 					tr.bg-total
 						td.label-total Total Revenues
 						td.label-total-num data-title="Amount" = to_peso((@sale.net_sales + @sale.vat + @sale.service_charge))
-						- total_revenues = vat_percentage + service_charge_percentage
-						td.label-total-num data-title="Percentage" = number_to_percentage(total_revenues, precision: 2)
+						td.label-total-num data-title="Percentage" = number_to_percentage(@sale.percentage_value_as_per("revenues"), precision: 2)
 
 - if @sale.sale_by_settlement_entries.any?
 .panel

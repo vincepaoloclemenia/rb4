@@ -1,24 +1,5 @@
 var SalesChart = {
-    init: function(){
-        $.ajax({
-        url: '/charts/get_average',
-        method: 'GET',
-        success: (data) => {
-            $.each(data.branches, function(i, branch){
-                $('td#'+branch.reverse).text(branch.average)
-                    if(branch.status === "Good"){
-                        $('td#'+branch.reverse).addClass("fine")
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }else if(branch.status === "Unwell"){
-                        $('td#'+branch.reverse).addClass("fail");
-                        $('td#'+branch.reverse).removeClass("fine");
-                    }else{
-                        $('td#'+branch.reverse).removeClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }
-            })
-        }
-    })    
+    init: function(){ 
 
     $('#from').datepicker({}).on('change', function(){
         if($(this).val() === '' || $(this).val() > $('#to').val())
@@ -27,7 +8,7 @@ var SalesChart = {
                 dfrom = $(this).val();
                 dto = $('#to').val();
                 $('#sales-chart').addClass('blurry');           
-                new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {})
+                new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {"colors":["#DC143C","#FF4500","#60355B","#DC143C","#FF8C00"],"min":100,"max":100000})
                 $.ajax({
                     url: '/charts/get_dates?from='+dfrom+'&to='+dto,
                     method: 'GET',
@@ -74,7 +55,7 @@ var SalesChart = {
             name = $('.branch').text()
             $('.centered').addClass('show');
             $('#sales-chart').addClass('blurry');           
-            new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {})                                                       
+            new Chartkick.LineChart('sales-chart', '/charts/daily_sales?from='+dfrom+'&to='+dto, {"colors":["#DC143C","#FF4500","#60355B","#DC143C","#FF8C00"],"min":100,"max":100000})                                                       
             $.ajax({
                 url: '/charts/get_dates?from='+dfrom+'&to='+dto,
                 method: 'GET',
@@ -111,7 +92,7 @@ var SalesChart = {
     });
 
     $('#reset').on('click',function(){
-        new Chartkick.LineChart('sales-chart', '/charts/daily_sales', {})               
+        new Chartkick.LineChart("sales-chart", "/charts/daily_sales", {"colors":["#DC143C","#FF4500","#60355B","#DC143C","#FF8C00"],"min":100,"max":100000});               
         $('#average-per-date').text('Average Sales Per Date Range (Current Week)')
         $('#reset').hide();
         $('#to').val('');

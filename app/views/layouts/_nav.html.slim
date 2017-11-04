@@ -43,7 +43,7 @@
 				ul.sub-menu
 					- if view_access_control("sales","show")
 						li class = '#{what_controller?('sales', 'index')}'
-							= link_to "Daily Sales Reports", sales_path
+							= link_to "Daily & Weekly Sales Reports", sales_path
 
 			/ purchasing and item ordering pages				
 			li.menu-accordion class="{is_menu_open?('purchasing')}"

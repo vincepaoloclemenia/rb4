@@ -6,5 +6,9 @@ class Api::SalesController < ApplicationController
         #@sales = current_brand.sales.paginate(page: params[:page], per_page: 1)
     end
 
+    def get_sales_averages
+        current_brand.sales
+    end
+
         
 end

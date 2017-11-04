@@ -11,6 +11,7 @@ class SalesController < ApplicationController
 				params[:q][:sale_date_eq] = Date.today.to_s
 			end
 		end
+		@colours = current_brand.branches.all.map { |b| b.color }
 		@q = current_brand.sales.ransack(params[:q])
 		#@sales = @q.result.paginate(page: params[:page], per_page: per_page)
 		@branches = current_brand.branches.includes(:sales)
@@ -19,8 +20,6 @@ class SalesController < ApplicationController
 
 	def show
 		@sale = current_brand.sales.find(params[:id])
-		@categories = current_brand.categories.main.saleable
-		@settlements = current_client.settlements.saleable
 	end
 
 	def new

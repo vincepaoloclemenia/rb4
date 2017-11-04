@@ -38,7 +38,7 @@
         h4 id='average-sales'
         /= react_component 'SalesSearch'
         /div id="chart"
-        = line_chart daily_sales_charts_path, id: 'sales-chart', min: 100, max: 100000
+        = line_chart daily_sales_charts_path, id: 'sales-chart', colors: @colours, min: 100, max: 100000
             .centered
                 i.fa.fa-spinner.fa-spin.fa-3x.fa-fw id="fuck"
                  
@@ -81,7 +81,10 @@
                     .togglecontent id="chart-view-#{branch.name.remove("'")}"
                         h5 Chart View for #{branch.name}'s Sales
                         h5 #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }
-                        = area_chart sales_per_branch_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 100000, colors: [branch.color], label: "Total Sales"
+                        = line_chart sales_per_branch_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 100000, colors: [branch.color], label: "Total Sales"
+                        br
+                        h5 Customer Count 
+                        = area_chart customer_count_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 1000, colors: [branch.color], label: "Customer Count"
 
                 .row
                     .togglecontent id="table-view-#{branch.name.remove("'")}"
@@ -92,6 +95,25 @@
 javascript:
     var tablinks = document.getElementsByClassName("tablinks");
     tablinks[0].click();
+    $.ajax({
+        url: '/charts/get_average',
+        method: 'GET',
+        success: (data) => {
+            $.each(data.branches, function(i, branch){
+                $('td#'+branch.reverse).text(branch.average)
+                    if(branch.status === "Good"){
+                        $('td#'+branch.reverse).addClass("fine")
+                        $('td#'+branch.reverse).removeClass("fail");
+                    }else if(branch.status === "Unwell"){
+                        $('td#'+branch.reverse).addClass("fail");
+                        $('td#'+branch.reverse).removeClass("fine");
+                    }else{
+                        $('td#'+branch.reverse).removeClass("fine");
+                        $('td#'+branch.reverse).removeClass("fail");
+                    }
+            })
+        }
+    })   
     
 
 

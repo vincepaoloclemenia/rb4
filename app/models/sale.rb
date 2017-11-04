@@ -41,6 +41,22 @@ class Sale < ActiveRecord::Base
 		end
 	end
 
+	def percentage_per_category(category)
+		category.amount.to_f / net_sales.to_f * 100.0
+	end
+
+	def percentage_value_as_per(request)		
+		percentage = if request == "vat"
+			((vat / (net_sales + vat + service_charge)) * 100.0)
+		elsif request == "service_charge"
+			((service_charge / (net_sales + vat + service_charge)) * 100.0)
+		elsif request == "revenues"
+			((vat / (net_sales + vat + service_charge)) * 100.0) + ((service_charge / (net_sales + vat + service_charge)) * 100.0)
+		end
+
+		return percentage		
+	end
+
 	def sale_per_person_average(count)
 		net_sales / count unless count.nil?
 	end
