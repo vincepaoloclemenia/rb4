@@ -40,6 +40,10 @@ class ChartsController < ApplicationController
         render json: current_brand.sales.group_by_day(:sale_date, format: "%a", range: @from..@to).sum(:net_total_sales)
     end
 
+    def yearly_sales
+        render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_month_of_year(:sale_date, default_value: "missing", format: "%b" ).sum(:net_total_sales) }}
+    end
+    
     private
         def set_dates
             @from = params[:from].present? ? Date.strptime(params[:from], '%m/%d/%Y') : Date.today.at_beginning_of_week(start_day = :sunday) 

@@ -45,7 +45,7 @@ class Sale < ActiveRecord::Base
 		category.amount.to_f / net_sales.to_f * 100.0
 	end
 
-	def percentage_value_as_per(request)		
+	def category_percentage_as_per(request)		
 		percentage = if request == "vat"
 			((vat / (net_sales + vat + service_charge)) * 100.0)
 		elsif request == "service_charge"
@@ -53,7 +53,19 @@ class Sale < ActiveRecord::Base
 		elsif request == "revenues"
 			((vat / (net_sales + vat + service_charge)) * 100.0) + ((service_charge / (net_sales + vat + service_charge)) * 100.0)
 		end
+		return percentage		
+	end
 
+	def settlement_percentage_as_per(request)		
+		percentage = if request == "credit_card_sales"
+			credit_card_sales.to_f / total_sales_by_settlement_type.to_f * 100.0 
+		elsif request == "cash_in_drawer"
+			cash_in_drawer.to_f / total_sales_by_settlement_type.to_f * 100.0
+		elsif request == "gc_redeemed"
+			gc_redeemed.to_f / total_sales_by_settlement_type.to_f * 100.0
+		elsif request == "delivery_sales"
+			delivery_sales.to_f / total_sales_by_settlement_type.to_f * 100.0
+		end
 		return percentage		
 	end
 

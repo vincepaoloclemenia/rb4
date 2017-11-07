@@ -1,8 +1,33 @@
 - content_for :title, "Restobot | Dashboard"
 .row
+  .col-xs-12.col-md-12.col-lg-4
+    .panel.green
+      .panel-heading.mt5.border
+        .pull-left.white-border Sales
+        br
+        = react_component 'SalesDashboard'
+        /= line_chart yearly_sales_charts_path, library: { fontColor: '#fff' }, id: "yearly-sales", width: "250px", height: "250px", colors: @colours
+          
+
+        
+  .col-xs-12.col-md-12.col-lg-4
+    .panel.red
+      .panel-heading.mt5.border
+        .pull-left.white-border Revenues
+        br
+        = react_component 'RevenuesDashboard'
+
+  .col-xs-12.col-md-12.col-lg-4
+    .panel.blue
+      .panel-heading.mt5.border
+        .pull-left.white-border Customer Count
+        br
+        = react_component 'CustomerCountDashboard'
+
+.row
   .col-xs-12.col-md-12.col-lg-8
     .panel
-      .panel-heading.border.pb45
+      .panel-heading.border
         .pull-left.mt5 Sales
         .panel-controls.no-upp.nave-tabs
           .tab
@@ -26,12 +51,12 @@
 
     .panel
       .panel-heading.border.pb45
-        .pull-left Customer Count
+        .pull-left Recent Activities
         .panel-controls.no-up
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
             i.icon-glyph-98
       .panel-body
-        = high_chart("customer_count", @update_customer_count)
+        
 
   .col-xs-12
     .panel

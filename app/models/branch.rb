@@ -75,7 +75,7 @@ class Branch < ActiveRecord::Base
 
   def average_sales(date_from, date_to)
     unless valid_branch?
-      num_of_days = (date_to - date_from).to_i
+      num_of_days = sales.where(sale_date: date_from..date_to).exists? ? (date_to - date_from).to_i : 1
       sales.where(sale_date: date_from..date_to).pluck(:net_total_sales).sum / num_of_days
     else      
       return"Unable to calculate"

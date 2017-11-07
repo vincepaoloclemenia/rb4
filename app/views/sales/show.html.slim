@@ -35,15 +35,15 @@
 					tr
 						td data-title="Sales by Category" VAT
 						td data-title="Amount" = to_peso(@sale.vat)
-						td data-title="Percentage" = number_to_percentage(@sale.percentage_value_as_per("vat"), precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("vat"), precision: 2)
 					tr
 						td data-title="Sales by Category" Service Charge
 						td data-title="Amount" = to_peso(@sale.service_charge)
-						td data-title="Percentage" = number_to_percentage(@sale.percentage_value_as_per("service_charge"), precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("service_charge"), precision: 2)
 					tr.bg-total
 						td.label-total Total Revenues
 						td.label-total-num data-title="Amount" = to_peso((@sale.net_sales + @sale.vat + @sale.service_charge))
-						td.label-total-num data-title="Percentage" = number_to_percentage(@sale.percentage_value_as_per("revenues"), precision: 2)
+						td.label-total-num data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("revenues"), precision: 2)
 
 - if @sale.sale_by_settlement_entries.any?
 .panel
@@ -65,19 +65,19 @@
 					tr
 						td data-title="Type" Credit Card Sales
 						td data-title="Amount" = to_peso(@sale.credit_card_sales)
-						td data-title="Percentage" = number_to_percentage(@sale.credit_card_sales.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.settlement_percentage_as_per("credit_card_sales"), precision: 2)
 					tr
 						td data-title="Sales by Category"  Cash in Drawer
 						td data-title="Amount" = to_peso(@sale.cash_in_drawer)
-						td data-title="Percentage" = number_to_percentage(@sale.cash_in_drawer.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.settlement_percentage_as_per("cash_in_drawer"), precision: 2)
 					tr
 						td data-title="Sales by Category" GC Redeemed
 						td data-title="Amount" = to_peso(@sale.gc_redeemed)
-						td data-title="Percentage" = number_to_percentage(@sale.gc_redeemed.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.settlement_percentage_as_per("gc_redeemed"), precision: 2)
 					tr
 						td data-title="Sales by Category" Delivery Sales
 						td data-title="Amount" = to_peso(@sale.delivery_sales)
-						td data-title="Percentage" = number_to_percentage(@sale.delivery_sales.to_f / @sale.total_sales_by_settlement_type.to_f * 100.0, precision: 2)
+						td data-title="Percentage" = number_to_percentage(@sale.settlement_percentage_as_per("delivery_sales"), precision: 2)
 					tr.bg-total
 						td.label-total Total Revenues
 						td.label-total-num data-title="Amount" = to_peso(@sale.total_sales_by_settlement_type)

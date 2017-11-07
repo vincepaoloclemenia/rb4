@@ -3,7 +3,7 @@ class EmployeesController < ApplicationController
   before_action :set_employee, only: [:edit, :destroy, :update]
 
   def index
-    @employees = Employee.all.paginate(page: params[:page], per_page: per_page)
+    @employees = current_client.employees.all.paginate(page: params[:page], per_page: per_page)
     @employee = Employee.new
   end
 

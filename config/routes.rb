@@ -99,7 +99,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :sales, only: :index do
-      get :searched_sales, on: :collection
+      get :get_sales_averages, on: :collection
+      get :get_customer_count, on: :collection
+      get :get_average_revenues, on: :collection
     end
   end
   
@@ -110,5 +112,6 @@ Rails.application.routes.draw do
     get :get_average, on: :collection
     get :get_dashboard_today, on: :collection
     get :customer_count, on: :collection
+    get :yearly_sales, on: :collection    
   end
 end

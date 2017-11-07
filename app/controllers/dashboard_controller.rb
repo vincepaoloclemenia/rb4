@@ -6,6 +6,7 @@ class DashboardController < ApplicationController
 	def index
 		@range_date = (Date.today - 7)..(Date.today - 1)
 		@formatted_dates = @range_date.map{|d| d.strftime("%b %d, %Y | %a")}
+		@colours = current_brand.branches.all.map { |b| b.color }
 		@branches = current_brand.branches.order(:id)		
 		#Tables/Modules
 		@branches_sales = branches_sales
