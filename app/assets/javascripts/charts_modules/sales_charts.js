@@ -12,7 +12,7 @@ var SalesChart = {
                 $.ajax({
                     url: '/charts/get_dates?from='+dfrom+'&to='+dto,
                     method: 'GET',
-                    success: (data) => {
+                    success: function(data) {
                         $('#sales-label').text(data.label);
                         $('#average-per-date').text(data.title);                     
                         $('#reset').show(); 
@@ -22,7 +22,7 @@ var SalesChart = {
                 $.ajax({
                     url: '/charts/get_average?from='+dfrom+'&to='+dto,
                     method: 'GET',
-                    success: (data) => {
+                    success: function(data) {
                     $('#sales-chart').removeClass('blurry');
                     $.each(data.branches, function(i, branch){
                             $('td#'+branch.reverse).text(branch.average)
@@ -59,7 +59,7 @@ var SalesChart = {
             $.ajax({
                 url: '/charts/get_dates?from='+dfrom+'&to='+dto,
                 method: 'GET',
-                success: (data) => {
+                success: function(data) {
                     $('#sales-label').text(data.label);
                     $('#average-per-date').text(data.title);                     
                     $('#reset').show(); 
@@ -69,7 +69,7 @@ var SalesChart = {
             $.ajax({
                 url: '/charts/get_average?from='+dfrom+'&to='+dto,
                 method: 'GET',
-                success: (data) => {
+                success: function(data) {
                 $.each(data.branches, function(i, branch){
                     $('.centered').removeClass('show');
                     $('#sales-chart').removeClass('blurry');   
@@ -101,7 +101,7 @@ var SalesChart = {
         $.ajax({
             url: '/charts/get_average',
             method: 'GET',
-            success: (data) => {
+            success: function(data) {
             $.each(data.branches, function(i, branch){
                     $('td#'+branch.reverse).text(branch.average)
                     if(branch.status === "Good"){
@@ -120,7 +120,7 @@ var SalesChart = {
         $.ajax({
             url: 'charts/get_dates',
             method: 'GET',
-            success: (data) => {
+            success: function(data) {
                 $('#sales-label').text(data.title)
                 $('#sales-chart').removeClass('blurry');
             }
