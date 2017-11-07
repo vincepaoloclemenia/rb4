@@ -7,8 +7,6 @@
         br
         = react_component 'SalesDashboard'
         /= line_chart yearly_sales_charts_path, library: { fontColor: '#fff' }, id: "yearly-sales", width: "250px", height: "250px", colors: @colours
-          
-
         
   .col-xs-12.col-md-12.col-lg-4
     .panel.red
@@ -27,8 +25,8 @@
 .row
   .col-xs-12.col-md-12.col-lg-8
     .panel
-      .panel-heading.border
-        .pull-left.mt5 Sales
+      .panel-heading.border.pb45
+        .pull-left Sales
         .panel-controls.no-upp.nave-tabs
           .tab
             button.tablinks onclick="openTab(event, 'today')" Today
