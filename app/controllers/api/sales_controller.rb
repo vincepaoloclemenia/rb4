@@ -7,14 +7,15 @@ class Api::SalesController < ApplicationController
     end
 
     def get_sales_averages
-        @last_week_ave_sales =  current_brand.get_sales_average                      
-        @average_sales = current_brand.last_week_sales     
+        @last_week_ave_sales =  current_brand.last_week_sales                      
+        @average_sales = current_brand.get_sales_average     
     end
 
     def get_customer_count
         @customer_count = current_brand.customer_count_average
         @last_week_count = current_brand.last_week_customer_count
-        render json: { customer_count: @customer_count, average_count: @last_week_count }
+        @percentage = @customer_count == 0 && @last_week_count == 0 ? 0 : (@last_week_count - @customer_count) * 100 / @customer_count
+        render json: { customer_count: @customer_count, average_count: @last_week_count, percentage: @percentage }
     end
 
     def get_average_revenues

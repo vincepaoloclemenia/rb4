@@ -2,7 +2,7 @@ class SalesDashboard extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            averageSales: 0, fetching: false, lastWeekSales: 0
+            averageSales: 0, fetching: false, lastWeekSales: 0, salesPercentage: 0
         }
     }
 
@@ -15,6 +15,7 @@ class SalesDashboard extends React.Component{
                 this.setState({
                     averageSales: data.sales_average,
                     lasWeekSales: data.last_week_sales,
+                    salesPercentage: data.percentage,
                     fetching: false
                 })
             }
@@ -38,6 +39,12 @@ class SalesDashboard extends React.Component{
                     <div className="pull-right">
                         <p className="dashboard">{this.state.lasWeekSales}</p>
                     </div>                    
+                </div>
+                <div className="row dpb25">
+                    <center>
+                        <p className="percentage"><i className="fa fa-usd" aria-hidden="true"></i><span className="space"></span>{this.state.salesPercentage} %</p>
+                        <label className="dashboard">(Sales Percentage for last 7 days)</label>
+                    </center>
                 </div>
             </div>
         )

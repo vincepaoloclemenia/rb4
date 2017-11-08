@@ -2,7 +2,7 @@ class CustomerCountDashboard extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            averageCount: 0, fetching: false, lastWeekCount: 0
+            averageCount: 0, fetching: false, lastWeekCount: 0, countPercentage: 0
         }
     }
 
@@ -15,6 +15,7 @@ class CustomerCountDashboard extends React.Component{
                 this.setState({
                     averageCount: data.customer_count,
                     lastWeekCount: data.average_count,
+                    countPercentage: data.percentage,
                     fetching: false
                 })
             }
@@ -38,6 +39,12 @@ class CustomerCountDashboard extends React.Component{
                     <div className="pull-right">
                         <p className="dashboard">{this.state.lastWeekCount}</p>
                     </div>                    
+                </div>
+                <div className="row dpb25">
+                    <center>
+                        <p className="percentage"><i className="fa fa-users" aria-hidden="true"></i><span className="space"></span>{this.state.countPercentage} %</p>
+                        <label className="dashboard">(Customer Count Percentage for last 7 days)</label>
+                    </center>
                 </div>
             </div>
         )

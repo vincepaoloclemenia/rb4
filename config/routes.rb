@@ -112,6 +112,7 @@ Rails.application.routes.draw do
     get :get_average, on: :collection
     get :get_dashboard_today, on: :collection
     get :customer_count, on: :collection
-    get :yearly_sales, on: :collection    
+    get :yearly_sales, on: :collection
+    get :today_sales_revenues_expenses, on: :collection    
   end
 end

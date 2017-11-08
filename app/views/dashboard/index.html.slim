@@ -34,11 +34,14 @@
             button.tablinks onclick="openTab(event, 'month')" Month
       .panel-body.tab-content
         .tabcontent id="today"
-          = bar_chart get_dashboard_today_charts_path, id: "today-sales", min: 1, max: 100000
+          h5 #{Date.today.strftime('%A, %b %d %Y')}
+          = column_chart today_sales_revenues_expenses_charts_path, colors: ["#EA6262","#5CC189"], id: "today-sales", min: 100, max: 1000000
         .tabcontent id="week"
-          = high_chart("brand_sales_stat", @branches_sales)
+          h5 #{Date.today.at_beginning_of_week(start_day = :sunday).strftime('%A, %b %d')} - #{Date.today.at_end_of_week(end_day = :sunday).strftime('%A, %b %d')}
+          = area_chart get_dashboard_today_charts_path, id: "weekly-sales", min: 1, max: 100000, label: "Sales", colors: ["#10374D"]
         .tabcontent id="month"
-          = high_chart("brand_sales_stat", @branches_sales)
+          h5 From #{Date.today.beginning_of_year.strftime('%B %d, %Y')} - #{Date.today.strftime("%B %d, %Y")}
+          = area_chart yearly_sales_charts_path, id: 'yearly-sales', min: 100, max: 1000000, label: "Sales", colors: ['#10374D']
 
   .col-xs-12.col-md-12.col-lg-4
     / .widget.bg-danger-light

@@ -2,7 +2,7 @@ class RevenuesDashboard extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            averageRevenues: 0, fetching: false, lastWeekRevenues: 0
+            averageRevenues: 0, fetching: false, lastWeekRevenues: 0, revenuesPercentage: 0
         }
     }
 
@@ -15,6 +15,7 @@ class RevenuesDashboard extends React.Component{
                 this.setState({
                     averageRevenues: data.ave_revenues,
                     lastWeekRevenues: data.last_week_revenues,
+                    revenuesPercentage: data.percentage,
                     fetching: false
                 })
             }
@@ -38,6 +39,12 @@ class RevenuesDashboard extends React.Component{
                     <div className="pull-right">
                         <p className="dashboard">{this.state.lastWeekRevenues}</p>
                     </div>                    
+                </div>
+                <div className="row dpb25">
+                    <center>
+                        <p className="percentage"><i className="fa fa-money" aria-hidden="true"></i><span className="space"></span>{this.state.revenuesPercentage} %</p>
+                        <label className="dashboard">(Revenue Percentage for last 7 days)</label>
+                    </center>
                 </div>
             </div>
         )

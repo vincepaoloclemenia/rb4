@@ -11,6 +11,7 @@ class PurchaseItemsController < ApplicationController
 	def create
 		purchase = current_brand.purchases.find(params[:purchase_id])
 		@purchase_item = purchase.purchase_items.new(purchase_item_params)
+		@purchase_item.date_of_purchase = Date.today
 		respond_to do |format|
 			if @purchase_item.save
 				index
@@ -51,6 +52,6 @@ class PurchaseItemsController < ApplicationController
 
 	def purchase_item_params
 		params.require(:purchase_item).permit(:item_id, :unit_id, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
-																				:remarks)
+																				:remarks, :date_of_purchase)
 	end
 end

@@ -37,11 +37,17 @@ class ChartsController < ApplicationController
     end
 
     def get_dashboard_today
-        render json: current_brand.sales.group_by_day(:sale_date, format: "%a", range: @from..@to).sum(:net_total_sales)
+        render json: current_brand.sales.group_by_day_of_week(:sale_date, range: @from..@to, format: "%a").sum(:net_total_sales)
     end
 
     def yearly_sales
-        render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_month_of_year(:sale_date, default_value: "missing", format: "%b" ).sum(:net_total_sales) }}
+        render json: current_brand.sales.group_by_month_of_year(:sale_date, range: Date.today.beginning_of_year..Date.today, format: "%b").sum(:net_total_sales)
+    end
+
+    def today_sales_revenues_expenses
+        render json: [{name: "Expenses", data: Hash[ Date.today.strftime("%A, %b %d"), current_brand.purchase_items.where(date_of_purchase: Date.today).pluck(:purchase_item_total_amount).sum ] },
+                    { name: "Revenues", data: current_brand.sales.where(sale_date: Date.today).group_by_day(:sale_date, range: Date.today..Date.today, format: '%A, %b %d').sum(:net_total_sales) }
+                    ]
     end
     
     private
