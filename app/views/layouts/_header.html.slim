@@ -1,14 +1,11 @@
 header.header.navbar
-	.brand.visible-xs
-		.toggle-offscreen 
+		
+	ul.nav.navbar-nav.navbar-right		
+		li.width10
 			a.hamburger-icon.visible-xs data-toggle="offscreen" data-move="ltr"
 				i.icon-menu.menu-icon 
-	
-
-	
-	ul.nav.navbar-nav.navbar-right
 		- if wizard_done?
-			li.user-menu 
+			li.user-menu
 				a href="javascript:;" data-toggle="dropdown"
 					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
 				- if current_user.role.role_level == 'client'

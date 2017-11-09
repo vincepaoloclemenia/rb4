@@ -28,6 +28,7 @@
             }
         }
         a { color: #10374D }
+        border-left: 0.5px solid #1D75A1;
     }
 
     
@@ -42,3 +43,20 @@
     }   
 }
 
+
+@media (max-width:768px){
+    ul.navbar-right{
+        width: 100%;
+    }
+    li.user-menu{
+        width: 45% !important;
+        display: inline-block;
+        img { 
+            margin-left: 45%;
+            display: block; 
+        }
+    }
+    li.width10{
+        width: 10% !important;
+    }
+}
