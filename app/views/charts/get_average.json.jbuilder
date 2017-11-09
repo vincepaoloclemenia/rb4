@@ -1,5 +1,6 @@
 json.from @from
 json.to @to
+json.colours @colours
 json.branches do |json|
     json.array! @branches do |branch|
         json.id branch.id

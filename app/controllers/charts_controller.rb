@@ -2,9 +2,9 @@ class ChartsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_dates, only: [:get_dates, :get_average, :daily_sales, :get_dashboard_today]
     before_action :set_branch_and_date, only: [:sales_per_branch, :customer_count]
+    before_action :get_colors, only: [:get_average]
 
     def daily_sales
-        colours = current_brand.branches.map { |b| [b.id, b.color] }.to_h
         if params[:from].present? && params[:to].present?
             render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day(:sale_date, range: @from.to_s..@to.to_s).maximum(:net_total_sales) } }
         else    
@@ -63,5 +63,9 @@ class ChartsController < ApplicationController
                 @date_from = params[:start]
                 @date_to = params[:end]
             end
+        end
+
+        def get_colors
+            @colours = current_brand.branches.all.map { |b| b.color }.to_a
         end
 end
