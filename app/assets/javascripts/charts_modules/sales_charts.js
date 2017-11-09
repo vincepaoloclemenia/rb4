@@ -22,7 +22,7 @@ var SalesChart = {
                     url: '/charts/get_average?from='+dfrom+'&to='+dto,
                     method: 'GET',
                     success: function(data) {
-                    new Chartkick.LineChart("sales-chart", "/charts/daily_sales", {"colors": Array.from(data.colours) ,"min":100,"max":100000});
+                    new Chartkick.LineChart("sales-chart", "/charts/daily_sales?from="+dfrom+'&to='+dto, {"colors": Array.from(data.colours) ,"min":100,"max":100000});
                     $('#sales-chart').removeClass('blurry');
                     $.each(data.branches, function(i, branch){
                             $('td#'+branch.reverse).text(branch.average)
@@ -69,7 +69,7 @@ var SalesChart = {
                 url: '/charts/get_average?from='+dfrom+'&to='+dto,
                 method: 'GET',
                 success: function(data) {
-                new Chartkick.LineChart("sales-chart", "/charts/daily_sales", {"colors": Array.from(data.colours) ,"min":100,"max":100000});
+                new Chartkick.LineChart("sales-chart", "/charts/daily_sales?from="+dfrom+'&to='+dto, {"colors": Array.from(data.colours) ,"min":100,"max":100000});
                 $.each(data.branches, function(i, branch){
                     $('.centered').removeClass('show');
                     $('#sales-chart').removeClass('blurry');   
