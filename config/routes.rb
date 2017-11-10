@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   resources :suppliers
   resources :manifolds
   resources :directionals
+  resources :sale_reports, only: :show
   resources :purchases do
     resources :purchase_items
   end
@@ -103,6 +104,9 @@ Rails.application.routes.draw do
       get :get_customer_count, on: :collection
       get :get_average_revenues, on: :collection
     end
+
+    post "sale_reports" => "sale_reports#create"
+    
   end
   
   resources :charts, only: [] do

@@ -1,0 +1,5 @@
+$('#modal h4').html('<%= @sale_report.title %>');
+
+$('.modal-body').html('<%= j render("show") %>');
+
+$('#modal').modal("show");

@@ -1,9 +1,17 @@
 var SalesChart = {
     init: function(){ 
+    
+    $('#from').val() === '' || $('#to').val() === '' ? $('#save-report').hide() : $('#save-report').show()
 
-    $('#from').datepicker({}).on('change', function(){
+    $('#from').datepicker({}).on('change', function(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
         if($(this).val() === '' || $(this).val() > $('#to').val())
-            {   $('#to').val('')    }
+            {   
+                $('#to').val('');
+                $('#save-report').hide();
+                $('#reset').hide()     
+            }
         else {
                 dfrom = $(this).val();
                 dto = $('#to').val();
@@ -14,7 +22,8 @@ var SalesChart = {
                     success: function(data) {
                         $('#sales-label').text(data.label);
                         $('#average-per-date').text(data.title);                     
-                        $('#reset').show(); 
+                        $('#reset').show();
+                        $('#save-report').show(); 
                     }
                 });
 
@@ -42,12 +51,14 @@ var SalesChart = {
         }
     });
 
-    $('#to').datepicker({}).on('change',function(){
-
+    $('#to').datepicker({}).on('change',function(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
         if($(this).val() === '' || $('#from').val() === '' || $(this).val() < $('#from').val())
             { 
                 alert("Please make sure your 'From' field has value and less than the other.")
                 $(this).val('');
+                $('#save-report').hide()
             }
         else {    
             dfrom = $('#from').val();
@@ -62,6 +73,7 @@ var SalesChart = {
                     $('#sales-label').text(data.label);
                     $('#average-per-date').text(data.title);                     
                     $('#reset').show(); 
+                    $('#save-report').show();
                 }
             });
             
@@ -91,41 +103,7 @@ var SalesChart = {
         
     });
 
-    $('#reset').on('click',function(){             
-        $('#average-per-date').text('Average Sales Per Date Range (Current Week)')
-        $('#reset').hide();
-        $('#to').val('');
-        $('#from').val(''); 
-        $('#sales-chart').addClass('blurry');
-        $.ajax({
-            url: '/charts/get_average',
-            method: 'GET',
-            success: function(data) {
-            new Chartkick.LineChart("sales-chart", "/charts/daily_sales", {"colors": Array.from(data.colours) ,"min":100,"max":100000});  
-            $.each(data.branches, function(i, branch){
-                    $('td#'+branch.reverse).text(branch.average)
-                    if(branch.status === "Good"){
-                        $('td#'+branch.reverse).addClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }else if(branch.status === "Unwell"){
-                        $('td#'+branch.reverse).addClass("fail");
-                        $('td#'+branch.reverse).removeClass("fine");
-                    }else{
-                        $('td#'+branch.reverse).removeClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }
-                })
-            }
-        })
-        $.ajax({
-            url: 'charts/get_dates',
-            method: 'GET',
-            success: function(data) {
-                $('#sales-label').text(data.title)
-                $('#sales-chart').removeClass('blurry');
-            }
-        })
-    })
+    
     }
 }
 

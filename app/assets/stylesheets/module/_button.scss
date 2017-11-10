@@ -5,3 +5,10 @@
     border-radius: 3px;
     font-size: 15px;
 }
+div.button-container{
+    margin-bottom: 10px;
+    p.sale-report{
+        display: none;
+        &.show-link{ display: block }
+    }
+}

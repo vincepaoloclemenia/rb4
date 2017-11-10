@@ -1,10 +1,11 @@
 class User < ActiveRecord::Base
-
+  
   has_one :client_user_access, dependent: :destroy
   has_one :role, through: :client_user_access
   has_one :client, through: :client_user_access
   has_one :brand, through: :client_user_access
   has_one :branch, through: :client_user_access
+  has_many :sale_reports
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

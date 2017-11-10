@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  from: 2017-11-09 16:57:53
+  to: 2017-11-09 16:57:53
+  num_of_days: 1
+  total_sales: 9.99
+
+two:
+  title: MyString
+  from: 2017-11-09 16:57:53
+  to: 2017-11-09 16:57:53
+  num_of_days: 1
+  total_sales: 9.99

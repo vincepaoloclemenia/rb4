@@ -25,8 +25,9 @@
     .panel-heading.border Daily Sales Report
     .panel-body
         .pull-right
-            h4 Sales Search <button class="reset" data-tt="tooltip" id="reset" data-original-title="Reset"><i class="fa fa-retweet" aria-hidden="true" id="reset-btn"></i></button>
-            /= react_component 'SalesSearch'
+            h4 Sales Search
+            = react_component 'SaveButton'
+            /= react_component 'SaleSearch'
             = form_tag sales_path, method: :get do
                 .col-xs-12.col-lg-6       
                     = text_field_tag :date_from, nil, id: 'from', placeholder: "From"
@@ -36,12 +37,9 @@
         h4 Sales for all Branches
         h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
         h4 id='average-sales'
-        /= react_component 'SalesSearch'
-        /div id="chart"
-        = line_chart daily_sales_charts_path, id: 'sales-chart', colors: @colours, min: 100, max: 100000
-            .centered
-                i.fa.fa-spinner.fa-spin.fa-3x.fa-fw id="fuck"
-                 
+        
+        = line_chart daily_sales_charts_path, id: 'sales-chart', colors: @colours, min: 100, max: 100000, height: "300px"         
+        
         br
 
             .no-more-tables
