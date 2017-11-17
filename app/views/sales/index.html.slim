@@ -25,17 +25,8 @@
     .panel-heading.border Daily Sales Report
     .panel-body
         .pull-right
-            
-            /= react_component 'SaleSearch'
-            = form_tag sales_path, method: :get do
-                .row
-                    h4 Sales Search
-                    .col-xs-12.col-lg-6       
-                        = text_field_tag :date_from, nil, id: 'from', placeholder: "From"
-                    .col-xs-12.col-lg-6                    
-                        = text_field_tag :date_to, nil, id: 'to', placeholder: "To"
-            
-            = react_component 'SaveButton'
+
+            = react_component 'FormSearch'
 
         h4 Sales for all Branches
         h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
@@ -44,7 +35,7 @@
         = line_chart daily_sales_charts_path, id: 'sales-chart', colors: @colours, min: 100, max: 100000, height: "300px"         
         
         br
-
+        .gap-top15
             .no-more-tables
                 table.table.table-bordered.table-striped.mb0 data-sortable="true" id='summary'
                     thead

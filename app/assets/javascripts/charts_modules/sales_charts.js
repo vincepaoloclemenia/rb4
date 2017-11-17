@@ -1,7 +1,7 @@
 var SalesChart = {
     init: function(){ 
     
-    $('#from').val() === '' || $('#to').val() === '' ? $('#save-report').hide() : $('#save-report').show()
+    /*$('#from').val() === '' || $('#to').val() === '' ? $('#save-report').hide() : $('#save-report').show()
 
     $('#from').datepicker({}).on('change', function(evt){
         evt.stopPropagation();
@@ -101,7 +101,7 @@ var SalesChart = {
             })
         }        
         
-    });
+    });*/
 
     
     }

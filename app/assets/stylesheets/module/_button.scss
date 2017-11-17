@@ -11,5 +11,14 @@ div.button-container{
     p.sale-report{
         display: none;
         &.show-link{ display: block }
+        margin-top: 15px;
+    }
+
+    a.sale-report-link{
+        text-decoration: underline;
+        color: #1D75A1;
+    }
+    div.sale-report-container{
+        margin-top: 15px;
     }
 }

@@ -1,7 +1,7 @@
 class SaveButton extends React.Component{
     constructor(props){
         super(props)
-        this.state = { status: 'Save Report', show: false,  sale_report: null }
+        this.state = { status: 'Save Report', show: false,  sale_report: null, title: '' }
     }
 
     render(){
@@ -45,10 +45,13 @@ class SaveButton extends React.Component{
                 this.setState({
                     status: 'Saved',
                     show: false,
-                    sale_report: data.saleReport 
+                    sale_report: data.saleReport, 
+                    title: data.title
                 })
             }
         })
+        $('#from').hide();
+        $('#to').hide();
     }
 
     resetAll(evt){
@@ -92,12 +95,14 @@ class SaveButton extends React.Component{
             status: 'Save Report',
             sale_report: null
         })
+        $('#from').show();
+        $('#to').show();
     }
 
     renderSaleReportLink(){
         if(this.state.sale_report === null || this.state.status === 'Save Report') { return }
         return(
-            <p className='sale-report show-link' >{<SaleReportLink saleReport={this.state.sale_report}/>}</p>
+            <p className='sale-report show-link' >{this.state.sale_report ? <SaleReportLink saleReport={this.state.sale_report}/>: `No existing Sales for ${this.state.title}`}</p>
         )
     }
 
@@ -109,11 +114,11 @@ class SaveButton extends React.Component{
     renderLabel(){
         switch (this.state.status){
             case 'Save Report':
-                return 'Save Report';
+                return 'Get Report';
             case 'Saving':
-                return 'Saving';
+                return 'Retrieving Information';
             case 'Saved':
-                return 'Saved';
+                return this.state.sale_report ? 'Report is Ready' : 'No Record Found'
         }
     }
 

@@ -25,7 +25,8 @@ class ChartsController < ApplicationController
             @total_num_of_days = (@to - @from).to_i
             @label = "Sales from: #{@from.strftime('%b %d, %Y')} to #{@to.strftime('%b %d,%Y')} (#{@total_num_of_days} days)"
             @title = "Average Sales Per Date Range (#{@from.strftime('%b %d, %Y')} - #{@to.strftime('%b %d,%Y')} = #{@total_num_of_days} days)"
-            render json: { label: @label, title: @title }
+            @status = current_brand.sale_reports.where(title: "#{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')}").exists?
+            render json: { label: @label, title: @title, existing: @status }
         else
             @today = "#{@from.strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }"
             render json: { title: @today }
