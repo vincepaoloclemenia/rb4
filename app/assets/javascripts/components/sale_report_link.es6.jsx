@@ -5,7 +5,7 @@ class SaleReportLink extends React.Component{
 
     render(){
         return(
-            <a href={`/sale_reports/${this.props.saleReport.id}`} >{this.props.saleReport.title}</a>
+            <a href={`/sale_reports/${this.props.saleReport.id}`} data-remote="true" >{this.props.saleReport.title}</a>
         )
     }
 }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110064626) do
+ActiveRecord::Schema.define(version: 20171116054005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -469,12 +469,12 @@ ActiveRecord::Schema.define(version: 20171110064626) do
     t.integer  "user_id"
     t.integer  "brand_id"
     t.string   "title"
-    t.datetime "from"
-    t.datetime "to"
     t.integer  "num_of_days"
     t.integer  "total_sales", default: 0
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.datetime "date_from"
+    t.datetime "date_to"
   end
 
   add_index "sale_reports", ["brand_id"], name: "index_sale_reports_on_brand_id", using: :btree

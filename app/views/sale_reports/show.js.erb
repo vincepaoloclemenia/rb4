@@ -1,5 +1,5 @@
 $('#modal h4').html('<%= @sale_report.title %>');
 
-$('.modal-body').html('<%= j render("show") %>');
+$('.modal-body').html('<%= j render("show_sale_report", sale_report: @sale_report, colors: @colours ) %>');
 
 $('#modal').modal("show");

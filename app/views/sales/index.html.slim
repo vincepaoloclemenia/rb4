@@ -25,14 +25,17 @@
     .panel-heading.border Daily Sales Report
     .panel-body
         .pull-right
-            h4 Sales Search
-            = react_component 'SaveButton'
+            
             /= react_component 'SaleSearch'
             = form_tag sales_path, method: :get do
-                .col-xs-12.col-lg-6       
-                    = text_field_tag :date_from, nil, id: 'from', placeholder: "From"
-                .col-xs-12.col-lg-6                    
-                    = text_field_tag :date_to, nil, id: 'to', placeholder: "To"
+                .row
+                    h4 Sales Search
+                    .col-xs-12.col-lg-6       
+                        = text_field_tag :date_from, nil, id: 'from', placeholder: "From"
+                    .col-xs-12.col-lg-6                    
+                        = text_field_tag :date_to, nil, id: 'to', placeholder: "To"
+            
+            = react_component 'SaveButton'
 
         h4 Sales for all Branches
         h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
@@ -89,6 +92,7 @@
                         h5 Table View for #{branch.name}'s Sales
                         = react_component('BranchSalesTable', { branch: branch.id } )
 
+= render "partials/modal"
 
 javascript:
     var tablinks = document.getElementsByClassName("tablinks");
