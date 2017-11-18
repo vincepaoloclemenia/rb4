@@ -8,7 +8,7 @@ class ChartsController < ApplicationController
         if params[:from].present? && params[:to].present?
             render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day(:sale_date, range: @from.to_s..@to.to_s).maximum(:net_total_sales) } }
         else    
-            render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day_of_week(:sale_date, default_value: "missing", range: @from.strftime..@date_to, format: "%a" ).maximum(:net_total_sales) } }        
+            render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day_of_week(:sale_date, default_value: "missing", range: @from..@date_to, format: "%a" ).maximum(:net_total_sales) } }        
         end
     end
 
@@ -28,7 +28,7 @@ class ChartsController < ApplicationController
             @status = current_brand.sale_reports.where(title: "#{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')}").exists?
             render json: { label: @label, title: @title, existing: @status }
         else
-            @today = "#{@from.strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }"
+            @today = "#{@from.strftime("%a, %b %d") } - #{Date.today.in_time_zone.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }"
             render json: { title: @today }
         end
     end
@@ -42,20 +42,20 @@ class ChartsController < ApplicationController
     end
 
     def yearly_sales
-        render json: current_brand.sales.group_by_month_of_year(:sale_date, range: Date.today.beginning_of_year..Date.today, format: "%b").sum(:net_total_sales)
+        render json: current_brand.sales.group_by_month_of_year(:sale_date, range: Date.today.in_time_zone.beginning_of_year..Date.today.in_time_zone, format: "%b").sum(:net_total_sales)
     end
 
     def today_sales_revenues_expenses
-        render json: [{name: "Expenses", data: Hash[ Date.today.strftime("%A, %b %d"), current_brand.purchase_items.where(date_of_purchase: Date.today).pluck(:purchase_item_total_amount).sum ] },
-                    { name: "Revenues", data: current_brand.sales.where(sale_date: Date.today).group_by_day(:sale_date, range: Date.today..Date.today, format: '%A, %b %d').sum(:net_total_sales) }
+        render json: [{name: "Expenses", data: Hash[ Date.today.in_time_zone.strftime("%A, %b %d"), current_brand.purchase_items.where(date_of_purchase: Date.today.in_time_zone.to_date).pluck(:purchase_item_total_amount).sum ] },
+                    { name: "Revenues", data: current_brand.sales.where(sale_date: Date.today.in_time_zone.to_date).group_by_day(:sale_date, range: Date.today.in_time_zone.to_date..Date.today.in_time_zone.to_date, format: '%A, %b %d').sum(:net_total_sales) }
                     ]
     end
     
     private
         def set_dates
-            @from = params[:from].present? ? Date.strptime(params[:from], '%m/%d/%Y') : Date.today.at_beginning_of_week(start_day = :sunday) 
-            @to = params[:to].present? ? Date.strptime(params[:to], '%m/%d/%Y') : Date.today
-            @date_to = Date.today.at_end_of_week(end_day = :sunday).strftime
+            @from = params[:from].present? ? Date.strptime(params[:from], '%m/%d/%Y').in_time_zone.to_date : Date.today.in_time_zone.at_beginning_of_week(start_day = :sunday).to_date 
+            @to = params[:to].present? ? Date.strptime(params[:to], '%m/%d/%Y').in_time_zone.to_date : Date.today.in_time_zone.to_date
+            @date_to = Date.today.at_end_of_week(end_day = :sunday).strftime.in_time_zone.to_date
         end
 
         def set_branch_and_date
