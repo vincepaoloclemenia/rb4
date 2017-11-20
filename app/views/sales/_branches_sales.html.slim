@@ -1,0 +1,30 @@
+.panel        
+    .panel-heading.border Branches
+    .panel-body
+        
+        .tab
+            - branches.map do |branch|
+                button.tablinks onclick="openBranch(event, '#{branch.name.remove("'")}', 'chart-toggle-#{branch.name.remove("'")}')" #{branch.name}
+
+        - branches.map do |branch|   
+            .tabcontent id="#{branch.name.remove("'")}"
+
+                .pull-right
+                    .toggle
+                        button.togglelinks id="chart-toggle-#{branch.name.remove("'")}" onclick="toggleView(event, 'chart-view-#{branch.name.remove("'")}')" 
+                            i.fa.fa-line-chart aria-hidden="true"
+                        button.togglelinks onclick="toggleView(event, 'table-view-#{branch.name.remove("'")}')" 
+                            i.fa.fa-table aria-hidden="true"
+                .row
+                    .togglecontent id="chart-view-#{branch.name.remove("'")}"
+                        h5 Chart View for #{branch.name}'s Sales
+                        h5 #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }
+                        = line_chart sales_per_branch_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 100000, colors: [branch.color], label: "Total Sales"
+                        br
+                        h5 Customer Count 
+                        = area_chart customer_count_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 1000, colors: [branch.color], label: "Customer Count"
+
+                .row
+                    .togglecontent id="table-view-#{branch.name.remove("'")}"
+                        h5 Table View for #{branch.name}'s Sales
+                        = react_component('BranchSalesTable', { branch: branch.id } )

@@ -1,4 +1,4 @@
-.panel.light-blue
+.panel
     .panel-heading Sales vs Expense
     = line_chart current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day(:sale_date, range: sale_report.date_from..sale_report.date_to).sum(:net_total_sales) } }, id: 'sales-vs-expenses', colors: @colours, min: 1000, max: 100000 
 

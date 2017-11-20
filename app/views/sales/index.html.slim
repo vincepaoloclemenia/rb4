@@ -26,9 +26,9 @@
     .panel-body
         .pull-right
 
-            = react_component 'FormSearch'
+            = react_component 'FormSearch', props: { userType: current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('client') }
 
-        h4 Sales for all Branches
+        h4 #{ current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client') ? 'Sales per Branch' : current_user.branch.name }
         h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
         h4 id='average-sales'
         
@@ -36,77 +36,15 @@
         
         br
         .gap-top15
-            .no-more-tables
-                table.table.table-bordered.table-striped.mb0 data-sortable="true" id='summary'
-                    thead
-                        tr.bg-thead
-                            th width="310" Branch Name
-                            th width="300" Daily Average Sales
-                            th id='average-per-date' width="300" Average Sales Per Date Range (Current Week)
-                    tbody
-                        - @branches.map do |branch|
-                            tr 
-                                td.branch-sample branch="#{branch.name.remove("'")}" data-title="Name" = branch.name
-                                td data-title="Daily Average Sales" = branch.sales.invalid_sales? ? branch.daily_average_sales : to_peso(branch.daily_average_sales)
-                                td.branch id="#{branch.name.downcase.reverse.gsub(/[' ]/, '')}" data-title="Average Based From Date Range" 
-        
-        br
-        
-.panel        
-    .panel-heading.border Branches
-    .panel-body
-        
-        .tab
-            - @branches.map do |branch|
-                button.tablinks onclick="openBranch(event, '#{branch.name.remove("'")}', 'chart-toggle-#{branch.name.remove("'")}')" #{branch.name}
+            - if current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client')
+                = render partial: 'branches_table', locals: { branches: @branches }        
+                br
 
-        - @branches.map do |branch|   
-            .tabcontent id="#{branch.name.remove("'")}"
-
-                .pull-right
-                    .toggle
-                        button.togglelinks id="chart-toggle-#{branch.name.remove("'")}" onclick="toggleView(event, 'chart-view-#{branch.name.remove("'")}')" 
-                            i.fa.fa-line-chart aria-hidden="true"
-                        button.togglelinks onclick="toggleView(event, 'table-view-#{branch.name.remove("'")}')" 
-                            i.fa.fa-table aria-hidden="true"
-                .row
-                    .togglecontent id="chart-view-#{branch.name.remove("'")}"
-                        h5 Chart View for #{branch.name}'s Sales
-                        h5 #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") }
-                        = line_chart sales_per_branch_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 100000, colors: [branch.color], label: "Total Sales"
-                        br
-                        h5 Customer Count 
-                        = area_chart customer_count_charts_path(br_id: branch, start: Date.today.at_beginning_of_week(start_day = :sunday).strftime, end: Date.today.at_end_of_week(end_day = :saturday).strftime), min: 1, max: 1000, colors: [branch.color], label: "Customer Count"
-
-                .row
-                    .togglecontent id="table-view-#{branch.name.remove("'")}"
-                        h5 Table View for #{branch.name}'s Sales
-                        = react_component('BranchSalesTable', { branch: branch.id } )
+- if current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client')       
+    = render partial: 'branches_sales', locals: { branches: @branches }
 
 = render "partials/modal"
-
-javascript:
-    var tablinks = document.getElementsByClassName("tablinks");
-    tablinks[0].click();
-    $.ajax({
-        url: '/charts/get_average',
-        method: 'GET',
-        success: (data) => {
-            $.each(data.branches, function(i, branch){
-                $('td#'+branch.reverse).text(branch.average)
-                    if(branch.status === "Good"){
-                        $('td#'+branch.reverse).addClass("fine")
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }else if(branch.status === "Unwell"){
-                        $('td#'+branch.reverse).addClass("fail");
-                        $('td#'+branch.reverse).removeClass("fine");
-                    }else{
-                        $('td#'+branch.reverse).removeClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }
-            })
-        }
-    })   
+  
     
 
 

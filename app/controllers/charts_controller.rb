@@ -1,14 +1,22 @@
 class ChartsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_dates, only: [:get_dates, :get_average, :daily_sales, :get_dashboard_today]
+    before_action :set_dates, only: [:get_dates, :get_average, :daily_sales, :get_dashboard_today, :get_branch_sales_average]
     before_action :set_branch_and_date, only: [:sales_per_branch, :customer_count]
     before_action :get_colors, only: [:get_average]
 
     def daily_sales
         if params[:from].present? && params[:to].present?
-            render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day(:sale_date, range: @from.to_s..@to.to_s).maximum(:net_total_sales) } }
-        else    
-            render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day_of_week(:sale_date, default_value: "missing", range: @from..@date_to, format: "%a" ).maximum(:net_total_sales) } }        
+            if current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('client')
+                render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day(:sale_date, range: @from.to_s..@to.to_s).maximum(:net_total_sales) } }
+            elsif current_user.role.role_level.eql?('branch')
+                render json: current_user.branch.sales.group_by_day(:sale_date, range: @from.to_s..@to.to_s).maximum(:net_total_sales)
+            end
+        else
+            if current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('client')    
+                render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day_of_week(:sale_date, default_value: "missing", range: @from..@date_to, format: "%a" ).maximum(:net_total_sales) } }        
+            elsif current_user.role.role_level.eql?('branch')
+                render json: current_user.branch.sales.group_by_day_of_week(:sale_date, range: @from..@date_to, format: "%a" ).maximum(:net_total_sales)
+            end
         end
     end
 
@@ -34,7 +42,7 @@ class ChartsController < ApplicationController
     end
 
     def get_average
-        @branches = current_brand.branches.includes(:sales)   
+        @branches = current_brand.branches.includes(:sales)    
     end
 
     def get_dashboard_today
