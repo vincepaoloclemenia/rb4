@@ -12,13 +12,7 @@ class ApplicationController < ActionController::Base
     current_user.client
   end
 
-  def my_stuff
-    case current_user.role.role_level
-      when 'branch'
-        current_user.branch
-      when 'brand'
-        current_user.brand
-    end
+  def type_of_user?(user)
   end
 
   def current_settings

@@ -28,7 +28,6 @@
             }
         }
         a { color: #10374D }
-        border-left: 0.5px solid #1D75A1;
     }
 
     
@@ -49,14 +48,17 @@
         width: 100%;
     }
     li.user-menu{
-        width: 45% !important;
+        width: 30% !important;
         display: inline-block;
         img { 
-            margin-left: 45%;
+            margin-left: 15%;
             display: block; 
         }
+        a { text-align: center }
+        &.branch-user{ width: 90% !important }
     }
     li.width10{
         width: 10% !important;
     }
+    .header-avatar.img-circle { display: inline-block }
 }

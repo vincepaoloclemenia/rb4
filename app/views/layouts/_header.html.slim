@@ -3,8 +3,15 @@ header.header.navbar
 	ul.nav.navbar-nav.navbar-right		
 		li.width10
 			a.hamburger-icon.visible-xs data-toggle="offscreen" data-move="ltr"
-				i.icon-menu.menu-icon 
-		- if wizard_done?
+				i.icon-menu.menu-icon
+
+		li.user-menu
+			a
+				i.fa.fa-envelope aria-hidden="true"	
+
+				 
+		- if wizard_done? && (current_user.role.role_level == 'brand' || current_user.role.role_level == 'client')
+
 			li.user-menu
 				a href="javascript:;" data-toggle="dropdown"
 					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
@@ -15,11 +22,14 @@ header.header.navbar
 								- if current_brand.name == brand.name
 									= link_to "#{brand.name}<i class='icon-glyph-26 pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
 								- else
-									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put
-		li.user-menu 
+									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put						
+
+		li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
 			a href="javascript:;" data-toggle="dropdown" 
+				= current_user.username 
 				/img.header-avatar.img-circle src="/img/avatar-mummy.png"
-				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle"
+				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle with-gap"
+				
 			ul.dropdown-menu
 
 				li
