@@ -105,6 +105,8 @@ Rails.application.routes.draw do
       get :get_average_revenues, on: :collection
     end
 
+    resources :activities, only: :index
+
     post "sale_reports" => "sale_reports#create"
     
   end
