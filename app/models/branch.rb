@@ -86,5 +86,67 @@ class Branch < ActiveRecord::Base
   def valid_branch?
     sales.invalid_sales?
   end
+  
+  def total_average_sales
+    if valid_branch?
+      return 0
+    else
+      total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
+      average_sales = sales.where(sale_date: created_at..Date.today).pluck(:net_total_sales).sum / total_days
+      
+      return average_sales
+    end
+  end
+
+  def last_week_sales
+    last_week_sales_average = if sales.any? && !nil? 
+      sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:net_total_sales).sum / 7
+    else
+      0
+    end
+    return last_week_sales_average
+  end
+
+  def customer_count_average
+    total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
+    count_average = if sales.any? && !nil?       
+      sales.where(sale_date: created_at..Date.today).pluck(:customer_count).sum / total_days
+    else
+      0
+    end
+    return count_average
+  end
+
+  def last_week_customer_count
+    last_week_count_average = if sales.any? && !nil? 
+      sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:customer_count).sum / 7
+    else
+      0
+    end
+    return last_week_count_average
+  end
+
+  def average_revenues(range)
+    case range
+      when "daily"
+        @total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
+        @all_sales = sales.any? ? sales.where(sale_date: created_at..Date.today).pluck(:net_total_sales).sum : 0
+        @sales_vat = sales.any? ? sales.where(sale_date: created_at..Date.today).pluck(:vat).sum : 0
+        @service_charge = sales.any? ? sales.where(sale_date: created_at..Date.today).pluck(:service_charge).sum : 0
+      when "last_week"
+        @total_days = 7
+        @all_sales = sales.any? ? sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:net_total_sales).sum : 0
+        @sales_vat = sales.any? ? sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:vat).sum : 0
+        @service_charge = sales.any? ? sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:service_charge).sum : 0
+    end
+    
+    average_revenues = if sales.any? && !nil?
+      ( @all_sales + @sales_vat + @service_charge ) / @total_days
+    else
+      0
+    end
+
+    return average_revenues
+  end
 
 end
