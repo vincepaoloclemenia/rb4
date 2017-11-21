@@ -42,6 +42,8 @@
 
 - if current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client')       
     = render partial: 'branches_sales', locals: { branches: @branches }
+- else
+    = render partial: 'current_branch_sales'
 
 = render "partials/modal"
   

@@ -6,7 +6,10 @@
 			.row
 				.col-xs-12.col-lg-4.mb5
 					= f.label :branch_id, "Branch <small class='field-req'>*</small>".html_safe
-					= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+					- unless current_user.role.role_level.eql?('branch')
+						= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+					- else
+						= f.select :branch_id, current_user.branch.name, { include_blank: current_user.branch.name }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 				.col-xs-12.col-lg-4.mb5
 					= f.label :sale_date, "Date <small class='field-req'>*</small>".html_safe
 					- if current_brand.sales.where(sale_date: Date.today).exists?
