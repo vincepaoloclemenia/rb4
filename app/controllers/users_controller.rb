@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+	protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
 	before_action :authenticate_user!
 	before_action :access_control
 	before_action :set_user, only: [:edit, :update, :destroy]
@@ -70,6 +71,12 @@ class UsersController < ApplicationController
 	def destroy
 		@user.destroy
 		redirect_to company_users_path, notice: "User successfully deleted"
+	end
+
+	def delete_picture
+		current_user.avatar = nil
+		current_user.save
+		render nothing: true, status: 200
 	end
 
 	private

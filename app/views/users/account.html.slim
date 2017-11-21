@@ -10,8 +10,9 @@
 								.col-xs-12
 									.show-image.mb5
 										= image_tag @user.avatar.url, class: "image-size", id: "upload_preview"
-										a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="#0"
-											i.icon-glyph-27 id="remove-avatar"
+										- unless current_user.avatar.nil?
+											a.btn.btn-sm.btn-danger.delete data-original-title="Remove" data-placement="top" data-tt="tooltip" href="%23"
+												i.icon-glyph-27 id="remove-avatar"
 									= f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
 							.col-xs-12.col-md-8.col-lg-8
 								.col-xs-6.mb10
@@ -87,9 +88,17 @@ javascript:
 			readURL(this);
 		});
 
-		$("#remove-avatar").click(function(){
-			var new_avatar = $("#avatar_file_field");
-			new_avatar.replaceWith( new_avatar.val('').clone( true ) );
-			$("#upload_preview").replaceWith('#{image_tag @user.avatar.url, class: "image-size", id: "upload_preview"}');
+		$("#remove-avatar").on('click', function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: '#{delete_avatar_path}',
+				method: 'DELETE',
+				success: () => {
+					var new_avatar = $("#avatar_file_field");
+					new_avatar.replaceWith( new_avatar.val('').clone( true ) );
+					$("#upload_preview").replaceWith('#{image_tag @user.avatar.url, class: "image-size", id: "upload_preview"}');
+				}
+			})
+			
 		});
 	});
