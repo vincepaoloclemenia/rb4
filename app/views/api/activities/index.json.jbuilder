@@ -1,10 +1,15 @@
+json.next_page @activities.next_page
 json.activities do |json|
     json.array! @activities do |activity|
         json.id activity.id
         json.brand_id activity.brand_id
-        json.user_id activity.user_id
+        json.doer activity.user == current_user ? 'You' : activity.user.username
         json.action activity.action
-        json.name activity.user.username
-        json.avatar activity.user.avatar
+        json.avatar avatar_for(activity.user)
+        json.type activity.recordable.class.to_s.underscore.humanize.downcase
+        json.url case activity.recordable.class.to_s
+                when "Sale" then sale_path(activity.recordable)
+                end
+        json.time_ago time_ago_in_words(activity.created_at) + " ago"
     end
 end

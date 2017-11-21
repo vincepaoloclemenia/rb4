@@ -1,0 +1,44 @@
+
+.activities-container{
+    .fetching-activities{
+        margin-left: 50%;
+        margin-top: 50;
+        i { color: $light-color }
+    }
+    .activities-list{
+        overflow: hidden;
+        overflow-y: scroll;
+        max-height: 640px;
+        list-style: none;
+        padding: 0;
+        .load-more {
+          text-align: center;
+        }
+
+        .avatar-image {
+            margin-right: 18px;
+            vertical-align: baseline;
+        }
+        li {
+            padding: 8px 0;
+            border-bottom: 1px solid $light-color;
+        }
+        li > a {
+            color: $light-color;
+            display: block;
+            padding: 3px 0 3px 20px;
+            clear: both;
+            white-space: nowrap;
+            font-weight: normal;
+            transition: color 200ms;
+            font-size: 13px;
+            &:hover {
+              color: $font-black;
+            }
+        }
+        .activity-metadata{
+            display: inline-block;
+        }
+    }
+    
+}

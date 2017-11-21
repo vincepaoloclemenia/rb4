@@ -5,7 +5,7 @@ header.header.navbar
 			a.hamburger-icon.visible-xs data-toggle="offscreen" data-move="ltr"
 				i.icon-menu.menu-icon
 
-		li.user-menu
+		li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
 			a
 				i.fa.fa-envelope aria-hidden="true"	
 

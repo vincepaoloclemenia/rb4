@@ -97,7 +97,7 @@ Rails.application.routes.draw do
   get 'new_password_validate_email' => 'pages#new_password_validate_email'
   put 'change_brand' => 'pages#change_brand'
   get 'get_plan_info' => 'pages#get_plan_info'
-  delete 'delete_picture' => 'users#delete_picture', as: :delete_avatar
+  
 
   namespace :api do
     resources :sales, only: :index do
@@ -109,6 +109,7 @@ Rails.application.routes.draw do
     resources :activities, only: :index
 
     post "sale_reports" => "sale_reports#create"
+    delete 'delete_picture' => 'users#delete_picture', as: :delete_avatar
     
   end
   

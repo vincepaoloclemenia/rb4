@@ -9,16 +9,21 @@
 @import "animate";
 @import "webfont";
 @import "jquery-ui";
+@import "partials/keyframes";
+@import "partials/variables";
+@import "partials/mixins";
 @import "navigation/navs";
 @import "module/search";
 @import "module/table";
-@import "module/keyframes";
 @import "module/button";
 @import "module/tabs";
 @import "module/charts";
 @import "module/loader";
 @import "module/inputs";
 @import "module/panels";
+@import "module/activity_panel";
+@import "module/avatar";
+
 
 html.turbolinks-progress-bar::before {
   background-color: #558B2F !important;

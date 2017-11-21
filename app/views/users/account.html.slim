@@ -91,7 +91,7 @@ javascript:
 		$("#remove-avatar").on('click', function (e) {
 			e.preventDefault();
 			$.ajax({
-				url: '#{delete_avatar_path}',
+				url: '#{api_delete_avatar_path}',
 				method: 'DELETE',
 				success: () => {
 					var new_avatar = $("#avatar_file_field");

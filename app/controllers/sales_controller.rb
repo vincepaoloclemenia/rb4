@@ -37,7 +37,8 @@ class SalesController < ApplicationController
 			redirect_to sales_path, notice: "Sale successfully created"
 			current_brand.activities.create(
 				user_id: current_user.id,
-				action: " has created Sales record for #{@sale.branch.name}, #{@sale.sale_date.strftime('%B %d, %Y')}",
+				action: " created Sales record for #{@sale.branch.name}, #{@sale.sale_date.strftime('%B %d, %Y')}",
+				recordable: @sale
 			)
 		else
 			redirect_to new_sale_path, alert: @sale.errors.full_messages.join(", "), params: sale_params
