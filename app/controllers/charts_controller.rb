@@ -46,17 +46,31 @@ class ChartsController < ApplicationController
     end
 
     def get_dashboard_today
-        render json: current_brand.sales.group_by_day_of_week(:sale_date, range: @from..@to, format: "%a").sum(:net_total_sales)
+        if current_user.role.role_level.eql?('branch')
+            render json: current_user.branch.sales.group_by_day_of_week(:sale_date, range: @from..@to, format: "%a").sum(:net_total_sales)
+        else
+            render json: current_brand.sales.group_by_day_of_week(:sale_date, range: @from..@to, format: "%a").sum(:net_total_sales)
+        end
     end
 
     def yearly_sales
-        render json: current_brand.sales.group_by_month_of_year(:sale_date, range: Date.today.in_time_zone.beginning_of_year..Date.today.in_time_zone, format: "%b").sum(:net_total_sales)
+        if current_user.role.role_level.eql?('branch')
+            render json: current_brand.sales.group_by_month_of_year(:sale_date, range: Date.today.in_time_zone.beginning_of_year..Date.today.in_time_zone, format: "%b").sum(:net_total_sales)
+        else
+            render json: current_brand.sales.group_by_month_of_year(:sale_date, range: Date.today.in_time_zone.beginning_of_year..Date.today.in_time_zone, format: "%b").sum(:net_total_sales)
+        end
     end
 
     def today_sales_revenues_expenses
-        render json: [{name: "Expenses", data: Hash[ Date.today.in_time_zone.strftime("%A, %b %d"), current_brand.purchase_items.where(date_of_purchase: Date.today.in_time_zone.to_date).pluck(:purchase_item_total_amount).sum ] },
-                    { name: "Revenues", data: current_brand.sales.where(sale_date: Date.today.in_time_zone.to_date).group_by_day(:sale_date, range: Date.today.in_time_zone.to_date..Date.today.in_time_zone.to_date, format: '%A, %b %d').sum(:net_total_sales) }
-                    ]
+        if current_user.role.role_level.eql?('branch')
+            render json: [{name: "Expenses", data: Hash[ Date.today.in_time_zone.strftime("%A, %b %d"), current_user.branch.purchase_items.where(date_of_purchase: Date.today.in_time_zone.to_date).pluck(:purchase_item_total_amount).sum ] },
+                        { name: "Revenues", data: current_user.branch.sales.where(sale_date: Date.today.in_time_zone.to_date).group_by_day(:sale_date, range: Date.today.in_time_zone.to_date..Date.today.in_time_zone.to_date, format: '%A, %b %d').sum(:net_total_sales) }
+                        ]
+        else
+            render json: [{name: "Expenses", data: Hash[ Date.today.in_time_zone.strftime("%A, %b %d"), current_brand.purchase_items.where(date_of_purchase: Date.today.in_time_zone.to_date).pluck(:purchase_item_total_amount).sum ] },
+                        { name: "Revenues", data: current_brand.sales.where(sale_date: Date.today.in_time_zone.to_date).group_by_day(:sale_date, range: Date.today.in_time_zone.to_date..Date.today.in_time_zone.to_date, format: '%A, %b %d').sum(:net_total_sales) }
+                        ]
+        end
     end
     
     private

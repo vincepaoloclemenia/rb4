@@ -15,6 +15,7 @@ class Brand < ActiveRecord::Base
   has_many :purchase_items, through: :purchases
   has_many :suppliers
   has_many :sale_reports
+  has_many :activities, dependent: :destroy
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 
