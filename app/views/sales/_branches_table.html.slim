@@ -10,4 +10,4 @@
                 tr 
                     td.branch-sample branch="#{branch.name.remove("'")}" data-title="Name" = branch.name
                     td data-title="Daily Average Sales" = branch.sales.invalid_sales? ? branch.daily_average_sales : to_peso(branch.daily_average_sales)
-                    td.branch id="#{branch.name.downcase.reverse.gsub(/[' ]/, '')}" data-title="Average Based From Date Range" 
+                    td.branch id="#{branch.name.downcase.reverse.gsub(/[' ()#]/, '')}" data-title="Average Based From Date Range" 
