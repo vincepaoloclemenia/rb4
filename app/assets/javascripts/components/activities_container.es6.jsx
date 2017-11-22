@@ -93,8 +93,10 @@ class ActivitiesContainer extends React.Component{
         if(!this.state.recentActivities.length){
             return(
                 <div>
-                    <p>Nothing happened yet</p>
-                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    <center>
+                        <p>Nothing happened yet</p>
+                        <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </center>
                 </div>
             )
         }

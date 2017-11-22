@@ -4,7 +4,6 @@ ruby '2.3.0'
 gem 'rails', '4.2.5.rc2'
 gem 'pg', '~> 0.20.0'
 gem 'sass-rails', '~> 5.0'
-gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'react-rails', '~> 2.3'
@@ -28,7 +27,6 @@ gem 'paypal-recurring'
 gem 'pdf-reader', '~> 2.0'
 gem "chartkick"
 gem 'groupdate', '~> 3.2'
-gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
 
 group :development, :test do
   gem 'byebug'

@@ -11,10 +11,7 @@
 // about supported directives.
 //
 //= require jquery
-//= require bootstrap-sprockets
-//= require bootstrap
 //= require jquery_ujs
-//= require jquery-ui
 //= require cocoon
 //= require highcharts/highcharts
 //= require turbolinks
