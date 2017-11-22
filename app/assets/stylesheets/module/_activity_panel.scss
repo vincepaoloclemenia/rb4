@@ -1,14 +1,15 @@
 
 .activities-container{
+    min-width: 200px;
+    overflow-x: auto;
     .fetching-activities{
         margin-left: 50%;
         margin-top: 50;
-        i { color: $light-color }
+        i { color: $blue }
     }
     .activities-list{
         overflow: hidden;
-        overflow-y: scroll;
-        max-height: 640px;
+        max-height: 340px;
         list-style: none;
         padding: 0;
         .load-more {
@@ -16,28 +17,33 @@
         }
 
         .avatar-image {
-            margin-right: 18px;
+            margin-right: 10px;
             vertical-align: baseline;
+            margin-left: -5px;
         }
-        li {
+        li.activity-item-link {
+            display: block;
             padding: 8px 0;
-            border-bottom: 1px solid $light-color;
+            &:hover {
+                background-color: $light-blue;
+            }
         }
-        li > a {
-            color: $light-color;
+        li.activity-item-link > a {
+            min-width: 300px;
+            word-break: break-word;
+            color: $font-black;
             display: block;
             padding: 3px 0 3px 20px;
             clear: both;
             white-space: nowrap;
             font-weight: normal;
             transition: color 200ms;
-            font-size: 13px;
-            &:hover {
-              color: $font-black;
-            }
+            font-size: 12px;
         }
-        .activity-metadata{
+        .activity-metadata{            
             display: inline-block;
+            word-wrap: break-word;
+            width: 300px;
         }
     }
     

@@ -1,12 +1,17 @@
+
 class ActivityItem extends React.Component{
     constructor(props){
         super(props)
     }
 
+    
+
     render(){
+        var borderStyles = { borderLeft: `5px solid ${this.props.color}` }
         return(
             <li
                 className='activity-item-link'
+                style={borderStyles}
                 onClick={() => this.handleMarkAsRead()}>
                 <a href={this.props.url}>
                     <span dangerouslySetInnerHTML={{ __html: this.props.avatar}} />

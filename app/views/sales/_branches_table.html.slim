@@ -11,26 +11,3 @@
                     td.branch-sample branch="#{branch.name.remove("'")}" data-title="Name" = branch.name
                     td data-title="Daily Average Sales" = branch.sales.invalid_sales? ? branch.daily_average_sales : to_peso(branch.daily_average_sales)
                     td.branch id="#{branch.name.downcase.reverse.gsub(/[' ]/, '')}" data-title="Average Based From Date Range" 
-
-javascript:
-    var tablinks = document.getElementsByClassName("tablinks");
-    tablinks[0].click();
-    $.ajax({
-        url: '/charts/get_average',
-        method: 'GET',
-        success: (data) => {
-            $.each(data.branches, function(i, branch){
-                $('td#'+branch.reverse).text(branch.average)
-                    if(branch.status === "Good"){
-                        $('td#'+branch.reverse).addClass("fine")
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }else if(branch.status === "Unwell"){
-                        $('td#'+branch.reverse).addClass("fail");
-                        $('td#'+branch.reverse).removeClass("fine");
-                    }else{
-                        $('td#'+branch.reverse).removeClass("fine");
-                        $('td#'+branch.reverse).removeClass("fail");
-                    }
-            })
-        }
-    }) 

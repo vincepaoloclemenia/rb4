@@ -20,7 +20,7 @@ class ActivitiesContainer extends React.Component{
         if(this.state.fetchingData){
             return(
                 <div className="fetching-activities">
-                    <i className="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
                 </div>
             )
         }
@@ -83,7 +83,7 @@ class ActivitiesContainer extends React.Component{
         return (
             <li className="load-more">
                 <a onMouseOver={() => this.handleLoadMore()}>
-                    <i className="fa fa-spinner fa-pulse"></i>
+                    <i className="fa fa-spinner fa-spin"></i>
                 </a>
             </li>
         );

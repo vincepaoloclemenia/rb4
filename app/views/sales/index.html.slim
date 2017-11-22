@@ -46,6 +46,31 @@
     = render partial: 'current_branch_sales'
 
 = render "partials/modal"
+
+javascript:
+    if('branch' !== '#{current_user.role.role_level}'){
+      var tablinks = document.getElementsByClassName("tablinks");
+      tablinks[0].click();
+      $.ajax({
+          url: '/charts/get_average',
+          method: 'GET',
+          success: (data) => {
+              $.each(data.branches, function(i, branch){
+                  $('td#'+branch.reverse).text(branch.average)
+                      if(branch.status === "Good"){
+                          $('td#'+branch.reverse).addClass("fine")
+                          $('td#'+branch.reverse).removeClass("fail");
+                      }else if(branch.status === "Unwell"){
+                          $('td#'+branch.reverse).addClass("fail");
+                          $('td#'+branch.reverse).removeClass("fine");
+                      }else{
+                          $('td#'+branch.reverse).removeClass("fine");
+                          $('td#'+branch.reverse).removeClass("fail");
+                      }
+              })
+          }
+      })
+    } 
   
     
 
