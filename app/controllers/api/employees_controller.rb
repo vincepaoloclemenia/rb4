@@ -13,6 +13,6 @@ class Api::EmployeesController < ApplicationController
     private
 
         def get_branch_id
-            @branch = params[:branch_id].present? ? Branch.find(params[:branch_id]) : return nothing: true
+            @branch = Branch.find_by_id(params[:branch_id])
         end
 end
