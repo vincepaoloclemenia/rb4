@@ -35,7 +35,10 @@
 				= cua.label :role_id
 					| Role
 					small.field-req  *
-				= cua.select :role_id, current_client.roles.pluck(:name,:id), { include_blank: true }, class: "chosen role-field", data: { placeholder: "Select" }, id: "role_field_id_new"
+				- if current_user.role.role_level.eql?('client') && controller.action_name == 'edit'
+					= cua.select :role_id, Hash[current_user.role.name, current_user.role.id], { include_blank: true }, class: "chosen role-field", data: { placeholder: "Select" }, id: "role_field_id_new"
+				- else
+					= cua.select :role_id, current_client.roles.pluck(:name,:id), { include_blank: true }, class: "chosen role-field", data: { placeholder: "Select" }, id: "role_field_id_new"
 			.col-xs-12.brand_field_div
 				= cua.label :brand_id
 					| Brand

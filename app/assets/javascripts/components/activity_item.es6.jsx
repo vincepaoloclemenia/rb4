@@ -29,7 +29,7 @@ class ActivityItem extends React.Component{
         const { doer, action, type } = this.props;
         switch (type) {
             case 'sale':
-                return ` ${doer} ${action} ${type}`;
+                return ` ${doer} ${action}`;
         }
     }
 

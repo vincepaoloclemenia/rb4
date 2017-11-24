@@ -5,28 +5,30 @@
 			- if view_access_control('users','create')
 				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add User".html_safe, new_company_user_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
-		.alert.alert-info.text-center role="alert"
-			| Add unlimited users who can access restobot &amp; manage their roles.
-		.no-more-tables
-			table.table.table-bordered.table-striped.mb0 data-sortable="true"
-				thead
-					tr.bg-thead
-						th width="225" Name
-						th width="225" Email
-						th width="225" Username
-						th width="225" Role
-						th width="100" data-sortable="false" Action
-				tbody
-					- @users.each do |user|
-						tr
-							td data-title="Name" = user.full_name
-							td data-title="Email" = user.email
-							td data-title="Username" = user.username
-							td data-title="Role" = user.role.name
-							td.action data-title="Action"
-								- if view_access_control('users','update')
-									= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_company_user_path(user), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
-								- if view_access_control('users','destroy')
-									= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, company_user_path(user), method: :delete, class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+		- if current_user.role.role_level.eql?('client')
+			= react_component 'AdminsContainer'
+		/.alert.alert-info.text-center role="alert"
+		/	| Add unlimited users who can access restobot &amp; manage their roles.
+		/.no-more-tables
+		/	table.table.table-bordered.table-striped.mb0 data-sortable="true"
+		/		thead
+		/			tr.bg-thead
+		/				th width="225" Name
+		/				th width="225" Email
+		/				th width="225" Username
+		/				th width="225" Role
+		/				th width="100" data-sortable="false" Action
+		/		tbody
+		/			- @users.each do |user|
+		/				tr
+		/					td data-title="Name" = user.full_name
+		/					td data-title="Email" = user.email
+		/					td data-title="Username" = user.username
+		/					td data-title="Role" = user.role.name
+		/					td.action data-title="Action"
+		/						- if view_access_control('users','update')
+		/							= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_company_user_path(user), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
+		/						- if view_access_control('users','destroy')
+		/							= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, company_user_path(user), method: :delete, class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
 
 = render "partials/modal"

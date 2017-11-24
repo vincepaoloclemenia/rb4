@@ -106,8 +106,13 @@ Rails.application.routes.draw do
       get :get_average_revenues, on: :collection
     end
 
-    resources :activities, only: :index
+    resources :users, only: :index do
+      get :users_per_branch, on: :collection
+      get :users_per_brand, on: :collection
+    end
 
+    resources :activities, only: :index
+    
     post "sale_reports" => "sale_reports#create"
     delete 'delete_picture' => 'users#delete_picture', as: :delete_avatar
     

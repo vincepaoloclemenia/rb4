@@ -65,5 +65,24 @@ class User < ActiveRecord::Base
 	      where(username: conditions[:username]).first
 	    end
 	  end
-	end
+  end
+
+  def self.branch_users(branch)
+    all.joins(:branch).map { |user| user.branch.id == branch.id ? user : next }.compact
+  end
+
+  def self.brand_users(brand)
+    all.joins(:brand).map { |user| user.brand.id == brand.id ? user : next }.compact
+  end
+
+  def self.users_by_roles(name)
+    if name == 'branch'
+      all.joins(:role, :branch).order('branches.name ASC').map { |user| user.role.role_level == name ? user : next }.compact
+    elsif name == 'brand'
+      all.joins(:role, :brand).order('brands.name ASC').map { |user| user.role.role_level == name ? user : next }.compact
+    elsif name == 'client'
+      all.joins(:role, :client).order('clients.name ASC').map { |user| user.role.role_level == name ? user : next }.compact
+    end
+  end
+
 end
