@@ -1,6 +1,6 @@
 class ChartsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_dates, only: [:get_dates, :get_average, :daily_sales, :get_dashboard_today, :get_branch_sales_average]
+    before_action :set_dates, only: [:get_dates, :get_average, :daily_sales, :get_dashboard_today, :get_branch_sales_average, :generated_sale_report, :sales_vs_expense]
     before_action :set_branch_and_date, only: [:sales_per_branch, :customer_count]
     before_action :get_colors, only: [:get_average]
 
@@ -70,6 +70,26 @@ class ChartsController < ApplicationController
             render json: [{name: "Expenses", data: Hash[ Date.today.in_time_zone.strftime("%A, %b %d"), current_brand.purchase_items.where(date_of_purchase: Date.today.in_time_zone.to_date).pluck(:purchase_item_total_amount).sum ] },
                         { name: "Revenues", data: current_brand.sales.where(sale_date: Date.today.in_time_zone.to_date).group_by_day(:sale_date, range: Date.today.in_time_zone.to_date..Date.today.in_time_zone.to_date, format: '%A, %b %d').sum(:net_total_sales) }
                         ]
+        end
+    end
+
+    def sales_vs_expense
+        if current_user.role.role_level.eql?('branch')
+            render json: [{name: "Expenses", data: Hash[ "#{@from.strftime('%A, %b %d')} - #{@to.strftime('%A, %b %d')}", current_user.branch.purchase_items.where(date_of_purchase: @from..@to).pluck(:purchase_item_total_amount).sum ] },
+                        { name: "Revenues", data: Hash[ "#{@from.strftime('%A, %b %d')} - #{@to.strftime('%A, %b %d')}", current_user.branch.sales.where(sale_date: @from..@to).pluck(:net_total_sales).sum ] }
+                    ]
+        else
+            render json: [{name: "Expenses", data: Hash[ "#{@from.strftime('%A, %b %d')} - #{@to.strftime('%A, %b %d')}", current_brand.purchase_items.where(date_of_purchase: @from..@to).pluck(:purchase_item_total_amount).sum ] },
+                        { name: "Revenues", data: Hash[ "#{@from.strftime('%A, %b %d')} - #{@to.strftime('%A, %b %d')}", current_brand.sales.where(sale_date: @from..@to).pluck(:net_total_sales).sum ] }
+                        ]
+        end
+    end
+
+    def generated_sale_report
+        if current_user.role.role_level.eql?('branch')
+            render json: current_user.branch.sales.group_by_day(:sale_date, range: @from..@to, format: '%b %d').sum(:customer_count)
+        elsif current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('client')
+            render json: current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day(:sale_date, range: @from..@to, format: "%b %d").maximum(:customer_count) } }
         end
     end
     

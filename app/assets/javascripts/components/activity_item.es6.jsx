@@ -9,19 +9,21 @@ class ActivityItem extends React.Component{
     render(){
         var borderStyles = { borderLeft: `5px solid ${this.props.color}` }
         return(
-            <li
-                className='activity-item-link'
-                style={borderStyles}
-                onClick={() => this.handleMarkAsRead()}>
-                <a href={this.props.url}>
-                    <span dangerouslySetInnerHTML={{ __html: this.props.avatar}} />
-                    <div className="activity-metadata">
-                        {this.activityContent()}
-                        <br/>
-                        <small>{this.activityIcon()} {this.props.time_ago}</small>
-                    </div>
-                </a>
-            </li>
+            <div className='activit-item'>
+                <li
+                    className='activity-item-link'
+                    style={borderStyles}
+                    onClick={() => this.handleMarkAsRead()}>
+                    <a href={this.props.url}>
+                        <span dangerouslySetInnerHTML={{ __html: this.props.avatar}} />
+                        <div className="activity-metadata">
+                            {this.activityContent()}
+                            <br/>
+                            <small>{this.activityIcon()} {this.props.time_ago}</small>
+                        </div>
+                    </a>
+                </li>
+            </div>
         )
     }
 

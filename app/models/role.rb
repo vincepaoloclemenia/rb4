@@ -3,7 +3,7 @@ class Role < ActiveRecord::Base
   belongs_to :client
   has_many :users, through: :client_user_accesses
   has_many :permissions, dependent: :destroy
-  has_many :sections, through: :permissions
+  has_many :sections, through: :permissions, dependent: :destroy
 
   accepts_nested_attributes_for :permissions
 

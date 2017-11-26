@@ -149,4 +149,8 @@ class Branch < ActiveRecord::Base
     return average_revenues
   end
 
+  def filter_sales_purchase_items
+    sales.all + purchase_items.all
+  end
+
 end

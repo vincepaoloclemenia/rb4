@@ -126,6 +126,8 @@ Rails.application.routes.draw do
     get :get_dashboard_today, on: :collection
     get :customer_count, on: :collection
     get :yearly_sales, on: :collection
-    get :today_sales_revenues_expenses, on: :collection    
+    get :today_sales_revenues_expenses, on: :collection
+    get :generated_sale_report, on: :collection
+    get :sales_vs_expense, on: :collection    
   end
 end

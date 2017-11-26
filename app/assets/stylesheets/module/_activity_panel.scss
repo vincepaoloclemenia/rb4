@@ -29,9 +29,11 @@
                 background-color: $light-blue;
             }
         }
-        li.activity-item-link > a {
-            min-width: 300px;
+        .activity-item{
+            max-width: 300px;
             word-break: break-word;
+        }
+        li.activity-item-link > a {
             color: $font-black;
             display: block;
             padding: 3px 0 3px 20px;

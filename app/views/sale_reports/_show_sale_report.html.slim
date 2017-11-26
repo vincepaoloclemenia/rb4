@@ -1,6 +1,22 @@
 .panel
-    .panel-heading Sales vs Expense
-    = line_chart current_brand.branches.includes(:sales).map { |branch| { name: branch.name, data: branch.sales.group_by_day(:sale_date, range: sale_report.date_from..sale_report.date_to).sum(:net_total_sales) } }, id: 'sales-vs-expenses', colors: @colours, min: 1000, max: 100000 
+    .panel-heading Sales Chart
+    .panel-body
+        - if current_user.role.role_level.eql?('branch')
+            = line_chart daily_sales_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), id: 'branch-sales', colors: [current_user.branch.color]
+        - else 
+            = line_chart daily_sales_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), id: 'sales-vs-expenses', colors: colours
 
-.panel.red
-    .panel-heading Sales and Cost Analysis
+.panel
+    .panel-heading Sales vs Expense
+    .panel-body
+        
+        = column_chart sales_vs_expense_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: ["#EA6262","#5CC189"], id: 'revenues-vs-expense'
+
+.panel
+    .panel-heading Customer Count
+    .panel-body
+        - if current_user.role.role_level.eql?('branch')
+            = area_chart generated_sale_report_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: colours, id: 'customer-count'    
+        - else    
+            = column_chart generated_sale_report_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: colours, id: 'customer-count'
+    

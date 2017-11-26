@@ -1,5 +1,11 @@
-$('#modal h4').html('<%= @sale_report.title %>');
+<% if current_user.role.role_level.eql?('branch') %>
+    $('#modal h4').html('<%= @sale_report.title+', '+current_user.branch.name %>');
+<% elsif current_user.role.role_level.eql?('brand') %>
+    $('#modal h4').html('<%= @sale_report.title+', '+current_user.brand.name %>');
+<% else %>
+    $('#modal h4').html('<%= @sale_report.title+', '+current_user.client.name %>');
+<% end %>
 
-$('.modal-body').html('<%= j render("show_sale_report", sale_report: @sale_report, colors: @colours ) %>');
+$('.modal-body').html('<%= j render("show_sale_report", sale_report: @sale_report, colours: current_user.role.role_level.eql?('branch') ? [ current_user.branch.color ] : @colours ) %>');
 
 $('#modal').modal("show");

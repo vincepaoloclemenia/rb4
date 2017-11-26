@@ -64,7 +64,9 @@ class FormSearch extends React.Component{
         }).on('change',function(evt){
             evt.stopPropagation();
             evt.preventDefault();
-            if($(this).val() === '' || $('#from').val() === '' || $(this).val() < $('#from').val())
+            var d1 = new Date($('#from').val());
+            var d2 = new Date($(this).val());
+            if($(this).val() === '' || $('#from').val() === '' || d2 < d1 )
                 { 
                     alert("Please make sure your 'From' field has value and less than the other.")
                     $(this).val('');
@@ -160,7 +162,7 @@ class FormSearch extends React.Component{
         }).on('change',function(evt){
             evt.stopPropagation();
             evt.preventDefault();
-            if($(this).val() === '' || $('#from').val() === '' || $(this).val() < $('#from').val())
+            if($(this).val() === '' || $('#from').val() === '')
                 { 
                     alert("Please make sure your 'From' field has value and less than the other.")
                     $(this).val('');
@@ -198,13 +200,10 @@ class FormSearch extends React.Component{
     }
 
     componentDidMount(){
-        if (this.props.userType){
+        
             this.clientBrandFromDatePicker()
             this.clientBrandToDatePicker()            
-        } else {
-            this.branchUserFromDatePicker()        
-            this.branchUserToDatePicker()
-        }
+        
     }
 
     render(){
