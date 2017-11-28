@@ -1,6 +1,7 @@
 class PurchaseItemsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
+	before_action :find_purchased_item, only: :show
 
 	def index
 		@purchase = current_brand.purchases.find(params[:purchase_id])
@@ -17,13 +18,13 @@ class PurchaseItemsController < ApplicationController
 				if current_user.role.role_level.eql?('branch')
 					current_brand.activities.create(
 						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity} #{@purchase_item.unit.symbol} of #{@purchase_item.item.name}",
+						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit.name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name}",
 						recordable: @purchase_item
 					)
 				else
 					current_brand.activities.create(
 						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity} #{@purchase_item.unit.symbol} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
+						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit.name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
 						recordable: @purchase_item
 					)
 				end
@@ -37,6 +38,9 @@ class PurchaseItemsController < ApplicationController
 			format.js
 		end
 		#redirect_to purchase_purchase_items_path(purchase_id: purchase.id)
+	end
+
+	def show
 	end
 
 	def destroy
@@ -66,5 +70,9 @@ class PurchaseItemsController < ApplicationController
 	def purchase_item_params
 		params.require(:purchase_item).permit(:item_id, :unit_id, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
 																				:remarks, :date_of_purchase)
+	end
+
+	def find_purchased_item
+		@purchase_item = current_user.brand.purchase_items.find(params[:id])
 	end
 end

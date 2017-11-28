@@ -150,7 +150,10 @@ class Branch < ActiveRecord::Base
   end
 
   def filter_sales_purchase_items
-    sales.all + purchase_items.all
+    records = []
+    records << purchase_items.all.to_a
+    records << sales.all.to_a
+    records
   end
 
 end

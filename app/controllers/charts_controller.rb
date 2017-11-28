@@ -109,6 +109,6 @@ class ChartsController < ApplicationController
         end
 
         def get_colors
-            @colours = current_brand.branches.all.map { |b| b.color }.to_a
+            @colours = current_user.role.role_level.eql?('branch') ? [current_user.branch.color] : current_brand.branches.all.map { |b| b.color }.to_a
         end
 end
