@@ -3,7 +3,7 @@ class Api::ActivitiesController < ApplicationController
 
     def index
         @activities = if current_user.role.role_level.eql?('branch')
-            branch_users = current_client.users.branch_users(current_user.branch)
+            branch_users = current_client.users.branch_users(current_user.branch) + current_client.users.brand_users(current_user.brand)
             branch_users << current_client.id
             current_user.branch.brand.activities.where(user_id: branch_users, recordable: current_user.branch.filter_sales_purchase_items).paginate(page: params[:page], per_page: 7)
         else

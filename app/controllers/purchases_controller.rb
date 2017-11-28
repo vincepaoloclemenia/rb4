@@ -4,15 +4,12 @@ class PurchasesController < ApplicationController
 
 	def index
 		get_total_purchases_per_branch
-		if params[:q]
-			if params[:q][:purchase_date_cont].present?
-				params[:q][:purchase_date_gteq] = Date.strptime(params[:q][:purchase_date_cont].split(" - ")[0], "%m/%d/%Y").to_s
-				params[:q][:purchase_date_lteq] = Date.strptime(params[:q][:purchase_date_cont].split(" - ")[1], "%m/%d/%Y").to_s
-				params[:q].delete(:purchase_date_cont)
-			end
-		end
 		@q = current_brand.purchases.ransack(params[:q])
-		@purchases = @q.result.paginate(page: params[:page], per_page: per_page)
+		@purchases = if current_user.role.role_level.eql?('branch')
+						current_user.branch.purchases.paginate(page: params[:page], per_page: per_page)
+					else
+						current_brand.purchases.paginate(page: params[:page], per_page: per_page)
+					end
 		@purchase = current_brand.purchases.new
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
 	end

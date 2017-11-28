@@ -1,39 +1,125 @@
-.nav{
-    background-color: #1D75A1;
 
-    li a { color: #fff;}
+.main-panel>.header, .nav.navbar-nav.navbar-right {
+    background-color: transparent;
+    .header.nav-bar>ul.nav>li.user-menu>a { color: $main-theme }
+}
+
+.sidebar-panel>.brand{
+    background-color: $main-theme;
+}
+
+.sidebar-panel>nav li.active>a,
+.sidebar-panel>nav li.open>a {
+    color: $white;
+    background-color: $twitter-blue;
+    /*border-left: 3px solid #71B75E;*/
+}
+
+.sidebar-panel>nav .open>a,
+.sidebar-panel>nav .open>a:focus,
+.sidebar-panel>nav .open>a:hover {
+    color: $white;
+    background-color: $twitter-blue;
+    /*border-left: 3px solid #71B75E;*/
+}
+
+.main-panel>.header .nav .open>a,
+.main-panel>.header .nav .open>a:focus,
+.main-panel>.header .nav .open>a:hover,
+.main-panel>.header .nav>li>a:focus,
+.main-panel>.header .nav>li>a:hover {
+    background-color: $twitter-blue;
+    color: $white
+}
+
+
+.sidebar-panel>nav>ul>li>ul {
+    color: $main-theme;
+    background-color: $twitter-blue;
+
+}
+
+.sidebar-panel>nav>ul>li.open>a:active {
+    color: $twitter-blue;
+}
+
+.sidebar-panel>nav>ul>li.open>a,
+.sidebar-panel>nav>ul>li.open>a:focus,
+.sidebar-panel>nav>ul>li.open>a:hover,
+.sidebar-panel>nav>ul>li>a:hover {
+    color: $white;
+    background-color: $twitter-blue;
+    /*border-left: 3px solid #71B75E;*/
+}
+
+.sidebar-panel>nav li.active>a{
+  color: $white;
+  background-color: $twitter-blue;
+  /*border-left: 3px solid #71B75E;*/
+  font-weight: 600 !important;
+}
+
+.sidebar-panel>nav a {
+    color: $main-theme;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.sidebar-panel>nav > i {
+  color:$main-theme;
+}
+
+.sidebar-panel>nav a:active,
+.sidebar-panel>nav a:focus,
+.sidebar-panel>nav a:hover {
+    color: $white;
+    background-color: $twitter-blue;
+    /*border-left: 3px solid #71B75E;*/
+}
+
+.main-panel>.header .nav>li>a,
+.main-panel>.header .navbar-text {
+    color: $main-theme
+}
+
+.nav{
+    background-color: $main-theme;
+    
+    li a { color: $white;}
 
     ul.sub-menu{
 
         li {
 
             a {
-                color: #1D75A1;
-                &:hover{ color: #10374D }
+                color: $white;
+                &:hover { color: $main-theme }
             }
 
             &.active-link{
-                background-color: #fff;
-                a { color: #10374D }
+                a { color: $white }
+                a:hover{ color: $main-theme }
             }
         }
     }
 
     li.user-menu{
-        background-color: #10374D;
+        color: $white;
+        background-color: transparent;
+        &:hover { background-color: $twitter-blue }
         li.dropdown-submenu {
             &:hover{
-                background-color: #1D75A1;
-                color: #fff;
+                background-color: $main-theme;
+                color: $white;
             }
         }
-        a { color: #10374D }
+        a { color: $main-theme }
     }
 
     
 
     li.menu-accordion {
-        color: #1D75A1;
+        color: $main-theme;
         &.open{
             li {
                 animation: navEffect 1s;

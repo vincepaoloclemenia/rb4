@@ -11,6 +11,6 @@ json.activities do |json|
                 when "Sale" then sale_path(activity.recordable)
                 end
         json.time_ago time_ago_in_words(activity.created_at) + " ago"
-        json.color activity.user.role.role_level.eql?('branch') ? activity.user.branch.color : '#10374D'
+        json.color activity.user.role.role_level.eql?('branch') ? activity.user.branch.color : activity.user.role.role_level.eql?('brand') ? '#00aced' : '#10374D'
     end
 end

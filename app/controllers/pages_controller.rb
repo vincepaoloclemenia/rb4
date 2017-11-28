@@ -29,20 +29,13 @@ class PagesController < ApplicationController
 	end
 
 	def update_units
-		if params[:item_id].empty? && params[:controller_name].empty? && params[:purchase_id].empty?
+		if params[:item_id].empty? && params[:purchase_id].empty?
 			@units = current_brand.units.none
-		else
-			@controller = params[:controller_name]
-			if @controller == 'purchase_items'
-				item = current_brand.items.find(params[:item_id])
-				purchase = Purchase.find(params[:purchase_id])
-				supplier_unit = purchase.supplier.prices.find_by_supplier_id_and_item_id(purchase.supplier, item).unit_id
-				@unit = Unit.find(supplier_unit)
-			elsif @controller == 'supplier_item_prices'
-				@item = current_brand.items.find(params[:item_id])
-				@unit = item.unit.name
-				render json: { unit: @unit }
-			end
+		else			
+			@item = current_brand.items.find(params[:item_id])
+			@purchase = Purchase.find(params[:purchase_id])
+			@supplier_unit = @purchase.supplier.prices.find_by_supplier_id_and_item_id(@purchase.supplier.id, @item.id)
+			@unit = Unit.find(@supplier_unit.unit.id) unless @supplier_unit.nil?
 		end
 	end
 

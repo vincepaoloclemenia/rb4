@@ -61,12 +61,15 @@
 				h4.modal-title Create Purchase
 			.modal-body
 				= form_for @purchase, remote: true do |f|
-					.row.mb10
-						.col-xs-12
-							= f.label :branch_id
-								| Branch
-								small.field-req  *
-							= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+					- if current_user.role.role_level.eql?('branch')
+						= f.hidden_field :branch_id, value: current_user.branch.id
+					- else 
+						.row.mb10
+							.col-xs-12
+								= f.label :branch_id
+									| Branch
+									small.field-req  *
+								= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 					.row.mb10
 						.col-xs-6
 							= f.label :invoice_number

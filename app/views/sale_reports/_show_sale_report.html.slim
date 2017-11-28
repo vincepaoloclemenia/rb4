@@ -2,21 +2,21 @@
     .panel-heading Sales Chart
     .panel-body
         - if current_user.role.role_level.eql?('branch')
-            = line_chart daily_sales_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), id: 'branch-sales', colors: [current_user.branch.color]
+            = line_chart daily_sales_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), id: 'branch-sales', colors: [current_user.branch.color], label: 'Total Sales'
         - else 
-            = line_chart daily_sales_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), id: 'sales-vs-expenses', colors: colours
+            = line_chart daily_sales_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), id: 'sales-vs-expenses', colors: colours, label: 'Total Sales'
 
 .panel
     .panel-heading Sales vs Expense
     .panel-body
         
-        = column_chart sales_vs_expense_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: ["#EA6262","#5CC189"], id: 'revenues-vs-expense'
+        = column_chart sales_vs_expense_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: ["#EA6262","#5CC189"], id: 'revenues-vs-expense'    
 
 .panel
     .panel-heading Customer Count
     .panel-body
         - if current_user.role.role_level.eql?('branch')
-            = area_chart generated_sale_report_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: colours, id: 'customer-count'    
+            = area_chart generated_sale_report_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: colours, id: 'customer-count', label: 'Customer Count'    
         - else    
-            = column_chart generated_sale_report_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: colours, id: 'customer-count'
+            = column_chart generated_sale_report_charts_path(from: URI.decode(sale_report.date_from.strftime('%m/%d/%Y')), to: URI.decode(sale_report.date_to.strftime('%m/%d/%Y'))), colors: colours, id: 'customer-count', label: 'Customer Count'    
     

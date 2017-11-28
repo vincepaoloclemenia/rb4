@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
   end
 
   def access_control
-    section = params[:controller] == 'sales' ? false : Section.find_by_name(params[:controller])
+    section = params[:controller] == 'sales' || params[:controller] == 'purchases' || params[:controller] == 'purchase_items' ? false : Section.find_by_name(params[:controller])
     if section
       if ["show","update","create","destroy"].include?(params[:action])
         action = params[:action].eql?('show') ? "is_read" : "is_#{params[:action]}"

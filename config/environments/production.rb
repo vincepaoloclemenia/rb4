@@ -89,8 +89,9 @@ Rails.application.configure do
     :port                 => '587',
     :domain               => 'restobot.com',
     :authentication       => :login,
+    :enable_starttls_auto =>  true,
     :user_name            => 'restobot@talentium.ph',
-    :password             => '@ppsource2015'
+    :password             => 'Koy52442'
    }
 
   Rails.application.config.middleware.use ExceptionNotification::Rack,

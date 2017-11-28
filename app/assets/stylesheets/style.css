@@ -12058,10 +12058,6 @@ blockquote p {
     box-shadow: 0 0 1px rgba(0, 0, 0, .1)
 }
 
-.sidebar-panel>.brand{
-  background-color: #10374D;
-}
-
 .sidebar-panel>.brand a {
     color: #fff;
 }
@@ -12082,64 +12078,6 @@ blockquote p {
 
 .menu-icon {
     color: #fff;
-}
-.sidebar-panel>nav>ul>li>ul {
-    color: #888;
-    background-color: #fff;
-
-}
-
-.sidebar-panel>nav>ul>li.open>a:active {
-    color: #fff;
-}
-
-.sidebar-panel>nav>ul>li.open>a,
-.sidebar-panel>nav>ul>li.open>a:focus,
-.sidebar-panel>nav>ul>li.open>a:hover,
-.sidebar-panel>nav>ul>li>a:hover {
-    color: #333;
-    background-color: #fff;
-    /*border-left: 3px solid #71B75E;*/
-}
-
-.sidebar-panel>nav li.active>a,
-.sidebar-panel>nav li.open>a {
-    color: #333;
-    background-color: #fff;
-    /*border-left: 3px solid #71B75E;*/
-}
-
-.sidebar-panel>nav li.active>a{
-  color: #333;
-  background-color: #fff;
-  /*border-left: 3px solid #71B75E;*/
-  font-weight: 600 !important;
-}
-
-.sidebar-panel>nav .open>a,
-.sidebar-panel>nav .open>a:focus,
-.sidebar-panel>nav .open>a:hover {
-    color: #333;
-    background-color: #fff;
-    /*border-left: 3px solid #71B75E;*/
-}
-
-.sidebar-panel>nav a {
-    color: #888888;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.sidebar-panel>nav > i {
-  color:#D8DDE4;
-}
-
-.sidebar-panel>nav a:active,
-.sidebar-panel>nav a:focus,
-.sidebar-panel>nav a:hover {
-    color: #333;
-    background-color: #fff;
-    /*border-left: 3px solid #71B75E;*/
 }
 
 .quick-launch-panel {
@@ -12360,24 +12298,6 @@ blockquote p {
     .main-panel>.header>.nav>li {
         float: left
     }
-}
-
-.main-panel>.header {
-    background-color: #10374D
-}
-
-.main-panel>.header .nav>li>a,
-.main-panel>.header .navbar-text {
-    color: #A9A9A9
-}
-
-.main-panel>.header .nav .open>a,
-.main-panel>.header .nav .open>a:focus,
-.main-panel>.header .nav .open>a:hover,
-.main-panel>.header .nav>li>a:focus,
-.main-panel>.header .nav>li>a:hover {
-    background-color: #1D75A1;
-    color: #fff
 }
 
 .main-panel>.header .hamburger-icon span {

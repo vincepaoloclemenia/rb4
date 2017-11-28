@@ -1,10 +1,7 @@
 - content_for :title, "Restobot | Dashboard"
 .row
-  - if current_user.role.role_level.eql?('branch')
-    = render 'branch_admin_dashboard'
-  - else
-    = render 'client_brand_admin_dashboard'
-
+  = render 'admins_dashboard'
+  
 .row
   .col-xs-12.col-md-12.col-lg-8
     .panel

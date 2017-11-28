@@ -14,6 +14,19 @@ class PurchaseItemsController < ApplicationController
 		@purchase_item.date_of_purchase = Date.today
 		respond_to do |format|
 			if @purchase_item.save
+				if current_user.role.role_level.eql?('branch')
+					current_brand.activities.create(
+						user_id: current_user.id,
+						action: " purchased #{@purchase_item.quantity} #{@purchase_item.unit.symbol} of #{@purchase_item.item.name}",
+						recordable: @purchase_item
+					)
+				else
+					current_brand.activities.create(
+						user_id: current_user.id,
+						action: " purchased #{@purchase_item.quantity} #{@purchase_item.unit.symbol} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
+						recordable: @purchase_item
+					)
+				end
 				index
 				@success = true
 				flash[:notice] = "Purchase Item successfully added"
