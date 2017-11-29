@@ -12,16 +12,16 @@ class AdminsPerRole extends React.Component{
             case 3:
                 return 'col-xs-12 col-md-12 col-md-12 col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-1';
             default:
-                return 'col-xs-12 col-sm-12 col-md-12 col-lg-12'; 
+                return 'col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1'; 
         }           
     }
 
     cardWidth(){
         switch (this.props.admins.length){
             case 1:
-                return "col-xs-12 col-sm-10 col-md-10 col-lg-10 col-xs-offset-0 col-sm-offset-1 col-md-offset-1 col-lg-offset-1";
+                return "col-xs-12 col-sm-10 col-md-10 col-lg-8 col-xs-offset-0 col-sm-offset-1 col-md-offset-1 col-lg-offset-2";
             case 2:
-                return "col-xs-6 col-sm-6 col-md-5 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-0";
+                return "col-xs-6 col-sm-6 col-md-5 col-lg-5 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-1";
             case 3:
                 return "col-xs-4 col-sm-4 col-md-4 col-lg-4" 
             default:

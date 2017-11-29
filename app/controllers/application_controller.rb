@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :find_wizard_flag
+  before_action :restrict_users
 
   helper_method :current_client, :current_brand, :view_access_control
 
@@ -81,6 +82,15 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource)
     flash[:notice] = "Logged out successfully"
     new_user_session_path
+  end
+
+  def restrict_users
+    controllers = Section.all.where.not(name: ['sales', 'purchase_items', 'purchases']).pluck(:name)
+    if user_signed_in?
+      if current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('branch')
+        redirect_to dashboard_path, alert: "Access denied" if controllers.include?(params[:controller])
+      end
+    end
   end
 
   protected
