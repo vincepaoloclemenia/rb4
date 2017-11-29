@@ -82,6 +82,17 @@
     color: $main-theme
 }
 
+.header.navbar{
+    background-color: $white opacity(0.5%);
+    transition: 0.3s transform;
+    &.is-inView {
+        transform: translateY(0);
+    }
+    &.is-hidden {
+        transform: translateY(-100%);
+    }
+}
+
 .nav{
     background-color: $main-theme;
     

@@ -43,28 +43,28 @@
     .panel
       .panel-heading.border.pb45 style="font-size:13px"
         .pull-left.mt5 Purchase Cost Stats
-        .panel-controls.no-upp.nav-tabs
+        /.panel-controls.no-upp.nav-tabs
           ul.nav.nav-tabs.btn-group data-toggle="buttons"
             label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
               a data-toggle="tab" href="#brand-purchase-info"  Brand Total
             label.btn.btn-primary class="#{brand_pane_active?('branches')}"
               a data-toggle="tab" href="#branches-purchase-list"  Branches Total
-      .panel-body.tab-content
+      /.panel-body.tab-content
         #brand-purchase-info.tab-pane class="#{brand_pane_active?('info')}"
           = high_chart("brand_purchases", @brand_purchases)
         #branches-purchase-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
           = high_chart("branch_purchases", @branch_purchases)
 
-  .col-xs-12.col-md-12.col-md-6
+  /.col-xs-12.col-md-12.col-md-6
     .panel
-      .panel-heading.border.pb45 style="font-size:11px"
+      /.panel-heading.border.pb45 style="font-size:11px"
         .pull-left
           small style="font-size:8px" Price Movement<br>
           | Highest to Lowest 
         .panel-controls.no-upp
           a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
             i.icon-glyph-98
-      .panel-body
+      /.panel-body
         .no-more-tables
           table.table.table-bordered.table-striped.mb0
             thead
@@ -85,7 +85,7 @@
                   td data-title="Current Amount" = to_peso(pm[:present_amount])
                   td data-title="Price Movement" = to_peso(pm[:price_movement].abs)
 
-  .col-xs-12.col-md-12.col-md-6
+  /.col-xs-12.col-md-12.col-md-6
     = render "price_movement"
 
 javascript:

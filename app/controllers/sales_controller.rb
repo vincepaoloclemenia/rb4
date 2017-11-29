@@ -1,6 +1,7 @@
 class SalesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
+	before_action :destroy_activity, only: :destroy
 	after_action :get_total_sales, only: :create
 
 	def index
@@ -62,6 +63,11 @@ class SalesController < ApplicationController
 
 		def get_total_sales
 			@sale.update(net_total_sales: @sale.net_sales)
+		end
+
+		def destroy_activity
+			@sale = current_brand.sales.find(params[:id])
+			current_brand.activities.find_by(recordable: @sale).destroy
 		end
 
 		def per_page

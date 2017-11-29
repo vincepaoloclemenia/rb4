@@ -1,6 +1,7 @@
 class PurchaseItemsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
+	before_action :destroy_activity, only: :destroy
 	before_action :find_purchased_item, only: :show
 
 	def index
@@ -75,4 +76,10 @@ class PurchaseItemsController < ApplicationController
 	def find_purchased_item
 		@purchase_item = current_user.brand.purchase_items.find(params[:id])
 	end
+
+	def destroy_activity
+		@purchase_item = current_brand.purchase_items.find(params[:id])
+		current_brand.activities.find_by(recordable: @purchase_item).destroy
+	end
+
 end

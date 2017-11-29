@@ -4,21 +4,10 @@
 		.panel-heading.border Details
 		.panel-body
 			.row
-				.col-xs-12.col-lg-4.mb5
-					= f.label :branch_id, "Branch <small class='field-req'>*</small>".html_safe
-					- if current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('client')
-						= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-					- else
-						= f.select :branch_id, Hash[ current_user.branch.name, current_user.branch.id ], { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-				.col-xs-12.col-lg-4.mb5
-					= f.label :sale_date, "Date <small class='field-req'>*</small>".html_safe
-					- if current_brand.sales.where(sale_date: Date.today).exists?
-						= f.text_field :sale_date, id: "sale_date_datepicker", placeholder: "mm/dd/yyyy", class: "form-control", data: { provide: "datepicker" }
-					- else
-						= f.text_field :sale_date, id: "sale_date_datepicker", placeholder: "#{Date.today.strftime('%m/%d/%Y')}", class: "form-control", data: { provide: "datepicker" }
-				.col-xs-12.col-lg-4.mb5
-					= f.label :shift_id, "Shift".html_safe
-					= f.select :shift_id, current_brand.shifts.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+			- if current_user.role.role_level.eql?('branch')
+				= render partial: 'branch_user', locals: { f: f }
+			- else
+				= render partial: 'client_brand_user', locals: { f: f }
 	
 	.panel
 		.panel-heading.border Statistics
