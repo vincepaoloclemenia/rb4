@@ -89,7 +89,6 @@ Rails.application.configure do
     :port                 => '587',
     :domain               => 'restobot.com',
     :authentication       => :login,
-    :enable_starttls_auto =>  true,
     :user_name            => 'restobot@talentium.ph',
     :password             => 'Koy52442'
    }
