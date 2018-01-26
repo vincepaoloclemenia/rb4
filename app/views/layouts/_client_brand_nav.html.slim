@@ -44,15 +44,14 @@
 					- if view_access_control("sales","show")
 						li class = '#{what_controller?('sales', 'index')}'
 							= link_to "Daily & Weekly Sales Reports", sales_path
-
-			/ purchasing and item ordering pages				
-			li.menu-accordion class="{is_menu_open?('purchasing')}"
+			
+			li.menu-accordion class="#{is_menu_open?('purchasing')}"
 				= link_to '<i class="fa icon-glyph-109"></i> <span>Purchasing</span>'.html_safe, 'javascript:;'
-				ul.sub-menu
-					- if view_access_control("purchase_orders","index")
-						li class = '#{what_controller?('purchase_orders', 'index')}'
-							/ = link_to "Purchase Order Listing", order_lists_path
-							= link_to "Purchase Order Listing", purchase_orders_path
+				ul.sub-menu					
+					li class = '#{what_controller?('order_lists', 'index')}'
+						= link_to "Orders List", order_lists_path
+					li class = '#{what_controller?('purchase_orders', 'index')}'
+						= link_to "Purchase Orders Listing", purchase_orders_path
 
 			li.menu-accordion class="#{is_menu_open?('management_reports')}"
 				= link_to '<i class="fa icon-glyph-63"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'

@@ -97,6 +97,8 @@ Rails.application.routes.draw do
   get 'new_password_validate_email' => 'pages#new_password_validate_email'
   put 'change_brand' => 'pages#change_brand'
   get 'get_plan_info' => 'pages#get_plan_info'
+  get 'get_price' => 'pages#get_price'
+  get 'get_units' => 'pages#get_units'
   
 
   namespace :api do

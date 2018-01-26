@@ -1,0 +1,8 @@
+var select = $('#purchase_order_item_unit_id');
+select.empty();	
+<% if @unit.nil? %>
+	select.append("<option>No Specified Unit Yet</option>");
+<% else %>
+	select.append("<option value='<%= @unit.id %>'><%= @unit.name %></option>");
+<% end %>
+	

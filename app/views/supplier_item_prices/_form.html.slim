@@ -29,7 +29,7 @@
 			= f.label :supplier_amount
 			  | Price:
 			  small.field-req  *
-			= f.number_field :supplier_amount, class: "form-control", placeholder: "Supplier Price", id: 'supplier-amount'
+			= f.number_field :supplier_amount, step: '.01', class: "form-control", placeholder: "Supplier Price", id: 'supplier-amount'
 	.row.mb10
 		.col-xs-12.mt20
 			| (

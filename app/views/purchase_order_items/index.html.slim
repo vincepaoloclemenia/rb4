@@ -63,7 +63,7 @@
 							= f.label :item_id
 								| Item
 								small.field-req  *
-							= f.select :item_id, Item.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+							= f.select :item_id, @purchase_order.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
 					.row.mb10
 						.col-xs-12
 							= f.label :unit_id
@@ -127,10 +127,26 @@ javascript:
 	// 	}
 	// });
 	$('#purchase_order_item_item_id').change(function(){
+		$('#purchase_order_item_price_selected').val('')
+		$('#purchase_order_item_quantity').val('')
 		$.ajax({
-	    url: "#{update_units_path}",
-	    data: {
-	      item_id : $('#purchase_order_item_item_id').val()
-	    }
-	  });
+			url: "#{get_units_path}",
+			data: {
+				item_id : $(this).val(),
+				supplier_id: "#{@purchase_order.supplier.id}"
+			}
+		});
+	});
+	$('#purchase_order_item_quantity').on('keyup', function(){
+		$.ajax({
+			url: "#{get_price_path}",
+			data: { 
+				item_id: $('#purchase_order_item_item_id').val(),
+				amount: parseInt($(this).val()),	
+				supplier_id: "#{@purchase_order.supplier.id}"
+			},
+			success: (data) => {
+				$('#purchase_order_item_price_selected').val(data.total)
+			}
+		});
 	});

@@ -8,6 +8,17 @@ class PagesController < ApplicationController
 		end
 	end
 
+	def get_units
+		if params[:item_id].empty? && params[:supplier_id].empty?
+			@units = current_brand.units.none
+		else			
+			@item = current_brand.items.find(params[:item_id])
+			@supplier = Supplier.find(params[:supplier_id])
+			@supplier_unit = @supplier.prices.find_by_item_id(@item.id)
+			@unit = Unit.find(@supplier_unit.unit.id) unless @supplier_unit.nil?
+		end
+	end
+
 	def update_role
 		@role = Role.find(params[:role_id])
 		@role_field_id = "##{params[:role_field_id]}"
@@ -51,6 +62,23 @@ class PagesController < ApplicationController
 				render json: { price: @price }
 			else
 				render json: { price: 0.00 }		
+			end
+		end
+	end
+
+	def get_price
+		if params[:item_id].empty? && params[:amount].empty? && params[:supplier_id].empty?
+			render json: { price: 0.00 }
+		else
+			@item = current_brand.items.find(params[:item_id])
+			@supplier = Supplier.find(params[:supplier_id])
+			@amount = params[:amount]
+			@price = @item.supplier_item_prices.find_by_supplier_id_and_item_id(@supplier.id, @item.id)	
+			@total = (@amount.to_f * @price.supplier_amount) if @price.present?
+			if @total
+				render json: { total: @total }
+			else
+				render json: { total: 0.00 }
 			end
 		end
 	end

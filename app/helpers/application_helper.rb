@@ -57,6 +57,8 @@ module ApplicationHelper
 															(controller.eql?('brands') && action.eql?('show'))
 		when "company_setup"
 			"open" if current_pages?(client_path, brands_path) || (controller.eql?('brands') && action.eql?('show'))
+		when "purchasing"
+			"open" if current_pages?(order_lists_path, purchase_orders_path) || (controller.eql?('order_lists') && action.eql?('index')) || (controller.eql?('purchase_orders') && action.eql?('index'))
 		when "labor_setup"
 			"open" if current_pages?(employees_path, employee_types_path)
 		when "sales_setup"
