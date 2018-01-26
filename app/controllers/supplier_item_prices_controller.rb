@@ -17,7 +17,8 @@ class SupplierItemPricesController < ApplicationController
 	def edit
 		@supplier_item_price = SupplierItemPrice.find(params[:id])
 		@sp_id = params[:sp]
-		@items = Supplier.find(@sp_id).items
+		@supplier = Supplier.find(@sp_id)
+		@items = Supplier.find(@sp_id).items	
 	end
 
 	def create
@@ -38,7 +39,7 @@ class SupplierItemPricesController < ApplicationController
 		else
 			flash[:alert] = @supplier_item_price.errors.full_messages.join(", ")
 		end
-		redirect_to supplier_item_prices_path
+		redirect_to supplier_item_prices_path(sp: @supplier_item_price.supplier.id)
 	end
 
 	def destroy

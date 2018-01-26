@@ -74,7 +74,7 @@ class PurchaseItemsController < ApplicationController
 	end
 
 	def find_purchased_item
-		@purchase_item = current_user.brand.purchase_items.find(params[:id])
+		@purchase_item = current_user.brand.purchase_items.find(params[:purchase_item])
 	end
 
 	def destroy_activity

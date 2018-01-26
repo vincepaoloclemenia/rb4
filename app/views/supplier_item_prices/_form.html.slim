@@ -1,16 +1,17 @@
 = form_for @supplier_item_price do |f|
 	.row.mb10
-		- if controller.action_name == 'new'
+		- if @supplier_item_price.new_record?
 			.col-xs-12		
 				= f.label :item_id
 					| Choose Item:
 					small.field-req  *
 				= f.select :item_id, @supplier.remaining_items, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-		- elsif controller.action_name == 'edit'
+		- else
 			.col-xs-12
 				= f.label :item_id
 					| Item Name:
-				=	f.select :item_id, @supplier_item_price.item.name, { include_blank: @supplier_item_price.item.name }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+				=	f.text_field :item_name, class: 'form-control', value: @supplier_item_price.item.name, disabled: true
+				= f.hidden_field :item_id, value: @supplier_item_price.item.id
 	.row.mb10
 		.col-xs-12
 			= f.label :supplier_item_unit
@@ -41,4 +42,7 @@
 			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 			|
 			/ button.btn.btn-primary type="submit" = @supplier.new_record? ? "Add Supplier" : "Save Changes"
-			= f.submit "Create", class: "btn btn-primary", data: { "disable-wth" => "Creating.." }
+			- if @supplier_item_price.new_record? 
+				= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+			- else
+				= f.submit "Save", class: "btn btn-primary", data: { "disable-with" => "Saving.." }
