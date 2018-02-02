@@ -12,7 +12,7 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 			th width="120" Total<br>Amount
 			th width="120" data-sortable="false" Action
 	tbody style="font-size:13px"
-		- if purchases.empty?
+		- if purchases.nil?
 			tr
 				td colspan="8"
 					p.text-center.mt5 No Records Found

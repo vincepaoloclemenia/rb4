@@ -1,10 +1,15 @@
 = form_for [@brand, @branch] do |f|
   .row
-    .col-xs-12.mb10
+    .col-xs-6.mb10
       = f.label :name
         | Branch
         small.field-req  *
       = f.text_field :name, class: "form-control", placeholder: "Name"
+    .col-xs-6.mb10
+      = f.label 'Alias'
+        | Alias
+        small.field-req  * <i>No spaces please</i>
+      = f.text_field :aka, class: "form-control", placeholder: "Alias: e.g 'Br', 'BR', 'Bwnt'"
     .col-xs-12.mb10
       = f.label :color
         | Color

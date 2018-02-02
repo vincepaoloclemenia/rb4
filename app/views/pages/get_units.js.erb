@@ -1,8 +1,14 @@
-var select = $('#purchase_order_item_unit_id');
+var select = $('#unit');
 select.empty();	
 <% if @unit.nil? %>
-	select.append("<option>No Specified Unit Yet</option>");
+	$('#unit').append("<option>No specified unit yet</option>");
 <% else %>
-	select.append("<option value='<%= @unit.id %>'><%= @unit.name %></option>");
+	$('#unit').append("<option value='<%= @unit.id %>'><%= @unit.name %></option>");
+<% end %>
+
+$('#packaging').val("<%= @packaging %>")
+
+<% if @supplier_unit.nil? || @unit.nil? %>
+	$('#purchase_order_item_quantity').prop( 'readonly', true )
 <% end %>
 	

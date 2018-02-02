@@ -19,12 +19,22 @@ class Branch < ActiveRecord::Base
 						},
             uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
 
+  validates :aka, presence: true, uniqueness: true
+
+  validate :validate_alias, on: :create
+
   after_create :set_default_color
 
   def self.all_unsubscribed
     # select { |b| b.subscription.nil? || b.subscription.plan_id.eql?(1) }
     select { |b| b.subscription.nil? || b.free_trial? }
     # joins(:subscriptions).where.not("subscriptions.status = ?", "Active")
+  end
+
+  def validate_alias
+    if ( /\s/ =~ aka ) > 0
+      errors.add(:aka, message: 'Spaces for alias is not allowed')
+    end
   end
 
   def self.all_unsubscribed_name_id

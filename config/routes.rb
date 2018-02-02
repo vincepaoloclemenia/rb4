@@ -56,6 +56,8 @@ Rails.application.routes.draw do
   resources :subscriptions do
     get 'show_branches'
   end
+
+  resources :orders_summary, only: :index
   resources :bills
   resources :payment_notifications
   post 'paypal_checkout' => 'subscriptions#paypal_checkout'
@@ -99,6 +101,7 @@ Rails.application.routes.draw do
   get 'get_plan_info' => 'pages#get_plan_info'
   get 'get_price' => 'pages#get_price'
   get 'get_units' => 'pages#get_units'
+  get 'take_units' => 'pages#take_units'
   
 
   namespace :api do

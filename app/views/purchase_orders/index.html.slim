@@ -26,7 +26,7 @@
 		.pull-left.mt7 Purchase Orders
 		.pull-right
 			/ - if view_access_control('purchase_orders','create')
-			= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, '#', data: { toggle: "modal", target: ".create-purchase_order-modal" }, class: "btn btn-success btn-round btn-outline"
+			= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_order_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
 		/ - if current_brand.purchase_order_orders.empty?
 		/ 	= render "partials/no_records_found", subtitle: 'To start tracking your purchase order click <b>"Create Purchase Order"</b> button'
@@ -50,55 +50,5 @@
 		.no-more-tables#purchase_order-list
 			= render "purchase_order_list", purchase_orders: @purchase_orders
 
-
-.modal.create-purchase_order-modal tabindex="-1" role="dialog" aria-hidden="true"
-	.modal-dialog
-		.modal-content
-			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true"
-					i.icon-glyph-27
-				h4.modal-title Create Purchase Order
-			.modal-body
-				= form_for @purchase_order, remote: true do |f|
-					.row.mb10
-						.col-xs-6
-							- @po_number = po_number_format
-							= f.label :pr_number
-								| Purchase Requisition No.
-								small.field-req  *
-							= f.text_field :pr_number, value: @po_number, class: "form-control", readonly: true
-						.col-xs-6
-							= f.label :pr_date
-								| Purchase Requisition Date
-								small.field-req  *
-							/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
-							= f.text_field :pr_date, value: Date.today, class: "form-control", readonly: true
-							= f.hidden_field :status, value: 'Pending'
-					.row.mb10
-						.col-xs-12
-							= f.label :supplier_id, "Supplier"
-								| Supplier
-								small.field-req  *
-							= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-
-							- if @suppliers.nil?
-
-								.alert.alert-info.mt5 role="alert"
-									.row
-										.col-xs-1.text-right
-											i.icon-glyph-73.f25
-										.col-xs-11
-											| You currently have no list of suppliers.<br> Go to:&nbsp;
-											b Setup > Purchase Setup > Suppliers >&nbsp;
-											= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
-					.row.mb10
-						.col-xs-12.mt20
-							| (
-							small.field-req   *
-							|  )
-							i  indicates field is required
-					.modal-footer.no-border
-						span.inline.float-right
-							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|
-							= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+					
+= render "partials/modal"

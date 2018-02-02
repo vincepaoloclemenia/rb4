@@ -7,6 +7,7 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 			th width="160" data-sortable="false" Item Description
 			th width="110" Quantity
 			th width="115" Unit
+			th width="145" Packaging
 			th width="120" Unit Price
 			th width="140" VAT Type
 			th width="140" Total Amount
@@ -17,7 +18,8 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				td data-title="Item Name" = pi.item.name
 				td data-title="Item Description" = pi.remarks
 				td data-title="Quantity" = pi.quantity.to_s
-				td data-title="Unit" = pi.unit.name
+				td data-title="Unit" = pi.unit_name
+				td data-title="Packaging" = pi.packaging
 				td data-title="Unit Price" = to_peso(pi.purchase_item_amount)
 				td data-title="VAT Type" = pi.vat_type
 				td data-title="Total Action" = to_peso(pi.purchase_item_total_amount)

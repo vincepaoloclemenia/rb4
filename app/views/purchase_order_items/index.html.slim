@@ -65,25 +65,36 @@
 								small.field-req  *
 							= f.select :item_id, @purchase_order.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
 					.row.mb10
-						.col-xs-12
+						.col-xs-6.col-md-6
 							= f.label :unit_id
 								| Unit
 								small.field-req  *
 							/= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
-							= f.select :unit_id, Unit.pluck(:name, :id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+							= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, readonly: true, id: 'unit'
+						.col-xs-6.col-md-6
+							= f.label :packaging
+							= f.text_field :packaging, class: 'form-control', readonly: true, id: 'packaging'
+														
 					.row.mb10
-						.col-xs-12.col-lg-4.mt5
+						.col-md-4.col-lg-4.mt5
 							= f.label :quantity
 								| Quantity
 								small.field-req  *
 							= f.number_field :quantity, class: "form-control", placeholder: "0"
-						.col-xs-6.col-lg-4.mt5
+						.col-md-4.col-lg-4.mt5
 							= f.label :price_selected
-								| Supplier Price
+								| Supplier's Item Price
 								small.field-req  *
 							.input-group
 								span.input-group-addon PHP
-								= f.text_field :price_selected, class: "form-control", placeholder: "0.00"
+								= f.number_field :price_selected, class: "form-control", placeholder: "0.00", readonly: true, id: 'supplier_price', step: '.01', id: 'supplier_price'	
+						.col-md-4.col-lg-4.mt5
+							= f.label :total_amount
+								| Total Amount
+								small.field-req  *
+							.input-group
+								span.input-group-addon PHP
+								= f.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true
 					.row.mb10
 						.col-xs-12
 							= f.label :remarks
@@ -134,7 +145,7 @@ javascript:
 			data: {
 				item_id : $(this).val(),
 				supplier_id: "#{@purchase_order.supplier.id}"
-			}
+			},
 		});
 	});
 	$('#purchase_order_item_quantity').on('keyup', function(){
@@ -146,7 +157,8 @@ javascript:
 				supplier_id: "#{@purchase_order.supplier.id}"
 			},
 			success: (data) => {
-				$('#purchase_order_item_price_selected').val(data.total)
+				$('#supplier_price').val(data.price)
+				$('#total_amount').val(data.total)
 			}
 		});
 	});

@@ -30,8 +30,9 @@ class OrderListsController < ApplicationController
 					@success = false
 					flash[:alert] = @order_list.errors.full_messages.join(", ")
 				end
-				redirect_to order_lists_path, notice: "Create Successful"
+				format.js
 			end
+			redirect_to order_lists_path
 		end
 
 	def update
@@ -46,7 +47,18 @@ class OrderListsController < ApplicationController
   def destroy
     @order_list = OrderList.find(params[:id])
     if @order_list.present?
-      @order_list.destroy
+			respond_to do |format|
+				@order_list.destroy
+				if @order_list.destroy
+					index
+					@success = true
+					flash[:notice] = "Order list successfully deleted"
+				else
+					@success = false
+					flash[:alert] = @order_list.errors.full_messages.join(", ")
+				end
+				format.js
+			end
     end
     redirect_to order_lists_path, notice: 'Successfully Deleted'
   end

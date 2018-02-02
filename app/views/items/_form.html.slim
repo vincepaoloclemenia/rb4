@@ -45,18 +45,18 @@
 			= f.label :item_type
 				| Item Type
 				small.field-req  *
-			= f.select :item_type, @item_types, { include_blank: true }, class: "chosen", data: {placeholder:"Select"}
-		.unit_cost_div
-			.col-xs-12.mt10
-				= f.label :item_value
-					| Item Value
-					small.field-req  *
-				= f.text_field :item_value, class: "form-control", placeholder: "Price of the Item"
+			= f.select :item_type, @item_types, { include_blank: true }, class: "chosen", data: {placeholder:"Select"}	
 	.row.mt10.mb10
+		.col-xs-6
+			= f.label :item_value
+				| Item Value
+				small.field-req  *
+			= f.number_field :item_value, class: "form-control", step: '.01'
 		.col-xs-6
 			= f.label :item_code
 			= f.text_field :item_code, class: "form-control"
-	.row.mb10
+
+	.row.mb10.mt10
 		.col-xs-4
 			= f.label :track_as_sales, "Track as Sales"
 			p

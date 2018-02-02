@@ -1,0 +1,48 @@
+= form_for @purchase do |f|
+	- if current_user.role.role_level.eql?('branch')
+		= f.hidden_field :branch_id, value: current_user.branch.id
+	- else 
+		.row.mb10
+			.col-xs-12
+				= f.label :branch_id
+					| Branch
+					small.field-req  *
+				= f.select :branch_id, current_brand.branches.all_subscribed_name_id, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+	.row.mb10
+		.col-xs-6
+			= f.label :invoice_number
+				| Invoice No.
+				small.field-req  *
+			= f.text_field :invoice_number, class: "form-control"
+		.col-xs-6
+			= f.label :purchase_date
+				| Purchase Date
+				small.field-req  *
+			= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+	.row.mb10
+		.col-xs-12
+			= f.label :supplier_id, "Supplier"
+				| Supplier
+				small.field-req  *
+			= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+		- if @suppliers.nil?
+			.alert.alert-info.mt5 role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11
+						| You currently have no list of suppliers.<br> Go to:&nbsp;
+						b Setup > Purchase Setup > Suppliers >&nbsp;
+						= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+
+	.row.mb10
+		.col-xs-12.mt20
+			| (
+			small.field-req   *
+			|  )
+			i  indicates field is required
+	.modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }

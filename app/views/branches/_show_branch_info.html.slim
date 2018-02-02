@@ -1,12 +1,18 @@
 .row
   .col-xs-12
     .row.mb10.mt10
-      .col-xs-6
+      div class="col-xs-#{branch.name.present? ? '4' : '6'}"
         .text-light-grey
           | Branch
         label.text-dark-grey
           span.label.label-primary style="background-color: #{branch.color};" = branch.name
-      .col-xs-6
+      -if branch.aka.present?  
+        .col-xs-4
+          .text-light-grey
+            | Alias
+          label.text-dark-grey
+            span.label.label-primary style="background-color: #{branch.color};" = branch.aka    
+      div class="col-xs-#{branch.name.present? ? '4' : '6'}"
         .text-light-grey
           | Landline
         label.text-dark-grey = branch.landline_no

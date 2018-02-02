@@ -8,20 +8,22 @@ class PurchaseOrdersController < ApplicationController
 		@suppliers = (Supplier.pluck(:name,:id) + Supplier.pluck(:name,:id)).uniq
 	end
 
+	def new
+		@purchase_order = current_brand.purchase_orders.new
+		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
+	end
+
 	def create
-		@purchase_order = PurchaseOrder.new(purchase_order_params)
+		@purchase_order = PurchaseOrder.create(purchase_order_params)
 		# @purchase_order.user_created_by_id = current_user.id
-		respond_to do |format|
-			if @purchase_order.save
-				index
-				@success = true
-				flash[:notice] = "Purchase Order successfully created"
-			else
-				@success = false
-				flash[:alert] = @purchase_order.errors.full_messages.join(", ")
-			end
-			format.js
+		if @purchase_order.save
+			flash[:notice] = 'Purchase order successfully created'
+			redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
+		else
+			flash[:alert] = @purchase_order.errors.full_messages.join(', ')
+			redirect_to purchase_orders_path
 		end
+
 	end
 
 	def update

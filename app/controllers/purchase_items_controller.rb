@@ -19,13 +19,13 @@ class PurchaseItemsController < ApplicationController
 				if current_user.role.role_level.eql?('branch')
 					current_brand.activities.create(
 						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit.name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name}",
+						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name}",
 						recordable: @purchase_item
 					)
 				else
 					current_brand.activities.create(
 						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit.name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
+						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
 						recordable: @purchase_item
 					)
 				end
@@ -69,8 +69,8 @@ class PurchaseItemsController < ApplicationController
 	end
 
 	def purchase_item_params
-		params.require(:purchase_item).permit(:item_id, :unit_id, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
-																				:remarks, :date_of_purchase)
+		params.require(:purchase_item).permit(:item_id, :unit_name, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
+																				:remarks, :date_of_purchase, :packaging)
 	end
 
 	def find_purchased_item
@@ -79,7 +79,7 @@ class PurchaseItemsController < ApplicationController
 
 	def destroy_activity
 		@purchase_item = current_brand.purchase_items.find(params[:id])
-		current_brand.activities.find_by(recordable: @purchase_item).destroy
+		#current_brand.activities.find_by(recordable: @purchase_item).destroy
 	end
 
 end

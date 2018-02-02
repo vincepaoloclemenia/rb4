@@ -16,6 +16,17 @@ class PagesController < ApplicationController
 			@supplier = Supplier.find(params[:supplier_id])
 			@supplier_unit = @supplier.prices.find_by_item_id(@item.id)
 			@unit = Unit.find(@supplier_unit.unit.id) unless @supplier_unit.nil?
+			@packaging = @supplier_unit.nil? ? 'No specified packaging yet' : @supplier_unit.packaging
+			#render json: { packaging: @packaging, unit: @unit }
+		end
+	end
+
+	def take_units
+		if params[:item_id].empty?
+			@unit = 'No Specified Unit'
+		else
+			@item = current_brand.items.find(params[:item_id])
+			@unit = @item.unit
 		end
 	end
 
@@ -76,7 +87,7 @@ class PagesController < ApplicationController
 			@price = @item.supplier_item_prices.find_by_supplier_id_and_item_id(@supplier.id, @item.id)	
 			@total = (@amount.to_f * @price.supplier_amount) if @price.present?
 			if @total
-				render json: { total: @total }
+				render json: { total: @total, price: @price.supplier_amount }
 			else
 				render json: { total: 0.00 }
 			end

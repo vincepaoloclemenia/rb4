@@ -1,21 +1,22 @@
 class Brand < ActiveRecord::Base
   belongs_to :client
-  has_many :branches
-  has_many :client_user_accesses										# => for rescue purposes, associated roles and branches
+  has_many :branches, dependent: :destroy
+  has_many :client_user_accesses, dependent: :destroy										# => for rescue purposes, associated roles and branches
   has_many :roles, through: :client_user_accesses		# => for rescue purposes, associated roles and branches
-  has_many :categories
-  has_many :shifts
+  has_many :categories, dependent: :destroy
+  has_many :shifts, dependent: :destroy
   has_many :sales, through: :branches
-  has_many :employees
-  has_many :units
-  has_many :items
+  has_many :employees, dependent: :destroy
+  has_many :units, dependent: :destroy
+  has_many :items, dependent: :destroy
   has_many :inventories, through: :branches, dependent: :restrict_with_error
-  has_many :conversions
-  has_many :purchases
+  has_many :conversions, dependent: :destroy
+  has_many :purchases, dependent: :destroy
   has_many :purchase_items, through: :purchases
-  has_many :suppliers
-  has_many :sale_reports
+  has_many :suppliers, dependent: :destroy
+  has_many :sale_reports, dependent: :destroy
   has_many :activities, dependent: :destroy
+  has_many :purchase_orders, dependent: :destroy
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 

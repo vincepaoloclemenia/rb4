@@ -1,0 +1,11 @@
+$('#modal h4').html('New Purchase Order Item');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
