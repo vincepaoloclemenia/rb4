@@ -96,16 +96,16 @@
 								= f.label :vat_type
 									| VAT Type
 									small.field-req  *
-								= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control"
+								= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control", id: 'vat-type'
 							.col-xs-6
 								= f.label :packaging
 									| Packaging
 									small.field-req  *
-								= f.text_field :packaging, class: 'form-control', placeholder: 'e.g 12pcs. per pack'
+								= f.text_field :packaging, class: 'form-control', placeholder: 'e.g 12pcs. per pack', id: 'packaging'
 						.row.mb10
 							.col-xs-12
 								= f.label :remarks
-								= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2
+								= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2, id: 'remarks'
 						.row.mb10
 							.col-xs-12.mt20
 								| (
@@ -116,7 +116,7 @@
 							span.inline.float-right
 								= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 								|
-								= f.submit "Add", class: "btn btn-primary"
+								= f.submit "Add", class: "btn btn-primary", id: 'add'
 				- else
 					.row.mb10
 						.alert.alert-danger.mt5 role="alert" style='width: 90%; margin-left: 5%'
