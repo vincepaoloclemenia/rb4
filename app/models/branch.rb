@@ -8,6 +8,8 @@ class Branch < ActiveRecord::Base
   has_many :purchase_items, through: :purchases
   has_many :branch_subscriptions
   has_many :subscriptions, through: :branch_subscriptions
+  has_many :purchase_orders, dependent: :destroy
+  has_many :order_lists, dependent: :destroy
 
   # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
   # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }

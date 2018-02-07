@@ -29,8 +29,8 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 					/ - if view_access_control('purchase_orders','update')
 					/ = link_to "<i class='icon-glyph f14'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_order_#{purchase_order.id}" }
 					/ - if view_access_control('purchase_orders','destroy')
-					= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_order_path(purchase_order), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true
-					/ = link_to "<i class='icon-glyph-23 f14'></i>".html_safe, purchase_order_update_status_path(purchase_order, oli: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Notify Admin" }
+					/ = link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_order_path(purchase_order), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true
+					= link_to "<i class='icon-glyph-23 f14'></i>".html_safe, purchase_order_update_status_path(purchase_order, oli: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Notify Admin" }
 
 			div class="modal edit_purchase_order_#{purchase_order.id}" tabindex="-1" role="dialog" aria-hidden="true"
 				.modal-dialog

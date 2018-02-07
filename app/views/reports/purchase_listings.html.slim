@@ -130,7 +130,7 @@
 													td = pi.item.category.name
 													td = pi.vat_type
 													td = pi.quantity.to_s
-													td = pi.unit.name
+													td = pi.unit.nil? ? '' : pi.unit.name
 													td = pi.purchase_item_amount.to_s
 
 							.modal-footer.no-border

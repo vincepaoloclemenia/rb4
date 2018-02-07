@@ -1,11 +1,11 @@
 class PurchaseOrdersController < ApplicationController
-	# before_action :authenticate_user!
-	# before_action :access_control
+	before_action :authenticate_user!
+	before_action :access_control
 
 	def index
-		@purchase_orders = PurchaseOrder.paginate(page: params[:page], per_page: per_page)
+		@purchase_orders = current_user.role.role_level == 'branch' ? current_user.branch.purchase_orders.paginate(page: params[:page], per_page: per_page) : current_brand.purchase_orders.new_pos.paginate(page: params[:page], per_page: per_page)
 		@purchase_order = PurchaseOrder.new
-		@suppliers = (Supplier.pluck(:name,:id) + Supplier.pluck(:name,:id)).uniq
+		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
 	end
 
 	def new
@@ -13,17 +13,34 @@ class PurchaseOrdersController < ApplicationController
 		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
 	end
 
-	def create
-		@purchase_order = PurchaseOrder.create(purchase_order_params)
-		# @purchase_order.user_created_by_id = current_user.id
-		if @purchase_order.save
-			flash[:notice] = 'Purchase order successfully created'
-			redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
-		else
-			flash[:alert] = @purchase_order.errors.full_messages.join(', ')
-			redirect_to purchase_orders_path
-		end
+	def show
+	end
 
+	def create
+		if current_user.role.role_level.eql? 'branch'
+			@purchase_order = current_user.branch.purchase_orders.create(purchase_order_params)
+			@purchase_order.brand_id = current_user.brand.id
+			@purchase_order.client_id = current_user.client.id
+			@purchase_order.status = 'Pending'
+			if @purchase_order.save
+				flash[:notice] = 'Purchase order successfully created'
+				redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
+			else
+				flash[:alert] = @purchase_order.errors.full_messages.join(', ')
+				redirect_to purchase_orders_path
+			end
+		else
+			@purchase_order = current_client.purchase_orders.create(purchase_order_params)
+			@purchase_order.brand_id = current_brand.id
+			@purchase_order.status = 'Pending'
+			if @purchase_order.save
+				flash[:notice] = 'Purchase order successfully created'
+				redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
+			else
+				flash[:alert] = @purchase_order.errors.full_messages.join(', ')
+				redirect_to purchase_orders_path
+			end
+		end
 	end
 
 	def update
@@ -57,18 +74,54 @@ class PurchaseOrdersController < ApplicationController
 			end
 			format.js
 		end
-		#redirect_to purchases_path, notice: "Purchase successfully deleted"
+		#redirect_to purchases_path, notice: "Purchase successfully deleted" if current_user.role.role_level.eql? 'branch'
+	end
+
+	def approve
+		if params[:po].present?
+			@purchase_order = PurchaseOrder.find(params[:po])
+			@purchase_order.update(status: 'Approved')
+			if @purchase_order.save
+				redirect_to purchase_orders_path(), notice: "You approved #{@purchase_order.branch.name}'s' purchase order"
+			else
+				redirect_to purchase_orders_path(), alert: @purchase_order.errors.full_messages.join(', ')
+			end
+		end
+	end
+
+	def hold
+		if params[:po].present?
+			@purchase_order = PurchaseOrder.find(params[:po])
+			@purchase_order.update(status: 'On Hold')
+			if @purchase_order.save
+				redirect_to purchase_orders_path(), notice: "#{@purchase_order.branch.name}'s' purchase order was marked 'On Hold' "
+			else
+				redirect_to purchase_orders_path(), alert: @purchase_order.errors.full_messages.join(', ')
+			end
+		end
+	end
+
+	def reject
+		if params[:purchase_order_id].present?
+			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+			@purchase_order.update(status: 'Rejected')
+			if @purchase_order.save
+				redirect_to purchase_orders_path, notice: "You rejected #{@purchase_order.branch.name}'s' purchase order"
+			else
+				redirect_to purchase_orders_path, alert: @purchase_order.errors.full_messages.join(', ')
+			end
+		end
 	end
 
 	def update_status
-  	@purchase_order = PurchaseOrder.find(params[:oli])
-  	@purchase_order.status = 'Notified'
-  	@purchase_order.save
-  	@purchase_order_items = @purchase_order.purchase_order_items.all
-  	#create mail notification
-  	UserMailer.send_status_notification(@purchase_order, @purchase_order_items).deliver
-  	redirect_to purchase_orders_path(), notice: 'Notify the admin about new purchase order.'	
-  end
+		@purchase_order = PurchaseOrder.find(params[:oli])
+		@purchase_order.status = 'Notified'
+		@purchase_order.save
+		@purchase_order_items = @purchase_order.purchase_order_items.all
+		#create mail notification
+		UserMailer.send_status_notification(@purchase_order, @purchase_order_items).deliver
+		redirect_to purchase_orders_path(), notice: 'Notify the admin about new purchase order.'	
+	end
 
 	private
 

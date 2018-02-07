@@ -48,7 +48,7 @@
 			li.menu-accordion class="#{is_menu_open?('purchasing')}"
 				= link_to '<i class="fa icon-glyph-109"></i> <span>Purchasing</span>'.html_safe, 'javascript:;'
 				ul.sub-menu					
-					li class = '#{what_controller?('order_lists', 'index')}'
+					li class = '#{what_controller?('purchase_orders', 'index')}'
 						= link_to "Purchase Order Generator", purchase_orders_path
 					li class = '#{what_controller?('orders_summary', 'index')}'
 						= link_to "Summary of Orders", orders_summary_index_path

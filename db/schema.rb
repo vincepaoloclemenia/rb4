@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180202082810) do
+ActiveRecord::Schema.define(version: 20180207022941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -307,7 +307,16 @@ ActiveRecord::Schema.define(version: 20180202082810) do
     t.string   "status"
     t.string   "pr_number"
     t.datetime "pr_date"
+    t.integer  "user_id"
+    t.integer  "branch_id"
+    t.integer  "brand_id"
+    t.integer  "client_id"
   end
+
+  add_index "order_lists", ["branch_id"], name: "index_order_lists_on_branch_id", using: :btree
+  add_index "order_lists", ["brand_id"], name: "index_order_lists_on_brand_id", using: :btree
+  add_index "order_lists", ["client_id"], name: "index_order_lists_on_client_id", using: :btree
+  add_index "order_lists", ["user_id"], name: "index_order_lists_on_user_id", using: :btree
 
   create_table "order_per_suppliers", force: :cascade do |t|
     t.integer  "supplier_id"
@@ -419,7 +428,10 @@ ActiveRecord::Schema.define(version: 20180202082810) do
     t.integer  "supplier_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "user_id"
   end
+
+  add_index "purchase_orders", ["user_id"], name: "index_purchase_orders_on_user_id", using: :btree
 
   create_table "purchases", force: :cascade do |t|
     t.integer  "client_id"

@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :find_wizard_flag
-  before_action :restrict_users
+  #before_action :restrict_users
 
   helper_method :current_client, :current_brand, :view_access_control
 
@@ -104,8 +104,8 @@ class ApplicationController < ActionController::Base
   def access_control
     section = params[:controller] == 'sales' || params[:controller] == 'purchases' || params[:controller] == 'purchase_items' ? false : Section.find_by_name(params[:controller])
     if section
-      if ["show","update","create","destroy"].include?(params[:action])
-        action = params[:action].eql?('show') ? "is_read" : "is_#{params[:action]}"
+      if ["show","update","create","destroy"].include?(params[:action]) #|| ( section == 'users' && params[:action] == 'account' )
+        action = params[:action].eql?('show') ? "is_read" : "is_#{params[:action]}" #: params[:action] == 'account' ? "is_read" : params[:action] == 'update_account' ? "is_update" : "is_#{params[:action]}"
         
         permission = current_user.role.permissions.find_by_section_id(section.id)
         unless permission.send(action.to_sym)

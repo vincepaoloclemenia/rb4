@@ -12,6 +12,8 @@ class Client < ActiveRecord::Base
 	has_many :subscriptions
 	has_many :bills, through: :subscriptions
 	has_one :setting, dependent: :destroy
+	has_many :purchase_orders, dependent: :destroy
+	has_many :order_lists, through: :brands, dependent: :destroy
 
 	validates :name,
 						presence: true,

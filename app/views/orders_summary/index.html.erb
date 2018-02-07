@@ -1,0 +1,28 @@
+<div class='panel'>
+    <div class='panel-heading border pb45'>
+        <div class="pull-left mt7">Purchase Orders</div>
+        <div class='panel-controls no-upp nave-tabs'>
+            <div class='tab'>
+                <button class='tablinks' onclick="openTab(event, 'approved')">Approved</button>
+                <button class='tablinks' onclick="openTab(event, 'on_hold')">On Hold</button>
+                <button class='tablinks' onclick="openTab(event, 'rejected')">Rejected</button>
+            </div>
+        </div>
+    </div>
+    <div class='panel-body'>
+        <div class='tabcontent' id='approved'>
+            <%= react_component 'PurchaseOrderSummary', { role: current_user.role.role_level != 'branch', typeOfPos: 'approved' } %>
+        </div>
+        <div class='tabcontent' id='on_hold'>
+            <%= react_component 'PurchaseOrderSummary', { role: current_user.role.role_level != 'branch', typeOfPos: 'onHold' } %>
+        </div>
+        <div class='tabcontent' id='rejected'>
+            <%= react_component 'PurchaseOrderSummary', { role: current_user.role.role_level != 'branch', typeOfPos: 'rejected' } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tablinks = document.getElementsByClassName("tablinks");
+    tablinks[0].click();
+</script>

@@ -26,29 +26,12 @@
 		.pull-left.mt7 Purchase Orders
 		.pull-right
 			/ - if view_access_control('purchase_orders','create')
-			= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_order_path, class: "btn btn-success btn-round btn-outline", remote: true
-	.panel-body
-		/ - if current_brand.purchase_order_orders.empty?
-		/ 	= render "partials/no_records_found", subtitle: 'To start tracking your purchase order click <b>"Create Purchase Order"</b> button'
-		/ - else
-		| Show
-		.btn-group.mb10
-			- params[:show] = "10" if params[:show].nil?
-			= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
-			ul.dropdown-menu role="menu"
-				li
-					= link_to "10", purchase_orders_path(request.params.except(:action,:controller).merge(show: "10"))
-				li
-					= link_to "25", purchase_orders_path(request.params.except(:action,:controller).merge(show: "25"))
-				li
-					= link_to "50", purchase_orders_path(request.params.except(:action,:controller).merge(show: "50"))
-				li
-					= link_to "100", purchase_orders_path(request.params.except(:action,:controller).merge(show: "100"))
-				li.divider
-				li
-					= link_to "Show All", purchase_orders_path(request.params.except(:action,:controller).merge(show: "all"))
-		.no-more-tables#purchase_order-list
-			= render "purchase_order_list", purchase_orders: @purchase_orders
+			- if current_user.role.role_level.eql?('branch')
+				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_order_path, class: "btn btn-success btn-round btn-outline", remote: true
+		
+	- if current_user.role.role_level.eql?('branch')
+		= render 'pos_for_branch'
+	- else
+		= render "pos_for_client", purchase_orders: @purchase_orders
 
-					
 = render "partials/modal"

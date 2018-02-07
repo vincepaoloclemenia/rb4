@@ -1,0 +1,2 @@
+.panel-body
+    = react_component 'PurchaseOrderSummary', { role: current_user.role.role_level != 'branch', typeOfPos: '' }

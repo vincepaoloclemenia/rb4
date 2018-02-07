@@ -90,7 +90,7 @@
 									small.field-req  *
 								.input-group
 									span.input-group-addon PHP
-									= f.number_field :purchase_item_total_amount, class: "form-control", placeholder: "0", step: '.25'
+									= f.number_field :purchase_item_total_amount, class: "form-control", placeholder: "0", step: '.01'
 						.row.mb10
 							.col-xs-6
 								= f.label :vat_type
@@ -144,7 +144,7 @@ javascript:
 			//$('#purchase_item_purchase_item_total_amount').prop('readonly',true);
 			var qty = $('#purchase_item_quantity').val();
 			var itemAmount = $('#purchase_item_purchase_item_amount').val();
-			$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
+			$('#purchase_item_purchase_item_total_amount').prop('value',( qty * itemAmount ).toFixed(2) );
 		}
 	});
 	$('#purchase_item_purchase_item_total_amount').on("keyup",function(){
@@ -152,7 +152,7 @@ javascript:
 			//$('#purchase_item_purchase_item_amount').prop('readonly',true);
 			var qty = $('#purchase_item_quantity').val();
 			var totalItemAmount = $('#purchase_item_purchase_item_total_amount').val();
-			$('#purchase_item_purchase_item_amount').prop('value',totalItemAmount / qty);
+			$('#purchase_item_purchase_item_amount').prop('value',( totalItemAmount / qty ).toFixed(2) );
 		}
 	});
 	$('#purchase_item_item_id').on('change',function(){

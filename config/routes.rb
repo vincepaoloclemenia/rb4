@@ -72,6 +72,9 @@ Rails.application.routes.draw do
   resources :purchase_orders do
     resources :purchase_order_items
     get 'update_status' => 'purchase_orders#update_status'
+    patch :approve, on: :collection
+    patch :hold, on: :collection
+    patch 'reject' => 'purchase_orders#reject'
   end
   
   resource :wizard, only: [:show] do
@@ -114,6 +117,12 @@ Rails.application.routes.draw do
     resources :users, only: :index do
       get :users_per_branch, on: :collection
       get :users_per_brand, on: :collection
+    end
+
+    resources :purchase_order_summary, only: :index do
+      get :get_purchase_orders, on: :collection
+      get :get_on_hold_pos, on: :collection
+      get :get_rejected_pos, on: :collection
     end
 
     resources :activities, only: :index
