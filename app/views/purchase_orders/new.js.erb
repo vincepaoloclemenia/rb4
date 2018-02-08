@@ -11,3 +11,15 @@ $('.chosen').chosen({
 });
 
 $("[data-toggle='toggle']").bootstrapToggle();
+
+
+$('#branch').on('change', function(){
+	$.ajax({
+		url: '/purchase_orders/get_po_number.json',
+		data: { id: $(this).val() },
+		success: function(data) {
+			$('#prn').val(data.pr_number);
+			$('#pro').val(data.po_number);
+		}
+	})
+})
