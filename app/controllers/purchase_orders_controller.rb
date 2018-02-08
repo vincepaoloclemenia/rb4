@@ -1,4 +1,5 @@
 class PurchaseOrdersController < ApplicationController
+	include PurchaseOrderHelper
 	before_action :authenticate_user!
 	before_action :access_control
 
@@ -11,6 +12,10 @@ class PurchaseOrdersController < ApplicationController
 	def new
 		@purchase_order = current_brand.purchase_orders.new
 		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
+		if current_user.role.role_level.eql? 'branch'
+			@po_number = po_number_format(current_user.branch) 
+			@po_ref =  PurchaseOrder.all.select(:id).order("id ASC").last.nil? ? 1 : (PurchaseOrder.all.select(:id).order("id ASC").last.id + 1).to_s
+		end
 	end
 
 	def show
@@ -22,6 +27,7 @@ class PurchaseOrdersController < ApplicationController
 			@purchase_order.brand_id = current_user.brand.id
 			@purchase_order.client_id = current_user.client.id
 			@purchase_order.status = 'Pending'
+			@purchase_order.user_id = current_user.id
 			if @purchase_order.save
 				flash[:notice] = 'Purchase order successfully created'
 				redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
@@ -32,7 +38,8 @@ class PurchaseOrdersController < ApplicationController
 		else
 			@purchase_order = current_client.purchase_orders.create(purchase_order_params)
 			@purchase_order.brand_id = current_brand.id
-			@purchase_order.status = 'Pending'
+			@purchase_order.status = 'Approved'
+			@purchase_order.user_id = current_user.id
 			if @purchase_order.save
 				flash[:notice] = 'Purchase order successfully created'
 				redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
@@ -78,25 +85,26 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def approve
-		if params[:po].present?
-			@purchase_order = PurchaseOrder.find(params[:po])
-			@purchase_order.update(status: 'Approved')
+		if params[:purchase_order_id].present?
+			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+			@po_number = po_approval_format(@purchase_order)
+			@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today )
 			if @purchase_order.save
-				redirect_to purchase_orders_path(), notice: "You approved #{@purchase_order.branch.name}'s' purchase order"
+				redirect_to purchase_orders_path, notice: "You approved #{@purchase_order.branch.name} purchase order"
 			else
-				redirect_to purchase_orders_path(), alert: @purchase_order.errors.full_messages.join(', ')
+				redirect_to purchase_orders_path, alert: @purchase_order.errors.full_messages.join(', ')
 			end
 		end
 	end
 
 	def hold
-		if params[:po].present?
-			@purchase_order = PurchaseOrder.find(params[:po])
+		if params[:purchase_order_id].present?
+			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
 			@purchase_order.update(status: 'On Hold')
 			if @purchase_order.save
-				redirect_to purchase_orders_path(), notice: "#{@purchase_order.branch.name}'s' purchase order was marked 'On Hold' "
+				redirect_to purchase_orders_path, notice: "#{@purchase_order.branch.name} purchase order was marked 'On Hold' "
 			else
-				redirect_to purchase_orders_path(), alert: @purchase_order.errors.full_messages.join(', ')
+				redirect_to purchase_orders_path, alert: @purchase_order.errors.full_messages.join(', ')
 			end
 		end
 	end
@@ -106,10 +114,19 @@ class PurchaseOrdersController < ApplicationController
 			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
 			@purchase_order.update(status: 'Rejected')
 			if @purchase_order.save
-				redirect_to purchase_orders_path, notice: "You rejected #{@purchase_order.branch.name}'s' purchase order"
+				redirect_to purchase_orders_path, notice: "You rejected #{@purchase_order.branch.name} purchase order"
 			else
 				redirect_to purchase_orders_path, alert: @purchase_order.errors.full_messages.join(', ')
 			end
+		end
+	end
+
+	def get_po_number
+		if params[:id].present?
+			@branch = Branch.find(params[:id])
+			@pr_number = po_number_format(@branch)
+			@po_number = @pr_number.gsub('PRN', 'PRO')
+			render json: { pr_number: @pr_number, po_number: @po_number }
 		end
 	end
 
@@ -129,7 +146,7 @@ class PurchaseOrdersController < ApplicationController
 		# if params[:purchase][:purchase_date].present?
 		# 	params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
 		# end
-		params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id)
+		params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference)
 	end
 
 	def per_page

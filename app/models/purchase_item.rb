@@ -4,6 +4,7 @@ class PurchaseItem < ActiveRecord::Base
 	belongs_to :purchase
 	has_one :branch, through: :purchase
 	validates :item_id, :quantity, :purchase_item_total_amount, :vat_type, presence: true
+	after_destroy { |pi| Activity.find_by_recordable_id(pi.id).destroy } 
 
 	def get_purchases_per_branch
 		d = DateTime.now - 1

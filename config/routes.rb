@@ -72,9 +72,10 @@ Rails.application.routes.draw do
   resources :purchase_orders do
     resources :purchase_order_items
     get 'update_status' => 'purchase_orders#update_status'
-    patch :approve, on: :collection
-    patch :hold, on: :collection
+    patch 'approve' => 'purchase_orders#approve'
+    patch 'hold' => 'purchase_orders#hold'
     patch 'reject' => 'purchase_orders#reject'
+    get :get_po_number, on: :collection
   end
   
   resource :wizard, only: [:show] do

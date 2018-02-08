@@ -23,11 +23,11 @@
 
 .panel
 	.panel-heading.border.pb45
-		.pull-left.mt7 Purchase Orders
+		.pull-left.mt7 #{ current_user.role.role_level.eql?('branch') ? 'Purchase Orders' : 'List of Pending Purchase Orders' }
 		.pull-right
 			/ - if view_access_control('purchase_orders','create')
-			- if current_user.role.role_level.eql?('branch')
-				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_order_path, class: "btn btn-success btn-round btn-outline", remote: true
+			/ - if current_user.role.role_level.eql?('branch')
+			= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_order_path, class: "btn btn-success btn-round btn-outline", remote: true
 		
 	- if current_user.role.role_level.eql?('branch')
 		= render 'pos_for_branch'

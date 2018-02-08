@@ -23,6 +23,8 @@
             table.table.table-bordered.table-striped.mb0 data-sortable="true"
                 thead
                     tr.bg-thead
+                        th width="120" Branch
+                        th width='120' Name of user
                         th width="130" data-sortable="false" PR No.
                         th width="120" PR Date
                         th width="160" Supplier
@@ -36,6 +38,8 @@
 
                     - purchase_orders.each do |purchase_order|
                         tr
+                            td data-title="Branch" = purchase_order.branch.name
+                            td data-title="Name of user" = purchase_order.user.full_name
                             td data-title="PO No." = purchase_order.pr_number
                             td data-title="PO Date" = purchase_order.pr_date.nil? ? "---" : purchase_order.pr_date.strftime("%b %d %Y")
                             / td data-title="Branch" = purchase_order.branch.name
@@ -50,8 +54,8 @@
                                 / = link_to "<i class='icon-glyph f14'></i>".html_safe, '#', class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit_purchase_order_#{purchase_order.id}" }
                                 / - if view_access_control('purchase_orders','destroy')
                                 = link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_order_path(purchase_order), method: :delete, class: "btn btn-default btn-xs mb10 mr2 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true
-                                = link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, approve_purchase_orders_path(po: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }
-                                = link_to "<i class='fa blue icon-glyph-28 f14'></i>".html_safe, hold_purchase_orders_path(po: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Hold" }
+                                = link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, purchase_order_approve_path(purchase_order), method: :patch, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }
+                                = link_to "<i class='fa blue icon-glyph-28 f14'></i>".html_safe, purchase_order_hold_path(purchase_order), method: :patch, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Hold" }
                                 = link_to "<i class='icon-glyph-27 f14'></i>".html_safe, purchase_order_reject_path(purchase_order), method: :patch, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Reject" }
 
                         div class="modal edit_purchase_order_#{purchase_order.id}" tabindex="-1" role="dialog" aria-hidden="true"
@@ -65,7 +69,7 @@
                                         = form_for purchase_order, remote: true do |f|
                                             .row.mb10
                                                 .col-xs-6
-                                                    - @po_number = po_number_format
+                                                    / - @po_number = po_number_format
                                                     = f.label :pr_number
                                                         | Purchase Requisition No.
                                                         small.field-req  *

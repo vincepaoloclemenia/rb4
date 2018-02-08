@@ -23,7 +23,7 @@ class Branch < ActiveRecord::Base
 
   validates :aka, presence: true, uniqueness: true
 
-  validate :validate_alias, on: :create
+  validate :validate_alias, on: [:create, :update]
 
   after_create :set_default_color
 
@@ -35,7 +35,7 @@ class Branch < ActiveRecord::Base
 
   def validate_alias
     if ( /\s/ =~ aka ) > 0
-      errors.add(:aka, message: 'Spaces for alias is not allowed')
+      errors.add('Alias', 'should not have spaces')
     end
   end
 

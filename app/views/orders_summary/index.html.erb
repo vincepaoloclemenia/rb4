@@ -11,13 +11,13 @@
     </div>
     <div class='panel-body'>
         <div class='tabcontent' id='approved'>
-            <%= react_component 'PurchaseOrderSummary', { role: current_user.role.role_level != 'branch', typeOfPos: 'approved' } %>
+            <%= react_component 'PurchaseOrderApproved' %>
         </div>
         <div class='tabcontent' id='on_hold'>
-            <%= react_component 'PurchaseOrderSummary', { role: current_user.role.role_level != 'branch', typeOfPos: 'onHold' } %>
+            <%= react_component 'PurchaseOrderOnhold' %>
         </div>
         <div class='tabcontent' id='rejected'>
-            <%= react_component 'PurchaseOrderSummary', { role: current_user.role.role_level != 'branch', typeOfPos: 'rejected' } %>
+            <%= react_component 'PurchaseOrderRejected' %>
         </div>
     </div>
 </div>

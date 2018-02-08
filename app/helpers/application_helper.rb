@@ -193,28 +193,6 @@ module ApplicationHelper
 		return 10 if params[:show].blank?
 		params[:show].eql?('all') ? current_brand.purchases.count : params[:show]
 	end
-
-	def po_number_format
-    @order_lists = PurchaseOrder.all
-    @order_list_id = PurchaseOrder.all.select(:id).order("id ASC").last
-
-    if @order_list_id.nil? 
-      @my_id = 1
-    else
-      @my_id = @order_list_id.id.to_i
-    end
-
-    # @year = @order_lists.last.created_at.strftime("%y")
-    # @month = @order_lists.last.created_at.strftime("%m")
-    # @day_1 = @order_lists.last.created_at.strftime("%d")
-    @id = @my_id
-    @id = @id + 1
-    @n = "%07d" % @id
-    @title = "PRN"
-    # return @title.to_s+''+@year.to_s+'-'+@month.to_s+'-'+@day_1.to_s+'-'+@day_2.to_s+'-'+@n.to_s
-    return @title.to_s+'-'+@n.to_s
-    
-	end
 	
 	def sales_status(branch, from, to)
 		if branch.sales.invalid_sales? || branch.daily_average_sales == 0

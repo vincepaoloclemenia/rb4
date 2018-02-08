@@ -63,14 +63,14 @@
 							= f.label :item_id
 								| Item
 								small.field-req  *
-							= f.select :item_id, @purchase_order.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
+							= f.select :item_id, @purchase_order.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, id: 'item'
 					.row.mb10
 						.col-xs-6.col-md-6
 							= f.label :unit_id
 								| Unit
 								small.field-req  *
 							/= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
-							= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, readonly: true, id: 'unit'
+							= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, readonly: true, id: 'unit', id: 'unit'
 						.col-xs-6.col-md-6
 							= f.label :packaging
 							= f.text_field :packaging, class: 'form-control', readonly: true, id: 'packaging'
@@ -80,14 +80,14 @@
 							= f.label :quantity
 								| Quantity
 								small.field-req  *
-							= f.number_field :quantity, class: "form-control", placeholder: "0"
+							= f.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity'
 						.col-md-4.col-lg-4.mt5
 							= f.label :price_selected
 								| Supplier's Item Price
 								small.field-req  *
 							.input-group
 								span.input-group-addon PHP
-								= f.number_field :price_selected, class: "form-control", placeholder: "0.00", readonly: true, id: 'supplier_price', step: '.01', id: 'supplier_price'	
+								= f.number_field :price_selected, class: "form-control", placeholder: "0.00", readonly: true, id: 'supplier_price', step: '.01'
 						.col-md-4.col-lg-4.mt5
 							= f.label :total_amount
 								| Total Amount
@@ -98,7 +98,7 @@
 					.row.mb10
 						.col-xs-12
 							= f.label :remarks
-							= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2
+							= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2, id: 'remaris'
 					.row.mb10
 						.col-xs-12.mt20
 							| (
@@ -137,9 +137,10 @@ javascript:
 	// 		$('#purchase_item_purchase_item_amount').prop('value',totalItemAmount / qty);
 	// 	}
 	// });
-	$('#purchase_order_item_item_id').change(function(){
-		$('#purchase_order_item_price_selected').val('')
-		$('#purchase_order_item_quantity').val('')
+	$('#item').change(function(){
+		$('#supplier_price').val('')
+		$('#quantity').val('')
+		$('#tota_amount').val('')
 		$.ajax({
 			url: "#{get_units_path}",
 			data: {
@@ -148,11 +149,11 @@ javascript:
 			},
 		});
 	});
-	$('#purchase_order_item_quantity').on('keyup', function(){
+	$('#quantity').on('keyup', function(){
 		$.ajax({
 			url: "#{get_price_path}",
 			data: { 
-				item_id: $('#purchase_order_item_item_id').val(),
+				item_id: $('#item').val(),
 				amount: parseInt($(this).val()),	
 				supplier_id: "#{@purchase_order.supplier.id}"
 			},
