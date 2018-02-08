@@ -126,7 +126,6 @@ class PurchaseOrdersController < ApplicationController
 			@branch = Branch.find(params[:id])
 			@pr_number = po_number_format(@branch)
 			@po_number = @pr_number.gsub('PRN', 'PRO')
-			render json: { pr_number: @pr_number, po_number: @po_number }
 		end
 	end
 

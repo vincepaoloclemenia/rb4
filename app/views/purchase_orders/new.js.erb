@@ -11,16 +11,11 @@ $('.chosen').chosen({
 });
 
 $("[data-toggle='toggle']").bootstrapToggle();
-
-$('#branch').on('change', function(){
-	$.ajax({
-		url: '/purchase_orders/get_po_number.json',
-		data: { id: $(this).val() },
-		dataType: 'JSON',
-		success: function(data){
-			console.log(data.pr_number, data.po_number)
-			$('#prn').val(data.pr_number);
-			$('#pro').val(data.po_number);
-		}
+<% if current_user.role.role_level != 'branch' %>
+	$('#branch').on('change', function(){
+		$.ajax({
+			url: '<%= get_po_number_purchase_orders_path %>',
+			data: { id: $(this).val() }
+		})
 	})
-})
+<% end %>
