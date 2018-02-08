@@ -12,13 +12,13 @@ $('.chosen').chosen({
 
 $("[data-toggle='toggle']").bootstrapToggle();
 
-
 $('#branch').on('change', function(){
 	$.ajax({
 		url: '/purchase_orders/get_po_number.json',
 		data: { id: $(this).val() },
 		dataType: 'JSON',
-		success: function(data) {
+		success: function(data){
+			console.log(data.pr_number, data.po_number)
 			$('#prn').val(data.pr_number);
 			$('#pro').val(data.po_number);
 		}
