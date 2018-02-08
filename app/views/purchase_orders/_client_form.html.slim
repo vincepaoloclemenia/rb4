@@ -63,3 +63,12 @@
             = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
             |
             = f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+
+javascript:
+
+	$('#branch').on('change', function(){
+		$.ajax({
+			url: '#{get_po_number_purchase_orders_path}',
+			data: { id: $(this).val() }
+		})
+	})
