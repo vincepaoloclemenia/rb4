@@ -69,7 +69,7 @@ javascript:
 		$.ajax({
 			url: '/purchase_orders/get_po_number.json',
 			data: { id: $(this).val() },
-			success: (data) => {
+			success: function(data) {
 				$('#prn').val(data.pr_number);
 				$('#pro').val(data.po_number);
 			}
