@@ -1,9 +1,7 @@
 $('#modal h4').html('New Purchase Order Item');
-<% if current_user.role.role_level.eql? 'branch' %>
-	$('.modal-body').html('<%= j render("branch_form") %>');
-<% else %>
-	$('.modal-body').html('<%= j render("client_form") %>');
-<% end %>
+
+$('.modal-body').html('<%= j render("form") %>');
+
 $('#modal').modal("show");
 
 $('.chosen').chosen({

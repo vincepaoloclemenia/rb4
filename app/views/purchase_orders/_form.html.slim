@@ -1,0 +1,119 @@
+- if current_user.role.role_level.eql? 'branch'	
+	= form_for @purchase_order do |f|
+		.row.mb10
+			.col-xs-6
+				/ - @po_number = po_number_format
+				= f.label :pr_number
+					| Purchase Requisition No.
+					small.field-req  *
+				= f.text_field :pr_number, value: @po_number, class: "form-control", readonly: true
+			.col-xs-6
+				= f.label :pr_date
+					| Purchase Requisition Date
+					small.field-req  *
+				/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+				= f.text_field :pr_date, value: Date.today, class: "form-control", readonly: true
+				= f.hidden_field :po_reference, value: @po_ref
+		.row.mb10
+			.col-xs-12
+				= f.label :supplier_id, "Supplier"
+					| Supplier
+					small.field-req  *
+				= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+
+				- if @suppliers.nil?
+
+					.alert.alert-info.mt5 role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| You currently have no list of suppliers.<br> Go to:&nbsp;
+								b Setup > Purchase Setup > Suppliers >&nbsp;
+								= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+								.row.mb10
+							.col-xs-12.mt20
+								| (
+								small.field-req   *
+								|  )
+								i  indicates field is required
+		.modal-footer.no-border
+			span.inline.float-right
+				= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+				|
+				= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+- else
+	= form_for @purchase_order do |f|
+
+		.row.mb10
+			.col-xs-12
+				= f.label :branch_id, "Branch"
+					| Branch
+					small.field-req  *
+				= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", id: 'branch'
+		
+		.row.mb10
+			.col-xs-6
+				/ - @po_number = po_number_format
+				= f.label :pr_number
+					| Purchase Requisition No.
+					small.field-req  *
+				= f.text_field :pr_number, class: "form-control", readonly: true, placeholder: 'Choose Branch first', id: 'prn'
+			.col-xs-6
+				= f.label :pr_date
+					| Purchase Requisition Date
+					small.field-req  *
+				/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+				= f.text_field :pr_date, value: Date.today, class: "form-control", readonly: true
+
+		.row.mb10
+			.col-xs-6
+				/ - @po_number = po_number_format
+				= f.label :po_number
+					| Purchase Order No.
+					small.field-req  *
+				= f.text_field :po_number, class: "form-control", readonly: true, placeholder: 'Choose Branch first', id: 'pro'
+			.col-xs-6
+				= f.label :po_date
+					| Purchase Order Date
+					small.field-req  *
+				/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+				= f.text_field :po_date, value: Date.today, class: "form-control", readonly: true
+		
+		.row.mb10
+			.col-xs-12
+				= f.label :supplier_id, "Supplier"
+					| Supplier
+					small.field-req  *
+				= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+
+				- if @suppliers.nil?
+
+					.alert.alert-info.mt5 role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| You currently have no list of suppliers.<br> Go to:&nbsp;
+								b Setup > Purchase Setup > Suppliers >&nbsp;
+								= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+								.row.mb10
+							.col-xs-12.mt20
+								| (
+								small.field-req   *
+								|  )
+								i  indicates field is required
+		.modal-footer.no-border
+			span.inline.float-right
+				= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+				|
+				= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+
+javascript:
+
+	$('#branch').on('change', function(){
+		$.ajax({
+			url: '#{get_po_number_purchase_orders_path}',
+			data: { id: $(this).val() }
+		})
+	})
