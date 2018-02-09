@@ -57,7 +57,9 @@ Rails.application.routes.draw do
     get 'show_branches'
   end
 
-  resources :orders_summary, only: :index
+  resources :purchase_order_generator, only: [:index, :new] do
+    get :get_pos, on: :collection
+  end
   resources :bills
   resources :payment_notifications
   post 'paypal_checkout' => 'subscriptions#paypal_checkout'
@@ -75,7 +77,6 @@ Rails.application.routes.draw do
     patch 'approve' => 'purchase_orders#approve'
     patch 'hold' => 'purchase_orders#hold'
     patch 'reject' => 'purchase_orders#reject'
-    get :get_po_number, on: :collection
   end
   
   resource :wizard, only: [:show] do

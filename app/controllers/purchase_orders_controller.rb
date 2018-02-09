@@ -121,14 +121,6 @@ class PurchaseOrdersController < ApplicationController
 		end
 	end
 
-	def get_po_number
-		if params[:id].present?
-			@branch = Branch.find(params[:id])
-			@pr_number = po_number_format(@branch)
-			@po_number = @pr_number.gsub('PRN', 'PRO')
-		end
-	end
-
 	def update_status
 		@purchase_order = PurchaseOrder.find(params[:oli])
 		@purchase_order.status = 'Notified'

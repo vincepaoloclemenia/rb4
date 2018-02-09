@@ -1,7 +1,9 @@
 <div class='panel'>
     <div class='panel-heading border pb45'>
         <div class="pull-left mt7">Purchase Orders</div>
-        <div class='panel-controls no-upp nave-tabs'>
+        <span class='space'></span>
+            <%= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase Order".html_safe, new_purchase_order_generator_path, class: "btn btn-success btn-round btn-outline", remote: true %>
+        <div class='panel-controls no-upp nave-tabs'>        
             <div class='tab'>
                 <button class='tablinks' onclick="openTab(event, 'approved')">Approved</button>
                 <button class='tablinks' onclick="openTab(event, 'on_hold')">On Hold</button>
@@ -26,3 +28,5 @@
     var tablinks = document.getElementsByClassName("tablinks");
     tablinks[0].click();
 </script>
+
+<%= render "partials/modal" %>

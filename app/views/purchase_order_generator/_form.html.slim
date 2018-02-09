@@ -5,7 +5,7 @@
 			= f.label :branch_id, "Branch"
 				| Branch
 				small.field-req  *
-			= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", id: 'branch'
+			= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", id: 'br'
 	
 	.row.mb10
 		.col-xs-6
@@ -45,30 +45,21 @@
 			- if @suppliers.nil?
 
 				.alert.alert-info.mt5 role="alert"
-                    .row
-                        .col-xs-1.text-right
-                            i.icon-glyph-73.f25
-                        .col-xs-11
-                            | You currently have no list of suppliers.<br> Go to:&nbsp;
-                            b Setup > Purchase Setup > Suppliers >&nbsp;
-                            = link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
-                            .row.mb10
-                        .col-xs-12.mt20
-                            | (
-                            small.field-req   *
-                            |  )
-                            i  indicates field is required
-    .modal-footer.no-border
-        span.inline.float-right
-            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-            |
-            = f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
-
-javascript:
-
-	$('#branch').on('change', function(){
-		$.ajax({
-			url: '#{get_po_number_purchase_orders_path}',
-			data: { id: $(this).val() }
-		})
-	})
+					.row
+						.col-xs-1.text-right
+							i.icon-glyph-73.f25
+						.col-xs-11
+							| You currently have no list of suppliers.<br> Go to:&nbsp;
+							b Setup > Purchase Setup > Suppliers >&nbsp;
+							= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+							.row.mb10
+						.col-xs-12.mt20
+							| (
+							small.field-req   *
+							|  )
+							i  indicates field is required
+	.modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }

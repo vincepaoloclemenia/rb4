@@ -8,12 +8,17 @@ $('.chosen').chosen({
 	width: "100%"
 });
 
-$("#sup").change(function(){
-	console.log('working');
-});
-
 $("#br").change(function(){
-	console.log("client");
+	$.ajax({
+		url: "/purchase_order_generator/get_pos.json",
+		data: { id: $(this).val() },
+		method: "GET",
+		dataType: "JSON",
+		success: function(data){
+			$("#prn").val(data.pr_number)
+			$("#pro").val(data.po_number)
+		}
+	});
 });
 
 $("[data-toggle='toggle']").bootstrapToggle();
