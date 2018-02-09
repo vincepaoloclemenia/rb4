@@ -24,6 +24,18 @@
 			= f.select :branch_id, [], { include_blank: true }, data: { placeholder: "Select" }, class: "form-control"
 	.row.mb10
 		.col-xs-12
+			= f.label :emails, "Supplier Email(s)"
+			div.input-group
+				input.form-control type='text' id='e_add' value='' placeholder='Input email here'
+				span.input-group-btn
+					button.btn.btn-primary id='add' type='button' +
+			= f.hidden_field :emails, value: [], id: 'emails'
+	.row.mb10
+		.col-xs-12
+			ul.emails id='email_addresses'
+
+	.row.mb10
+		.col-xs-12
 			= f.label :address, "Supplier Address"
 			= f.text_area :address, class: "form-control", rows:"3"
 	.row.mb10
@@ -63,4 +75,8 @@
 		span.inline.float-right
 			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 			|
-			button.btn.btn-primary type="submit" = @supplier.new_record? ? "Add Supplier" : "Save Changes"
+			button.btn.btn-primary id='create_edit' type="submit" = @supplier.new_record? ? "Add Supplier" : "Save Changes"
+
+javascript:
+
+	

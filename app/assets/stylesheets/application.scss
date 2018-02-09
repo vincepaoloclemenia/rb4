@@ -1,6 +1,5 @@
-@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
-@import "chosen.min";
 @import "style";
+@import "chosen.min";
 @import "font-icons";
 @import "daterangepicker-bs3";
 @import "bootstrap-datepicker3";
@@ -22,6 +21,8 @@
 @import "module/avatar";
 @import "module/card";
 @import "module/fontawesome";
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
+
 
 
 html.turbolinks-progress-bar::before {

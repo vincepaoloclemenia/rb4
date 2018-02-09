@@ -8,6 +8,27 @@ $('.chosen').chosen({
 	width: "100%"
 });
 
+$(document).ready(function(){
+	var emails = [];
+	$("#add").on('click', function(){
+		var input = $("#e_add")
+		if(input.val() != '' ){
+			emails.push(input.val())
+			$("#email_addresses").append("<li class='email-list'>"+input.val()+"<button id='wew' class='inline' type='button'>x</button></li>")
+			input.val('')
+			$('#emails').val(emails)
+		}else{ alert("Please input valid email") }		
+	})
+
+	$("#email_addresses").on('click', '.inline',function(){
+		var x = emails.find( x => x === $(this).closest('li').text().replace('x', ''))
+		emails.splice( $.inArray(x, emails), 1);
+		$('#emails').val(emails.split(","))
+		$(this).closest('li').remove();	
+	})
+	
+})
+
 $("[data-toggle='toggle']").bootstrapToggle();
 
 var assignedToValue = $("select#supplier_assigned_to").val();

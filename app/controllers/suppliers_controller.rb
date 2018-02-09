@@ -23,7 +23,9 @@ class SuppliersController < ApplicationController
 	end
 
 	def create
+		@emails = params[:supplier][:emails]
 		@supplier = current_client.suppliers.new(supplier_params)
+        @supplier.emails = @emails.split(",")
 		if @supplier.save
 			flash[:notice] = "Supplier successfully created"
 		else
@@ -52,6 +54,6 @@ class SuppliersController < ApplicationController
 
 	def supplier_params
 		params.require(:supplier).permit(:name, :address, :contact_person, :contact_title, :tin, :mobile_no, :fax_no, :landline_no,
-																		:is_active, :assigned_to, :brand_id, :branch_id, item_ids: [])
+																		:is_active, :assigned_to, :brand_id, :branch_id, emails: [], item_ids: [])
 	end
 end

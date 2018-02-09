@@ -11,7 +11,9 @@ module RestobotV4
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-
+    #config.assets.paths << "#{Rails.root}/app/assets/stylesheets/font-awesome-4.7.0/css/"
+    #config.assets.paths << "#{Rails.root}/app/assets/stylesheets/style.css"
+    #config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'

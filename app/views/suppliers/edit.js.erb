@@ -8,7 +8,48 @@ $('.chosen').chosen({
 	width: "100%"
 });
 
+$(document).ready(function(){
+	var email_addresses = "<%= @supplier.emails.join(",") %>"	
+	<% if @supplier.emails.length != 0 %>
+		var emails = email_addresses.split(",");
+		email_addresses.split(",").map(function(email){
+			$("#email_addresses").append("<li class='email-list'>"+email+"<button id='wew' class='inline' type='button'>x</button></li>")
+		});
+	<% else %>
+		var emails = []
+	<% end %>
+	$("#emails").val(emails)
+	$("#add").on('click', function(){
+		var input = $("#e_add")
+		if(input.val() != '' ){
+			emails.push(input.val())
+			$("#email_addresses").append("<li class='email-list'>"+input.val()+"<button id='wew' class='inline' type='button'>x</button></li>")
+			input.val('')
+			$('#emails').val(emails)
+		}else{ alert("Please input valid email") }		
+	})
+	
+	$("#email_addresses").on('click', '.inline',function(){
+		var x = emails.find( x => x === $(this).closest('li').text().replace('x', ''))
+		emails.splice( $.inArray(x, emails), 1);
+		$('#emails').val(emails)
+		$(this).closest('li').remove();	
+	})	
+})
+
+
+
 $("[data-toggle='toggle']").bootstrapToggle();
+
+$("#create_edit").on('click', function(){
+	$.ajax({
+		url: "/api/suppliers/<%= @supplier.id %>",
+		beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $("meta[name='csrf-token']").attr('content'))},
+		method: "PATCH",
+		dataType: 'JSON',
+		data: { emails: $("#emails").val() }
+	});		
+});
 
 var assignedToValue = $("select#supplier_assigned_to").val();
 if(assignedToValue == 2){

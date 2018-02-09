@@ -32,3 +32,16 @@ div.button-container{
         border-color: $light-blue;
     }
 }
+.btn.btn-primary.inline{
+    display: inline-block;
+}
+
+button.inline{
+    display: inline-block;
+    border: none;
+    color: tomato;
+    font-size: 15px;
+    font-weight: 900;
+    margin-left: 1.5em;
+    &:hover{ background: tomato; color: white }
+}

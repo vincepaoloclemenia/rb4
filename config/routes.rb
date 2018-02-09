@@ -127,6 +127,8 @@ Rails.application.routes.draw do
       get :get_rejected_pos, on: :collection
     end
 
+    resources :suppliers, only: [:create, :update]
+
     resources :activities, only: :index
     
     post "sale_reports" => "sale_reports#create"
