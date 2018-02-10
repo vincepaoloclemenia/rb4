@@ -41,16 +41,6 @@ $(document).ready(function(){
 
 $("[data-toggle='toggle']").bootstrapToggle();
 
-$("#create_edit").on('click', function(){
-	$.ajax({
-		url: "/api/suppliers/<%= @supplier.id %>",
-		beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $("meta[name='csrf-token']").attr('content'))},
-		method: "PATCH",
-		dataType: 'JSON',
-		data: { emails: $("#emails").val() }
-	});		
-});
-
 var assignedToValue = $("select#supplier_assigned_to").val();
 if(assignedToValue == 2){
 	$(".p_brand_field").show();

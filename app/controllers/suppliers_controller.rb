@@ -36,6 +36,8 @@ class SuppliersController < ApplicationController
 
 	def update
 		@supplier = current_client.suppliers.find(params[:id])
+		@emails = params[:supplier][:emails]
+		@supplier.emails = @emails.split(",")		
 		if @supplier.update(supplier_params)
 			flash[:notice] = "Supplier successfully updated"
 		else
