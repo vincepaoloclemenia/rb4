@@ -37,7 +37,12 @@ $(document).ready(function(){
 	})	
 })
 
-
+$('#sample').on('click', function(){
+	$.ajax({
+		url: '/api/suppliers/<%=  @supplier.id %>',
+		method: 'PATCH'
+	})
+})
 
 $("[data-toggle='toggle']").bootstrapToggle();
 

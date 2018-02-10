@@ -5,8 +5,7 @@ class Api::SuppliersController < ApplicationController
 
     def update
         @supplier = current_brand.suppliers.find(params[:id])
-        @emails = params[:emails]
-        @supplier.update(emails: @emails.split(","))
+        @supplier.update(tin: "ABCDESample")
         render nothing: true
     end
 
