@@ -42,6 +42,7 @@ $('#sample').on('click', function(){
 		url: '/api/suppliers/<%=  @supplier.id %>',
 		beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $("meta[name='csrf-token']").attr('content'))},
 		method: 'PATCH',
+		data: { supplier: { tin: "SAMPLEONLY" }},
 		dataType: 'JSON'
 	})
 })
