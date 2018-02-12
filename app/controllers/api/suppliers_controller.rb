@@ -6,11 +6,11 @@ class Api::SuppliersController < ApplicationController
     end
 
     def update
-        if request.xhr?
-            @supplier = current_brand.suppliers.find(params[:id])
-            @supplier.update(supplier_params)
-            render nothing: true
-        end
+        
+        @supplier = current_brand.suppliers.find(params[:id])
+        @supplier.update(supplier_params)
+        render nothing: true
+        
     end
 
     private

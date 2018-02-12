@@ -1,0 +1,35 @@
+@import url(http://fonts.googleapis.com/css?family=Lora|Ubuntu|Noto+Sans|Ubuntu|Vollkorn+SC|Work+Sans|Open+Sans|Patua+One|Francois+One);
+body#pdf-body{
+    img.brand-avatar{
+        width: 50px;
+        height: 50px;
+    }
+    background-color: transparent;    
+    .pdf-container{
+        margin: 10px 10px;
+        h1, h2, h3, h4, h5, h6{
+            font-family: 'Noto Sans', sans-serif; 
+            font-weight: 900;
+            font-style: bold;        
+        }
+        p{
+            font-family: 'Ubuntu Sans', sans-serif; 
+            &.header{
+                font-size: 14px;
+                font-weight: 700;
+                margin-right: 8px;
+            } 
+            &.inline{ 
+                display: inline; 
+                font-size: 12px;
+            }   
+        }  
+        table{
+            font-family: 'Work Sans', sans-serif;
+            td{
+                padding: 20px;
+            }
+        }
+        span.gap{ margin-right: 1em }
+    }  
+}

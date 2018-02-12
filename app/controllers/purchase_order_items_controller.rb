@@ -4,6 +4,7 @@ class PurchaseOrderItemsController < ApplicationController
 
 	def index
 		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		@po_items =  @purchase_order.purchase_order_items
 		@purchase_order_items = @purchase_order.purchase_order_items.paginate(page: params[:page], per_page: per_page)
 		@purchase_order_item = PurchaseOrderItem.new
 	end
@@ -50,6 +51,6 @@ class PurchaseOrderItemsController < ApplicationController
 	end
 
 	def purchase_order_item_params
-		params.require(:purchase_order_item).permit(:item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks)
+		params.require(:purchase_order_item).permit(:item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks, :total_amount)
 	end
 end

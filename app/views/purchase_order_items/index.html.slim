@@ -1,13 +1,19 @@
 .panel
 	.panel-heading.border.pb45
-		.pull-left.mt7 Purchase Order
-		
+		.pull-left.mt7 Purchase Order <span class='gap'></span>
+		- if current_user.role.role_level != 'branch'
+			= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_order_purchase_order_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
+
 		.pull-right
 			button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-order-item-modal"
 				i.icon-maxicons2-paste.mr5
 				| Add Order Item
 		.pull-right
-			= link_to "Back To Purchase Order", purchase_orders_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
+			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
+				= link_to "Back To Purchase Order Generator", purchase_order_generator_index_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
+			- else
+				= link_to "Back To Purchase Orders", purchase_orders_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
+
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0

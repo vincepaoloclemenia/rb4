@@ -51,6 +51,9 @@ class PurchaseOrderOnhold extends React.Component{
                         <td data-title='PO Date'>{po.po_date ? po.po_date : '---' }</td>
                         <td data-title='Status'>{po.status}</td>
                         <td className='action' data-title='Action'>
+                            <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="View purchase_order Items" href={`/purchase_orders/${po.id}/purchase_order_items`}><i className="icon-glyph-41 f14"></i></a>
+                            <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Approve" rel="nofollow" data-method="patch" href={`purchase_orders/${po.id}/approve`}><i className="fa green icon-glyph-26 f14"></i></a>
+                            <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Reject" rel="nofollow" data-method="patch" href={`purchase_orders/${po.id}/reject`}><i className="icon-glyph-27 f14"></i></a>
                             <a onClick={() => this.fetchData() } className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="Delete" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href={`/purchase_orders/${po.id}`}><i className="icon-glyph-76 f14"></i></a>
                         </td>
                     </tr>

@@ -131,6 +131,16 @@ class PurchaseOrdersController < ApplicationController
 		redirect_to purchase_orders_path(), notice: 'Notify the admin about new purchase order.'	
 	end
 
+	def purchase_order
+		@purchase_order = current_brand.purchase_orders.find(params[:purchase_order_id])
+		@po_items =  @purchase_order.purchase_order_items
+		respond_to do |format|
+			format.html
+			format.json
+			format.pdf {render template: 'purchase_orders/purchase_order', pdf: 'Purchase Order'}
+		end
+	end
+
 	private
 
 	def purchase_order_params

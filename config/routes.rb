@@ -77,6 +77,7 @@ Rails.application.routes.draw do
     patch 'approve' => 'purchase_orders#approve'
     patch 'hold' => 'purchase_orders#hold'
     patch 'reject' => 'purchase_orders#reject'
+    get 'purchase_order' => 'purchase_orders#purchase_order'
   end
   
   resource :wizard, only: [:show] do

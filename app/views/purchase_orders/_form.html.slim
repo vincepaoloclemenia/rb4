@@ -113,7 +113,7 @@ javascript:
 
 	$('#branch').on('change', function(){
 		$.ajax({
-			url: '#{get_po_number_purchase_orders_path}',
+			url: '#{get_pos_purchase_order_generator_index_path}',
 			data: { id: $(this).val() }
 		})
 	})
