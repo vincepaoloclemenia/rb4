@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 
 	def update_account
 		@user = current_client.users.find_by_username(params[:username])
-		if @user.update(account_params)
+		if @user.update_with_password(account_params)
 			flash[:notice] = "Account successfully updated"
 		else
 			flash[:alert] = @user.errors.full_messages.join(", ")
@@ -100,7 +100,7 @@ class UsersController < ApplicationController
 	end
 
 	def account_params
-		params.require(:user).permit(:first_name, :last_name, :avatar)
+		params.require(:user).permit(:first_name, :last_name, :avatar, :email, :username, :current_password)
 	end
 
 	private

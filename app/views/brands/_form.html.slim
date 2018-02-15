@@ -13,9 +13,12 @@
           | Brand
           small.field-req  *
         = f.text_field :name, class: "form-control", placeholder: "Name"
-      .col-xs-12.mb10
+      .col-xs-6.mb10
         = f.label :website
         = f.text_field :website, class: "form-control"
+      .col-xs-6.mb10
+        = f.label :email
+        = f.email_field :email, class: "form-control"  
       .col-xs-12.mb10
         = f.label :description
         = f.text_area :description, class: "form-control", placeholder:"Description of Brand", rows: "2"

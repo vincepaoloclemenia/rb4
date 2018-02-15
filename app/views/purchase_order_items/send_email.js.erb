@@ -1,0 +1,11 @@
+$('#modal h4').html('Send Email to <%= @po.supplier.name %>');
+
+$('.modal-body').html('<%= j render("send_email") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

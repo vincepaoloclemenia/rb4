@@ -43,6 +43,24 @@ class PurchaseOrderItemsController < ApplicationController
 		#redirect_to purchase_order_purchase_order_items_path(purchase_order_id: purchase_order.id), notice: "Purchase Item successfully deleted"
 	end
 
+	def send_email
+		@po = current_brand.purchase_orders.find(params[:purchase_order_id])
+		@email = current_brand.email.nil? ? '' : current_brand.email
+		@supplier_emails = []
+		@po.supplier.emails.map { |x| @supplier_emails << x }
+		@contact_person = @po.supplier.contact_person
+		@contact_title = @po.supplier.contact_title
+		@subject = "PO-#{current_brand.name.gsub(/\//, '').split.map(&:first).join.upcase}-#{@po.supplier.name}-#{Date.today.strftime('%B%d')}"
+	end
+
+	def approve_purchase_order
+		@po = current_brand.purchase_orders.find(params[:purchase_order_id])
+		@time = []
+		(1..24).each { |x| @time << x }
+		@numbers = []
+		@time.map { |n| @numbers << [n, n] }
+	end
+
 	private
 
 	def per_page
@@ -51,6 +69,6 @@ class PurchaseOrderItemsController < ApplicationController
 	end
 
 	def purchase_order_item_params
-		params.require(:purchase_order_item).permit(:item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks, :total_amount)
+		params.require(:purchase_order_item).permit(:item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks, :total_amount, :packaging)
 	end
 end

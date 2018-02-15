@@ -1,0 +1,35 @@
+= form_for(:approval, url: purchase_order_approve_path(@po), method: :patch) do |f|
+    .row.mb10
+		.col-xs-12
+			= f.label :delivery_date
+				| Delivery Date
+				small.field-req  *
+			input.form-control name='approval[delivery_date]' data-provide='datepicker' data-autoclose='true' placeholder="Delivery Date" id='dd'
+    .row
+        .col-xs-6
+            label From <small class='field-req'>*</small>
+            .row.mb10
+                
+                .col-xs-6         
+                    = f.select :from_time, @numbers, { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'from_hr'
+                .col-xs-6
+                    = f.select :from_ampm, [["AM", "AM"], ["PM", "PM"]], { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'from_ampm'
+                
+
+        .col-xs-6
+            label To <small class='field-req'>*</small>
+            .row.mb10
+                
+                .col-xs-6         
+                    = f.select :to_time, @numbers, { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'to_hr'
+                .col-xs-6
+                    = f.select :to_ampm, [["AM", "AM"], ["PM", "PM"]], { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'to_ampm'
+                
+
+    .modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			button.btn.btn-primary type="submit" Approve
+
+javascript: 

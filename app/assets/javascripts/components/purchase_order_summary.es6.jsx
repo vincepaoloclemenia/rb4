@@ -26,6 +26,7 @@ class PurchaseOrderSummary extends React.Component{
     renderHeader(role){
         return(
             <tr className="bg-thead">
+                <th data-sortable="false" width="130">Created by</th>
                 <th data-sortable="false" width="130">PR Number</th>
                 <th width="120">PR Date</th>
                 <th width="160">PO Number</th>
@@ -42,6 +43,7 @@ class PurchaseOrderSummary extends React.Component{
             return(
                 purchaseOrders.map((po, index) => 
                     <tr key={index}>
+                        <td data-title='Created by'>{po.user.first_name} {po.user.last_name}</td>
                         <td data-title='PR No.'>{po.pr_number}</td>
                         <td data-title='PR Date'>{po.pr_date}</td>
                         <td data-title='PO No.'>{po.po_number ? po.po_number : '---' }</td>

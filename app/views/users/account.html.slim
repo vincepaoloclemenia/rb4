@@ -16,23 +16,30 @@
 									= f.file_field :avatar, class: "mb10", accept: "image/gif, image/jpeg, image/png", id: "avatar_file_field"
 							.col-xs-12.col-md-8.col-lg-8
 								.col-xs-6.mb10
-									= f.label :first_name
-										| First name
+									= f.label :first_name 
+										| First name 
 										small.field-req *
 									= f.text_field :first_name, class: "form-control", placeholder: "First Name"
 								.col-xs-6.mb10
 									= f.label :last_name
-										| Last name
+										| Last name 
 										small.field-req *
 									= f.text_field :last_name, class: "form-control", placeholder: "Last Name"
 								.col-xs-12.mb10
-									= f.label :email
-										| Email Address
-										small.field-req *
-									= f.text_field :email, class: "form-control", disabled: true
+									= f.label :email 
+										| Email Address 
+										small.field-req * #{ @user.unconfirmed_email.nil? ? '' : '<i>Your email has not been confirmed yet</i>'.html_safe }
+									= f.text_field :email, class: "form-control"
 								.col-xs-12.mb10
-									= f.label :username
-									= f.text_field :username, class: "form-control", disabled: true
+									= f.label :username 
+									= f.text_field :username, class: "form-control"
+
+								.col-xs-12.mb10
+									= f.label :current_password
+										| Current Password 
+										small.field-req * 
+									= f.password_field :current_password, class: "form-control", autocomplete: "off"
+
 								.col-xs-12
 									| (
 									small.field-req  *

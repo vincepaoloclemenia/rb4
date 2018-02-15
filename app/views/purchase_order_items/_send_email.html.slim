@@ -1,0 +1,43 @@
+= form_for(:po_email, url: purchase_order_send_email_notification_path(po: @po)) do |f|
+	.row.mb10
+		.col-xs-12
+			= f.label :from
+				| Brand Email
+				small.field-req  *
+			= f.email_field :from, required: true, class: "form-control", placeholder:"Brand email", value: @email
+	.row.mb10
+		.col-xs-12
+			= f.label :recipients
+				| To:
+				small.field-req  *
+			= f.select :recipients, @supplier_emails, {}, class: "chosen", data: { placeholder: "Select Recipient(s)" }, style: "width: 100%; display: none;", multiple: true
+    
+    .row.mb10
+		.col-xs-12
+			= f.label :subject
+				| Subject
+				small.field-req  *
+			= f.text_field :subject, required: true, class: "form-control", placeholder:"Subject", value: @subject
+
+    .row.mb10
+		.col-xs-12
+			= f.text_area :body, class: "form-control", rows:"5", placeholder: "Write your message here"
+    
+    .row.mb10
+		.col-xs-6
+			= f.label :contact_person
+				| Contact
+				small.field-req  *
+			= f.text_field :contact_person, required: true, class: "form-control", placeholder:"Name of Contact Person", value: @contact_person
+
+        .col-xs-6
+			= f.label :contact_title
+				| Position
+				small.field-req  *
+			= f.text_field :contact_title, required: true, class: "form-control", placeholder:"Name of Contact Person", value: @contact_title
+
+    .modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			button.btn.btn-primary type="submit" Send

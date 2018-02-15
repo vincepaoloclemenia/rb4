@@ -85,14 +85,17 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def approve
-		if params[:purchase_order_id].present?
+		if params[:purchase_order_id].present? && params[:approval].present?
+			approval = params[:approval]
+			@delivery_date = Date.strptime(approval[:delivery_date], '%m/%d/%Y')
+			@delivery_time = "#{approval[:from_time]} #{approval[:from_ampm]} - #{approval[:to_time]} #{approval[:to_ampm]}"
 			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
 			@po_number = po_approval_format(@purchase_order)
-			@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today )
+			@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today, delivery_date: @delivery_date, delivery_time: @delivery_time )
 			if @purchase_order.save
-				redirect_to purchase_orders_path, notice: "You approved #{@purchase_order.branch.name} purchase order"
+				redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "You approved #{@purchase_order.branch.name} purchase order"
 			else
-				redirect_to purchase_orders_path, alert: @purchase_order.errors.full_messages.join(', ')
+				redirect_to purchase_order_purchase_order_items_path(@purchase_order), alert: @purchase_order.errors.full_messages.join(', ')
 			end
 		end
 	end
@@ -121,14 +124,32 @@ class PurchaseOrdersController < ApplicationController
 		end
 	end
 
-	def update_status
-		@purchase_order = PurchaseOrder.find(params[:oli])
-		@purchase_order.status = 'Notified'
-		@purchase_order.save
+	def send_email_notification
+		@purchase_order = current_brand.purchase_orders.find(params[:po])
 		@purchase_order_items = @purchase_order.purchase_order_items.all
-		#create mail notification
-		UserMailer.send_status_notification(@purchase_order, @purchase_order_items).deliver
-		redirect_to purchase_orders_path(), notice: 'Notify the admin about new purchase order.'	
+		@subject = params[:po_email][:subject]
+		@person = params[:po_email][:contact_person]
+		@recipients = params[:po_email][:recipients]
+		@title = params[:po_email][:contact_title]
+		@message = params[:po_email][:body]
+		@recipient = 'pclemenia@talentium.ph'
+		@recipients.map do |recipient|
+			if recipient == ''
+				next
+			else
+				UserMailer.send_status_notification(
+					@purchase_order, 
+					@purchase_order_items, 
+					current_user,
+					recipient,
+					@subject,
+					@person,
+					@title,
+					@message
+				).deliver_now
+			end
+		end	
+		redirect_to purchase_order_generator_index_path, notice: "Your email to #{@purchase_order.supplier.name} has been sent."	
 	end
 
 	def purchase_order

@@ -72,8 +72,11 @@ Rails.application.routes.draw do
     get 'update_status' => 'order_lists#update_status'
   end
   resources :purchase_orders do
-    resources :purchase_order_items
-    get 'update_status' => 'purchase_orders#update_status'
+    resources :purchase_order_items do
+      get :send_email, on: :collection
+      get :approve_purchase_order, on: :collection
+    end
+    post 'send_email_notification' => 'purchase_orders#send_email_notification'
     patch 'approve' => 'purchase_orders#approve'
     patch 'hold' => 'purchase_orders#hold'
     patch 'reject' => 'purchase_orders#reject'

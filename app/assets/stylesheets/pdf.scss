@@ -1,16 +1,39 @@
 @import url(http://fonts.googleapis.com/css?family=Lora|Ubuntu|Noto+Sans|Ubuntu|Vollkorn+SC|Work+Sans|Open+Sans|Patua+One|Francois+One);
+@import 'style';
+@import 'partials/variables';
+
 body#pdf-body{
+
     img.brand-avatar{
-        width: 50px;
-        height: 50px;
+        width: 250px;
+        height: 100px;
+        image-rendering: auto;
+        image-rendering: crisp-edges;
+        image-rendering: pixelated; 
     }
     background-color: transparent;    
     .pdf-container{
+        div.col-xs-5, div.col-xs-6{
+            &.bordered{
+                padding: 20px;
+                border: 1.5px solid grey;
+            }
+            &.h230{
+                min-height: 230px
+            }
+        }
         margin: 10px 10px;
         h1, h2, h3, h4, h5, h6{
             font-family: 'Noto Sans', sans-serif; 
             font-weight: 900;
-            font-style: bold;        
+            font-style: bold;  
+            &.pdf-header{
+                display: inline;
+                margin-left: 2em;
+            }     
+            span{
+                font-weight: 300;
+            } 
         }
         p{
             font-family: 'Ubuntu Sans', sans-serif; 
@@ -23,11 +46,38 @@ body#pdf-body{
                 display: inline; 
                 font-size: 12px;
             }   
+            &.pdf-body{
+                text-justify: justify;
+                font-size: 14px;
+                margin-left: 35px;
+                color: darken(grey, 10%);
+                z-index: 999;
+            }
+            &.signature{
+                font-size: 16px;
+                font-weight: 900;
+                color: darken(grey, 10%);
+                margin-left: 35px;
+            }
         }  
+        label.header{
+            font-family: 'Ubuntu Sans', sans-serif; 
+            font-size: 15px;
+            font-weight: 900;
+            margin-right: 8px;
+        }
+
         table{
             font-family: 'Work Sans', sans-serif;
             td{
-                padding: 20px;
+                padding: 10px;
+                &.highlighted{
+                    font-weight: 900;
+                    background-color: lighten($blue, 50%);
+                    &.align-right{
+                        text-align: right;
+                    }
+                }
             }
         }
         span.gap{ margin-right: 1em }

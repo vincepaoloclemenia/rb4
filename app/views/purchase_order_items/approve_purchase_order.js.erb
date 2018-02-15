@@ -1,0 +1,19 @@
+$('#modal h4').html('Purchase Order Approval');
+
+$('.modal-body').html('<%= j render("approve_po") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
+
+$('#dd').datepicker({
+        autoclose: true,
+        minDate: new Date()
+}).on('change',function(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
+});

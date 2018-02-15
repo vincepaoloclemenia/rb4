@@ -1,36 +1,48 @@
 .panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Purchase Order <span class='gap'></span>
-		- if current_user.role.role_level != 'branch'
+		- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
 			= link_to "<i class='icon-glyph-162 f14 mr5'></i> Download as PDF".html_safe, purchase_order_purchase_order_path(format: :pdf, q: request.params[:q]), class: "btn btn-success btn-round btn-outline", target: "_blank"
+		- elsif current_user.role.role_level != 'branch' && @purchase_order.status == 'Pending'
+			= link_to "<i class='fa green icon-glyph-26 f14'></i> Approve PO".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-success btn-round btn-outline", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
+
 
 		.pull-right
-			button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-order-item-modal"
-				i.icon-maxicons2-paste.mr5
-				| Add Order Item
+			- if @purchase_order.user == current_user
+				button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-order-item-modal"
+					i.icon-maxicons2-paste.mr5
+					| Add Order Item
 		.pull-right
 			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
 				= link_to "Back To Purchase Order Generator", purchase_order_generator_index_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
 			- else
 				= link_to "Back To Purchase Orders", purchase_orders_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
+		
 
 	.panel-body
+		.row.mb10.ml15
+		- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
+			= link_to "<i class='fa fa-envelope mr5'></i> Send PDF File to #{@purchase_order.supplier.name}".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-success btn-round btn-outline", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0
 				thead
 					tr.bg-thead
-						th PR Date
+						th Supplier
 						th PR No.
+						th PR Date						
+						th Status
 						th PO Date
 						th PO No.
-						th Supplier
+						
 				tbody
 					tr
-						td data-title="PR Date" = @purchase_order.pr_date
+						td data-title="Supplier" = @purchase_order.supplier.name
 						td data-title="PR No." = @purchase_order.pr_number
+						td data-title="PR Date" = @purchase_order.pr_date
+						td data-title='Status' = @purchase_order.status
 						td data-title="PO Date" = @purchase_order.po_date
 						td data-title="PO No." = @purchase_order.po_number
-						td data-title="Supplier" = @purchase_order.supplier.name
+						
 
 .panel
 	.panel-heading.border Purchase Order Items
@@ -169,3 +181,7 @@ javascript:
 			}
 		});
 	});
+
+
+- if current_user.role.role_level != 'branch'
+	= render "partials/modal"

@@ -18,6 +18,11 @@
         &.fine{ color: #8DB600 }
         &.fail{ color: tomato }
     } 
+    tr.highlight{ font-weight: 900 }
+    td.align-right{
+        text-align: right;
+    }
+    td.align-center{ text-align: center }
 }
 .gap-top15{
     margin-top: 5%;

@@ -4,23 +4,35 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 	thead
 		tr.bg-thead
 			th width="145" Item Name
-			th width="160" data-sortable="false" Remarks
+			th width="160" data-sortable="false" Packaging
 			th width="110" Quantity
 			th width="115" Unit
 			th width="120" Unit Price
+			th width="120" Total Price
 			th width="60" data-sortable="false" Action
 	tbody
 		- purchase_order_items.each do |pi|
 			tr
 				td data-title="Item Name" = pi.item.name
-				td data-title="Item Description" = pi.remarks
-				td data-title="Quantity" = pi.quantity.to_s
+				td data-title="Packaging" = pi.packaging
+				td data-title="Quantity" = pi.quantity.to_i.to_s
 				td data-title="Unit" = pi.unit.name
 				td data-title="Unit Price" = to_peso(pi.price_selected)
+				td data-titile='Total Price' = to_peso(pi.total_amount)
 				td.action data-title="Action"
 					/ - if view_access_control('purchase_order_items','destroy')
 					= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_order_purchase_order_item_path(purchase_order_id: @purchase_order.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
-.align-center
+		tr.highlight
+			td.align-right colspan='5' data-title="Sub Total" Sub Total
+			td colspan='2' data-title='Vat' = to_peso(purchase_order.sub_total)
+		tr.highlight
+			td.align-right colspan='5' data-title="12% Vat" 12% VAT
+			td colspan='2' data-title='Vat' = to_peso(purchase_order.vat)
+		tr.highlight
+			td.align-right colspan='5' data-title="Total Amount" Total Amount
+			td colspan='2' data-title='Vat' = to_peso(purchase_order.total_amount)
+
+
 	p
 		= page_entries_info purchase_order_items, renderer: BootstrapPagination::Rails
 	= will_paginate purchase_order_items, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
