@@ -164,11 +164,19 @@ class PurchaseOrdersController < ApplicationController
 
 	private
 
+	def time_params
+		#params.permit(:from_time, :from_ampm, :to_time, :to_ampm)!
+	end
+
 	def purchase_order_params
 		# if params[:purchase][:purchase_date].present?
 		# 	params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
 		# end
-		params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference)
+		if current_user.role.role_level == 'branch'
+			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference)
+		else
+			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date)			
+		end
 	end
 
 	def per_page

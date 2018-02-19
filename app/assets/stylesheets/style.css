@@ -12260,7 +12260,10 @@ blockquote p {
 .main-panel>.header .header-avatar {
     width: 37px;
     height: 37px;
-    margin-top: -8px
+    margin-top: -8px;
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated; 
 }
 
 @media screen and (min-width:768px) {

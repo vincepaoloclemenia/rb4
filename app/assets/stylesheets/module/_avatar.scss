@@ -1,3 +1,6 @@
 img.avatar-image {
     @include border-radius($round);
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated; 
 }

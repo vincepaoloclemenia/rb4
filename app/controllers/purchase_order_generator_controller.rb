@@ -10,13 +10,15 @@ class PurchaseOrderGeneratorController < ApplicationController
     def new
         @purchase_order = current_brand.purchase_orders.new
 		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
+        @numbers = []
+        (1..24).each { |x| @numbers << [x, x] }
     end
 
     def get_pos
         if params[:id].present?
 			@branch = Branch.find(params[:id])
 			@pr_number = po_number_format(@branch)
-            @po_number = @pr_number.gsub('PRN', 'PRO')
+            @po_number = @pr_number.gsub('PR', 'PO')
             render json: { po_number: @po_number, pr_number: @pr_number }
 		end
     end

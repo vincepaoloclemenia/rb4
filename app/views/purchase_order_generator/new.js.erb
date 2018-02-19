@@ -22,3 +22,28 @@ $("#br").change(function(){
 });
 
 $("[data-toggle='toggle']").bootstrapToggle();
+
+$(document).ready(function(){
+	var delivery_time = ""
+	var from_hr = ""
+	var from_ampm = ""
+	var to_hr = ""
+	var to_ampm = ""
+	$('#from_hr').on('change', function(){
+		from_hr = $(this).val();
+		$('#dt').val( from_hr+" "+from_ampm+" - "+to_hr+" "+to_ampm );
+	})
+	$('#from_ampm').on('change', function(){
+		from_ampm = $(this).val();
+		$('#dt').val( from_hr+" "+from_ampm+" - "+to_hr+" "+to_ampm );
+	})
+	$('#to_hr').on('change', function(){
+		to_hr = $(this).val();
+		$('#dt').val( from_hr+" "+from_ampm+" - "+to_hr+" "+to_ampm );
+	})
+	$('#to_ampm').on('change', function(){
+		to_ampm = $(this).val();
+		$('#dt').val( from_hr+" "+from_ampm+" - "+to_hr+" "+to_ampm );
+	})
+	
+});
