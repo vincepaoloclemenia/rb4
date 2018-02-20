@@ -46,7 +46,7 @@
 						td data-title="PO Date" = @purchase_order.po_date.nil? ? '--/--/----' : @purchase_order.po_date
 						td data-title="PO No." = @purchase_order.po_number.nil? ? '---' : @purchase_order.po_number
 						- if @purchase_order.approved?
-							td data-title='Delivery Date' = @purchase_order.delivery_date.strftime("%b %d, %Y")
+							td data-title='Delivery Date' = @purchase_order.delivery_date.nil? ? '--/--/----' : @purchase_order.delivery_date.strftime("%b %d, %Y")
 							td data-title='Delivery Time' = @purchase_order.delivery_time
 
 .panel

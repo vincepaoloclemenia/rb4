@@ -9,6 +9,7 @@ class PurchaseOrderGeneratorController < ApplicationController
 
     def new
         @purchase_order = current_brand.purchase_orders.new
+        @status = 'Approved'
 		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
         @numbers = []
         (1..12).each { |x| @numbers << [x, x] }
