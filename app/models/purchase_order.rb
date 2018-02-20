@@ -15,4 +15,8 @@ class PurchaseOrder < ActiveRecord::Base
   accepts_nested_attributes_for :purchase_order_items,  :reject_if => :all_blank, :allow_destroy => :true
   # validates :invoice_number, :pr_date, :supplier_id, :brand_id, :branch_id, presence: true
 
+  def approved?
+    status == 'Approved'
+  end
+
 end

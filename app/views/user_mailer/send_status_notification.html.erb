@@ -4,42 +4,44 @@
    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
  </head>
    <style type="text/css">
-     @import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css);
      @import url(http://fonts.googleapis.com/css?family=Lora|Ubuntu|Noto+Sans|Ubuntu|Vollkorn+SC|Work+Sans|Open+Sans|Patua+One|Francois+One);
-     table tr th { text-align: center }
-     table td { border: 1px solid grey; padding: 10px 5px }
-     table tr th { padding: 10px; font-family: 'Noto Sans', sans-serif; background-color: #1D75A1; color: white }
-     .pdf-container{ margin: 30px }
-     table { padding: 5px }
-     tr.highlighted { background-color: #C0EBFD }
-     td.bold { font-weight: 700 }
-     td.align-right { text-align: right }
-     p.pdf-body{ font-size: 15px; text-justify: justify; margin-top: 15px; color: grey; z-index: 999; }
-     .row { margin-right: -15px; margin-left: -15px }
-     .row:after, .row:before { display: table; content: "" }
-     .row:after { clear: both }
-     .panel { background-color: #fff; border: 1px solid transparent } 
+    div.half-container { display: inline; position: relative; width: 50% }
+    table tr th { text-align: center }
+    table td { border: 1px solid grey; padding: 10px 5px; font-family: 'Ubuntu Sans', sans-serif; font-size: 14px; }
+    table tr th { padding: 10px; font-family: 'Noto Sans', sans-serif; background-color: #1D75A1; color: white }
+    .pdf-container{ margin: 30px }
+    table { padding: 5px }
+    tr.highlighted { background-color: #C0EBFD }
+    td.bold { font-weight: 700 }
+    td.align-right { text-align: right }
+    p.pdf-body{ font-family: 'Open Sans', sans-serif;font-size: 15px; text-justify: justify; margin-top: 15px; color: grey; z-index: 999; }
+    .row { margin-right: -15px; margin-left: -15px }
+    .row:after, .row:before { display: table; content: " " }
+    .row:after { clear: both }
+    .panel { background-color: #fff; border: 1px solid transparent } 
     .panel-body { padding: 15px }
     .row.mb10 { margin-bottom: 10px }
     div.panel-heading { font-family: 'Noto Sans', sans-serif; color: #0072c6; position: relative; border-color: transparent; border-top-right-radius: 0; border-top-left-radius: 0; padding: 15px; text-transform: uppercase; font-weight: 900; border-bottom: 0; border-bottom: 1px solid transparent; -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-width: 0; position: relative; margin-bottom: 20px }
-    .col-xs-12{ position: relative; min-height: 1px; width: 100%; float: left!important; padding-left: 10px; padding-right: 10px }
-    .col-xs-6 { position: relative; min-height: 1px; float: left!important ; width: 50%; padding-left: 10px; padding-right: 10px }
     .pull-left { float: left!important }
     .pull-right { float: right!important }
     h5.po-labels { font-family: 'Noto Sans', sans-serif; font-size: 15px; color: grey }
     h4.pdf-header{ font-size: 20px; font-family: 'Noto Sans', sans-serif; font-weight: 800; display: inline-block !important; margin-left: 2em; color: #10374D }   
     img.brand-avatar{ width: 250px; height: 100px; image-rendering: auto; image-rendering: crisp-edges; image-rendering: pixelated;}  
-    .col-xs-6.bordered.h230 { padding: 20px; border: 1.5px solid grey; min-height: 230px}
+    .bordered.h230 { padding: 20px; border: 1.5px solid grey; min-height: 230px}
     p.po-info{ font-family: 'Ubuntu Sans', sans-serif; color: grey }
-    p.signature { font-size: 16px; font-weight: 900; color: #10374D; }
+    p.signature { font-size: 16px; font-weight: 900; color: #10374D; font-family: 'Lora Sans', sans-serif; }
     label.header{ font-family: 'Ubuntu Sans', sans-serif;  font-size: 15px; font-weight: 900; margin-right: 8px; }
+    table#po-details { width:100%; border: 2px solid grey; padding: 5px; }
+    table#po-details th { width:20%; background-color: #e4e4e4; border: none; color: black; text-align: left; }
+    table#po-details td { width:30%; background-color: transparent; border: none }
+    p.mt20{ margin-top: 50px; }
    </style>
     <body>
         <div class='pdf-container'>
             
             <div class='panel-heading'>
                 <center>
-                    <img class='brand-avatar' alt='<%= @purchase_order.brand.name %>' src='<%= @purchase_order.brand.avatar.url %>' />
+                    <%= image_tag @purchase_order.brand.avatar.url, alt: @purchase_order.brand.name, class: 'brand-avatar' %>
                     <h4 class='pdf-header'><%= @purchase_order.brand.name %></h4>
                 </center>
             </div>
@@ -54,61 +56,28 @@
                 </div>
             </div>
             <div class='row mb10'>
-                
-                    <div class='col-xs-6 bordered h230'>
-                        <div class='row mb10'>
-                            <div class='col-xs-6'>
-                                <label class='header'>Supplier:</label> 
-                            </div>
-                            <div class='col-xs-6'>
-                                    <p class='po-info'><%= @purchase_order.supplier.name %></p>
-                            </div>
-                        </div> 
-                        <div class='row mb10'>
-                            <div class='col-xs-6'>
-                                <label class='header'>Contact Person:</label> 
-                            </div>
-                            <div class='col-xs-6'>
-                                <p class='po-info'><%= @contact_title %>, <%= @contact_person %></p>
-                            </div>
-                        </div>   
-                        <div class='row mb10'>
-                            <div class='col-xs-6'>
-                                <label class='header'>Email:</label>
-                            </div>
-                            <div class='col-xs-6'>
-                                <p class='po-info'><%= @email %></p>
-                            </div>
-                        </div>                                          
-                    </div>
-    
-                    <div class='col-xs-6 bordered h230'>
-                        <div class='row mb10'>
-                            <div class='col-xs-6'>
-                                <label class='header'>Deliver To:</label> 
-                            </div>
-                            <div class='col-xs-6'>
-                                <p class='po-info'><%= @purchase_order.branch.name %></p>
-                            </div>
-                        </div> 
-                        <div class='row mb10'>
-                            <div class='col-xs-6'>
-                                <label class='header'>Address:</label> 
-                            </div>
-                            <div class='col-xs-6'>
-                                <p class='po-info'><%= @purchase_order.branch.address1 %></p>
-                            </div>
-                        </div> 
-                        <div class='row mb10'>
-                            <div class='col-xs-6'>
-                                <label class='header'>Delivery Date and Time:</label> 
-                            </div>
-                            <div class='col-xs-6'>
-                                <p class='po-info'><%= @purchase_order.delivery_date.strftime('%B %d, %Y') %>, <%= @purchase_order.delivery_time %></p>
-                            </div>
-                        </div> 
-                           
-                </div>    
+                <table id='po-details'>
+                    <thead>
+                        <tr>
+                            <th>Supplier</th>
+                            <td><%= @purchase_order.supplier.name %></th>
+                            <th>Deliver To:</th>
+                            <td><%= @purchase_order.branch.name %></td>
+                        </tr>
+                        <tr>
+                            <th>Contact Person</th>
+                            <td><%= @contact_title %>, <%= @contact_person %></th>
+                            <th>Address</th>
+                            <td><%= @purchase_order.branch.address1 %></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td><%= @email %></th>
+                            <th>Delivery date and time:</th>
+                            <td><%= @purchase_order.delivery_date.strftime('%B %d, %Y') %>, <%= @purchase_order.delivery_time %></td>
+                        </tr>
+                    </thead>
+                </table>
             </div>
             <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
                 <thead>
@@ -163,7 +132,7 @@
                     <%= @body %>
                 </p>                      
             <% end %> 
-            <p class='pdf-body'>
+            <p class='pdf-body mt20'>
                 Regards,
             </p> 
 

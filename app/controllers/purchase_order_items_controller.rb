@@ -56,7 +56,7 @@ class PurchaseOrderItemsController < ApplicationController
 	def approve_purchase_order
 		@po = current_brand.purchase_orders.find(params[:purchase_order_id])
 		@numbers = []
-		(1..24).each { |x| @numbers << [ x, x ] }
+		(1..12).each { |x| @numbers << [ x, x ] }
 	end
 
 	private

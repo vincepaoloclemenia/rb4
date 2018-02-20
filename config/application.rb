@@ -9,7 +9,8 @@ Bundler.require(*Rails.groups)
 module RestobotV4
   class Application < Rails::Application
     if Rails.env.development? 
-      config.action_mailer.asset_host = 'localhost:3000'
+      config.action_controller.asset_host = 'http://localhost:3000'
+      config.action_mailer.asset_host = config.action_controller.asset_host
     end
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

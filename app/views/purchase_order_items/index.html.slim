@@ -33,6 +33,9 @@
 						th Status
 						th PO Date
 						th PO No.
+						- if @purchase_order.approved?	
+							th Delivery Date
+							th Delivery Time
 						
 				tbody
 					tr
@@ -40,9 +43,11 @@
 						td data-title="PR No." = @purchase_order.pr_number
 						td data-title="PR Date" = @purchase_order.pr_date
 						td data-title='Status' = @purchase_order.status
-						td data-title="PO Date" = @purchase_order.po_date
-						td data-title="PO No." = @purchase_order.po_number
-						
+						td data-title="PO Date" = @purchase_order.po_date.nil? ? '--/--/----' : @purchase_order.po_date
+						td data-title="PO No." = @purchase_order.po_number.nil? ? '---' : @purchase_order.po_number
+						- if @purchase_order.approved?
+							td data-title='Delivery Date' = @purchase_order.delivery_date.strftime("%b %d, %Y")
+							td data-title='Delivery Time' = @purchase_order.delivery_time
 
 .panel
 	.panel-heading.border Purchase Order Items

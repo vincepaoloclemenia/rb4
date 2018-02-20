@@ -36,9 +36,11 @@ class PurchaseOrdersController < ApplicationController
 				redirect_to purchase_orders_path
 			end
 		else
+			@date = Date.strptime(params[:purchase_order][:delivery_date], '%m/%d/%Y')
 			@purchase_order = current_client.purchase_orders.create(purchase_order_params)
 			@purchase_order.brand_id = current_brand.id
 			@purchase_order.status = 'Approved'
+			@purchase_order.delivery_date = @date
 			@purchase_order.user_id = current_user.id
 			if @purchase_order.save
 				flash[:notice] = 'Purchase order successfully created'
@@ -132,7 +134,6 @@ class PurchaseOrdersController < ApplicationController
 		@recipients = params[:po_email][:recipients]
 		@title = params[:po_email][:contact_title]
 		@message = params[:po_email][:body]
-		@recipient = 'pclemenia@talentium.ph'
 		@recipients.map do |recipient|
 			if recipient == ''
 				next

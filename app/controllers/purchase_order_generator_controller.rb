@@ -11,7 +11,7 @@ class PurchaseOrderGeneratorController < ApplicationController
         @purchase_order = current_brand.purchase_orders.new
 		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
         @numbers = []
-        (1..24).each { |x| @numbers << [x, x] }
+        (1..12).each { |x| @numbers << [x, x] }
     end
 
     def get_pos
