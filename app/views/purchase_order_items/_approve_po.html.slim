@@ -4,7 +4,7 @@
 			= f.label :delivery_date
 				| Delivery Date
 				small.field-req  *
-			input.form-control name='approval[delivery_date]' data-provide='datepicker' data-autoclose='true' placeholder="Delivery Date" id='dd'
+			input.form-control name='approval[delivery_date]' placeholder="Delivery Date"
     .row
         .col-xs-6
             label From <small class='field-req'>*</small>
@@ -32,4 +32,13 @@
 			|
 			button.btn.btn-primary type="submit" Approve
 
-javascript: 
+javascript:
+    $('[name="approval[delivery_date]"]').datepicker({
+		autoclose: true,
+		minDate: new Date()
+	}).on('change',function(evt){
+		evt.stopPropagation()
+		evt.preventDefault()
+	})
+	
+    

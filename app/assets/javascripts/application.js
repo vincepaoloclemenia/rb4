@@ -23,6 +23,10 @@
 //= require chartkick
 //= require bootstrap-datepicker
 //= require module
+//= require chosen.jquery.min.js
+//= require react-select.js
+//= require moment.js
+//= require moment-with-locales.js
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

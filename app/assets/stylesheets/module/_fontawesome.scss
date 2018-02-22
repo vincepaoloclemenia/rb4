@@ -5,5 +5,8 @@ i.fa{
     &.blue{
         color: #0087F5
     }
+    &.dark-blue{
+        color: $main-theme
+    }
 
 }

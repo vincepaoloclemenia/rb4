@@ -9,11 +9,3 @@ $('.chosen').chosen({
 });
 
 $("[data-toggle='toggle']").bootstrapToggle();
-
-$('#dd').datepicker({
-        autoclose: true,
-        minDate: new Date()
-}).on('change',function(evt){
-        evt.stopPropagation();
-        evt.preventDefault();
-});

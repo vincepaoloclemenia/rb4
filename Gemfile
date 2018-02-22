@@ -27,6 +27,7 @@ gem 'paypal-recurring'
 gem 'pdf-reader', '~> 2.0'
 gem "chartkick"
 gem 'groupdate', '~> 3.2'
+gem 'pg_search'
 
 group :development, :test do
   gem 'byebug'

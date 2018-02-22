@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   get 'process_subscription' => 'subscriptions#process_subscription'
   delete 'subscription/:id/cancel', to: 'subscriptions#cancel', as: 'cancel_subscription'
   
+  resources :purchase_orders_summary, only: :index
   resources :supplier_item_prices
   resources :order_per_suppliers
   resources :order_lists do
@@ -129,6 +130,10 @@ Rails.application.routes.draw do
       get :get_purchase_orders, on: :collection
       get :get_on_hold_pos, on: :collection
       get :get_rejected_pos, on: :collection
+    end
+
+    resources :purchase_orders, only: :index do
+      get :get_pos, on: :collection
     end
 
     resources :suppliers, only: [:create, :update]

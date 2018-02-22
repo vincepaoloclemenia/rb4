@@ -48,7 +48,7 @@
 			= f.label :delivery_date
 				| Delivery Date
 				small.field-req  *
-			input.form-control name='purchase_order[delivery_date]' data-provide='datepicker' data-autoclose='true' placeholder="Delivery Date" id='dd'
+			input.form-control name='purchase_order[delivery_date]' placeholder="Delivery Date" id='dd'
     
 	.row.mb10
         .col-xs-6
@@ -93,3 +93,12 @@
 			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 			|
 			= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+
+javascript:
+	$('#dd').datepicker({
+		autoclose: true,
+		minDate: new Date()
+	}).on('change',function(evt){
+		evt.stopPropagation()
+		evt.preventDefault()
+	})
