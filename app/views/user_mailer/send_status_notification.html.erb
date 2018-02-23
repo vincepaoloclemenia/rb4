@@ -41,7 +41,7 @@
             
             <div class='panel-heading'>
                 <center>
-                    <%= image_tag @purchase_order.brand.avatar.url, alt: @purchase_order.brand.name, class: 'brand-avatar' %>
+                    <img class='brand-avatar' alt='<%= @purchase_order.brand.name %>' src='<%= File.expand_path(Rails.root) + '/public' + @purchase_order.brand.avatar.url %>' />
                     <h4 class='pdf-header'><%= @purchase_order.brand.name %></h4>
                 </center>
             </div>
