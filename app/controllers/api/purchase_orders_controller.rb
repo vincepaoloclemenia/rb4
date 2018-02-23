@@ -16,7 +16,11 @@ class Api::PurchaseOrdersController < ApplicationController
         elsif params[:from].present? && params[:to].present? && params[:term].present?
             @from = Date.strptime(params[:from], '%m/%d/%Y')
             @to = Date.strptime(params[:to], '%m/%d/%Y')
-            @purchase_orders = current_brand.purchase_orders.where(po_date: @from..@to).text(params[:term])    
+            @purchase_orders = if current_brand.purchase_orders.where(po_date: @from..@to).exists? 
+                current_brand.purchase_orders.where(po_date: @from..@to).text_search(params[:term])    
+            else
+                []
+            end
         end
     end
 end

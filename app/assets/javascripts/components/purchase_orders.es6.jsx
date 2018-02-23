@@ -28,7 +28,7 @@ class PurchaseOrders extends React.Component{
         if(this.state.supplier.length > 0)
             suppliers = this.state.supplier.map( x=> x.label )
 
-        if ((from != '' && to != '') && (this.state.branch.length != 0 && this.state.supplier.length != 0 || this.state.poNumber || this.state.creator || this.state.status)){           
+        if ((from != '' && to != '') && ( this.state.branch.length > 0 || this.state.supplier.length > 0  || this.state.poNumber != null || this.state.creator != null || this.state.status != null )){           
             $.ajax({
                 url: `/api/purchase_orders/get_pos.json?from=${from}&to=${to}&term=${suppliers.join(" ")} ${branches.join(" ")} ${this.state.poNumber} ${this.state.status} ${this.state.creator}`,
                 method: 'GET',
@@ -67,6 +67,8 @@ class PurchaseOrders extends React.Component{
     }
 
     resetEveything(){
+        $("#from").val('')
+        $("#to").val('')
         this.setState({
             supplier: [], branch: [], poNumber: '', status: '', creator: '', fetching: true, keywords: ''
         })

@@ -18,7 +18,7 @@ class PurchaseOrder < ActiveRecord::Base
   
   validates :delivery_date, :delivery_time, presence: true, if: :approved?
 
-  pg_search_scope :search, against: { :po_number => 'A', :po_date => 'B', :status => 'C' },
+  pg_search_scope :search, against: { :po_date => 'A', :po_number => 'B', :status => 'C' },
     associated_against: { 
       branch: [:name],
       user: [:first_name, :last_name],
