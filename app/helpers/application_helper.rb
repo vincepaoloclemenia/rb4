@@ -26,6 +26,11 @@ module ApplicationHelper
 		date.strftime("%b %d, %Y")
 	end
 
+	def pdf_image_tag(image, options = {})
+		options[:src] = File.expand_path(Rails.root) + '/public' + image
+		tag(:img, options)
+	end
+
 	def is_menu_open?(menu_name)
 		controller = params[:controller]
 		action = params[:action]
