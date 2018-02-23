@@ -9,6 +9,11 @@ class PurchaseOrderItemsController < ApplicationController
 		@purchase_order_item = PurchaseOrderItem.new
 	end
 
+	def new
+		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		@purchase_order_item = PurchaseOrderItem.new
+	end
+
 	def create
 		purchase_order = PurchaseOrder.find(params[:purchase_order_id])
 		@purchase_order_item = purchase_order.purchase_order_items.new(purchase_order_item_params)

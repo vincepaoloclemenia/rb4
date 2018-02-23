@@ -9,9 +9,10 @@
 
 		.pull-right
 			- if @purchase_order.user == current_user
-				button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-order-item-modal"
-					i.icon-maxicons2-paste.mr5
-					| Add Order Item
+				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Add New Purchase Order Item".html_safe,  new_purchase_order_purchase_order_item_path(@purchase_order), class: "btn btn-success btn-round btn-outline", remote: true
+				/button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target="#create-purchase-order-modal"
+					/i.icon-maxicons2-paste.mr5
+					/| Add Order Item
 		.pull-right
 			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
 				= link_to "Back To Purchase Order Generator", purchase_order_generator_index_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
@@ -70,122 +71,7 @@
 					= link_to "Show All", purchase_order_purchase_order_items_path(show: "all", purchase_order_id: @purchase_order.id)
 		.no-more-tables#purchase-order-item-list
 			= render "purchase_order_item_list", purchase_order_items: @purchase_order_items, purchase_order: @purchase_order
-
-
-.modal.add-purchase-order-item-modal tabindex="-1" role="dialog" aria-hidden="true"
-	.modal-dialog
-		.modal-content
-			.modal-header
-				button.close type="button" data-dismiss="modal" aria-hidden="true"
-					i.icon-maxicons1-exit
-				h4.modal-title Add Purchase Item
-			.modal-body
-				= form_for [@purchase_order, @purchase_order_item], remote: true do |f|
-					.row.mb10
-						.col-xs-12
-							= f.label :item_id
-								| Item
-								small.field-req  *
-							= f.select :item_id, @purchase_order.supplier.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, id: 'item'
-					.row.mb10
-						.col-xs-6.col-md-6
-							= f.label :unit_id
-								| Unit
-								small.field-req  *
-							/= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
-							= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, readonly: true, id: 'unit', id: 'unit'
-						.col-xs-6.col-md-6
-							= f.label :packaging
-							= f.text_field :packaging, class: 'form-control', readonly: true, id: 'packaging'
-														
-					.row.mb10
-						.col-md-4.col-lg-4.mt5
-							= f.label :quantity
-								| Quantity
-								small.field-req  *
-							= f.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity'
-						.col-md-4.col-lg-4.mt5
-							= f.label :price_selected
-								| Supplier's Item Price
-								small.field-req  *
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :price_selected, class: "form-control", placeholder: "0.00", readonly: true, id: 'supplier_price', step: '.01'
-						.col-md-4.col-lg-4.mt5
-							= f.label :total_amount
-								| Total Amount
-								small.field-req  *
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true
-					.row.mb10
-						.col-xs-12
-							= f.label :remarks
-							= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2, id: 'remaris'
-					.row.mb10
-						.col-xs-12.mt20
-							| (
-							small.field-req   *
-							|  )
-							i  indicates field is required
-					.modal-footer.no-border
-						span.inline.float-right
-							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-							|
-							= f.submit "Add", class: "btn btn-primary"
-
-javascript:
-	// $('#purchase_item_quantity').on("keyup",function(){
-	// 	if($(this).val() > 0){
-	// 		$('#purchase_item_purchase_item_amount').prop('readonly',false);
-	// 		$('#purchase_item_purchase_item_total_amount').prop('readonly',false);
-	// 		var qty = $('#purchase_item_quantity').val();
-	// 		var itemAmount = $('#purchase_item_purchase_item_amount').val();
-	// 		$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
-	// 	}
-	// });
-	// $('#purchase_item_purchase_item_amount').on("keyup",function(){
-	// 	if($(this).val().length > 0){
-	// 		$('#purchase_item_purchase_item_total_amount').prop('readonly',true);
-	// 		var qty = $('#purchase_item_quantity').val();
-	// 		var itemAmount = $('#purchase_item_purchase_item_amount').val();
-	// 		$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
-	// 	}
-	// });
-	// $('#purchase_item_purchase_item_total_amount').on("keyup",function(){
-	// 	if($(this).val().length > 0){
-	// 		$('#purchase_item_purchase_item_amount').prop('readonly',true);
-	// 		var qty = $('#purchase_item_quantity').val();
-	// 		var totalItemAmount = $('#purchase_item_purchase_item_total_amount').val();
-	// 		$('#purchase_item_purchase_item_amount').prop('value',totalItemAmount / qty);
-	// 	}
-	// });
-	$('#item').change(function(){
-		$('#supplier_price').val('')
-		$('#quantity').val('')
-		$('#tota_amount').val('')
-		$.ajax({
-			url: "#{get_units_path}",
-			data: {
-				item_id : $(this).val(),
-				supplier_id: "#{@purchase_order.supplier.id}"
-			},
-		});
-	});
-	$('#quantity').on('keyup', function(){
-		$.ajax({
-			url: "#{get_price_path}",
-			data: { 
-				item_id: $('#item').val(),
-				amount: parseInt($(this).val()),	
-				supplier_id: "#{@purchase_order.supplier.id}"
-			},
-			success: (data) => {
-				$('#supplier_price').val(data.price)
-				$('#total_amount').val(data.total)
-			}
-		});
-	});
+	
 
 
 - if current_user.role.role_level != 'branch'
