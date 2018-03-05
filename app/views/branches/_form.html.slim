@@ -28,11 +28,16 @@
         a data-original-title="What's my zip?" data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
           text-grey  ?
       = f.number_field :zip, class: "form-control"
-    .col-xs-12.mb10
+    .col-xs-6.mb10
       = f.label :email_address
         | E-mail Address
         small.field-req  *
       = f.text_field :email_address, class: "form-control", placeholder: "E-mail address of branch"
+    .col-xs-6.mb10
+      = f.label :delivery_time
+        | Delivery Time
+        small.field-req  * <i>For Purchasing Purposes</i>
+      = f.text_field :delivery_time, class: "form-control", placeholder: "Delivery Time"
     .col-xs-12.col-lg-4.mb10
       = f.label :landline_no
       = f.number_field :landline_no, class: "form-control"

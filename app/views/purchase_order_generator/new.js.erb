@@ -17,13 +17,14 @@ $("#br").change(function(){
 		success: function(data){
 			$("#prn").val(data.pr_number)
 			$("#pro").val(data.po_number)
+			$("#purchase_order_delivery_time").val(data.deliveryTime)
 		}
 	});
 });
 
 $("[data-toggle='toggle']").bootstrapToggle();
 
-$(document).ready(function(){
+/*$(document).ready(function(){
 	var delivery_time = ""
 	var from_hr = ""
 	var from_ampm = ""
@@ -46,4 +47,4 @@ $(document).ready(function(){
 		$('#dt').val( from_hr+" "+from_ampm+" - "+to_hr+" "+to_ampm );
 	})
 	
-});
+});*/

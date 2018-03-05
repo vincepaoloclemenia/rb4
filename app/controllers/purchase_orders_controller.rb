@@ -133,11 +133,13 @@ class PurchaseOrdersController < ApplicationController
 		@recipients = params[:po_email][:recipients]
 		@title = params[:po_email][:contact_title]
 		@message = params[:po_email][:body]
+		@from = params[:po_email][:from]
+		
 		@recipients.map do |recipient|
 			if recipient == ''
 				next
 			else
-				UserMailer.send_status_notification(
+				UserMailer.send_purchase_order(
 					@purchase_order, 
 					@purchase_order_items, 
 					current_user,

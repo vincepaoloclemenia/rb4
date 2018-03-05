@@ -3,7 +3,7 @@ class Api::PurchaseOrdersController < ApplicationController
     def index
         @branches = current_brand.branches.pluck(:name)
         @suppliers = current_brand.suppliers.pluck(:name)
-        @purchase_orders = current_brand.purchase_orders.paginate(page: params[:page], per_page: 15)      
+        @purchase_orders = current_brand.purchase_orders     
     end
 
     def get_pos

@@ -34,7 +34,7 @@ class Branch < ActiveRecord::Base
   end
 
   def validate_alias
-    if ( /\s/ =~ aka ) > 0
+    if !( /\s/ =~ aka ).nil?
       errors.add('Alias', 'should not have spaces')
     end
   end

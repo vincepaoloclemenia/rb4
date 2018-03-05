@@ -17,6 +17,20 @@
           | Landline
         label.text-dark-grey = branch.landline_no
     .row.mb10
+      .col-xs-4
+        .text-light-grey
+          | City
+        label.text-dark-grey
+          = branch.city
+      .col-xs-4
+        .text-light-grey
+          | Fax No.
+        label.text-dark-grey = branch.delivery_time   
+      .col-xs-4
+        .text-light-grey
+          | Delivery Time.
+        label.text-dark-grey = branch.delivery_time     
+    .row.mb10
       .col-xs-6
         .text-light-grey
           | Address
@@ -26,16 +40,6 @@
         .text-light-grey
           | Mobile No.
         label.text-dark-grey = branch.mobile_no
-    .row.mb10
-      .col-xs-6
-        .text-light-grey
-          | City
-        label.text-dark-grey
-          = branch.city
-      .col-xs-6
-        .text-light-grey
-          | Fax No.
-        label.text-dark-grey = branch.fax_no
     .row.mb10
       .col-xs-6
         .text-light-grey

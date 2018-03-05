@@ -55,7 +55,7 @@ class PurchaseOrderItemsController < ApplicationController
 		@po.supplier.emails.map { |x| @supplier_emails << x }
 		@contact_person = @po.supplier.contact_person
 		@contact_title = @po.supplier.contact_title
-		@subject = "PO-#{current_brand.name.gsub(/\//, '').split.map(&:first).join.upcase}-#{@po.supplier.name}-#{Date.today.strftime('%B%d')}"
+		@subject = "PO - #{current_brand.name.gsub(/\//, '').split.map(&:first).join.upcase} #{@po.branch.aka} - #{@po.supplier.name} - #{Date.today.strftime('%B %-d')}"
 	end
 
 	def approve_purchase_order

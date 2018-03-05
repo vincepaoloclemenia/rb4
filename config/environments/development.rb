@@ -44,14 +44,13 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
-    :enable_starttls_auto => true,
     :address              => "smtp.office365.com",
     :port                 => '587',
     :domain               => 'restobot.com',
     :authentication       => :login,
     :enable_starttls_auto =>  true,
-    :user_name            => 'restobot@talentium.ph',
-    :password             => 'Koy52442'
+    :user_name            => "restobot@talentium.ph",
+    :password             => "Koy52442"
    }
   config.generators do |g| 
     g.template_engine :slim

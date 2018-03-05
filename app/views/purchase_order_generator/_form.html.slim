@@ -44,33 +44,17 @@
 			= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 
 	.row.mb10
-		.col-xs-12
+		.col-xs-6
 			= f.label :delivery_date
 				| Delivery Date
 				small.field-req  *
 			input.form-control name='purchase_order[delivery_date]' placeholder="Delivery Date" id='dd'
-    
-	.row.mb10
-        .col-xs-6
-            label From <small class='field-req'>*</small>
-            .row.mb10
-                
-                .col-xs-6         
-                    = f.select :delivery_time, @numbers, { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'from_hr'
-                .col-xs-6
-                    = f.select :delivery_time, [["AM", "AM"], ["PM", "PM"]], { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'from_ampm'
-                
 
-        .col-xs-6
-            label To <small class='field-req'>*</small>
-            .row.mb10
-                
-                .col-xs-6         
-                    = f.select :delivery_time, @numbers, { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'to_hr'
-                .col-xs-6
-                    = f.select :delivery_time, [["AM", "AM"], ["PM", "PM"]], { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'to_ampm'
-
-				= f.hidden_field :delivery_time, id: 'dt'
+		.col-xs-6    
+			= f.label :delivery_date
+				| Delivery Time
+				small.field-req  *     
+			= f.text_field :delivery_time, class: 'form-control', placeholder: 'Delivery time'
 			
 			- if @suppliers.nil?
 

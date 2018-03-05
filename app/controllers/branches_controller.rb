@@ -60,6 +60,6 @@ class BranchesController < ApplicationController
 		if params["colorpicker-option-selected"]
 			params[:branch][:color] = params["colorpicker-option-selected"]
 		end
-		params.require(:branch).permit(:name, :aka, :address1, :brand_id, :color, :city, :zip, :email_address, :landline_no, :mobile_no, :fax_no)
+		params.require(:branch).permit(:name, :aka, :address1, :brand_id, :color, :city, :zip, :email_address, :landline_no, :mobile_no, :fax_no, :delivery_time)
 	end
 end

@@ -9,7 +9,7 @@ class UserMailer < ApplicationMailer
   	mail(to: email, subject: 'RESTOBOT Assignment of User')	
   end
 
-	def send_status_notification(purchase_order, purchase_order_items, user, recipient, subject, contact, title, message)
+	def send_purchase_order(purchase_order, purchase_order_items, user, recipient, subject, contact, title, message)
 		@purchase_order = purchase_order
 		@purchase_order_items = purchase_order_items
 		@user = user

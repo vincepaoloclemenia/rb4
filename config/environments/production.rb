@@ -89,8 +89,8 @@ Rails.application.configure do
     :port                 => '587',
     :domain               => 'restobot.com',
     :authentication       => :login,
-    :user_name            => 'restobot@talentium.ph',
-    :password             => 'Koy52442'
+    :user_name            => ENV["OUTLOOK_USERNAME"],
+    :password             => ENV["OUTLOOK_PASSWORD"]
    }
 
   Rails.application.config.middleware.use ExceptionNotification::Rack,

@@ -25,6 +25,10 @@ set :output, "log/cron.log"
 # 	runner 'Dashboard.sample'
 # end
 
+every :reboot do
+	command 'bin/delayed_job -n2 start'
+end
+
 every :day, at: '2am' do 
 	runner 'Dashboard.populate_dashboard'
 end 

@@ -20,7 +20,7 @@ class PurchaseOrderGeneratorController < ApplicationController
 			@branch = Branch.find(params[:id])
 			@pr_number = po_number_format(@branch)
             @po_number = @pr_number.gsub('PR', 'PO')
-            render json: { po_number: @po_number, pr_number: @pr_number }
+            render json: { po_number: @po_number, pr_number: @pr_number, deliveryTime: @branch.delivery_time }
 		end
     end
 
