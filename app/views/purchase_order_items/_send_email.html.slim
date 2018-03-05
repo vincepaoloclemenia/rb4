@@ -1,10 +1,10 @@
 = form_for(:po_email, url: purchase_order_send_email_notification_path(po: @po)) do |f|
-	.row.mb10
-		.col-xs-12
-			= f.label :from
-				| Brand Email
-				small.field-req  *
-			= f.email_field :from, required: true, class: "form-control", placeholder:"Brand email", value: @email
+	/.row.mb10
+	/	.col-xs-12
+	/		= f.label :from
+	/			| Brand Email
+	/			small.field-req  *
+	/		= f.email_field :from, required: true, class: "form-control", placeholder:"Brand email", value: @email
 	.row.mb10
 		.col-xs-12
 			= f.label :recipients
