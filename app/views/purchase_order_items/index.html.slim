@@ -72,7 +72,4 @@
 		.no-more-tables#purchase-order-item-list
 			= render "purchase_order_item_list", purchase_order_items: @purchase_order_items, purchase_order: @purchase_order
 	
-
-
-- if current_user.role.role_level != 'branch'
-	= render "partials/modal"
+= render "partials/modal"

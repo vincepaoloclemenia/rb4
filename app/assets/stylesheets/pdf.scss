@@ -8,6 +8,7 @@ table tr th { padding: 10px; font-family: 'Noto Sans', sans-serif; background-co
 table { padding: 5px }
 tr.highlighted { background-color: #C0EBFD }
 td.bold { font-weight: 700 }
+td.po-item { text-align: center }
 td.align-right { text-align: right }
 .row { margin-right: -15px; margin-left: -15px }
 .row:after, .row:before { display: table; content: " " }
@@ -20,7 +21,7 @@ div.panel-heading { font-family: 'Noto Sans', sans-serif; color: #0072c6; positi
 .pull-right { float: right!important }
 h5.po-labels { font-family: 'Noto Sans', sans-serif; font-size: 15px; color: grey }
 h4.pdf-header{ font-size: 20px; font-family: 'Noto Sans', sans-serif; font-weight: 800; display: inline-block !important; margin-left: 2em; color: #10374D }   
-img.brand-avatar{ width: 250px; height: 100px; image-rendering: auto; image-rendering: crisp-edges; image-rendering: pixelated;}  
+img.brand-avatar{ width: 300px; height: 100px; image-rendering: auto; image-rendering: crisp-edges; image-rendering: pixelated;}  
 .bordered.h230 { padding: 20px; border: 1.5px solid grey; min-height: 230px}
 p.po-info{ font-family: 'Ubuntu Sans', sans-serif; color: grey }
 p.signature { font-size: 16px; font-weight: 900; color: #10374D; font-family: 'Lora Sans', sans-serif; }

@@ -29,7 +29,8 @@
     img.brand-avatar{ width: 250px; height: 100px; image-rendering: auto; image-rendering: crisp-edges; image-rendering: pixelated;}  
     .bordered.h230 { padding: 20px; border: 1.5px solid grey; min-height: 230px}
     p.po-info{ font-family: 'Ubuntu Sans', sans-serif; color: grey }
-    p.signature { font-size: 16px; font-weight: 900; color: #10374D; font-family: 'Lora Sans', sans-serif; }
+    p.signature { margin-bottom: 40px; font-size: 16px; font-weight: 900; color: #10374D; font-family: 'Lora Sans', sans-serif; }
+    p.footer { width: 80%; font-size: 11px; color: grey; text-justify: justify; text-align: center; font-family: 'Lora Sans', sans-serif;}
     label.header{ font-family: 'Ubuntu Sans', sans-serif;  font-size: 15px; font-weight: 900; margin-right: 8px; }
     table#po-details { width:100%; border: 2px solid grey; padding: 5px; }
     table#po-details th { width:20%; background-color: #e4e4e4; border: none; color: black; text-align: left; }
@@ -41,8 +42,7 @@
             
             <div class='panel-heading'>
                 <center>
-                    <img class='brand-avatar' alt='<%= @purchase_order.brand.name %>' src='<%= File.expand_path(Rails.root) + '/public' + @purchase_order.brand.avatar.url %>' />
-                    <h4 class='pdf-header'><%= @purchase_order.brand.name %></h4>
+                    <img class='brand-avatar' alt='<%= @purchase_order.brand.name %>' src="<%= 'http://restobotv4.cloudapp.net/public' + @purchase_order.brand.avatar.url %>" />
                 </center>
             </div>
             <div class='row'>
@@ -139,6 +139,8 @@
             <p class='signature'>
                 <%= @purchase_order.client.name %> Team
             </p>       
+
+            <center><p class='footer'><%= @purchase_order.brand.email_footer %></p></center>
             
         </div>
     </body>

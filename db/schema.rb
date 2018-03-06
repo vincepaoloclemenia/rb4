@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305060636) do
+ActiveRecord::Schema.define(version: 20180306074512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20180305060636) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "email"
+    t.text     "email_footer"
   end
 
   add_index "brands", ["client_id"], name: "index_brands_on_client_id", using: :btree

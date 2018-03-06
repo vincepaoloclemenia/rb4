@@ -1,0 +1,9 @@
+$('#modal h4').html('<%= @role.name %>');
+
+$('.modal-body').html('<%= j render("show") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+})

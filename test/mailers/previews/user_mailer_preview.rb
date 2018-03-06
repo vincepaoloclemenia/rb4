@@ -1,7 +1,7 @@
 # Preview all emails at http://localhost:3000/rails/mailers/user_mailer
 class UserMailerPreview < ActionMailer::Preview
     def send_purchase_order
-        @po = PurchaseOrder.find(70)
+        @po = PurchaseOrder.find(80)
         @poi = @po.purchase_order_items
         @user = User.find 2
         @subject = 'Sample'

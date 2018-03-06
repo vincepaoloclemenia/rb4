@@ -1,0 +1,23 @@
+.row.mb10
+	.col-xs-12
+		.no-more-tables
+			table.table.table-bordered.table-striped.mb0 data-sortable="true"
+				thead
+					tr.bg-thead
+						th width="400" Section
+						th width="150" data-sortable="false" Read
+						th width="150" data-sortable="false" Create
+						th width="150" data-sortable="false" Edit
+						th width="150" data-sortable="false" Delete
+				tbody
+					- @role.permissions.map do |per|
+						tr
+							td.roles data-title="Section" = per.section.page
+							td.roles data-title="Read" = per.is_read? ? "<i class='fa green icon-glyph-26 f14'></i>".html_safe : "<i class='fa red icon-glyph-27 f14'></i>".html_safe
+							td.roles data-title="Create" = per.is_create? ? "<i class='fa green icon-glyph-26 f14'></i>".html_safe : "<i class='fa red icon-glyph-27 f14'></i>".html_safe
+							td.roles data-title="Update" = per.is_update? ? "<i class='fa green icon-glyph-26 f14'></i>".html_safe : "<i class='fa red icon-glyph-27 f14'></i>".html_safe
+							td.roles data-title="Destroy" = per.is_destroy? ? "<i class='fa green icon-glyph-26 f14'></i>".html_safe : "<i class='fa red icon-glyph-27 f14'></i>".html_safe
+.modal-footer.no-border
+	= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+	- if view_access_control('roles','update')
+		= link_to "Manage Permissions", role_manage_permissions_path(role_id: @role.id), class: "btn btn-primary btn-outline"

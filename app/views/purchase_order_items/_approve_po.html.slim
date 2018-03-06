@@ -1,29 +1,15 @@
 = form_for(:approval, url: purchase_order_approve_path(@po), method: :patch) do |f|
     .row.mb10
-		.col-xs-12
+		.col-xs-6
 			= f.label :delivery_date
 				| Delivery Date
 				small.field-req  *
 			input.form-control name='approval[delivery_date]' placeholder="Delivery Date"
-    .row
         .col-xs-6
-            label From <small class='field-req'>*</small>
-            .row.mb10
-                
-                .col-xs-6         
-                    = f.select :from_time, @numbers, { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'from_hr'
-                .col-xs-6
-                    = f.select :from_ampm, [["AM", "AM"], ["PM", "PM"]], { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'from_ampm'
-                
-
-        .col-xs-6
-            label To <small class='field-req'>*</small>
-            .row.mb10
-                
-                .col-xs-6         
-                    = f.select :to_time, @numbers, { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'to_hr'
-                .col-xs-6
-                    = f.select :to_ampm, [["AM", "AM"], ["PM", "PM"]], { include_blank: "--" }, class: "form-control", data: { placeholder: "Select" }, required: true, id: 'to_ampm'
+			= f.label :delivery_time
+				| Delivery Time
+				small.field-req  *
+			= f.text_field :delivery_time, value: @delivery_time, class: 'form-control', placeholder: "Delivery Time"
                 
 
     .modal-footer.no-border

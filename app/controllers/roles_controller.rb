@@ -21,6 +21,10 @@ class RolesController < ApplicationController
 		redirect_to roles_path
 	end
 
+	def show
+		
+	end
+
 	def update
 		if @role.update(role_params)
 			flash[:notice] = "Role successfully updated"

@@ -31,6 +31,11 @@
       .col-xs-12.col-lg-4.mb10
         = f.label :fax_no
         = f.number_field :fax_no, class: "form-control"
+      .col-xs-12.col-lg-12.mb10
+        = f.label :email_footer
+          | Email Footer
+          small.field-req  * <i>For email purposes</i>
+        = f.text_area :email_footer, class: "form-control", required: true, rows: "5", placeholder: "Write your email footer here"
       .col-xs-12
         | (
         small.field-req  *
