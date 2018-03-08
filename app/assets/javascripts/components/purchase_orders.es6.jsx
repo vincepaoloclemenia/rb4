@@ -20,8 +20,7 @@ class PurchaseOrders extends React.Component{
         this.items = []
     }
 
-    searchPurchaseOrder(){
-        this.setState({ fetching: true })
+    searchPurchaseOrder(){       
         var branches = []
         var suppliers = []
         var items = []
@@ -34,47 +33,50 @@ class PurchaseOrders extends React.Component{
         var branchParams = ''
         var supplierParams = ''
         var dateParams = ''
-
-        if(this.state.branch.length > 0){
-            branches = this.state.branch.map( x => x.label )
-            branchParams = `&branch=${branches.join(" ")}`
-        }
-        
-        if(this.state.supplier.length > 0){
-            suppliers = this.state.supplier.map( x=> x.label )
-            supplierParams = `&supplier=${suppliers.join(" ")}`
-        }
-        
-        if(this.state.item.length > 0){
-            items = this.state.item.map( x => x.label )
-            itemParams = `&items=${items.join(" ")}`
-            this.items = items
-        }
-
-        if (this.state.poNumber != '')
-            poParams = `&po_number=${this.state.poNumber}`
-        
-        if (this.state.creator != '' )
-            creatorParams = `&creator=${this.state.creator}`
-        
-        if (this.state.status != '')
-            statusParams = `&status=${this.state.status}`
-
-        if (from != '' && to != '')
-            dateParams = `&from=${from}&to=${to}`
-            
-        $.ajax({
-            url: `/api/purchase_orders/get_pos.json?${dateParams}${poParams}${branchParams}${supplierParams}${itemParams}${creatorParams}${statusParams}`,
-            method: 'GET',
-            success: (data) => {
-                this.setState({ 
-                    purchaseOrders: data.purchase_orders, fetching: false, 
-                    searching: true,
-                    totalAmount: data.total_amount,
-                    keywords: `${this.state.item.length > 0 ? `Items: [${items.join(", ")}]` : ''}${this.state.poNumber ? ` PO Number: ${this.state.poNumber} ` : '' } ${this.state.status ? ` Status: ${this.state.status} ` : ''} ${this.state.creator ? ` Creator: ${this.state.creator} ` : ''} ${this.state.branch.length > 0 ? ` Branches: [${this.state.branch.map( x=>x.label).join(", ")}] ` : '' } ${this.state.supplier.length > 0 ? ` Suppliers: [${this.state.supplier.map( x=>x.label).join(", ")}] ` : '' }`                    
-                })
+        if ((from != '' && to != '') || ( this.state.creator != '' || this.state.creator != '' || this.state.poNumber != '' || this.state.item.length > 0 || this.state.supplier.length > 0 || this.state.branch.length > 0)){  
+            this.setState({ fetching: true })
+            if(this.state.branch.length > 0){
+                branches = this.state.branch.map( x => x.label )
+                branchParams = `&branch=${branches.join(" ")}`
             }
-        })          
+            
+            if(this.state.supplier.length > 0){
+                suppliers = this.state.supplier.map( x=> x.label )
+                supplierParams = `&supplier=${suppliers.join(" ")}`
+            }
+            
+            if(this.state.item.length > 0){
+                items = this.state.item.map( x => x.label )
+                itemParams = `&items=${items.join(" ")}`
+                this.items = items
+            }
+
+            if (this.state.poNumber != '')
+                poParams = `&po_number=${this.state.poNumber}`
+            
+            if (this.state.creator != '' )
+                creatorParams = `&creator=${this.state.creator}`
+            
+            if (this.state.status != '')
+                statusParams = `&status=${this.state.status}`
+
+            if (from != '' && to != '')
+                dateParams = `&from=${from}&to=${to}`
+
+          
+            $.ajax({
+                url: `/api/purchase_orders/get_pos.json?${dateParams}${poParams}${branchParams}${supplierParams}${itemParams}${creatorParams}${statusParams}`,
+                method: 'GET',
+                success: (data) => {
+                    this.setState({ 
+                        purchaseOrders: data.purchase_orders, fetching: false, 
+                        searching: true,
+                        totalAmount: data.total_amount,
+                        keywords: `${this.state.item.length > 0 ? `Items: [${items.join(", ")}]` : ''}${this.state.poNumber ? ` PO Number: ${this.state.poNumber} ` : '' } ${this.state.status ? ` Status: ${this.state.status} ` : ''} ${this.state.creator ? ` Creator: ${this.state.creator} ` : ''} ${this.state.branch.length > 0 ? ` Branches: [${this.state.branch.map( x=>x.label).join(", ")}] ` : '' } ${this.state.supplier.length > 0 ? ` Suppliers: [${this.state.supplier.map( x=>x.label).join(", ")}] ` : '' }`                    
+                    })
+                }
+            })     
+        }     
     }
 
     resetEveything(){
