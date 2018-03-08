@@ -1,12 +1,21 @@
 class PurchaseOrderItem < ActiveRecord::Base
+	include PgSearch
 	belongs_to :item
   	belongs_to :unit
-  	belongs_to :purchase_order
+	belongs_to :purchase_order
+	belongs_to :brand
+	belongs_to :branch
 
 	validates :unit_id, :item_id, :quantity, presence: true
-
+	validates_uniqueness_of :item_id, scope: :purchase_order
 	after_create :update_purchase_order
 	after_destroy :update_purchase_order
+
+	pg_search_scope :search, against: [ :price_selected, :total_amount ], 
+	associated_against: { 
+		item: [:name],
+		purchase_order: [ :po_number, :po_date ] 
+	}, using: { tsearch: { prefix: true } }
 
 	def update_purchase_order
 		po = self.purchase_order
@@ -16,6 +25,13 @@ class PurchaseOrderItem < ActiveRecord::Base
 		po.update(sub_total: subtotal, vat: vat, total_amount: sum)
 	end
 
+	def self.poi_search(*query)
+		if query.present? || query == ''
+		  search(query)
+		else
+		  scoped
+		end
+	end
 	# def get_purchases_per_branch
 	# 	d = DateTime.now - 1
 	# 	purchase = Purchase.where(brand_id: current_brand, purchase_date: Date.today - 1)

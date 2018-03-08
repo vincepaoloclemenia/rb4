@@ -18,13 +18,13 @@ class PurchaseOrder < ActiveRecord::Base
   
   validates :delivery_date, :delivery_time, presence: true, if: :approved?
 
-  pg_search_scope :search, against: { :po_date => 'A', :po_number => 'B', :status => 'C' },
+  pg_search_scope :search, against: { :po_number => 'A', :po_date => 'B', :status => 'C' },
     associated_against: { 
       branch: [:name],
       user: [:first_name, :last_name],
       items: [:name],
       supplier: [:name]
-    }, using: { tsearch: { prefix: true, any_word: true } }
+    }, using: { tsearch: { prefix: true } }
   
   def approved?
     status == 'Approved'
@@ -36,6 +36,24 @@ class PurchaseOrder < ActiveRecord::Base
     else
       scoped
     end
+  end
+
+  def self.items_search(*query)
+    if query.present?
+      search(query)
+    else
+      scoped
+    end
+  end
+
+  def self.get_sum_of_poitems(*keywords)
+    total = if keywords.present? && self.items_search(keywords).length > 0
+      sum = self.items_search(keywords).map { |po| po.purchase_order_items.poi_search(keywords).pluck(:total_amount) }.sum
+      sum.sum
+    else
+      0.00
+    end
+    total
   end
 
 end

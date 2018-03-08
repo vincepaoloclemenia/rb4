@@ -12,7 +12,7 @@ class Supplier < ActiveRecord::Base
   before_save :capitalize_name
 
   def capitalize_name
-    name.capitalize!
+    name.split.map(&:capitalize!).join(" ")
   end
 
   def self.search(term)
