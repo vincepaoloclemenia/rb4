@@ -46,7 +46,7 @@ class PurchaseOrders extends React.Component{
             }
             
             if(this.state.item.length > 0){
-                items = this.state.item.map( x => x.label )
+                items = this.state.item.map( x => x.value )
                 itemParams = `&items=${items.join(" ")}`
                 this.items = items
             }

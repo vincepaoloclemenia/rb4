@@ -22,9 +22,9 @@ class PurchaseOrder < ActiveRecord::Base
     associated_against: { 
       branch: [:name],
       user: [:first_name, :last_name],
-      items: [:name],
+      items: [:id],
       supplier: [:name]
-    }, using: { tsearch: { prefix: true } }
+    }, using: { tsearch: { prefix: true, any_word: true } }
   
   def approved?
     status == 'Approved'
