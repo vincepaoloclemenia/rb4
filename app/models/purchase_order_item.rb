@@ -11,7 +11,7 @@ class PurchaseOrderItem < ActiveRecord::Base
 	after_create :update_purchase_order
 	after_destroy :update_purchase_order
 
-	pg_search_scope :search, against: [ :price_selected, :total_amount ], 
+	pg_search_scope :search,
 	associated_against: { 
 		item: [:id]
 	}, using: { tsearch: { prefix: true, any_word: true } }

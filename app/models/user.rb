@@ -68,6 +68,10 @@ class User < ActiveRecord::Base
 	  end
   end
 
+  def allowed_access?(page)
+    role.permissions.check_permissions(page)
+  end
+
   def self.branch_users(branch)
     all.joins(:branch).map { |user| user.branch.id == branch.id ? user : next }.compact
   end

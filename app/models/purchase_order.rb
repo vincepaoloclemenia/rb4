@@ -56,4 +56,29 @@ class PurchaseOrder < ActiveRecord::Base
     total
   end
 
+  def self.dynamic_search(from, to, things, branches, suppliers, estado, maker, po_num)
+    searched_items = things.present? ? things : ''
+    searched_branches = branches.present? ? branches : ''   
+    searched_suppliers = suppliers.present? ? suppliers : ''
+    searched_status = estado.present? ? estado : ''
+    searched_creator = maker.present? ? maker : ''
+    searched_po = po_num.present? ? po_num : ''
+    keywords = "#{searched_branches} #{searched_suppliers} #{searched_status} #{searched_creator} #{searched_po} #{searched_items}"
+    purchase_orders = if from.present? && to.present? && !( things.present? || branches.present? || suppliers.present? || maker.present? || estado.present? || po_num.present? )
+      date_from = Date.strptime(from, '%m/%d/%Y')   
+      date_to = Date.strptime(to, '%m/%d/%Y')          
+      where(po_date: date_from..date_to)
+    elsif from.present? && to.present? && ( things.present? || branches.present? || suppliers.present? || maker.present? || estado.present? || po_num.present? )
+      date_from = Date.strptime(from, '%m/%d/%Y')   
+      date_to = Date.strptime(to, '%m/%d/%Y')   
+      if where(po_date: date_from..date_to).exists?
+        where(po_date: date_from..date_to).text_search(keywords)
+      else
+          []
+      end
+    elsif !(from.present? && to.present?) && ( things.present? || branches.present? || suppliers.present? || maker.present? || estado.present? || po_num.present? )
+        text_search(keywords)
+    end
+  end
+
 end
