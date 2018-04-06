@@ -1,3 +1,4 @@
+json.next_page @purchase_orders.next_page
 json.purchase_orders do |json|
     json.array! @purchase_orders do |po|
         json.id po.id

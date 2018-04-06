@@ -1,3 +1,4 @@
+json.next_page @approved_purchase_orders.next_page
 json.approved_purchase_orders do |json|
     json.array! @approved_purchase_orders do |po|
         json.id po.id

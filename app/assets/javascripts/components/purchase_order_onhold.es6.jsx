@@ -1,11 +1,26 @@
 class PurchaseOrderOnhold extends React.Component{
     constructor(props){
         super(props)
-        this.state = { purchaseOrders: [] }
+        this.state = { purchaseOrders: [], fetching: false, nextPage: null }
     }
 
     componentDidMount(){
         this.fetchData()
+    }
+
+    handleNextPurchaseOrders(){
+        this.setState({ fetching: true })
+        $.ajax({
+            url: `/api/purchase_order_summary/get_on_hold_pos.json?page=${this.state.nextPage}`,
+            method: 'GET',
+            success: (data) => {
+                this.setState({
+                    fetching: false,
+                    nextPage: data.next_page,
+                    purchaseOrders: [ ...this.state.purchaseOrders, ...data.on_hold_pos ]
+                });
+            }
+        })
     }
 
     render(){
@@ -19,8 +34,29 @@ class PurchaseOrderOnhold extends React.Component{
                         {this.renderTableDataForAdmins(this.state.purchaseOrders)}
                     </tbody>
                 </table>
+                <ul>
+                    <li><center>{this.renderButton()}</center></li>
+                </ul>
             </div>         
         )
+    }
+
+    renderButton(){
+        if(this.state.fetching){
+            return(
+                <i className="fa fa-spinner fa-spin fa-lg fa-fw"></i>
+            )
+        }
+        if(this.state.purchaseOrders.length === 0){
+            return(
+                <p className='text-center mt5'>No Records Found</p>
+            )
+        }
+        if(!this.state.nextPage){ return }
+        return(          
+            <a className='view-more' onClick={this.handleNextPurchaseOrders.bind(this)}>See more..</a>              
+        )
+        
     }
 
     renderHeader(){
@@ -60,20 +96,16 @@ class PurchaseOrderOnhold extends React.Component{
                 )
             )
         }
-        return(
-            <tr>
-                <td colSpan='8'><p className='text-center mt5'>No Records Found</p></td>
-            </tr>
-        )
     }
 
     fetchData(){
+        this.setState({ fetching: true })
         $.ajax({
             url: '/api/purchase_order_summary/get_on_hold_pos.json',
             method: 'GET',
             success: (data) => {
                 this.setState({
-                    purchaseOrders: data.on_hold_pos
+                    purchaseOrders: data.on_hold_pos, nextPage: data.next_page, fetching: false
                 })
             }
         })

@@ -1,3 +1,4 @@
+json.next_page @on_hold_pos.next_page
 json.on_hold_pos do |json|
     json.array! @on_hold_pos do |po|
         json.id po.id

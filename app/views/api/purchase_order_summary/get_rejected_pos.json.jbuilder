@@ -1,3 +1,4 @@
+json.next_page @rejected_pos.next_page
 json.rejected_pos do |json|
     json.array! @rejected_pos do |po|
         json.id po.id

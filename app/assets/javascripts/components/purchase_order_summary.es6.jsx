@@ -1,7 +1,22 @@
 class PurchaseOrderSummary extends React.Component{
     constructor(props){
         super(props)
-        this.state = { purchaseOrders: [] }
+        this.state = { purchaseOrders: [], fetching: false, nextPage: null }
+    }
+
+    handleNextPurchaseOrders(){
+        this.setState({ fetching: true })
+        $.ajax({
+            url: `/api/purchase_order_summary/get_purchase_orders.json?page=${this.state.nextPage}`,
+            method: 'GET',
+            success: (data) => {
+                this.setState({
+                    fetching: false,
+                    nextPage: data.next_page,
+                    purchaseOrders: [ ...this.state.purchaseOrders, ...data.purchase_orders ]
+                });
+            }
+        })
     }
 
     componentDidMount(){
@@ -19,8 +34,24 @@ class PurchaseOrderSummary extends React.Component{
                         {this.renderTableForBranchUsers(this.state.purchaseOrders)}
                     </tbody>
                 </table>
+                <ul>
+                    <li><center>{this.renderButton()}</center></li>
+                </ul>
             </div>         
         )
+    }
+
+    renderButton(){
+        if(this.state.fetching){
+            return(
+                <i className="fa fa-spinner fa-spin fa-lg fa-fw"></i>
+            )
+        }
+        if(!this.state.nextPage){ return }
+        return(          
+            <a className='view-more' onClick={this.handleNextPurchaseOrders.bind(this)}>See more..</a>              
+        )
+        
     }
 
     renderHeader(role){
@@ -58,11 +89,6 @@ class PurchaseOrderSummary extends React.Component{
                 )
             )
         }
-        return(
-            <tr>
-                <td colSpan='8'><p className='text-center mt5'>No Records Found</p></td>
-            </tr>
-        )
     }
 
     renderTableDataForAdmins(purchaseOrders){
@@ -90,12 +116,13 @@ class PurchaseOrderSummary extends React.Component{
     }
 
     fetchData(){
+        this.setState({ fetching: true })
         $.ajax({
             url: '/api/purchase_order_summary/get_purchase_orders.json',
             method: 'GET',
             success: (data) => {
                 this.setState({
-                    purchaseOrders: data.purchase_orders
+                    purchaseOrders: data.purchase_orders, nextPage: data.next_page, fetching: false
                 })
             }
         })
