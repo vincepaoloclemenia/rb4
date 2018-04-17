@@ -57,7 +57,7 @@
 					i.icon-maxicons1-exit
 				h4.modal-title Add Purchase Item
 			.modal-body
-				- unless @purchase.supplier.items.empty?
+				- if current_brand.items.present?
 					= form_for [@purchase, @purchase_item], remote: true do |f|
 						.row.mb10
 							.col-xs-12							
@@ -121,13 +121,11 @@
 					.row.mb10
 						.alert.alert-danger.mt5 role="alert" style='width: 90%; margin-left: 5%'
 							i.icon-glyph-93.f14.mr10
-							| Oops! Sorry. You currently have no items for 
-							b  '#{@purchase.supplier.name}'&nbsp;
-							| yet
+							| Oops! Sorry. You currently have no items yet
 						.alert.alert-info role="alert" style='width: 90%; margin-left: 5%'
 							i.icon-glyph-73.mr10.f20
 							| To add item: please click 
-							b = link_to "here", edit_supplier_path(@purchase.supplier), data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true				
+							b = link_to "here", new_item_path, data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true				
 
 javascript:
 	$('#purchase_item_quantity').on("keyup",function(){
