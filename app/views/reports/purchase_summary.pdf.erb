@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Purchase Order</title>
+            <%= wicked_pdf_stylesheet_link_tag "application" %>
+			<%= wicked_pdf_stylesheet_link_tag 'pdf' %>
+        <meta charset='utf-8'>
+    </head>
+    <body id='pdf-body'>
+        <div class='pdf-container'>    
+			<h2>Purchase Summary Report</h2>       
+			<table class="table table-bordered table-striped mb0">
+				<thead>
+					<tr class="big-head">
+						<th>RANK</th>
+						<th>BRANCH</th>
+						<th>ITEM</th>
+						<th>UNIT</th>
+						<th>QUANTITY</th>
+						<th>UNIT COST</th>
+						<th>NET AMOUNT</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @rank_number = rank_number(params[:page].to_i) %>
+					<% @purchase_items.each do |pi| %>
+						<tr>
+							<td><%= @rank_number %></td>
+							<td><%= pi[:branch].to_s %></td>
+							<td><%= pi[:name].to_s %></td>
+							<td><%= pi[:unit].to_s %></td>
+							<td><%= number_with_precision(pi[:quantity], precision: 2) %></td>
+							<td><%= to_peso(pi[:cost]) %></td>
+							<td><%= to_peso(pi[:net_amount]) %></td>
+						</tr>
+						<% @rank_number += 1 %>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+    </body>
+</html>
