@@ -43,8 +43,15 @@ class ItemsController < ApplicationController
 
 	def destroy
 		@item = current_brand.items.find(params[:id])
-		@item.destroy
-		redirect_to items_path, notice: "Item successfully deleted"
+		#@item.destroy
+		#redirect_to items_path, notice: "Item successfully deleted"
+
+		begin
+			@item.destroy
+			redirect_to items_path, notice: "Item successfully deleted"
+		rescue ActiveRecord::InvalidForeignKey => e
+			redirect_to items_path, alert: "Error: Unable to delete #{@item.name} for it is currently being for purchasing record."
+		end
 	end
 
 	private

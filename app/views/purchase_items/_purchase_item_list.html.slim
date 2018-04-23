@@ -1,6 +1,7 @@
 - purchase_items = purchase_items || @purchase_items
 - purchase = purchase || @purchase
-table.table.table-bordered.table-striped.mb0 data-sortable="true"
+- nvt = net_vat_total_computation(purchase_items)
+table.table.table-bordered.table-striped.mb0
 	thead
 		tr.bg-thead
 			th width="145" Item Name
@@ -26,6 +27,15 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				td.action data-title="Action"
 					- if view_access_control('purchase_items','destroy')
 						= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+		tr.bg-total
+			td.text-right.label-total colspan="7" Net Amount:
+			td.label-total-num colspan="2" = to_peso(nvt[:net])
+		tr.bg-total
+			td.text-right.label-total colspan="7" VAT Amount:
+			td.label-total-num colspan="2" = to_peso(nvt[:vat])
+		tr.bg-total
+			td.text-right.label-total colspan="7" Total Amount:
+			td.label-total-num colspan="2" = to_peso(nvt[:total])
 .align-center
 	p
 		= page_entries_info purchase_items, renderer: BootstrapPagination::Rails

@@ -1,5 +1,6 @@
 class LaborHoursController < ApplicationController
   before_action :authenticate_user!
+  before_action :access_control
   before_action only: [:create]
 
   def index

@@ -3,7 +3,7 @@ class Item < ActiveRecord::Base
   belongs_to :unit
   belongs_to :category
   has_many :inventory_items
-  has_many :supplier_item_prices
+  has_many :supplier_item_prices, dependent: :destroy
   has_and_belongs_to_many :suppliers
   default_scope -> { order(name: :asc) }
   accepts_nested_attributes_for :suppliers, reject_if: :all_blank, allow_destroy: true

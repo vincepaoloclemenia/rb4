@@ -103,11 +103,10 @@ class ApplicationController < ActionController::Base
   end
 
   def access_control
-    section = params[:controller] == 'sales' || params[:controller] == 'purchases' || params[:controller] == 'purchase_items' ? false : Section.find_by_name(params[:controller])
-    if section
-      if ["show","update","create","destroy"].include?(params[:action]) #|| ( section == 'users' && params[:action] == 'account' )
-        action = params[:action].eql?('show') ? "is_read" : "is_#{params[:action]}" #: params[:action] == 'account' ? "is_read" : params[:action] == 'update_account' ? "is_update" : "is_#{params[:action]}"
-        
+    section = Section.find_by_name(params[:controller])  
+    if section && user_signed_in?
+      if ["index","update","create","destroy"].include?(params[:action])
+        action = params[:action].eql?("index") ? "is_read" : "is_#{params[:action]}"  
         permission = current_user.role.permissions.find_by_section_id(section.id)
         unless permission.send(action.to_sym)
           redirect_to dashboard_path, alert: "Access denied"
@@ -115,5 +114,6 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+  
 
 end
