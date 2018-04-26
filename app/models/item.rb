@@ -1,4 +1,5 @@
 class Item < ActiveRecord::Base
+  include PgSearch
   belongs_to :brand
   belongs_to :unit
   belongs_to :category
@@ -13,11 +14,22 @@ class Item < ActiveRecord::Base
   validates :item_type,      length: { maximum: 50 }
   scope :for_inventory, -> { where(is_active: true, item_type: "Inventory") }
 
+  pg_search_scope :search_category, associated_against: { category: [:id] },
+                  using: { tsearch: { any_word: true } }
+
   def self.search(term)
     if term
       where('name LIKE ?', "%#{term}%")
     else
       all
+    end
+  end
+
+  def self.category_search(*query)
+    if query.present?
+      search_category(query)
+    else
+      scoped
     end
   end
 

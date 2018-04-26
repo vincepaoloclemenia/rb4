@@ -136,6 +136,10 @@ Rails.application.routes.draw do
       get :get_pos, on: :collection
     end
 
+    resources :purchases, only: :index do
+      get :searched_purchases, on: :collection
+    end
+
     resources :suppliers, only: [:create, :update]
 
     resources :activities, only: :index

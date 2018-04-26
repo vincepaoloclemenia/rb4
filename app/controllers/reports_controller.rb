@@ -6,7 +6,7 @@ class ReportsController < ApplicationController
 		process_ransack_purchase_date_range!
 
 		@q = current_brand.purchases.ransack(params[:q])
-		@purchases = @q.result
+		@purchases = current_brand.purchases
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
 
 		respond_to do |format|

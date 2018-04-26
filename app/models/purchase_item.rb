@@ -1,10 +1,14 @@
 class PurchaseItem < ActiveRecord::Base
-  belongs_to :item
-  belongs_to :unit
+	include PgSearch
+	belongs_to :item
+	belongs_to :unit
 	belongs_to :purchase
 	has_one :branch, through: :purchase
 	validates :item_id, :quantity, :purchase_item_total_amount, :vat_type, presence: true
 	after_destroy { |pi| Activity.find_by_recordable_id(pi.id).destroy } 
+
+	pg_search_scope :search_item, associated_against: { item: [:id] },
+	using: { tsearch: { any_word: true } }
 
 	def get_purchases_per_branch
 		d = DateTime.now - 1
@@ -16,4 +20,15 @@ class PurchaseItem < ActiveRecord::Base
 		end
 	end
 
+	def item_total_amount
+		return vat_type == "VAT-Inclusive" ? purchase_item_total_amount.to_d : purchase_item_total_amount.to_d + (purchase_item_total_amount.to_d * 0.12).to_d			
+	end
+
+	def item_total_vat
+		return vat_type == "VAT-Exempted" ? 0.00 : (purchase_item_total_amount * 0.12).to_d
+	end
+
+	def item_total_net
+		return vat_type == "VAT-Inclusive" ? (purchase_item_total_amount - item_total_vat).to_d : purchase_item_total_amount.to_d
+	end
 end

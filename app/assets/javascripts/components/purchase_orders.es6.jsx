@@ -184,20 +184,6 @@ class PurchaseOrders extends React.Component{
                                 </div>
                                 
                                 <div className='col-xs-6 mb5'>
-                                    <label htmlFor='q[branch_name]'>Branch Name</label>
-                                    <Select.Creatable
-                                        multi={true}
-                                        name='q[branch_name]'
-                                        optionClassName='form-control'
-                                        options={this.state.branches}
-                                        onChange={ value => this.setState({ branch: value }) }
-                                        value={this.state.branch}               
-                                    /> 
-                                </div>
-                            </div>
-
-                            <div className='row mb10'>
-                                <div className='col-xs-6 mb5'>
                                     <label htmlFor='q[item]'>Item Name</label>
                                     <Select.Creatable
                                         multi={true}
@@ -206,7 +192,21 @@ class PurchaseOrders extends React.Component{
                                         options={this.state.items}
                                         onChange={ value => this.setState({ item: value }) }
                                         value={this.state.item}               
-                                    /> 
+                                    />  
+                                </div>
+                            </div>
+
+                            <div className='row mb10'>
+                                <div className='col-xs-6 mb5'>
+                                    <label htmlFor='q[branch_name]'>Branch Name</label>
+                                    <Select.Creatable
+                                        multi={true}
+                                        name='q[branch_name]'
+                                        optionClassName='form-control'
+                                        options={this.state.branches}
+                                        onChange={ value => this.setState({ branch: value }) }
+                                        value={this.state.branch}               
+                                    />
                                 </div>
 
                                 <div className='col-md-3 mb5'>
@@ -326,9 +326,7 @@ class PurchaseOrders extends React.Component{
                     <tr>
                         <td colSpan='7'>
                             <center>
-                                <i>No record found for 
-                                    <b>"{this.state.keywords}"
-                                    </b>
+                                <i>No record found                                
                                 </i>
                             </center>
                         </td>
