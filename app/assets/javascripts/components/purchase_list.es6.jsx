@@ -15,7 +15,10 @@ class PurchaseList extends React.Component{
             branch: [],
             supplier: [],
             nextPage: null,
-            searching: false
+            searching: false,
+            itemTotalVat: null,
+            itemTotalAmount: null,
+            itemTotalNet: null,
         }
     }
 
@@ -32,7 +35,14 @@ class PurchaseList extends React.Component{
                 invoice_number: this.state.invoice
             },
             success: (data) => {
-                this.setState({ purchases: data.purchases, fetching: false, nextPage: data.next_page })
+                this.setState({ 
+                    purchases: data.purchases, 
+                    fetching: false, 
+                    nextPage: data.next_page,
+                    itemTotalAmount: data.total_amount,
+                    itemTotalNet: data.total_net,
+                    itemTotalVat: data.total_vat
+                })
             }
         })
     }
@@ -85,6 +95,30 @@ class PurchaseList extends React.Component{
                 this.setState({ items: data.items })
             }
         })
+    }
+
+    downloadExcel(event){
+        $.ajax({
+            url: `/api/purchases/searched_purchases.json?page=${this.state.nextPage}`,
+            method: 'GET',
+            data: { 
+                date: $("#q_purchase_date_cont").val() === '' ? [] : $("#q_purchase_date_cont").val().split(" - "),
+                suppliers: this.state.supplier.map( x => x.input ),
+                branches: this.state.branch.map( x => x.input ),
+                purchase_items: this.state.item.map( x => x.input ),
+                invoice_number: this.state.invoice
+            },
+            success: (data) => {
+                console.log(data.purchases)
+            }
+        })
+        /*if(this.state.searching){
+            event.target.target = "_blank"
+            event.target.href = '/api/purchases/searched_purchases.xlsx'
+        }else{
+            event.target.target = "_blank"
+            event.target.href = '/api/purchases.xlsx'
+        }*/
     }
 
     componentDidMount(){
@@ -199,7 +233,7 @@ class PurchaseList extends React.Component{
                     <div className='panel-heading border pb45'>
                         <div className='pull-left mt7'>Purchase List</div>
                         <div className='pull-right'>
-                            <button className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download Excel </button>
+                            <button onClick={this.downloadExcel.bind(this)} className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download Excel </button>
                         </div>
                     </div>
                     <div className='panel-body'>
@@ -219,6 +253,7 @@ class PurchaseList extends React.Component{
                                     </tr>
                                 </thead>
                                 {this.renderData()}
+                                {this.renderTotalsWhenItemSearch()}
                             </table>
                             <ul>
                                 <li><center>{this.renderButton()}</center></li>
@@ -253,9 +288,51 @@ class PurchaseList extends React.Component{
         )
         
     }
+
+    renderTotalsWhenItemSearch(){
+        if(this.state.searching){ 
+            return(
+                <tbody>
+                    <tr className='bg-total'>
+                        <td className='text-right label-total' colSpan="7">Total VAT</td>
+                        <td className='label-total-num' colSpan="2">{this.state.itemTotalVat}</td>
+                    </tr>
+                    <tr className='bg-total'>
+                        <td className='text-right label-total' colSpan="7">Total Net</td>
+                        <td className='label-total-num' colSpan="2">{this.state.itemTotalNet}</td>
+                    </tr>
+                    <tr className='bg-total'>
+                        <td className='text-right label-total' colSpan="7">Total Amount</td>
+                        <td className='label-total-num' colSpan="2">{this.state.itemTotalAmount}</td>
+                    </tr>
+                </tbody>
+            ) 
+        }
+    }
     
     renderData(){
         if(this.state.fetching){ return }
+        if(this.state.searching){
+            return(
+                this.state.purchases.map((purchase, index) => 
+                    <tbody key={index}>
+                        { purchase.purchase_items.map((purchase_item, index) =>
+                            <tr key={index}>
+                                <td>{purchase.invoice_number}</td>
+                                <td>{purchase.purchase_date}</td>
+                                <td>{purchase.branch.name}</td>
+                                <td>{purchase.supplier.name}</td>
+                                <td>{purchase_item.item.name}</td>
+                                <td>{purchase_item.category}</td>
+                                <td>{purchase_item.item_total_vat}</td>
+                                <td>{purchase_item.item_total_net}</td>
+                                <td>{purchase_item.item_total_amount}</td>
+                            </tr> 
+                        )}   
+                    </tbody>                         
+                )
+            )
+        }
         return(     
                 this.state.purchases.map((purchase, index) => 
                     <tbody key={index}>
@@ -305,7 +382,7 @@ class PurchaseList extends React.Component{
             url: '/api/purchases.json',
             method: 'GET',
             success: (data => {
-                this.setState({ purchases: data.purchases, fetching: false, nextPage: data.next_page })
+                this.setState({ items: data.items, purchases: data.purchases, fetching: false, nextPage: data.next_page })
             })
         })
     }

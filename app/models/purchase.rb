@@ -63,8 +63,8 @@ class Purchase < ActiveRecord::Base
 		all.includes(:purchase_items).where.not( purchase_items: { purchase_id: nil })
 	end
 
-	def self.search_purchases(purchase_items, suppliers, branches, invoice_number)
-		keywords = "all#{invoice_number == '' ? '' : '.search_invoice(invoice_number)'}#{purchase_items.present? ? '.search_purchase_item(purchase_items)' : ''}#{suppliers.present? ? '.search_supplier(suppliers)' : ''}#{branches.present? ? '.search_branch(branches)' : ''}"
+	def self.search_purchases(suppliers, branches, invoice_number)
+		keywords = "all#{invoice_number == '' ? '' : '.search_invoice(invoice_number)'}#{suppliers.present? ? '.search_supplier(suppliers)' : ''}#{branches.present? ? '.search_branch(branches)' : ''}"
 		eval(keywords)
 	end
 

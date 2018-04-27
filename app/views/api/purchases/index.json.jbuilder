@@ -30,7 +30,7 @@ json.items do |json|
     end
 end
 
-json.next_page @purchases.next_page
+json.next_page @purchases.next_page if @purchases.present?
 
 json.purchases do |json|
     json.array! @purchases do |purchase|

@@ -9,25 +9,25 @@ class Api::PurchasesController < ApplicationController
                 end
         @branches = current_brand.branches.select(:name, :id)
         @categories = current_brand.categories.where.not(parent_id: nil).select(:name, :id)
-        @purchases = current_brand.purchases.with_purchase_items.paginate(page: params[:page], per_page: 15)
+        @purchases = current_brand.purchases.where(purchase_date: Date.today.at_beginning_of_month..Date.today.end_of_month).with_purchase_items.paginate(page: params[:page], per_page: 15)
+        if params[:format] == 'xlsx' 
+            render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/index'
+        end      
     end
 
     def searched_purchases
         @purchases = if params[:date].nil?
-                        current_brand.purchases.search_purchases(params[:purchase_items], params[:suppliers], params[:branches], params[:invoice_number]).paginate(page: params[:page], per_page: 15)                                 
+                        current_brand.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number])                                 
                     else
                         from = Date.strptime(params[:date][0], "%m/%d/%Y")
                         to = Date.strptime(params[:date][1], "%m/%d/%Y")        
-                        if current_brand.purchases.search_purchases(params[:purchase_items], params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: from..to).exists?
-                            current_brand.purchases.search_purchases(params[:purchase_items], params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: from..to).paginate(page: params[:page], per_page: 15)
+                        if current_brand.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: from..to).exists?
+                            current_brand.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: from..to)
                         else
                             []
                         end
                     end
-        respond_to do |format|
-            format.xlsx
-            render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.frst.purchase_date.strftime('%b %d, %Y')}", template: 'api/timelogs/searched_purchases'
-        end
+        @items = params[:purchase_items]
     end
 
 end
