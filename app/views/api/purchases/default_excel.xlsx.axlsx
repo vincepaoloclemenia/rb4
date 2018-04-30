@@ -1,7 +1,7 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "#{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}") do |sheet|
 
-    sheet.add_row[
+    sheet.add_row [
         "Invoice Number",
         "Date",
         "Branch",
@@ -14,7 +14,7 @@ wb.add_worksheet(name: "#{@purchases.last.purchase_date.strftime('%b %d, %Y')} -
 
     @purchases.each do |purchase|
         purchase.purchase_items.each do |purchase_item|
-            sheet.add_row[
+            sheet.add_row [
                 purchase.invoice_number,
                 purchase.purchase_date.strftime("%b %d, %Y"),
                 purchase.branch.name,

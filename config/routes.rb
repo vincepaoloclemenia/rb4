@@ -138,6 +138,8 @@ Rails.application.routes.draw do
 
     resources :purchases, only: :index do
       get :searched_purchases, on: :collection
+      get :export_excel, on: :collection
+      get :default_excel, on: :collection
     end
 
     resources :suppliers, only: [:create, :update]

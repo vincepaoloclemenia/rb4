@@ -97,28 +97,18 @@ class PurchaseList extends React.Component{
         })
     }
 
-    downloadExcel(event){
-        $.ajax({
-            url: `/api/purchases/searched_purchases.json?page=${this.state.nextPage}`,
-            method: 'GET',
-            data: { 
-                date: $("#q_purchase_date_cont").val() === '' ? [] : $("#q_purchase_date_cont").val().split(" - "),
-                suppliers: this.state.supplier.map( x => x.input ),
-                branches: this.state.branch.map( x => x.input ),
-                purchase_items: this.state.item.map( x => x.input ),
-                invoice_number: this.state.invoice
-            },
-            success: (data) => {
-                console.log(data.purchases)
-            }
-        })
-        /*if(this.state.searching){
+    downloadExcel(event){    
+        var items = this.state.item.map( x => `&purchase_items[]=${x.input}` ).toString()
+        var branches = this.state.branch.map( x => `&branches[]=${x.input}`).toString()
+        var suppliers = this.state.supplier.map ( x => `&suppliers[]=${x.input}`).toString()
+        var dates = $("#q_purchase_date_cont").val().split(" - ").map( x => `&date[]=${x}` ).toString()
+        if(this.state.searching){
             event.target.target = "_blank"
-            event.target.href = '/api/purchases/searched_purchases.xlsx'
+            event.target.href = `/api/purchases/searched_purchases.xlsx?invoice_number=${this.state.invoice}${$("#q_purchase_date_cont").val() === '' ? [] : dates.replace(/,/, '') }${this.state.item.length === 0 ? '' : items.replace(/,/, '') }${this.state.branch.length === 0 ? '' : branches.replace(/,/,'')}${this.state.supplier.length === 0 ? '' : suppliers.replace(/,/,'')}` 
         }else{
             event.target.target = "_blank"
-            event.target.href = '/api/purchases.xlsx'
-        }*/
+            event.target.href = '/api/purchases/default_excel.xlsx'
+        }
     }
 
     componentDidMount(){
@@ -154,86 +144,14 @@ class PurchaseList extends React.Component{
                         <div className='pull-left mt7'>Search Filter</div>                       
                     </div>
                     <div className='panel-body ml15 mr15'>
-                        
-                        <div className='row'> 
-                            <div className='row pb10'>
-                                <div className='col-md-6 col-xs-6 mb5'>
-                                    <label htmlFor='category'>Category</label>
-                                    <Select.Creatable
-                                        multi={true}
-                                        name='category'
-                                        optionClassName='form-control'
-                                        options={this.state.categories}
-                                        onChange={ this.searchForItem.bind(this) }
-                                        value={this.state.category}               
-                                    /> 
-                                </div>
-                                <div className='col-xs-6 mb5'>
-                                    <label htmlFor='q[item]'>Items</label>
-                                    <Select.Creatable
-                                        multi={true}
-                                        name='q[item]'
-                                        optionClassName='form-control'
-                                        options={this.state.items}
-                                        onChange={ value => this.setState({ item: value }) }
-                                        value={this.state.item}               
-                                    />  
-                                </div>
-                            
-                            </div>
-                            <div className='row pb10'>
-                                
-                                <div className='col-md-6 col-xs-6 mb5'>
-                                    <label htmlFor='date_range'>Branches</label>
-                                    <Select.Creatable
-                                        multi={true}
-                                        name='supplier_names'
-                                        optionClassName='form-control'
-                                        options={this.state.branches}
-                                        onChange={ value => this.setState({ branch: value }) }
-                                        value={this.state.branch}               
-                                    />        
-                                </div>
-                                <div className='col-md-6 col-xs-6 mb5'>
-                                    <label htmlFor='supplier_names'>Suppliers</label>
-                                    <Select.Creatable
-                                        multi={true}
-                                        name='supplier_names'
-                                        optionClassName='form-control'
-                                        options={this.state.suppliers}
-                                        onChange={ value => this.setState({ supplier: value }) }
-                                        value={this.state.supplier}               
-                                    /> 
-                                </div>
-                            </div>
-                            <div className='row pb10'>
-                                <div className='col-md-6 col-xs-6 mb5'>
-                                    <label htmlFor='date_range'>Date</label>
-                                    <input className="form-control drp" placeholder="Search" type="text" name="date_range" id="q_purchase_date_cont"/>         
-                                </div>
-                                <div className='col-md-6 col-xs-6 mb5'>
-                                    <label htmlFor='invoice_no'>Invoice No.</label>
-                                    <input className='form-control' placeholder='Input invoice' value={this.state.invoice} onChange={ (e) => this.setState({ invoice: e.target.value })} />
-                                </div>                              
-                            </div>
-                            <div className='row pb10'>
-                                <div className='row mb10' style={{ marginRight: '15px' }}>
-                                    <div className='col-xs-12'>
-                                        <div className='pull-right'>
-                                            <button onClick={this.searchPurchases.bind(this)} className='btn btn-primary' type='button'><i className='fa fa-search' aria-hidden='true'></i><span className='gap1'></span>Search</button>
-                                            {this.displayResetButton()}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>           
+                        {this.renderFilters()}         
                     </div>
                 </div>
                 <div className='panel'>
                     <div className='panel-heading border pb45'>
                         <div className='pull-left mt7'>Purchase List</div>
                         <div className='pull-right'>
-                            <button onClick={this.downloadExcel.bind(this)} className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download Excel </button>
+                            <a onClick={this.downloadExcel.bind(this)} className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download Excel </a>
                         </div>
                     </div>
                     <div className='panel-body'>
@@ -265,8 +183,147 @@ class PurchaseList extends React.Component{
         )
     }
 
+    renderFilters(){
+        if(this.props.isBranchUser){
+            return(
+                <div className='row'> 
+                    <div className='row pb10'>
+                        <div className='col-md-6 col-xs-6 mb5'>
+                            <label htmlFor='category'>Category</label>
+                            <Select.Creatable
+                                multi={true}
+                                name='category'
+                                optionClassName='form-control'
+                                options={this.state.categories}
+                                onChange={ this.searchForItem.bind(this) }
+                                value={this.state.category}               
+                            /> 
+                        </div>
+                        <div className='col-xs-6 mb5'>
+                            <label htmlFor='q[item]'>Items</label>
+                            <Select.Creatable
+                                multi={true}
+                                name='q[item]'
+                                optionClassName='form-control'
+                                options={this.state.items}
+                                onChange={ value => this.setState({ item: value }) }
+                                value={this.state.item}               
+                            />  
+                        </div>            
+                    </div>
+                    <div className='row pb10'>                   
+                        <div className='col-md-6 col-xs-6 mb5'>
+                            <label htmlFor='supplier_names'>Suppliers</label>
+                            <Select.Creatable
+                                multi={true}
+                                name='supplier_names'
+                                optionClassName='form-control'
+                                options={this.state.suppliers}
+                                onChange={ value => this.setState({ supplier: value }) }
+                                value={this.state.supplier}               
+                            /> 
+                        </div>
+                        <div className='col-md-6 col-xs-6 mb5'>
+                            <label htmlFor='invoice_no'>Invoice No.</label>
+                            <input className='form-control' placeholder='Input invoice' value={this.state.invoice} onChange={ (e) => this.setState({ invoice: e.target.value })} />
+                        </div>   
+                    </div>
+                    <div className='row pb10'>
+                        <div className='col-md-6 col-xs-6 mb5'>
+                            <label htmlFor='date_range'>Date</label>
+                            <input className="form-control drp" placeholder="Search" type="text" name="date_range" id="q_purchase_date_cont"/>         
+                        </div>                                           
+                    </div>
+                    <div className='row pb10'>
+                        <div className='row mb10' style={{ marginRight: '15px' }}>
+                            <div className='col-xs-12'>
+                                <div className='pull-right'>
+                                    <button onClick={this.searchPurchases.bind(this)} className='btn btn-primary' type='button'><i className='fa fa-search' aria-hidden='true'></i><span className='gap1'></span>Search</button>
+                                    {this.displayResetButton()}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            )
+
+        }
+        return(
+            <div className='row'> 
+                <div className='row pb10'>
+                    <div className='col-md-6 col-xs-6 mb5'>
+                        <label htmlFor='category'>Category</label>
+                        <Select.Creatable
+                            multi={true}
+                            name='category'
+                            optionClassName='form-control'
+                            options={this.state.categories}
+                            onChange={ this.searchForItem.bind(this) }
+                            value={this.state.category}               
+                        /> 
+                    </div>
+                    <div className='col-xs-6 mb5'>
+                        <label htmlFor='q[item]'>Items</label>
+                        <Select.Creatable
+                            multi={true}
+                            name='q[item]'
+                            optionClassName='form-control'
+                            options={this.state.items}
+                            onChange={ value => this.setState({ item: value }) }
+                            value={this.state.item}               
+                        />  
+                    </div>              
+                </div>
+                <div className='row pb10'>                  
+                    <div className='col-md-6 col-xs-6 mb5'>
+                        <label htmlFor='date_range'>Branches</label>
+                        <Select.Creatable
+                            multi={true}
+                            name='supplier_names'
+                            optionClassName='form-control'
+                            options={this.state.branches}
+                            onChange={ value => this.setState({ branch: value }) }
+                            value={this.state.branch}               
+                        />        
+                    </div>
+                    <div className='col-md-6 col-xs-6 mb5'>
+                        <label htmlFor='supplier_names'>Suppliers</label>
+                        <Select.Creatable
+                            multi={true}
+                            name='supplier_names'
+                            optionClassName='form-control'
+                            options={this.state.suppliers}
+                            onChange={ value => this.setState({ supplier: value }) }
+                            value={this.state.supplier}               
+                        /> 
+                    </div>
+                </div>
+                <div className='row pb10'>
+                    <div className='col-md-6 col-xs-6 mb5'>
+                        <label htmlFor='date_range'>Date</label>
+                        <input className="form-control drp" placeholder="Search" type="text" name="date_range" id="q_purchase_date_cont"/>         
+                    </div>
+                    <div className='col-md-6 col-xs-6 mb5'>
+                        <label htmlFor='invoice_no'>Invoice No.</label>
+                        <input className='form-control' placeholder='Input invoice' value={this.state.invoice} onChange={ (e) => this.setState({ invoice: e.target.value })} />
+                    </div>                              
+                </div>
+                <div className='row pb10'>
+                    <div className='row mb10' style={{ marginRight: '15px' }}>
+                        <div className='col-xs-12'>
+                            <div className='pull-right'>
+                                <button onClick={this.searchPurchases.bind(this)} className='btn btn-primary' type='button'><i className='fa fa-search' aria-hidden='true'></i><span className='gap1'></span>Search</button>
+                                {this.displayResetButton()}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        )
+    }
+
     displayResetButton(){
-        if(this.state.searching && ( this.state.branch.length > 0 || this.state.supplier.length > 0 || this.state.invoice !== '' || this.state.item.length > 0 || $("#q_purchase_date_cont").val() !== '')){ 
+        if(this.state.searching || ( this.state.branch.length > 0 || this.state.supplier.length > 0 || this.state.invoice !== '' || this.state.item.length > 0 || $("#q_purchase_date_cont").val() !== '')){ 
             return(
                 <button onClick={this.resetEverything.bind(this)} className='btn btn-default'>Reset</button>            
             )
