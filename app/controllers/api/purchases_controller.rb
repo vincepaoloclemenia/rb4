@@ -16,8 +16,10 @@ class Api::PurchasesController < ApplicationController
 
     def default_excel
         @purchases = @user.purchases.where(purchase_date: Date.today.at_beginning_of_month..Date.today.end_of_month).with_purchase_items 
-        if @purchases.present?             
+        if params[:format].eql? "xlsx" && @purchases.present?             
             render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/default_excel'
+        elsif params[:format].eql? "pdf" && @purchases.present?  
+            render template: 'api/purchases/default_excel', pdf: 'Purchase List', orientation: 'Landscape'
         end
     end
 
@@ -36,6 +38,8 @@ class Api::PurchasesController < ApplicationController
         @items = params[:purchase_items]
         if params[:format] == 'xlsx' && @purchases.present?
             render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/searched_purchases'
+        elsif params[:format] == 'pdf' && @purchases.present?
+            render template: 'api/purchases/searched_purchases', pdf: 'Purchase List', orientation: 'Landscape'
         end  
     end
 

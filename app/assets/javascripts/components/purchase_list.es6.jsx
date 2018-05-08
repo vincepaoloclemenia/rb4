@@ -111,6 +111,20 @@ class PurchaseList extends React.Component{
         }
     }
 
+    downloadPdf(event){
+        var items = this.state.item.map( x => `&purchase_items[]=${x.input}` ).toString()
+        var branches = this.state.branch.map( x => `&branches[]=${x.input}`).toString()
+        var suppliers = this.state.supplier.map ( x => `&suppliers[]=${x.input}`).toString()
+        var dates = $("#q_purchase_date_cont").val().split(" - ").map( x => `&date[]=${x}` ).toString()
+        if(this.state.searching){
+            event.target.target = "_blank"
+            event.target.href = `/api/purchases/searched_purchases.pdf?invoice_number=${this.state.invoice}${$("#q_purchase_date_cont").val() === '' ? [] : dates.replace(/,/, '') }${this.state.item.length === 0 ? '' : items.replace(/,/, '') }${this.state.branch.length === 0 ? '' : branches.replace(/,/,'')}${this.state.supplier.length === 0 ? '' : suppliers.replace(/,/,'')}` 
+        }else{
+            event.target.target = "_blank"
+            event.target.href = '/api/purchases/default_excel.pdf'
+        }
+    }
+
     componentDidMount(){
         $('.drp').daterangepicker({
             
@@ -152,6 +166,7 @@ class PurchaseList extends React.Component{
                         <div className='pull-left mt7'>Purchase List</div>
                         <div className='pull-right'>
                             <a onClick={this.downloadExcel.bind(this)} className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download Excel </a>
+                            <a onClick={this.downloadPdf.bind(this)} className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download PDF </a>
                         </div>
                     </div>
                     <div className='panel-body'>
