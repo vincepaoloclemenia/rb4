@@ -19,6 +19,19 @@
     .col-xs-12.mb10
       = f.label :address1, "Address"
       = f.text_area :address1, placeholder: "Address of Branch", rows: 2, class: "form-control"
+    
+    .col-xs-6.mb10
+      = f.label :tin_number
+        | Tin Number
+        small.field-req  *
+      = f.text_field :tin_number, class: "form-control"
+    
+    .col-xs-6.mb10
+      = f.label :company_registered_name
+        | Company Registered Name
+          small.field-req  *
+      = f.text_field :company_registered_name, class: "form-control"
+    
     .col-xs-6.mb10
       = f.label :city
       = f.text_field :city, class: "form-control"

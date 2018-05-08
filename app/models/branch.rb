@@ -14,17 +14,10 @@ class Branch < ActiveRecord::Base
   # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
   # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }
   
-  validates :name,
-						presence: true,
-						length: {
-							maximum: 50
-						},
-            uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
-
-  validates :aka, presence: true, uniqueness: true
-
+  validates :name, presence: true, length: { maximum: 50 }, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
+  validates :company_registered_name, presence: true, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
+  validates :aka, :tin_number, presence: true, uniqueness: true
   validate :validate_alias, on: [:create, :update]
-
   after_create :set_default_color
 
   def self.all_unsubscribed
