@@ -27,22 +27,22 @@
                 <table id='po-details'>
                     <thead>
                         <tr>
-                            <th>Supplier</th>
-                            <td><%= @purchase_order.supplier.name %></th>
-                            <th>Deliver To</th>
+                            <th>Branch</th>
                             <td><%= @purchase_order.branch.name %></td>
-                        </tr>
-                        <tr>
-                            <th>Contact Person</th>
-                            <td><%= @purchase_order.supplier.contact_person %></th>
-                            <th>Address</th>
+                            <th>Delivery Address</th>
                             <td><%= @purchase_order.branch.address1 %></td>
                         </tr>
                         <tr>
-                            <th>Email</th>
-                            <td><%= @purchase_order.supplier.emails.join(", ") %></th>
+                            <th>Company Name</th>
+                            <td><%= @purchase_order.branch.company_registered_name %></td>
                             <th>Delivery date and time</th>
                             <td><%= @purchase_order.delivery_date.strftime('%B %d, %Y') %>, <%= @purchase_order.delivery_time %></td>
+                        </tr>
+                        <tr>
+                            <th>Supplier</th>
+                            <td><%= @purchase_order.supplier.name %></td>  
+                            <th></th>
+                            <td></td>          
                         </tr>
                     </thead>
                 </table>

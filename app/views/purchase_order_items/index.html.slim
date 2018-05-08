@@ -8,7 +8,7 @@
 
 
 		.pull-right
-			- if @purchase_order.user == current_user
+			- if @purchase_order.user == current_user && !@purchase_order.approved?
 				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Add New Purchase Order Item".html_safe,  new_purchase_order_purchase_order_item_path(@purchase_order), class: "btn btn-success btn-round btn-outline", remote: true
 				/button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target="#create-purchase-order-modal"
 					/i.icon-maxicons2-paste.mr5

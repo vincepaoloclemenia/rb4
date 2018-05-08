@@ -26,7 +26,7 @@ class ReportsController < ApplicationController
 		require 'will_paginate/array'
 		process_ransack_purchase_date_range!
 
-		@q = current_brand.purchases.ransack(params[:q])
+		@q = current_user.role.role_level.eql?("branch") ? current_user.branch.purchases.ransack(params[:q]) : current_brand.purchases.ransack(params[:q])
 		@purchases = @q.result
 		@purchase_items = item_summary_with_rank(PurchaseItem.where(purchase_id: @purchases.ids).order("purchase_item_total_amount DESC")).paginate(:page => params[:page], :per_page => 100)
 

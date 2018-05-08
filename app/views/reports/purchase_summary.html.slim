@@ -4,15 +4,25 @@
 		.panel-body
 			= search_form_for @q, url: purchase_summary_path do |f|
 				.row
-					.col-xs-6
-						= f.label :purchase_date_cont, "Purchase Date"
-						- if params[:q][:purchase_date_gteq].present? && params[:q][:purchase_date_lteq].present?
-							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", value: "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
-						- else
-							= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select"
-					.col-xs-6
-						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
+					- if current_user.role.role_level.eql? "branch"
+						.col-xs-8.col-xs-offset-2
+							= f.label :purchase_date_cont, "Purchase Date"
+							- if params[:q][:purchase_date_gteq].present? && params[:q][:purchase_date_lteq].present?
+								= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", value: "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+							- else
+								= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select"
+					- else
+						.col-xs-6
+							= f.label :purchase_date_cont, "Purchase Date"
+							- if params[:q][:purchase_date_gteq].present? && params[:q][:purchase_date_lteq].present?
+								= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select", value: "#{to_datepicker_format(params[:q][:purchase_date_gteq])} - #{to_datepicker_format(params[:q][:purchase_date_lteq])}"
+							- else
+								= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Select"
+						
+						.col-xs-6
+							= f.label :branch_id_eq, "Branch"
+							= f.select :branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
+
 				.row.mt10
 					.col-xs-12
 						.pull-right
