@@ -1,6 +1,9 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "#{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}") do |sheet|
-
+purchases_size = @purchases.map { |p| p.purchase_items.size }.sum
+vat = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_vat).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_vat).sum }.sum
+net = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_net).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_net).sum }.sum
+amount = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_amount).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_amount).sum }.sum
     sheet.add_row [
         "Invoice Number",
         "Date",
@@ -42,4 +45,18 @@ wb.add_worksheet(name: "#{@purchases.last.purchase_date.strftime('%b %d, %Y')} -
         end
     end
 
+    sheet.add_row [
+        "Total", 
+        "",
+        "",
+        "",
+        "",
+        to_peso(vat),
+        to_peso(net),
+        to_peso(amount)      
+    ]
+    sheet.column_widths 20, 20, 20, 20, 20, 20, 20, 20
+    sheet.add_style "A#{purchases_size + 2}:H#{purchases_size + 2}", bg_color: 'E2F89C', alignment: { horizontal: :right }
+    sheet.add_style "A#{purchases_size + 2}:H#{purchases_size + 2}", b: true
+    sheet.add_style "A1:H1", b: true, bg_color: '95AFBA'
 end

@@ -5,6 +5,7 @@ class PurchaseItem < ActiveRecord::Base
 	belongs_to :purchase
 	has_one :branch, through: :purchase
 	validates :item_id, :quantity, :purchase_item_total_amount, :vat_type, presence: true
+	default_scope { joins(:item).order("items.name ASC") }
 	after_destroy { |pi| Activity.find_by_recordable_id(pi.id).destroy } 
 
 	pg_search_scope :search_item, associated_against: { item: [:id] },
@@ -29,6 +30,6 @@ class PurchaseItem < ActiveRecord::Base
 	end
 
 	def item_total_net
-		return vat_type == "VAT-Inclusive" ? (purchase_item_total_amount - item_total_vat).to_d : purchase_item_total_amount.to_d
+		return vat_type == "VAT-Inclusive" ? (purchase_item_total_amount - item_total_vat).to_d : item_total_amount
 	end
 end

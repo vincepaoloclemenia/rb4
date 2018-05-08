@@ -4,6 +4,7 @@ class Brand < ActiveRecord::Base
   has_many :client_user_accesses, dependent: :destroy										# => for rescue purposes, associated roles and branches
   has_many :roles, through: :client_user_accesses		# => for rescue purposes, associated roles and branches
   has_many :categories, dependent: :destroy
+  has_many :subcategories, -> { where.not(parent_id: nil) }, class_name: 'Category', dependent: :destroy
   has_many :shifts, dependent: :destroy
   has_many :sales, through: :branches
   has_many :employees, dependent: :destroy

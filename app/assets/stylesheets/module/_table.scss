@@ -29,6 +29,16 @@
         font-weight: 900;
         color: tomato;
     }
+    td.category{
+        background: $light-blue;
+    }
+    td.subcategory{
+        background: lighten($light-blue, 15%);
+    }
+    td.total-overall{
+        background: $main-theme;
+        color: white
+    }
 }
 .gap-top15{
     margin-top: 5%;

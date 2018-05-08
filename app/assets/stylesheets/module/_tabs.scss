@@ -2,7 +2,7 @@ div.tab, div.toggle {
     overflow: hidden;
     border: none;
     background-color: transparent;
-    button{
+    button:not(.btn-primary){
         background-color: inherit;
         float: left;
         border: none;

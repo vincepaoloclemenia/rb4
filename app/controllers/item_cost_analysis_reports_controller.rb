@@ -8,7 +8,7 @@ class ItemCostAnalysisReportsController < ApplicationController
     else
       selected_date = Date.strptime(params[:date_entry], "%m/%d/%Y")
     end   
-    past_date = selected_date - 1.month
+    past_date = selected_date - 12.month
     @categories = Category.main
     inventory = Inventory.where(entry_date: past_date.beginning_of_month..past_date.end_of_month, branch_id: params[:branch_id]).last
     end_inventory = Inventory.where(entry_date: selected_date.beginning_of_month..selected_date, branch_id: params[:branch_id]).last

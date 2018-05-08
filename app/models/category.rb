@@ -13,7 +13,7 @@ class Category < ActiveRecord::Base
 
 
   def is_subcategory?
-    parent_id.present? ? true : false
+    parent_id.present?
   end
 
   def total_revenue_month_to_date(branch_id, date)

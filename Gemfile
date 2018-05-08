@@ -28,6 +28,7 @@ gem 'pdf-reader', '~> 2.0'
 gem "chartkick"
 gem 'groupdate', '~> 3.2'
 gem 'pg_search'
+gem 'axlsx_styler'
 
 group :development, :test do
   gem 'byebug'

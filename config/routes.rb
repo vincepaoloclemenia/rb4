@@ -142,6 +142,10 @@ Rails.application.routes.draw do
       get :default_excel, on: :collection
     end
 
+    resources :item_and_costs, only: :index do
+      get :filtered_records, on: :collection
+    end
+
     resources :suppliers, only: [:create, :update]
 
     resources :activities, only: :index
