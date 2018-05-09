@@ -30,3 +30,8 @@ table#po-details { width:100%; border: 2px solid grey; padding: 5px; }
 table#po-details th { width:20%; background-color: #e4e4e4; border: none; color: black; text-align: left; }
 table#po-details td { width:30%; background-color: transparent; border: none }
 p.mt20{ margin-top: 50px; }
+thead { display: table-header-group }
+tfoot { display: table-row-group }
+tr { page-break-inside: avoid }
+td { font-size: 25px; color: lighten(black, 15%) }
+td.label-total-num{ font-size: 14px; background: lighten(grey, 15%) }
