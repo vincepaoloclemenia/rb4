@@ -8,7 +8,7 @@ class PurchaseItem < ActiveRecord::Base
 	default_scope { joins(:item).order("items.name ASC") }
 	after_destroy { |pi| Activity.find_by_recordable_id(pi.id).destroy } 
 
-	pg_search_scope :search_item, associated_against: { item: [:id] },
+	pg_search_scope :search_item, against: :item_id,
 	using: { tsearch: { any_word: true } }
 
 	def get_purchases_per_branch
