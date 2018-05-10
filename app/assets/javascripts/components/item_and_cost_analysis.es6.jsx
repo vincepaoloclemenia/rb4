@@ -113,11 +113,64 @@ class ItemAndCostAnalysis extends React.Component{
         }
     }
     renderData(){
-        if(this.state.purchases.length === 0){
-            if(this.state.display === 'week'){
+        if(this.state.fetching){ return }
+        else{
+            if(this.state.purchases.length === 0){
+                if(this.state.display === 'week'){
+                    return(
+                        <tbody >
+                            { this.state.purchasesLastWeek.map((purchase, index) => 
+                                [
+                                    <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
+                                        <td className='category' colSpan='17'></td>
+                                    </tr>,
+                                    purchase.purchases.map((pur, i) => 
+                                        [ 
+                                            <tr key={i}>
+                                                <td className='subcategory' colSpan='1'></td>
+                                                <td className='subcategory' colSpan='1'>{pur.subcategory}</td>
+                                                <td className='subcategory' colSpan='16'></td>
+                                            </tr>,
+                                            pur.purchase_items.map((purchase_item, item) =>       
+                                                
+                                                <tr key={item}>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{purchase_item.item_name}</td>
+                                                    <td>{purchase_item.unit}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{purchase_item.quantity}</td>
+                                                    <td>{purchase_item.purchase_item_amount}</td>
+                                                    <td>{purchase_item.item_total_net}</td>
+                                                </tr>
+                                            ),                                    
+                                            <tr key={i+1} className='bg-total'>
+                                                <td className='subcategory' colSpan="9">Total Per Sub Category: </td>
+                                                <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
+                                                <td className='subcategory' colSpan="8"></td>
+                                            </tr> 
+                                        ]
+                                    ),
+                                    <tr key={index+1} className='bg-total'>
+                                        <td className='category' colSpan="9">Total Amount Per Category</td>
+                                        <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
+                                        <td className='category' colSpan="8"></td>
+                                    </tr>   
+                                ]
+                            )}
+                            <tr className='bg-total'>
+                                <td className='total-overall' colSpan="9">Total</td>
+                                <td className='label-total-num total-overall' colSpan="1">{this.state.lastWeekTotal}</td>
+                                <td className='total-overall' colSpan="8"></td>
+                            </tr>   
+                        </tbody>
+                    )
+                }
                 return(
                     <tbody >
-                        { this.state.purchasesLastWeek.map((purchase, index) => 
+                        { this.state.purchaseLastMonth.map((purchase, index) => 
                             [
                                 <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
                                     <td className='category' colSpan='17'></td>
@@ -160,114 +213,64 @@ class ItemAndCostAnalysis extends React.Component{
                         )}
                         <tr className='bg-total'>
                             <td className='total-overall' colSpan="9">Total</td>
-                            <td className='label-total-num total-overall' colSpan="1">{this.state.lastWeekTotal}</td>
+                            <td className='label-total-num total-overall' colSpan="1">{this.state.lastMonthTotal}</td>
+                            <td className='total-overall' colSpan="8"></td>
+                        </tr>   
+                    </tbody>
+
+                )
+            }else{
+                return(
+                    <tbody >
+                        { this.state.purchases.map((purchase, index) => 
+                            [
+                                <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
+                                    <td className='category' colSpan='17'></td>
+                                </tr>,
+                                purchase.purchases.map((pur, i) => 
+                                    [ 
+                                        <tr key={i}>
+                                            <td className='subcategory' colSpan='1'></td>
+                                            <td className='subcategory' colSpan='1'>{pur.subcategory}</td>
+                                            <td className='subcategory' colSpan='16'></td>
+                                        </tr>,
+                                        pur.purchase_items.map((purchase_item, item) =>       
+                                            
+                                            <tr key={item}>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{purchase_item.item_name}</td>
+                                                <td>{purchase_item.unit}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{purchase_item.quantity}</td>
+                                                <td>{purchase_item.purchase_item_amount}</td>
+                                                <td>{purchase_item.item_total_net}</td>
+                                            </tr>
+                                        ),                                    
+                                        <tr key={i+1} className='bg-total'>
+                                            <td className='subcategory' colSpan="9">Total Per Sub Category: </td>
+                                            <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
+                                            <td className='subcategory' colSpan="8"></td>
+                                        </tr> 
+                                    ]
+                                ),
+                                <tr key={index+1} className='bg-total'>
+                                    <td className='category' colSpan="9">Total Amount Per Category</td>
+                                    <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
+                                    <td className='category' colSpan="8"></td>
+                                </tr>   
+                            ]
+                        )}
+                        <tr className='bg-total'>
+                            <td className='total-overall' colSpan="9">Total</td>
+                            <td className='label-total-num total-overall' colSpan="1">{this.state.overAll}</td>
                             <td className='total-overall' colSpan="8"></td>
                         </tr>   
                     </tbody>
                 )
             }
-            return(
-                <tbody >
-                    { this.state.purchaseLastMonth.map((purchase, index) => 
-                        [
-                            <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
-                                <td className='category' colSpan='17'></td>
-                            </tr>,
-                            purchase.purchases.map((pur, i) => 
-                                [ 
-                                    <tr key={i}>
-                                        <td className='subcategory' colSpan='1'></td>
-                                        <td className='subcategory' colSpan='1'>{pur.subcategory}</td>
-                                        <td className='subcategory' colSpan='16'></td>
-                                    </tr>,
-                                    pur.purchase_items.map((purchase_item, item) =>       
-                                        
-                                        <tr key={item}>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{purchase_item.item_name}</td>
-                                            <td>{purchase_item.unit}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{purchase_item.quantity}</td>
-                                            <td>{purchase_item.purchase_item_amount}</td>
-                                            <td>{purchase_item.item_total_net}</td>
-                                        </tr>
-                                    ),                                    
-                                    <tr key={i+1} className='bg-total'>
-                                        <td className='subcategory' colSpan="9">Total Per Sub Category: </td>
-                                        <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
-                                        <td className='subcategory' colSpan="8"></td>
-                                    </tr> 
-                                ]
-                            ),
-                            <tr key={index+1} className='bg-total'>
-                                <td className='category' colSpan="9">Total Amount Per Category</td>
-                                <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
-                                <td className='category' colSpan="8"></td>
-                            </tr>   
-                        ]
-                    )}
-                    <tr className='bg-total'>
-                        <td className='total-overall' colSpan="9">Total</td>
-                        <td className='label-total-num total-overall' colSpan="1">{this.state.lastMonthTotal}</td>
-                        <td className='total-overall' colSpan="8"></td>
-                    </tr>   
-                </tbody>
-
-            )
-        }else{
-            return(
-                <tbody >
-                    { this.state.purchases.map((purchase, index) => 
-                        [
-                            <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
-                                <td className='category' colSpan='17'></td>
-                            </tr>,
-                            purchase.purchases.map((pur, i) => 
-                                [ 
-                                    <tr key={i}>
-                                        <td className='subcategory' colSpan='1'></td>
-                                        <td className='subcategory' colSpan='1'>{pur.subcategory}</td>
-                                        <td className='subcategory' colSpan='16'></td>
-                                    </tr>,
-                                    pur.purchase_items.map((purchase_item, item) =>       
-                                        
-                                        <tr key={item}>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{purchase_item.item_name}</td>
-                                            <td>{purchase_item.unit}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{purchase_item.quantity}</td>
-                                            <td>{purchase_item.purchase_item_amount}</td>
-                                            <td>{purchase_item.item_total_net}</td>
-                                        </tr>
-                                    ),                                    
-                                    <tr key={i+1} className='bg-total'>
-                                        <td className='subcategory' colSpan="9">Total Per Sub Category: </td>
-                                        <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
-                                        <td className='subcategory' colSpan="8"></td>
-                                    </tr> 
-                                ]
-                            ),
-                            <tr key={index+1} className='bg-total'>
-                                <td className='category' colSpan="9">Total Amount Per Category</td>
-                                <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
-                                <td className='category' colSpan="8"></td>
-                            </tr>   
-                        ]
-                    )}
-                    <tr className='bg-total'>
-                        <td className='total-overall' colSpan="9">Total</td>
-                        <td className='label-total-num total-overall' colSpan="1">{this.state.overAll}</td>
-                        <td className='total-overall' colSpan="8"></td>
-                    </tr>   
-                </tbody>
-            )
         }
     }
 
