@@ -24,18 +24,6 @@ json.purchase_orders do |json|
     end
 end
 
-json.branches do |json|
-    json.array! @branches.each_with_index.to_a do |(job, index)|
-        json.label job
-        json.value index
-    end
-end
-
-json.suppliers do |json|
-    json.array! @suppliers.each_with_index.to_a do |(supp, index)|
-        json.label supp
-        json.value index
-    end
-end
-
+json.branches @branches
+json.suppliers @suppliers
 json.items @items

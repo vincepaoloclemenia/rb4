@@ -83,7 +83,7 @@
 									small.field-req  *
 								.input-group
 									span.input-group-addon PHP
-									= f.number_field :purchase_item_amount, class: "form-control", placeholder: "0", step: '.01'
+									= f.number_field :purchase_item_amount, class: "form-control", placeholder: "0", step: '.01', readonly: true
 							.col-xs-6.col-lg-4.mt5
 								= f.label :purchase_item_total_amount
 									| Total Amount

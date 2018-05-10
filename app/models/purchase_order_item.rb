@@ -11,10 +11,10 @@ class PurchaseOrderItem < ActiveRecord::Base
 	after_create :update_purchase_order
 	after_destroy :update_purchase_order
 
-	pg_search_scope :search,
+	pg_search_scope :poi_search,
 	associated_against: { 
 		item: [:id]
-	}, using: { tsearch: { prefix: true, any_word: true } }
+	}, using: { tsearch: { any_word: true } }
 
 	def update_purchase_order
 		po = self.purchase_order
@@ -22,14 +22,6 @@ class PurchaseOrderItem < ActiveRecord::Base
 		subtotal = sum / 1.12
 		vat = sum - subtotal
 		po.update(sub_total: subtotal, vat: vat, total_amount: sum)
-	end
-
-	def self.poi_search(*query)
-		if query.present?
-		  search(query)
-		else
-		  scoped
-		end
 	end
 	# def get_purchases_per_branch
 	# 	d = DateTime.now - 1

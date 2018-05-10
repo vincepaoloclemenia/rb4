@@ -12,7 +12,6 @@ class PurchaseOrders extends React.Component{
             supplier: [],
             items: [],
             fetching: false,
-            keywords: '',
             item: [],
             searching: false,
             totalAmount: null
@@ -21,91 +20,41 @@ class PurchaseOrders extends React.Component{
     }
 
     searchPurchaseOrder(){       
-        var branches = []
-        var suppliers = []
-        var items = []
-        var from = $("#from").val()
-        var to = $("#to").val()
-        var itemParams = ''
-        var poParams = '' 
-        var creatorParams = ''
-        var statusParams = ''
-        var branchParams = ''
-        var supplierParams = ''
-        var dateParams = ''
-        if ((from != '' && to != '') || ( this.state.creator != '' || this.state.creator != '' || this.state.poNumber != '' || this.state.item.length > 0 || this.state.supplier.length > 0 || this.state.branch.length > 0)){  
-            this.setState({ fetching: true })
-            if(this.state.branch.length > 0){
-                branches = this.state.branch.map( x => x.label )
-                branchParams = `&branch=${branches.join(" ")}`
+        if( $('#date_range').val() === '' && this.state.poNumber === '' && this.state.status === '' && this.state.creator === '' && this.state.branch.length === 0 && this.state.supplier.length === 0 && this.state.item.length === 0 ){ return }       
+        this.setState({ fetching: true }) 
+        $.ajax({
+            url: `/api/purchase_orders/get_pos.json`,
+            method: 'GET',
+            data: {
+                po_number: this.state.poNumber,
+                status: this.state.status,
+                creator: this.state.creator,
+                branches: this.state.branch.map( x => x.value ),
+                suppliers: this.state.supplier.map( x => x.value ),
+                items: this.state.item.map( x => x.value ),
+                date: $("#date_range").val() === '' ? [] : $("#date_range").val().split(" - ")
+            },
+            success: (data) => {
+                this.setState({ 
+                    purchaseOrders: data.purchase_orders, fetching: false, 
+                    searching: true,
+                    totalAmount: data.total_amount
+                })
             }
-            
-            if(this.state.supplier.length > 0){
-                suppliers = this.state.supplier.map( x=> x.label )
-                supplierParams = `&supplier=${suppliers.join(" ")}`
-            }
-            
-            if(this.state.item.length > 0){
-                items = this.state.item.map( x => x.value )
-                itemParams = `&items=${items.join(" ")}`
-                this.items = items
-            }
-
-            if (this.state.poNumber != '')
-                poParams = `&po_number=${this.state.poNumber}`
-            
-            if (this.state.creator != '' )
-                creatorParams = `&creator=${this.state.creator}`
-            
-            if (this.state.status != '')
-                statusParams = `&status=${this.state.status}`
-
-            if (from != '' && to != '')
-                dateParams = `&from=${from}&to=${to}`
-
-          
-            $.ajax({
-                url: `/api/purchase_orders/get_pos.json?${dateParams}${poParams}${branchParams}${supplierParams}${itemParams}${creatorParams}${statusParams}`,
-                method: 'GET',
-                success: (data) => {
-                    this.setState({ 
-                        purchaseOrders: data.purchase_orders, fetching: false, 
-                        searching: true,
-                        totalAmount: data.total_amount,
-                        keywords: `${this.state.item.length > 0 ? `Items: [${items.join(", ")}]` : ''}${this.state.poNumber ? ` PO Number: ${this.state.poNumber} ` : '' } ${this.state.status ? ` Status: ${this.state.status} ` : ''} ${this.state.creator ? ` Creator: ${this.state.creator} ` : ''} ${this.state.branch.length > 0 ? ` Branches: [${this.state.branch.map( x=>x.label).join(", ")}] ` : '' } ${this.state.supplier.length > 0 ? ` Suppliers: [${this.state.supplier.map( x=>x.label).join(", ")}] ` : '' }`                    
-                    })
-                }
-            })     
-        }     
+        })                  
     }
 
     resetEveything(){
-        $("#from").val('')
-        $("#to").val('')
+        $("#date_range").val('')
         this.setState({
-            searching: false, supplier: [], branch: [], poNumber: '', status: '', creator: '', fetching: true, keywords: '', item: []
+            searching: false, supplier: [], branch: [], poNumber: '', status: '', creator: '', fetching: true, item: []
         })
         this.fetchPurchaseOrders()
     }
 
 
     componentDidMount(){
-        $('#to').datepicker({
-            autoclose: true,
-            minDate: new Date()
-        }).on('change',function(evt){
-            evt.stopPropagation()
-            evt.preventDefault()
-        })
-
-        $('#from').datepicker({
-            autoclose: true,
-            minDate: new Date()
-        }).on('change',function(evt){
-            evt.stopPropagation()
-            evt.preventDefault()
-        })
-
+        $('.drp').daterangepicker({ });
         this.setState({ fetching: true })        
         $.ajax({
             url: '/api/purchase_orders.json',
@@ -209,14 +158,9 @@ class PurchaseOrders extends React.Component{
                                     />
                                 </div>
 
-                                <div className='col-md-3 mb5'>
+                                <div className='col-md-6 mb5'>
                                     <label >Date Filter</label>
-                                    <input placeholder='Date from' className='form-control' type='text' id='from' onChange={ e => this.setState({ dateFrom: e.target.value }) }/>
-                                </div>
-
-                                <div className='col-md-3 mb5'>
-                                    <label ></label>
-                                    <input placeholder='Date to' className='form-control' type='text' id='to' onChange={ e => this.setState({ dateTo: e.target.value }) }/>
+                                    <input className="form-control drp" placeholder="Search" type="text" name="date_range" id="date_range"/>  
                                 </div>
                                 
                             </div>
@@ -238,9 +182,9 @@ class PurchaseOrders extends React.Component{
     }
 
     displayResetButton(){
-        if(this.state.keywords === '') { return }
+        if(this.state.searching)
         return(
-            <button onClick={this.resetEveything.bind(this)} className='btn btn-default'>Reset</button>            
+            <button type='button' onClick={this.resetEveything.bind(this)} className='btn btn-default'>Reset</button>            
         )
     }
 
@@ -295,14 +239,6 @@ class PurchaseOrders extends React.Component{
                     </div>
                 </div>
             </div>
-        )
-    }
-
-    renderOptions(){
-        return(          
-            this.state.branches.map((br, index)=>{
-                <option key={index} value={br}>{br}</option>
-            })       
         )
     }
 
@@ -382,17 +318,6 @@ class PurchaseOrders extends React.Component{
                 </tbody>
             )
         )
-    }
-
-    renderItemHeader(){
-        if(this.state.item.length === 0){ return }
-        return <th width='130'>Item Name</th>
-    }
-
-    renderItemName(){
-        if(this.state.item.length === 0){ return }
-        var items = this.state.item.map( x => x.label)
-        return <td data-title='Item Name'>{}</td>
     }
 
     fetchPurchaseOrders(){
