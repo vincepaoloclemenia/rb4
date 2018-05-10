@@ -42,78 +42,77 @@ class ItemAndCostAnalysis extends React.Component{
     }
 
     render(){
-        return(
-            <div>
-                <div className='panel'>
-                    <div className='panel-heading pb20'>
-                        <div className='pull-left mt7'>Search Filter</div>                       
-                    </div>
-                    <div className='panel-body ml15 mr15'>
-                           
+        return(      
+            <div className='panel'>
+                <div className='panel-heading border pb45'>
+                    <div className='pull-left mt7'>ITEM COST ANALYSIS REPORT</div>
+                    <div className='pull-right'>
                     </div>
                 </div>
-                <div className='panel'>
-                    <div className='panel-heading border pb45'>
-                        <div className='pull-left mt7'>ITEM COST ANALYSIS REPORT</div>
+                <div className='panel-body'>
+                    <div>
                         <div className='pull-right'>
+                            <i onClick={this.searchPurchases.bind(this)} id='search' className='fa fa-search fa-sm' aria-hidden='true'></i>
+                        </div>
+                        <div className='pull-right'>
+                            <input className="form-control drp" placeholder="Custom Search" type="text" id="q_date_range"/>     
+                        </div>
+                        <div className='tab'>
+                            <button type='button' onClick={() => this.setState({ display: 'week', purchases: [] })} className={this.state.display === 'week' ? 'tablinks active' : 'tablinks'}>This Week's ({this.state.lwRange})</button>
+                            <button type='button' onClick={() => this.setState({ display: 'month', purchases: [] })} className={this.state.display === 'month' ? 'tablinks active' : 'tablinks'}>This Month's ({this.state.tmRange})</button>                               
                         </div>
                     </div>
-                    <div className='panel-body'>
-                        <div>
-                            <div className='pull-right'>
-                                <i onClick={this.searchPurchases.bind(this)} id='search' className='fa fa-search fa-sm' aria-hidden='true'></i>
-                            </div>
-                            <div className='pull-right'>
-                                <input className="form-control drp" placeholder="Custom Search" type="text" id="q_date_range"/>     
-                            </div>
-                            <div className='tab'>
-                                <button type='button' onClick={() => this.setState({ display: 'week' })} className={this.state.display === 'week' ? 'tablinks active' : 'tablinks'}>This Week's ({this.state.lwRange})</button>
-                                <button type='button' onClick={() => this.setState({ display: 'month' })} className={this.state.display === 'month' ? 'tablinks active' : 'tablinks'}>This Month's ({this.state.tmRange})</button>                               
-                            </div>
-                        </div>
-                        
-                        <div className='no-more-tables'>
-                            <table className='table table-bordered table-striped mb0'>
-                                <thead>
-                                    <tr className='bg-thead'>
-                                        <th colSpan='4'></th>
-                                        <th colSpan='3' className='ica-primary-thead'>Beginning Inventory</th>
-                                        <th colSpan='4' className='ica-primary-thead'>Total Purchases</th>
-                                        <th colSpan='3' className='ica-primary-thead'>Ending Inventory</th>  
-                                        <th colSpan='4' className='ica-primary-thead'>Cost of Goods Sold</th>  
-                                    </tr>
-                                    <tr className='bg-thead'>
-                                        <th styles={{ width: '50px'}}>Category</th>
-                                        <th width='100'>Sub Category</th>
-                                        <th width='100'>Name</th>
-                                        <th width='100'>Unit</th>
-                                        <th width='90'>Qty</th>
-                                        <th width='100'>Cost</th>   
-                                        <th width='100'>Amount</th>
-                                        <th width='90'>Qty</th>
-                                        <th width='100'>Cost</th>
-                                        <th width='100'>Amount</th>
-                                        <th width='90'>%</th>
-                                        <th width='90'>Qty</th>
-                                        <th width='100'>Cost</th>   
-                                        <th width='100'>Total</th>
-                                        <th width='90'>Qty</th>
-                                        <th width='100'>Cost</th>
-                                        <th width='100'>Amount</th>
-                                        <th width='90'>%</th>
-                                    </tr>
-                                </thead>
-                                {this.renderData()}
-                            </table>
-                        </div>
+                    
+                    <div className='no-more-tables'>
+                        <table className='table table-bordered table-striped mb0'>
+                            <thead>
+                                <tr className='bg-thead'>
+                                    <th colSpan='4'></th>
+                                    <th colSpan='3' className='ica-primary-thead'>Beginning Inventory</th>
+                                    <th colSpan='4' className='ica-primary-thead'>Total Purchases</th>
+                                    <th colSpan='3' className='ica-primary-thead'>Ending Inventory</th>  
+                                    <th colSpan='4' className='ica-primary-thead'>Cost of Goods Sold</th>  
+                                </tr>
+                                <tr className='bg-thead'>
+                                    <th styles={{ width: '50px'}}>Category</th>
+                                    <th width='100'>Sub Category</th>
+                                    <th width='100'>Name</th>
+                                    <th width='100'>Unit</th>
+                                    <th width='90'>Qty</th>
+                                    <th width='100'>Cost</th>   
+                                    <th width='100'>Amount</th>
+                                    <th width='90'>Qty</th>
+                                    <th width='100'>Cost</th>
+                                    <th width='100'>Amount</th>
+                                    <th width='90'>%</th>
+                                    <th width='90'>Qty</th>
+                                    <th width='100'>Cost</th>   
+                                    <th width='100'>Total</th>
+                                    <th width='90'>Qty</th>
+                                    <th width='100'>Cost</th>
+                                    <th width='100'>Amount</th>
+                                    <th width='90'>%</th>
+                                </tr>
+                            </thead>
+                            {this.renderData()}
+                        </table>
+                        {this.renderSpinner()}
                     </div>
                 </div>
-            </div>
+            </div>     
         )
     }
 
+    renderSpinner(){
+        if(this.state.fetching){
+            return(
+                <div className='row pt20'>
+                    <center><p><i className="fa fa-spinner fa-spin fa-2x fa-fw"></i></p></center>
+                </div>
+            )
+        }
+    }
     renderData(){
-        var rows = []
         if(this.state.purchases.length === 0){
             if(this.state.display === 'week'){
                 return(
@@ -153,7 +152,7 @@ class ItemAndCostAnalysis extends React.Component{
                                     ]
                                 ),
                                 <tr key={index+1} className='bg-total'>
-                                    <td className='category' colSpan="9">Total Amount (Overall)</td>
+                                    <td className='category' colSpan="9">Total Amount Per Category</td>
                                     <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
                                     <td className='category' colSpan="8"></td>
                                 </tr>   
