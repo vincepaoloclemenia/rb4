@@ -18,7 +18,7 @@ class Api::PurchaseOrdersController < ApplicationController
                 params[:branches],
                 params[:items],
                 params[:status],
-                params[:creator],     
+                params[:creator]     
             )
         else
             @purchase_orders = current_brand.purchase_orders.dynamic_search(
@@ -27,7 +27,7 @@ class Api::PurchaseOrdersController < ApplicationController
                 params[:branches],
                 params[:items],
                 params[:status],
-                params[:creator],     
+                params[:creator]     
             )
         end
     end
