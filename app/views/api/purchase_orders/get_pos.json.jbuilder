@@ -48,5 +48,5 @@ else
             json.total_amount to_peso(po.total_amount)
         end
     end
-    json.total_amount @purchase_orders.length > 0 ? to_peso(@purchase_orders.pluck(:total_amount).sum) : 0.00
+    json.total_amount @purchase_orders.present? ? to_peso(@purchase_orders.pluck(:total_amount).sum) : 0.00
 end
