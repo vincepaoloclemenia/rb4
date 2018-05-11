@@ -3,7 +3,7 @@ class Api::PurchaseOrdersController < ApplicationController
     def index
         @branches = current_brand.branches.map { |x| { label: x.name, value: x.id } }.to_a
         @suppliers = current_brand.suppliers.map { |x| { label: x.name, value: x.id } }.to_a
-        @purchase_orders = current_brand.purchase_orders.where( po_date: Date.today.beginning_of_week..Date.today.end_of_week )
+        @purchase_orders = current_brand.purchase_orders.with_purchase_order_items.where( po_date: Date.today.beginning_of_week..Date.today.end_of_week )
         @items = current_brand.items.all.map { |x| { label: x.name, value: x.id } }.to_a
     end
 
@@ -12,7 +12,7 @@ class Api::PurchaseOrdersController < ApplicationController
         if params[:date].present?
             from = Date.strptime(params[:date][0], "%m/%d/%Y")
             to = Date.strptime(params[:date][1], "%m/%d/%Y") 
-            @purchase_orders = current_brand.purchase_orders.where(po_date: from..to).dynamic_search(
+            @purchase_orders = current_brand.purchase_orders.with_purchase_order_items.where(po_date: from..to).dynamic_search(
                 params[:po_number],
                 params[:suppliers],
                 params[:branches],
@@ -21,7 +21,7 @@ class Api::PurchaseOrdersController < ApplicationController
                 params[:creator]     
             )
         else
-            @purchase_orders = current_brand.purchase_orders.dynamic_search(
+            @purchase_orders = current_brand.purchase_orders.with_purchase_order_items.dynamic_search(
                 params[:po_number],
                 params[:suppliers],
                 params[:branches],

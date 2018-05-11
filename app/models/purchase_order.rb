@@ -19,7 +19,7 @@ class PurchaseOrder < ActiveRecord::Base
   validates :delivery_date, :delivery_time, presence: true, if: :approved?
 
   pg_search_scope :search_po_number, against: [ :po_number ], using: { tsearch: { prefix: true, any_word: true } }
-  pg_search_scope :search_status, against: [ :po_date ]  
+  pg_search_scope :search_status, against: [ :status ]  
   pg_search_scope :search_branches, associated_against: { branch: [:id] }, using: { tsearch: { any_word: true } }
   pg_search_scope :search_suppliers, associated_against: { supplier: [:id] }, using: { tsearch: { any_word: true } }
   pg_search_scope :search_items, associated_against: { items: [:id] }, using: { tsearch: { any_word: true } }
@@ -27,6 +27,10 @@ class PurchaseOrder < ActiveRecord::Base
   
   def approved?
     status == 'Approved'
+  end
+
+  def self.with_purchase_order_items
+    joins(:purchase_order_items).where.not( purchase_order_items: { purchase_order_id: nil } )
   end
 
   def self.text_search(*query)
