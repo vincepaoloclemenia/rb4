@@ -31,7 +31,7 @@
 							= user_presenter.sub_link("employees", "labor_hours", "index", "Labor Hours Listing", labor_hours_path)
 							= user_presenter.sub_link("employees", "reports", "man_hours", "Man Hours Report", man_hours_path)
 				- if user_presenter.display_tab?("item_cost_analysis_reports", "reports", "profit_and_losses", "directionals")
-					li.menu-accordion class="#{is_menu_open?('data_entry')}"
+					li.menu-accordion class="#{is_menu_open?('management_reports')}"
 						= link_to '<i class="fa icon-glyph-63"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
 						ul.sub-menu
 							= user_presenter.sub_link("directionals","directionals", "index", "Directionals", directionals_path)
