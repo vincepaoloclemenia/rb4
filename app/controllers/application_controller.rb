@@ -112,8 +112,6 @@ class ApplicationController < ActionController::Base
           redirect_to dashboard_path, alert: "Access denied"
         end
       end
-    else
-      redirect_to dashboard_path, alert: "Access denied"
     end
   end
   
