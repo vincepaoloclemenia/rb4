@@ -19,7 +19,10 @@ class Api::PurchasesController < ApplicationController
         if params[:format].eql? "xlsx" && @purchases.present?             
             render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/default_excel'
         elsif params[:format].eql? "pdf" && @purchases.present?  
-            render template: 'api/purchases/default_excel', pdf: 'Purchase List', orientation: 'Landscape'
+            render template: 'api/purchases/default_excel', pdf: 'Purchase List', orientation: 'Landscape', :page_width   => '13in',
+            :margin => {:top       => 15,
+                         :bottom   => 15
+                        }
         end
     end
 
@@ -41,7 +44,8 @@ class Api::PurchasesController < ApplicationController
         elsif params[:format] == 'pdf' && @purchases.present?
             render template: 'api/purchases/searched_purchases', pdf: 'Purchase List', orientation: 'Landscape', :page_width   => '13in',
                 :margin => {:top       => 15,
-                             :bottom   => 15}
+                             :bottom   => 15
+                            }
         end  
     end
 

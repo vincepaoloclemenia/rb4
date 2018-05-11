@@ -1,7 +1,7 @@
 class Section < ActiveRecord::Base
 	belongs_to :role
 	has_many :permissions, dependent: :destroy
-
+	default_scope { order(page: :asc) }
 	after_create :create_permissions_for_all_roles
 	private
 

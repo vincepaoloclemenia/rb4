@@ -29,10 +29,6 @@ class PurchaseOrder < ActiveRecord::Base
     status == 'Approved'
   end
 
-  def self.with_purchase_order_items
-    joins(:purchase_order_items).where.not( purchase_order_items: { purchase_order_id: nil } )
-  end
-
   def self.text_search(*query)
     if query.present?
       search(query)

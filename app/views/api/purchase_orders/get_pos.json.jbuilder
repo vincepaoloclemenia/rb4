@@ -48,5 +48,5 @@ else
             json.total_amount to_peso(po.total_amount)
         end
     end
-    json.total_amount @purchase_orders.present? ? to_peso(@purchase_orders.pluck(:total_amount).sum) : 0.00
+    json.total_amount @purchase_orders.present? ? to_peso(@purchase_orders.map { |pur| pur.purchase_order_items.present? ? pur.total_amount : 0.00 }.sum.round(2)) : 0.00
 end

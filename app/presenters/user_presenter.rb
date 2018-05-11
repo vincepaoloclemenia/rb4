@@ -31,7 +31,7 @@ class UserPresenter < BasePresenter
         def permitted?(page)
             section = Section.find_by_name(page)
             permission = user.role.permissions.find_by_section_id(section.id)
-            return (permission.is_create? || permission.is_update? || permission.is_destroy?)
+            return (permission.is_read? || permission.is_create? || permission.is_update? || permission.is_destroy?)
         end
 
         

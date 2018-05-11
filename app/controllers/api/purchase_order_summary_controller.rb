@@ -3,16 +3,16 @@ class Api::PurchaseOrderSummaryController < ApplicationController
     before_action :restrict_users_for_index, only: [ :index, :get_on_hold_pos, :get_rejected_pos ]
     before_action :restrict_users_for_get_purchase_orders, only: :get_purchase_orders
     def index
-        @approved_purchase_orders = current_brand.purchase_orders.with_purchase_order_items.approved_pos.paginate(page: params[:page], per_page: 20)
+        @approved_purchase_orders = current_brand.purchase_orders.approved_pos.paginate(page: params[:page], per_page: 20)
         #@pending_pos = current_brand.purchase_orders.new_pos
     end
 
     def get_on_hold_pos
-        @on_hold_pos = current_brand.purchase_orders.with_purchase_order_items.on_hold_pos.paginate(page: params[:page], per_page: 20)
+        @on_hold_pos = current_brand.purchase_orders.on_hold_pos.paginate(page: params[:page], per_page: 20)
     end      
     
     def get_rejected_pos
-        @rejected_pos = current_brand.purchase_orders.with_purchase_order_items.rejected_pos.paginate(page: params[:page], per_page: 20)        
+        @rejected_pos = current_brand.purchase_orders.rejected_pos.paginate(page: params[:page], per_page: 20)        
     end        
 
     def get_purchase_orders 
