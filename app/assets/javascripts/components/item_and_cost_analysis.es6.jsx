@@ -55,18 +55,8 @@ class ItemAndCostAnalysis extends React.Component{
                 </div>
                 <div className='panel-body'>
                     <div className='row pb20'>
-                        <div className='col-xs-6'>
-                            <Select.Creatable
-                                multi={true}
-                                name='supplier_names'
-                                optionClassName='form-control'
-                                options={this.state.branches}
-                                placeholder='Select Branches'
-                                onChange={ value => this.setState({ branch: value }) }
-                                value={this.state.branch}               
-                            /> 
-                        </div>
-                        <div className='col-xs-6'>
+                        {this.showBranchFilter()}
+                        <div className={this.props.branchUser ? `col-xs-12` : 'col-xs-6'}>
                             <div className='pull-right'>
                                 <i onClick={this.searchPurchases.bind(this)} id='search' className='fa fa-search fa-sm' aria-hidden='true'></i>
                             </div>
@@ -119,6 +109,23 @@ class ItemAndCostAnalysis extends React.Component{
                     </div>
                 </div>
             </div>     
+        )
+    }
+
+    showBranchFilter(){
+        if(this.props.branchUser){ return }
+        return(
+            <div className='col-xs-6'>
+                <Select.Creatable
+                    multi={true}
+                    name='supplier_names'
+                    optionClassName='form-control'
+                    options={this.state.branches}
+                    placeholder='Select Branches'
+                    onChange={ value => this.setState({ branch: value }) }
+                    value={this.state.branch}               
+                /> 
+            </div>
         )
     }
 
