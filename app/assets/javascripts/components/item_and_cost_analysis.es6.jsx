@@ -7,6 +7,7 @@ class ItemAndCostAnalysis extends React.Component{
             purchasesLastWeek: [],
             purchaseLastMonth: [],
             purchases: [],
+            branches: [],
             lwRange: '',
             tmRange: '',
             lastWeekTotal: '',
@@ -16,22 +17,25 @@ class ItemAndCostAnalysis extends React.Component{
     }
 
     searchPurchases(){
-        this.setState({ fetching: true })
-        $.ajax({
-            url: '/api/item_and_costs/filtered_records.json',
-            method: 'GET',
-            data: {
-                date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ")
-            },
-            success: (data) => {
-                this.setState({
-                    fetching: false,
-                    purchases: data.purchases,
-                    overAll: data.overall,
-                    display: ''
-                })
-            }
-        })
+        if(this.state.branches.length > 0 || $("#q_date_range").val() !== '' ){
+            this.setState({ fetching: true })
+            $.ajax({
+                url: '/api/item_and_costs/filtered_records.json',
+                method: 'GET',
+                data: {
+                    date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - "),
+                    branches: this.state.branch.map( x => x.value )
+                },
+                success: (data) => {
+                    this.setState({
+                        fetching: false,
+                        purchases: data.purchases,
+                        overAll: data.overall,
+                        display: ''
+                    })
+                }
+            })
+        }
     }
 
     componentDidMount(){
@@ -50,18 +54,33 @@ class ItemAndCostAnalysis extends React.Component{
                     </div>
                 </div>
                 <div className='panel-body'>
-                    <div>
-                        <div className='pull-right'>
-                            <i onClick={this.searchPurchases.bind(this)} id='search' className='fa fa-search fa-sm' aria-hidden='true'></i>
+                    <div className='row pb20'>
+                        <div className='col-xs-6'>
+                            <Select.Creatable
+                                multi={true}
+                                name='supplier_names'
+                                optionClassName='form-control'
+                                options={this.state.branches}
+                                placeholder='Select Branches'
+                                onChange={ value => this.setState({ branch: value }) }
+                                value={this.state.branch}               
+                            /> 
                         </div>
-                        <div className='pull-right'>
-                            <input className="form-control drp" placeholder="Custom Search" type="text" id="q_date_range"/>     
-                        </div>
-                        <div className='tab'>
-                            <button type='button' onClick={() => this.setState({ display: 'week', purchases: [] })} className={this.state.display === 'week' ? 'tablinks active' : 'tablinks'}>This Week's ({this.state.lwRange})</button>
-                            <button type='button' onClick={() => this.setState({ display: 'month', purchases: [] })} className={this.state.display === 'month' ? 'tablinks active' : 'tablinks'}>This Month's ({this.state.tmRange})</button>                               
+                        <div className='col-xs-6'>
+                            <div className='pull-right'>
+                                <i onClick={this.searchPurchases.bind(this)} id='search' className='fa fa-search fa-sm' aria-hidden='true'></i>
+                            </div>
+                            <div className='pull-right'>
+                                <input className="form-control drp" placeholder="Custom Search" type="text" id="q_date_range"/>     
+                            </div>
                         </div>
                     </div>
+                    
+                    <div className='tab'>
+                        <button type='button' onClick={() => this.setState({ display: 'week', purchases: [] })} className={this.state.display === 'week' ? 'tablinks active' : 'tablinks'}>This Week's ({this.state.lwRange})</button>
+                        <button type='button' onClick={() => this.setState({ display: 'month', purchases: [] })} className={this.state.display === 'month' ? 'tablinks active' : 'tablinks'}>This Month's ({this.state.tmRange})</button>                               
+                    </div>
+                    
                     
                     <div className='no-more-tables'>
                         <table className='table table-bordered table-striped mb0'>
@@ -287,7 +306,8 @@ class ItemAndCostAnalysis extends React.Component{
                     lwRange: data.last_week_range,
                     tmRange: data.this_month_range,
                     lastMonthTotal: data.last_month_total,
-                    lastWeekTotal: data.last_week_total
+                    lastWeekTotal: data.last_week_total,
+                    branches: data.branches
                 })
             }
         })

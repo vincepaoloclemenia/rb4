@@ -25,6 +25,7 @@ json.last_month_total to_peso(@purchase_items_within_month.keys.map { |x| @purch
 json.last_week_total to_peso(@purchase_items_last_week.keys.map { |x| @purchase_items_last_week[x].map(&:item_total_net).sum.to_f }.sum)
 json.last_week_range @range_lw
 json.this_month_range @range_tm
+json.branches @branches
 
 json.purchase_items_last_week do |json|
     json.array! @purchase_items_last_week.keys do |key|
