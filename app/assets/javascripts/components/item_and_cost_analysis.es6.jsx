@@ -8,6 +8,7 @@ class ItemAndCostAnalysis extends React.Component{
             purchaseLastMonth: [],
             purchases: [],
             branches: [],
+            branch: [],
             lwRange: '',
             tmRange: '',
             lastWeekTotal: '',
@@ -17,14 +18,14 @@ class ItemAndCostAnalysis extends React.Component{
     }
 
     searchPurchases(){
-        if(this.state.branches.length > 0 || $("#q_date_range").val() !== '' ){
+        if((this.props.branchUser && $("#q_date_range").val() !== '') || (!this.props.branchUser && ( this.state.branch.length > 0 || $("#q_date_range").val() !== '')) ){
             this.setState({ fetching: true })
             $.ajax({
                 url: '/api/item_and_costs/filtered_records.json',
                 method: 'GET',
-                data: {
+                data: this.props.branchUser || this.state.branch.length === 0 ? { date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ") } : {
                     date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - "),
-                    branches: this.state.branch.map( x => x.value )
+                    branches: this.state.branch.map( x => x.value ) 
                 },
                 success: (data) => {
                     this.setState({

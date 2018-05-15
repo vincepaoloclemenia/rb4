@@ -22,7 +22,7 @@ class UserPresenter < BasePresenter
         when "purchase_orders" then "<i class='fa icon-glyph-109'></i> <span>Purchase Order Generator</span>".html_safe
         when "sales" then "<i class='fa icon-glyph-14'></i> <span>Sales Report</span>".html_safe
         when "subscriptions" then "<i class='fa icon-glyph-170'></i> <span>Subscriptions</span>".html_safe
-        when "settings" then "<i class='fa icon-glyph-90'></i> <span>Subscriptions</span>".html_safe
+        when "settings" then "<i class='fa icon-glyph-90'></i> <span>Settings</span>".html_safe
         end
     end
 
