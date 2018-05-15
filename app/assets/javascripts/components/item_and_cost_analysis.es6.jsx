@@ -23,7 +23,7 @@ class ItemAndCostAnalysis extends React.Component{
             $.ajax({
                 url: '/api/item_and_costs/filtered_records.json',
                 method: 'GET',
-                data: this.props.branchUser || this.state.branch.length === 0 ? { date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ") } : {
+                data: (this.props.branchUser || this.state.branch.length === 0) ? { date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ") } : {
                     date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - "),
                     branches: this.state.branch.map( x => x.value ) 
                 },
