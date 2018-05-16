@@ -18,7 +18,26 @@ class ItemAndCostAnalysis extends React.Component{
     }
 
     searchPurchases(){
-        if(this.props.branchUser){
+        if(this.state.branches.length > 0 || $("#q_date_range").val() !== '' ){
+            this.setState({ fetching: true })
+            $.ajax({
+                url: '/api/item_and_costs/filtered_records.json',
+                method: 'GET',
+                data: {
+                    date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - "),
+                    branches: this.state.branch.map( x => x.value )
+                },
+                success: (data) => {
+                    this.setState({
+                        fetching: false,
+                        purchases: data.purchases,
+                        overAll: data.overall,
+                        display: ''
+                    })
+                }
+            })
+        }
+        /*if(this.props.branchUser){
             if($("#q_date_range").val() === ''){ return }
             this.setState({ fetching: true })
             $.ajax({
@@ -52,7 +71,7 @@ class ItemAndCostAnalysis extends React.Component{
                     })
                 }
             })
-        } 
+        }*/ 
     }
 
     componentDidMount(){
