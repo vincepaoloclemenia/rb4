@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.10.0'
+lock '3.10.2'
 
 set :application, 'restobotv4'
 # set :repo_url, 'git@bitbucket.org:jmunts/restobot-v4.git'
