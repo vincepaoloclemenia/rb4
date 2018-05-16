@@ -142,8 +142,14 @@ Rails.application.routes.draw do
       get :default_excel, on: :collection
     end
 
-    resources :item_and_costs, only: :index do
+    resources :item_and_costs, only: [] do
       get :filtered_records, on: :collection
+      get :this_month_for_brand_admin, on: :collection
+      get :this_week_for_brand_admin, on: :collection
+      get :this_month_for_branch_admin, on: :collection
+      get :this_week_for_branch_admin, on: :collection
+      get :filtered_records_for_brand, on: :collection
+      get :filtered_records_for_branch, on: :collection
     end
 
     resources :suppliers, only: [:create, :update]

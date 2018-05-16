@@ -22,7 +22,7 @@ class ItemAndCostAnalysis extends React.Component{
             if($("#q_date_range").val() === ''){ return }
             this.setState({ fetching: true })
             $.ajax({
-                url: '/api/item_and_costs/filtered_records.json',
+                url: '/api/item_and_costs/filtered_records_for_branch.json',
                 method: 'GET',
                 data: { date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ") },
                 success: (data) => {
@@ -37,7 +37,7 @@ class ItemAndCostAnalysis extends React.Component{
         }else{
             if(this.state.branch.length === 0 && $("#q_date_range").val() === ''){ return }
             $.ajax({
-                url: '/api/item_and_costs/filtered_records.json',
+                url: '/api/item_and_costs/filtered_records_for_brand.json',
                 method: 'GET',
                 data: {
                     date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - "),
@@ -317,21 +317,57 @@ class ItemAndCostAnalysis extends React.Component{
 
     fetchDefaultData(){
         this.setState({ fetching: true })
-        $.ajax({
-            url: `/api/item_and_costs.json`,
-            method: 'GET',
-            success: (data) => {
-                this.setState({ 
-                    fetching: false, 
-                    purchaseLastMonth: data.purchase_items_within_month, 
-                    purchasesLastWeek: data.purchase_items_last_week,
-                    lwRange: data.last_week_range,
-                    tmRange: data.this_month_range,
-                    lastMonthTotal: data.last_month_total,
-                    lastWeekTotal: data.last_week_total,
-                    branches: data.branches
-                })
-            }
-        })
+        if(this.props.branchUser){
+            $.ajax({
+                url: `/api/item_and_costs/this_week_for_branch_admin.json`,
+                method: 'GET',
+                success: (data) => {
+                    this.setState({ 
+                        fetching: false, 
+                        purchasesLastWeek: data.purchase_items_last_week,
+                        lwRange: data.last_week_range,
+                        tmRange: data.this_month_range,
+                        lastWeekTotal: data.last_week_total
+                    })
+                }
+            })
+            $.ajax({
+                url: `/api/item_and_costs/this_month_for_branch_admin.json`,
+                method: 'GET',
+                success: (data) => {
+                    this.setState({ 
+                        fetching: false, 
+                        purchaseLastMonth: data.purchase_items_within_month, 
+                        lastMonthTotal: data.last_month_total
+                    })
+                }
+            })
+        }else{
+            $.ajax({
+                url: `/api/item_and_costs/this_week_for_brand_admin.json`,
+                method: 'GET',
+                success: (data) => {
+                    this.setState({ 
+                        fetching: false, 
+                        purchasesLastWeek: data.purchase_items_last_week,
+                        lwRange: data.last_week_range,
+                        tmRange: data.this_month_range,
+                        lastWeekTotal: data.last_week_total,
+                        branches: data.branches
+                    })
+                }
+            })
+            $.ajax({
+                url: `/api/item_and_costs/this_month_for_brand_admin.json`,
+                method: 'GET',
+                success: (data) => {
+                    this.setState({ 
+                        fetching: false, 
+                        purchaseLastMonth: data.purchase_items_within_month, 
+                        lastMonthTotal: data.last_month_total
+                    })
+                }
+            })
+        }
     }
 }
