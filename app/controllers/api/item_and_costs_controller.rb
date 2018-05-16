@@ -20,6 +20,10 @@ class Api::ItemAndCostsController < ApplicationController
             else
                 @purchases = @user.purchase_items.includes(:purchase).where( purchases: { purchase_date: @from..@to } ).group_by { |pi| pi.item.category.parent.name }
             end
+        else
+            if params[:branches].present?
+                @purchases = @user.purchase_items.includes(:purchase).where( purchases: { branch_id: params[:branches] } ).group_by { |pi| pi.item.category.parent.name }
+            end
         end
     end
 

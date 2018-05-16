@@ -18,14 +18,30 @@ class ItemAndCostAnalysis extends React.Component{
     }
 
     searchPurchases(){
-        if((this.props.branchUser && $("#q_date_range").val() !== '') || (!this.props.branchUser && ( this.state.branch.length > 0 || $("#q_date_range").val() !== '')) ){
+        if(this.props.branchUser){
+            if($("#q_date_range").val() === ''){ return }
             this.setState({ fetching: true })
             $.ajax({
                 url: '/api/item_and_costs/filtered_records.json',
                 method: 'GET',
-                data: (this.props.branchUser || this.state.branch.length === 0) ? { date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ") } : {
+                data: { date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ") },
+                success: (data) => {
+                    this.setState({
+                        fetching: false,
+                        purchases: data.purchases,
+                        overAll: data.overall,
+                        display: ''
+                    })
+                }
+            })
+        }else{
+            if(this.state.branch.length === 0 && $("#q_date_range").val() === ''){ return }
+            $.ajax({
+                url: '/api/item_and_costs/filtered_records.json',
+                method: 'GET',
+                data: {
                     date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - "),
-                    branches: this.state.branch.map( x => x.value ) 
+                    branches: this.state.branch.length > 0 ? this.state.branch.map( x => x.value ) : null
                 },
                 success: (data) => {
                     this.setState({
@@ -36,7 +52,7 @@ class ItemAndCostAnalysis extends React.Component{
                     })
                 }
             })
-        }
+        } 
     }
 
     componentDidMount(){
@@ -148,15 +164,14 @@ class ItemAndCostAnalysis extends React.Component{
                         <tbody >
                             { this.state.purchasesLastWeek.map((purchase, index) => 
                                 [
-                                    <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
-                                        <td className='category' colSpan='17'></td>
+                                    <tr key={index}>
+                                        <td className='category' colSpan='18'>{purchase.parent_category}</td> 
                                     </tr>,
                                     purchase.purchases.map((pur, i) => 
                                         [ 
                                             <tr key={i}>
                                                 <td className='subcategory' colSpan='1'></td>
-                                                <td className='subcategory' colSpan='1'>{pur.subcategory}</td>
-                                                <td className='subcategory' colSpan='16'></td>
+                                                <td className='subcategory' colSpan='17'>{pur.subcategory}</td>
                                             </tr>,
                                             pur.purchase_items.map((purchase_item, item) =>       
                                                 
@@ -174,14 +189,15 @@ class ItemAndCostAnalysis extends React.Component{
                                                 </tr>
                                             ),                                    
                                             <tr key={i+1} className='bg-total'>
-                                                <td className='subcategory' colSpan="9">Total Per Sub Category: </td>
+                                                <td className='subcategory' colSpan='1'></td>
+                                                <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
                                                 <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
                                                 <td className='subcategory' colSpan="8"></td>
                                             </tr> 
                                         ]
                                     ),
                                     <tr key={index+1} className='bg-total'>
-                                        <td className='category' colSpan="9">Total Amount Per Category</td>
+                                        <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
                                         <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
                                         <td className='category' colSpan="8"></td>
                                     </tr>   
@@ -199,18 +215,16 @@ class ItemAndCostAnalysis extends React.Component{
                     <tbody >
                         { this.state.purchaseLastMonth.map((purchase, index) => 
                             [
-                                <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
-                                    <td className='category' colSpan='17'></td>
+                                <tr key={index}>
+                                    <td className='category' colSpan='18'>{purchase.parent_category}</td>                        
                                 </tr>,
                                 purchase.purchases.map((pur, i) => 
                                     [ 
                                         <tr key={i}>
                                             <td className='subcategory' colSpan='1'></td>
-                                            <td className='subcategory' colSpan='1'>{pur.subcategory}</td>
-                                            <td className='subcategory' colSpan='16'></td>
+                                            <td className='subcategory' colSpan='17'>{pur.subcategory}</td>
                                         </tr>,
-                                        pur.purchase_items.map((purchase_item, item) =>       
-                                            
+                                        pur.purchase_items.map((purchase_item, item) =>                                         
                                             <tr key={item}>
                                                 <td></td>
                                                 <td></td>
@@ -225,14 +239,15 @@ class ItemAndCostAnalysis extends React.Component{
                                             </tr>
                                         ),                                    
                                         <tr key={i+1} className='bg-total'>
-                                            <td className='subcategory' colSpan="9">Total Per Sub Category: </td>
+                                            <td className='subcategory' colSpan='1'></td>
+                                            <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
                                             <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
                                             <td className='subcategory' colSpan="8"></td>
                                         </tr> 
                                     ]
                                 ),
                                 <tr key={index+1} className='bg-total'>
-                                    <td className='category' colSpan="9">Total Amount Per Category</td>
+                                    <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
                                     <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
                                     <td className='category' colSpan="8"></td>
                                 </tr>   
@@ -251,18 +266,16 @@ class ItemAndCostAnalysis extends React.Component{
                     <tbody >
                         { this.state.purchases.map((purchase, index) => 
                             [
-                                <tr key={index}><td className='category' colSpan='1'>{purchase.parent_category}</td>
-                                    <td className='category' colSpan='17'></td>
+                                <tr key={index}>
+                                    <td className='category' colSpan='18'>{purchase.parent_category}</td>
                                 </tr>,
                                 purchase.purchases.map((pur, i) => 
                                     [ 
                                         <tr key={i}>
                                             <td className='subcategory' colSpan='1'></td>
-                                            <td className='subcategory' colSpan='1'>{pur.subcategory}</td>
-                                            <td className='subcategory' colSpan='16'></td>
+                                            <td className='subcategory' colSpan='17'>{pur.subcategory}</td>
                                         </tr>,
-                                        pur.purchase_items.map((purchase_item, item) =>       
-                                            
+                                        pur.purchase_items.map((purchase_item, item) =>                                       
                                             <tr key={item}>
                                                 <td></td>
                                                 <td></td>
@@ -277,14 +290,15 @@ class ItemAndCostAnalysis extends React.Component{
                                             </tr>
                                         ),                                    
                                         <tr key={i+1} className='bg-total'>
-                                            <td className='subcategory' colSpan="9">Total Per Sub Category: </td>
+                                            <td className='subcategory' colSpan='1'></td>
+                                            <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
                                             <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
                                             <td className='subcategory' colSpan="8"></td>
                                         </tr> 
                                     ]
                                 ),
                                 <tr key={index+1} className='bg-total'>
-                                    <td className='category' colSpan="9">Total Amount Per Category</td>
+                                    <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
                                     <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
                                     <td className='category' colSpan="8"></td>
                                 </tr>   
