@@ -18,14 +18,30 @@ class ItemAndCostAnalysis extends React.Component{
     }
 
     searchPurchases(){
-        if(this.state.branches.length > 0 || $("#q_date_range").val() !== '' ){
+        if(this.props.branchUser){
+            if($("#q_date_range").val() === ''){ return }
             this.setState({ fetching: true })
+            $.ajax({
+                url: '/api/item_and_costs/filtered_records.json',
+                method: 'GET',
+                data: { date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - ") },
+                success: (data) => {
+                    this.setState({
+                        fetching: false,
+                        purchases: data.purchases,
+                        overAll: data.overall,
+                        display: ''
+                    })
+                }
+            })
+        }else{
+            if(this.state.branch.length === 0 && $("#q_date_range").val() === ''){ return }
             $.ajax({
                 url: '/api/item_and_costs/filtered_records.json',
                 method: 'GET',
                 data: {
                     date: $("#q_date_range").val() === '' ? [] : $("#q_date_range").val().split(" - "),
-                    branches: this.state.branch.map( x => x.value )
+                    branches: this.state.branch.length > 0 ? this.state.branch.map( x => x.value ) : []
                 },
                 success: (data) => {
                     this.setState({

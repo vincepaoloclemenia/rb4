@@ -99,4 +99,5 @@ Rails.application.configure do
     :sender_address => %{"notifier" <notifier@example.com>},
     :exception_recipients => %w{ralbaredo@talentium.ph kdegracia@talentium.ph}
   }
+  config.react.variant = :production
 end
