@@ -1,0 +1,241 @@
+@import url(http://fonts.googleapis.com/css?family=Lora|Ubuntu|Noto+Sans|Ubuntu|Vollkorn+SC|Work+Sans|Open+Sans|Patua+One|Francois+One);
+/* line 2, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+body#pdf-body {
+  background-color: #fff;
+}
+
+/* line 3, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+div.half-container {
+  display: inline;
+  position: relative;
+  width: 50%;
+}
+
+/* line 4, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+table tr th {
+  text-align: center;
+}
+
+/* line 5, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+table td {
+  border: 1px solid grey;
+  padding: 10px 5px;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-size: 14px;
+}
+
+/* line 6, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+table tr th {
+  padding: 10px;
+  font-family: 'Noto Sans', sans-serif;
+  background-color: #1D75A1;
+  color: white;
+}
+
+/* line 7, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.pdf-container {
+  margin: 30px;
+  background-color: #fff;
+}
+
+/* line 8, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+table {
+  padding: 5px;
+}
+
+/* line 9, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+tr.highlighted {
+  background-color: #C0EBFD;
+}
+
+/* line 10, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+td.bold {
+  font-weight: 700;
+}
+
+/* line 11, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+td.po-item {
+  text-align: center;
+}
+
+/* line 12, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+td.align-right {
+  text-align: right;
+}
+
+/* line 13, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+/* line 14, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.row:after, .row:before {
+  display: table;
+  content: " ";
+}
+
+/* line 15, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.row:after {
+  clear: both;
+}
+
+/* line 16, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.panel {
+  background-color: #fff;
+  border: 1px solid transparent;
+}
+
+/* line 17, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.panel-body {
+  padding: 15px;
+}
+
+/* line 18, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.row.mb10 {
+  margin-bottom: 10px;
+}
+
+/* line 19, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+div.panel-heading {
+  font-family: 'Noto Sans', sans-serif;
+  color: #0072c6;
+  position: relative;
+  border-color: transparent;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 15px;
+  text-transform: uppercase;
+  font-weight: 900;
+  border-bottom: 0;
+  border-bottom: 1px solid transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-width: 0;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* line 20, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.pull-left {
+  float: left !important;
+}
+
+/* line 21, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.pull-right {
+  float: right !important;
+}
+
+/* line 22, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+h5.po-labels {
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 15px;
+  color: grey;
+}
+
+/* line 23, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+h4.pdf-header {
+  font-size: 20px;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 800;
+  display: inline-block !important;
+  margin-left: 2em;
+  color: #10374D;
+}
+
+/* line 24, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+img.brand-avatar {
+  width: 300px;
+  height: 100px;
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* line 25, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+.bordered.h230 {
+  padding: 20px;
+  border: 1.5px solid grey;
+  min-height: 230px;
+}
+
+/* line 26, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+p.po-info {
+  font-family: 'Ubuntu Sans', sans-serif;
+  color: grey;
+}
+
+/* line 27, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+p.signature {
+  font-size: 16px;
+  font-weight: 900;
+  color: #10374D;
+  font-family: 'Lora Sans', sans-serif;
+}
+
+/* line 28, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+label.header {
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  margin-right: 8px;
+}
+
+/* line 29, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+table#po-details {
+  width: 100%;
+  border: 2px solid grey;
+  padding: 5px;
+}
+
+/* line 30, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+table#po-details th {
+  width: 20%;
+  background-color: #e4e4e4;
+  border: none;
+  color: black;
+  text-align: left;
+}
+
+/* line 31, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+table#po-details td {
+  width: 30%;
+  background-color: transparent;
+  border: none;
+}
+
+/* line 32, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+p.mt20 {
+  margin-top: 50px;
+}
+
+/* line 33, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+thead {
+  display: table-header-group;
+}
+
+/* line 34, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+tfoot {
+  display: table-row-group;
+}
+
+/* line 35, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+tr {
+  page-break-inside: avoid;
+}
+
+/* line 36, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+td {
+  font-size: 20px;
+  color: #262626;
+}
+
+/* line 37, /Users/appsource/Appsource Ruby on Rails Projects/restobot-v4/app/assets/stylesheets/pdf.scss */
+td.label-total-num {
+  font-size: 13px;
+  background: #d9d9d9;
+}
