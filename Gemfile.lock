@@ -320,7 +320,7 @@ DEPENDENCIES
   pg_search
   rails (= 4.2.5.rc2)
   ransack
-  react-rails (~> 2.3)
+  react-rails (~> 2.4)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   slim-rails
