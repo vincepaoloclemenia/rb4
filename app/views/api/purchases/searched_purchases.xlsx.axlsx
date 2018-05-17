@@ -1,0 +1,62 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "#{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}") do |sheet|
+purchases_size = @purchases.map { |p| p.purchase_items.size }.sum
+vat = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_vat).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_vat).sum }.sum
+net = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_net).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_net).sum }.sum
+amount = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_amount).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_amount).sum }.sum
+    sheet.add_row [
+        "Invoice Number",
+        "Date",
+        "Branch",
+        "Supplier",
+        "Item",
+        "VAT Amount",
+        "Net Amount",
+        "Total Amount"
+    ]
+
+    @purchases.each do |purchase|
+        if @items.present?
+            purchase.purchase_items.search_item(@items).each do |purchase_item|
+                sheet.add_row [
+                    purchase.invoice_number,
+                    purchase.purchase_date.strftime("%b %d, %Y"),
+                    purchase.branch.name,
+                    purchase.supplier.name,
+                    purchase_item.item.name,
+                    to_peso(purchase_item.item_total_vat),
+                    to_peso(purchase_item.item_total_net),
+                    to_peso(purchase_item.item_total_amount)
+                ]
+            end
+        else
+            purchase.purchase_items.each do |purchase_item|
+                sheet.add_row [
+                    purchase.invoice_number,
+                    purchase.purchase_date.strftime("%b %d, %Y"),
+                    purchase.branch.name,
+                    purchase.supplier.name,
+                    purchase_item.item.name,
+                    to_peso(purchase_item.item_total_vat),
+                    to_peso(purchase_item.item_total_net),
+                    to_peso(purchase_item.item_total_amount)
+                ]
+            end
+        end
+    end
+
+    sheet.add_row [
+        "Total", 
+        "",
+        "",
+        "",
+        "",
+        to_peso(vat),
+        to_peso(net),
+        to_peso(amount)      
+    ]
+    sheet.column_widths 20, 20, 20, 20, 20, 20, 20, 20
+    sheet.add_style "A#{purchases_size + 2}:H#{purchases_size + 2}", bg_color: 'E2F89C', alignment: { horizontal: :right }
+    sheet.add_style "A#{purchases_size + 2}:H#{purchases_size + 2}", b: true
+    sheet.add_style "A1:H1", b: true, bg_color: '95AFBA'
+end
