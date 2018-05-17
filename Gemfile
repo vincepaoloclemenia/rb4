@@ -14,7 +14,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'devise', '~> 3.4.1'
 gem 'slim-rails'
 gem 'cocoon'
-gem 'therubyracer'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 gem 'will_paginate-bootstrap'
