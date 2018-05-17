@@ -1,4 +1,4 @@
-class ItemAndCostAnalysis extends React.Component{
+class CostAnalysis extends React.Component{
     constructor(props){
         super(props)
         this.state = {
