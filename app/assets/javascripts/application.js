@@ -28,11 +28,6 @@
 //= require moment.js
 //= require moment-with-locales.js
 
-window.onload = function(){
-  const v8 = require('v8');
-  v8.setFlagsFromString('--max_old_space_size=4096');
-}
-
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),

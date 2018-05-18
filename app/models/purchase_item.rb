@@ -22,14 +22,14 @@ class PurchaseItem < ActiveRecord::Base
 	end
 
 	def item_total_amount
-		return vat_type == "VAT-Inclusive" ? purchase_item_total_amount.to_d : purchase_item_total_amount.to_d + (purchase_item_total_amount.to_d * 0.12).to_d			
+		purchase_item_total_amount.round(2)		
 	end
 
 	def item_total_vat
-		return vat_type == "VAT-Exempted" ? 0.00 : (purchase_item_total_amount * 0.12).to_d
+		return vat_type == "VAT-Exempted" ? 0.00 : (purchase_item_total_amount - (purchase_item_total_amount / 1.12).round(2)).round(2) 
 	end
 
 	def item_total_net
-		return vat_type == "VAT-Inclusive" ? (purchase_item_total_amount - item_total_vat).to_d : item_total_amount
+		return vat_type == "VAT-Exempted" ? item_total_amount : (purchase_item_total_amount / 1.12).round(2)
 	end
 end

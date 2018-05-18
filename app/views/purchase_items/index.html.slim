@@ -66,42 +66,57 @@
 									small.field-req  *							
 								= f.select :item_id, @current_brand.items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }								
 						.row.mb10
-							.col-xs-12
+							.col-xs-6
 								= f.label :unit_id
 									| Unit
 									small.field-req  *
 								= f.text_field :unit_name, readonly: true, class: "form-control", data: { placeholder: "Select" }, id: 'unit'
+
+							.col-xs-6
+								= f.label :vat_type
+									| VAT Type
+									small.field-req  *
+								= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control", id: 'type-of-vat'
+						
 						.row.mb10
-							.col-xs-12.col-lg-4.mt5
+							.col-xs-4.col-lg-4.mt5
 								= f.label :quantity
 									| Quantity
 									small.field-req  *
-								= f.number_field :quantity, class: "form-control", placeholder: "0", step: :any
-							.col-xs-6.col-lg-4.mt5
+								= f.number_field :quantity, class: "form-control", placeholder: "0", step: :any, disabled: true
+							.col-xs-4.col-lg-4.mt5
 								= f.label :purchase_item_amount
 									| Unit Price
 									small.field-req  *
 								.input-group
 									span.input-group-addon PHP
 									= f.number_field :purchase_item_amount, class: "form-control", placeholder: "0", step: '.01', readonly: true
-							.col-xs-6.col-lg-4.mt5
+							.col-xs-4.col-lg-4.mt5
+								label for='entry_amount'
+									| Enter Amount
+								input.form-control id='entry_amount' name='entry_amount' type='number' placeholder='0' disabled='true' step='any'
+								
+						.row.mb10
+							.col-xs-4.mt5
+								label for='total_vat'
+									| Total VAT
+								.input-group
+									span.input-group-addon PHP
+									input.form-control id='total_vat' name='total_vat' type='number' placeholder='0' readonly='true'
+							.col-xs-4.mt5
+								label for='total_net'
+									| Total NET
+								.input-group
+									span.input-group-addon PHP
+									input.form-control id='total_net' name='total_net' type='number' placeholder='0' readonly='true'	
+							.col-xs-4.mt5
 								= f.label :purchase_item_total_amount
 									| Total Amount
 									small.field-req  *
 								.input-group
 									span.input-group-addon PHP
-									= f.number_field :purchase_item_total_amount, class: "form-control", placeholder: "0", step: '.01'
-						.row.mb10
-							.col-xs-6
-								= f.label :vat_type
-									| VAT Type
-									small.field-req  *
-								= f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control", id: 'vat-type'
-							.col-xs-6
-								= f.label :packaging
-									| Packaging
-									small.field-req  *
-								= f.text_field :packaging, class: 'form-control', placeholder: 'e.g 12pcs. per pack', id: 'packaging'
+									= f.number_field :purchase_item_total_amount, class: "form-control", placeholder: "0", step: '.01', readonly: true
+							
 						.row.mb10
 							.col-xs-12
 								= f.label :remarks
@@ -128,15 +143,69 @@
 							b = link_to "here", new_item_path, data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true				
 
 javascript:
+	
+	$("#type-of-vat").on("change", function(){
+		if($(this).val() !== ''){
+			$("#purchase_item_quantity").prop("disabled", false)
+			$("#entry_amount").prop("disabled", false)
+			var entryAmount = $("#entry_amount").val()
+			var qty = $("#purchase_item_quantity").val()
+			if(qty > 0 && entryAmount > 0){
+				if($(this).val() === 'VAT-Inclusive'){
+					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / 1.12 / qty).toFixed(2))
+					$("#total_vat").prop("value", (entryAmount - (entryAmount / 1.12)).toFixed(2))
+					$("#total_net").prop("value", (entryAmount / 1.12).toFixed(2))
+					$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount)
+				}else if($(this).val() === 'VAT-Exclusive'){
+					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
+					$("#total_vat").prop("value", (entryAmount * 1.12 - entryAmount).toFixed(2))
+					$("#total_net").prop("value", entryAmount)
+					$("#purchase_item_purchase_item_total_amount").prop("value", (entryAmount * 1.12).toFixed(2) )
+				}else if($(this).val() === 'VAT-Exempted'){
+					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
+					$("#total_vat").prop("value", 0.00)
+					$("#total_net").prop("value", entryAmount)
+					$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount )
+				}
+			}
+		}else{
+			$("#purchase_item_quantity").prop("disabled", true)
+			$("#purchase_item_quantity").val('')
+			$("#entry_amount").prop("disabled", true)
+			$("#entry_amount").val('')
+		}
+	})
 	$('#purchase_item_quantity').on("keyup",function(){
 		if($(this).val() > 0){
-			//$('#purchase_item_purchase_item_amount').prop('readonly',false);
-			$('#purchase_item_purchase_item_total_amount').prop('readonly',false);
-			var qty = $('#purchase_item_quantity').val();
-			var itemAmount = $('#purchase_item_purchase_item_amount').val();
-			$('#purchase_item_purchase_item_total_amount').prop('value',qty * itemAmount);
+			$('#entry_amount').prop('readonly', false);
+			if($("#type-of-vat").val() === 'VAT-Inclusive' && $('#purchase_item_purchase_item_amount').val() > 0){
+				var qty = $('#purchase_item_quantity').val();
+				var itemAmount = $('#purchase_item_purchase_item_amount').val();
+				$('#total_net').prop('value', ((qty * itemAmount) / 1.12).toFixed(2));
+			}
 		}
 	});
+	$("#entry_amount").on("keyup", function(){
+		var vatType = $("#type-of-vat").val()
+		var entryAmount = $(this).val()
+		var qty = $('#purchase_item_quantity').val()
+		if(vatType === 'VAT-Inclusive' && qty > 0){
+			$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / 1.12 / qty).toFixed(2))
+			$("#total_vat").prop("value", (entryAmount - (entryAmount / 1.12)).toFixed(2))
+			$("#total_net").prop("value", (entryAmount / 1.12).toFixed(2))
+			$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount)
+		}else if(vatType === 'VAT-Exclusive' && qty > 0){
+			$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
+			$("#total_vat").prop("value", (entryAmount * 1.12 - entryAmount).toFixed(2))
+			$("#total_net").prop("value", entryAmount)
+			$("#purchase_item_purchase_item_total_amount").prop("value", (entryAmount * 1.12).toFixed(2) )
+		}else if(vatType === 'VAT-Exempted' && qty > 0){
+			$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
+			$("#total_vat").prop("value", 0.00)
+			$("#total_net").prop("value", entryAmount)
+			$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount )
+		}
+	})
 	$('#purchase_item_purchase_item_amount').on("keyup",function(){
 		if($(this).val().length > 0){
 			//$('#purchase_item_purchase_item_total_amount').prop('readonly',true);
