@@ -1,0 +1,157 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+ </head>
+   <style type="text/css">
+     @import url(http://fonts.googleapis.com/css?family=Lora|Ubuntu|Noto+Sans|Ubuntu|Vollkorn+SC|Work+Sans|Open+Sans|Patua+One|Francois+One);
+    div.half-container { display: inline; position: relative; width: 50% }
+    table tr th { text-align: center }
+    table td { border: 1px solid grey; padding: 10px 5px; font-family: 'Ubuntu Sans', sans-serif; font-size: 14px; }
+    table tr th { padding: 10px; font-family: 'Noto Sans', sans-serif; background-color: #1D75A1; color: white }
+    .pdf-container{ margin: 30px }
+    table { padding: 5px }
+    tr.highlighted { background-color: #C0EBFD }
+    td.bold { font-weight: 700 }
+    td.align-right { text-align: right }
+    p.pdf-body{ font-family: 'Open Sans', sans-serif;font-size: 15px; text-justify: justify; margin-top: 15px; color: grey; z-index: 999; }
+    .row { margin-right: -15px; margin-left: -15px }
+    .row:after, .row:before { display: table; content: " " }
+    .row:after { clear: both }
+    .panel { background-color: #fff; border: 1px solid transparent } 
+    .panel-body { padding: 15px }
+    .row.mb10 { margin-bottom: 10px }
+    div.panel-heading { font-family: 'Noto Sans', sans-serif; color: #0072c6; position: relative; border-color: transparent; border-top-right-radius: 0; border-top-left-radius: 0; padding: 15px; text-transform: uppercase; font-weight: 900; border-bottom: 0; border-bottom: 1px solid transparent; -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-width: 0; position: relative; margin-bottom: 20px }
+    .pull-left { float: left!important }
+    .pull-right { float: right!important }
+    h5.po-labels { font-family: 'Noto Sans', sans-serif; font-size: 15px; color: grey }
+    h4.pdf-header{ font-size: 20px; font-family: 'Noto Sans', sans-serif; font-weight: 800; display: inline-block !important; margin-left: 2em; color: #10374D }   
+    img.brand-avatar{ width: 250px; height: 100px; image-rendering: auto; image-rendering: crisp-edges; image-rendering: pixelated;}  
+    .bordered.h230 { padding: 20px; border: 1.5px solid grey; min-height: 230px}
+    p.po-info{ font-family: 'Ubuntu Sans', sans-serif; color: grey }
+    p.signature { margin-bottom: 40px; font-size: 16px; font-weight: 900; color: #10374D; font-family: 'Lora Sans', sans-serif; }
+    p.footer { width: 80%; font-size: 11px; color: grey; text-justify: justify; text-align: center; font-family: 'Lora Sans', sans-serif;}
+    label.header{ font-family: 'Ubuntu Sans', sans-serif;  font-size: 15px; font-weight: 900; margin-right: 8px; }
+    table#po-details { width:100%; border: 2px solid grey; padding: 5px; }
+    table#po-details th { width:20%; background-color: #e4e4e4; border: none; color: black; text-align: left; }
+    table#po-details td { width:30%; background-color: transparent; border: none }
+    p.mt20{ margin-top: 50px; }
+   </style>
+    <body>
+        <div class='pdf-container'>
+            
+            <div class='panel-heading'>
+                <center>
+                    <img class='brand-avatar' alt='<%= @brand.name %>' src="<%= 'http://restobotv4.cloudapp.net' + @brand.avatar.url %>" />
+                </center>
+            </div>
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <div class='pull-right'>
+                        <h5 class='po-labels'>PO DATE: <span><%= @date.strftime('%B %d, %Y') %></span></h5>
+                    </div>
+                </div>
+            </div>
+            <div class='row mb10'>
+                <table id='po-details'>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <td><%= @brand.name %></td>
+                            <th>Delivery Address</th>
+                            <td><%= @address %></td>
+                        </tr>                        
+                        <tr>
+                            <th>Supplier</th>
+                            <td><%= @supplier.name %></td> 
+                            <th>Contact Person</th>
+                            <td><%= @contact %></td>   
+                                
+                        </tr>
+                        <tr>
+                            <th>Delivery date and time</th>
+                            <td><%= @date.strftime('%B %d, %Y') %>, <%= @time %></td>
+                            <th></th>
+                            <td></td>      
+                        </tr>
+                        
+                    </thead>
+                </table>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+                <thead>
+                    <tr>
+                        <th>Branch Name</th>
+                        <th>Item Name</th>
+                        <th>Packaging</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Price</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @purchase_orders.keys.each do |branch| %>
+                        <tr>
+                            <td>
+                                <%= branch %>
+                            </td>
+                        </tr>
+                        <% @purchase_orders[branch].map do |pur| %>
+                            <% pur.purchase_order_items.map do |pi| %>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <%= pi.item.name %>
+                                    </td>
+                                    <td>
+                                        <%= pi.packaging %>
+                                    </td>
+                                    <td>
+                                        <%= pi.quantity.to_s %>
+                                    </td>
+                                    <td>
+                                        <%= pi.unit.name%>
+                                    </td>
+                                    <td>
+                                        <%= number_to_currency(pi.price_selected, unit: "₱ ") %>
+                                    </td>
+                                    <td>
+                                        <%= number_to_currency(pi.total_amount, unit: "₱ ") %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                            <tr class='highlighted'>
+                                <td colspan='6'>Subtotal</td>
+                                <td class='bold'><%= number_to_currency(pur.sub_total, unit: "₱ ") %></td>
+                            </tr>
+                            <tr class='highlighted'>
+                                <td colspan='6'>12% VAT</td>
+                                <td class='bold'><%= number_to_currency(pur.vat, unit: "₱ ") %></td>
+                            </tr>
+                            <tr class='highlighted'>
+                                <td colspan='6'>Total</td>
+                                <td class='bold'><%= number_to_currency(pur.total_amount, unit: "₱ ") %></td>
+                            </tr>
+                        <% end %>
+                    <% end %>
+                </tbody>
+            </table>
+            <% if @body.present? %>                             
+                <p class='pdf-body'>
+                    <%= @body %>
+                </p>                      
+            <% end %> 
+            <p class='pdf-body mt20'>
+                Regards,
+            </p> 
+
+            <p class='signature'>
+                <%= @brand.client.name %> Team
+            </p>       
+
+            <center><p class='footer'><%= @brand.email_footer %></p></center>
+            
+        </div>
+    </body>
+</html>

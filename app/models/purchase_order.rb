@@ -13,6 +13,8 @@ class PurchaseOrder < ActiveRecord::Base
   scope :new_pos, -> { includes(:purchase_order_items).where( status: 'Pending' ).where.not( purchase_order_items: { purchase_order_id: nil } ) }
   scope :on_hold_pos, -> { where status: 'On Hold' }
   scope :rejected_pos, -> { where status: 'Rejected' }
+  scope :sent_purchase_orders, -> { where sent: true, status: 'Approved' }
+  scope :unsent_pos, -> { where(sent: false, status: ["Approved", "Pending"]) }
 
   accepts_nested_attributes_for :purchase_order_items,  :reject_if => :all_blank, :allow_destroy => :true
   

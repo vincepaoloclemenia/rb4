@@ -13,6 +13,8 @@ if @items.present?
                 json.purchase_items purchase.purchase_items.search_item(@items) do |pi|
                     json.item pi.item
                     json.category pi.item.category.name
+                    json.quantity pi.quantity
+                    json.unit_cost pi.purchase_item_amount
                     json.item_total_vat to_peso(pi.item_total_vat)
                     json.item_total_net to_peso(pi.item_total_net)
                     json.item_total_amount to_peso(pi.item_total_amount)
@@ -38,6 +40,8 @@ else
                 json.purchase_items purchase.purchase_items do |pi|
                     json.item pi.item
                     json.category pi.item.category.name
+                    json.quantity pi.quantity
+                    json.unit_cost pi.purchase_item_amount
                     json.item_total_vat to_peso(pi.item_total_vat)
                     json.item_total_net to_peso(pi.item_total_net)
                     json.item_total_amount to_peso(pi.item_total_amount)  

@@ -1,0 +1,98 @@
+.panel
+	.panel-body
+		= form_for(:po_email, url: mail_bulk_of_purchase_orders_purchase_orders_path(supplier: @supplier.id, purchase_orders: @ids)) do |f|
+			- supplier_emails = @supplier.emails.map { |x| x }
+			/.row.mb10
+			/	.col-xs-12
+			/		= f.label :from
+			/			| Brand Email
+			/			small.field-req  *
+			/		= f.email_field :from, required: true, class: "form-control", placeholder:"Brand email", value: @email
+			.row.mb10
+				.col-xs-12
+					= f.label :recipients
+						| To:
+						small.field-req  *
+					= f.select :recipients, options_for_select(supplier_emails, supplier_emails), {}, class: "chosen", data: { placeholder: "Select Recipient(s)" }, style: "width: 100%; display: none;", multiple: true
+			
+			.row.mb10
+				.col-xs-12
+					= f.label :subject
+						| Subject
+						small.field-req  *
+					= f.text_field :subject, required: true, class: "form-control", placeholder:"Subject", value: @subject
+			.row.mb10
+				.col-xs-12
+					= f.label :delivery_address
+						| Delivery Address
+						small.field-req  *
+					= f.text_field :delivery_address, required: true, class: "form-control", placeholder:"Delivery Address"
+			
+			.row.mb10
+				.col-xs-6
+					= f.label :delivery_date
+						| Delivery Date
+						small.field-req  *
+					= f.text_field :delivery_date, required: true, class: "form-control", placeholder:"Delivery Date"	
+				.col-xs-6
+					= f.label :delivery_time
+						| Delivery Time
+						small.field-req  *
+					= f.text_field :delivery_time, required: true, class: "form-control", placeholder:"Delivery Time"	
+				
+			.row.mb10
+				.col-xs-12
+					= f.text_area :body, class: "form-control", rows:"5", placeholder: "Write your message here" 
+					= f.hidden_field :contact_person, value: @contact_person
+					= f.hidden_field :contact_title, value: @contact_title
+
+			.modal-footer.no-border
+				span.inline.float-right
+					= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+					|
+					button.btn.btn-primary type="submit" Send
+
+table.table.table-bordered.table-striped.mb0 data-sortable="true"
+	thead
+		tr.bg-thead
+			th width="145" Branch Name
+			th width="145" Item Name
+			th width="160" data-sortable="false" Packaging
+			th width="110" Quantity
+			th width="115" Unit
+			th width="120" Unit Price
+			th width="120" Total Price 
+	tbody
+	- @purchase_orders.keys.map do |branch|
+		tr
+			td colspan='7' data-title="Item Name" = branch
+			
+			- @purchase_orders[branch].each do |po|
+				- po.purchase_order_items.each do |pi|
+					tr
+						td
+						td data-title="Item Name" = pi.item.name
+						td data-title="Packaging" = pi.packaging
+						td data-title="Quantity" = pi.quantity.to_i.to_s
+						td data-title="Unit" = pi.unit.name
+						td data-title="Unit Price" = to_peso(pi.price_selected)
+						td data-titile='Total Price' = to_peso(pi.total_amount)
+
+				tr.bg-total
+					td.text-right.label-total colspan='6' data-title="Sub Total" Sub Total
+					td.label-total-num data-title='Vat' = to_peso(po.sub_total)
+				tr.bg-total
+					td.text-right.label-total colspan='6' data-title="12% Vat" 12% VAT
+					td.label-total-num data-title='Vat' = to_peso(po.vat)
+				tr.bg-total
+					td.text-right.label-total colspan='6' data-title="Total Amount" Total Amount
+					td.label-total-num data-title='Vat' = to_peso(po.total_amount)
+
+javascript:
+    $('[name="po_email[delivery_date]"]').datepicker({
+		autoclose: true,
+		minDate: new Date()
+	}).on('change',function(evt){
+		evt.stopPropagation()
+		evt.preventDefault()
+	})

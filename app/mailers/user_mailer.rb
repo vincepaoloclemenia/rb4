@@ -20,5 +20,19 @@ class UserMailer < ApplicationMailer
 		@body = message
 		#attachments.inline["#{@purchase_order.brand.avatar_file_name}"] = File.read("#{Rails.root}/public#{@purchase_order.brand.avatar.url}")		
 		mail(to: @email, subject: @subject, content_type: 'text/html')
-  end
+	end
+	
+	def send_bulk_of_purchase_orders(brand, supplier, purchase_orders, recipient, address, time, date, contact, subject, message)
+		@brand = brand
+		@supplier = supplier
+		@purchase_orders = purchase_orders
+		@email = recipient
+		@address = address
+		@time = time
+		@contact = contact
+		@date = Date.strptime(date, "%m/%d/%Y")
+		@subject = subject
+		@body = message
+		mail(to: @email, subject: @subject, content_type: 'text/html')
+	end
 end

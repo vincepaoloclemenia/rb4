@@ -1,0 +1,12 @@
+$('#modal h4').html('Purchase Order Items (<%= @po.pr_number %>)');
+
+$('.modal-body').html('<%= j render("po_items") %>');
+
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

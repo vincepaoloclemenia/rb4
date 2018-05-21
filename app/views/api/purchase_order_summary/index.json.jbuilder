@@ -2,6 +2,8 @@ json.next_page @approved_purchase_orders.next_page
 json.approved_purchase_orders do |json|
     json.array! @approved_purchase_orders do |po|
         json.id po.id
+        json.date_sent po.date_sent? ? po.date_sent.strftime("%b %d, %Y | %l:%M %p") : "Unsent"
+        json.sent po.sent
         json.user po.user
         json.branch po.branch
         json.brand po.brand

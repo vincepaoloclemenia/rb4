@@ -180,6 +180,8 @@ class PurchaseList extends React.Component{
                                         <th width='150'>Supplier</th>   
                                         <th width='170'>Item</th>
                                         <th width='170'>Category</th>
+                                        <th width='110'>Quantity</th>
+                                        <th width='110'>Unit Cost</th>
                                         <th width='170'>VAT Amount</th>
                                         <th width='170'>Net Amount</th>
                                         <th width='170'>Total Amount</th>
@@ -396,6 +398,8 @@ class PurchaseList extends React.Component{
                                 <td>{purchase.supplier.name}</td>
                                 <td>{purchase_item.item.name}</td>
                                 <td>{purchase_item.category}</td>
+                                <td>{purchase_item.quantity}</td>
+                                <td>{purchase_item.unit_cost}</td>
                                 <td>{purchase_item.item_total_vat}</td>
                                 <td>{purchase_item.item_total_net}</td>
                                 <td>{purchase_item.item_total_amount}</td>
@@ -416,6 +420,8 @@ class PurchaseList extends React.Component{
                                 <td>{purchase.supplier.name}</td>
                                 <td>{purchase_item.item.name}</td>
                                 <td>{purchase_item.category}</td>
+                                <td>{purchase_item.quantity}</td>
+                                <td>{purchase_item.unit_cost}</td>
                                 <td>{purchase_item.item_total_vat}</td>
                                 <td>{purchase_item.item_total_net}</td>
                                 <td>{purchase_item.item_total_amount}</td>

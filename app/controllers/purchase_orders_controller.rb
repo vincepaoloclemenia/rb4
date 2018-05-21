@@ -4,7 +4,7 @@ class PurchaseOrdersController < ApplicationController
 	before_action :access_control
 
 	def index
-		@purchase_orders = current_user.role.role_level == 'branch' ? current_user.branch.purchase_orders.paginate(page: params[:page], per_page: per_page) : current_brand.purchase_orders.new_pos.paginate(page: params[:page], per_page: per_page)
+		@purchase_orders = current_brand.purchase_orders.unsent_pos.group_by { |po| po.supplier_id }
 		@purchase_order = PurchaseOrder.new
 		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
 	end
@@ -149,9 +149,48 @@ class PurchaseOrdersController < ApplicationController
 					@title,
 					@message
 				).deliver_now
+				@purchase_order.update(date_sent: DateTime.now, sent: true)
 			end
 		end	
 		redirect_to purchase_order_generator_index_path, notice: "Your email to #{@purchase_order.supplier.name} has been sent."	
+	end
+
+	def mail_bulk_of_purchase_orders
+		@pos = current_brand.purchase_orders.where(id: params[:purchase_orders])
+		@purchase_orders = @pos.group_by { |pur| pur.branch.name }
+		@subject = params[:po_email][:subject]
+		@contact = params[:po_email][:contact_person]
+		@address = params[:po_email][:delivery_address]
+		@date = params[:po_email][:delivery_date]
+		@time = params[:po_email][:delivery_time]
+		@supplier = Supplier.find(params[:supplier])
+		@message = params[:po_email][:body]
+		@recipients = params[:po_email][:recipients]
+		@brand = current_brand
+		if @subject == '' || @date == '' || @time == ''
+			redirect_to purchase_order_generator_index_path, alert: "Your mail information was incomplete. Sending Failed"
+		else
+			@recipients.map do |recipient|
+				if recipient == ''
+					next
+				else
+					UserMailer.send_bulk_of_purchase_orders(
+						@brand,
+						@supplier, 
+						@purchase_orders, 
+						recipient,
+						@address,
+						@time,
+						@date,
+						@contact,
+						@subject,
+						@message
+					).deliver_now
+				end
+			end	
+			redirect_to purchase_order_generator_index_path, notice: "Your email to #{@supplier.name} has been sent."				
+			@pos.update_all(date_sent: DateTime.now, sent: true)
+		end	
 	end
 
 	def purchase_order
@@ -164,25 +203,39 @@ class PurchaseOrdersController < ApplicationController
 		end
 	end
 
+	def group_of_purchase_orders
+		@purchase_orders = current_brand.purchase_orders.find(params[:purchases])
+		@supplier = Supplier.find params[:supplier]
+	end
+
+	def view_po_remotely
+		@po = PurchaseOrder.find params[:purchase_order_id]
+	end
+
+	def send_bulk_purchase_orders
+		@ids = params[:purchases]
+		@supplier = Supplier.find params[:supplier_id]
+		@contact_person = @supplier.contact_person
+		@contact_title = @supplier.contact_title
+		@subject = "PO - #{current_brand.name.gsub(/\//, '').split.map(&:first).join.upcase} - #{@supplier.name} - #{Date.today.strftime('%B %-d')}"		
+		@purchase_orders = current_brand.purchase_orders.find(params[:purchases]).group_by { |pur| pur.branch.name }
+	end
+
 	private
 
-	def time_params
-		#params.permit(:from_time, :from_ampm, :to_time, :to_ampm)!
-	end
-
-	def purchase_order_params
-		# if params[:purchase][:purchase_date].present?
-		# 	params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
-		# end
-		if current_user.role.role_level == 'branch'
-			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference)
-		else
-			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date)			
+		def purchase_order_params
+			# if params[:purchase][:purchase_date].present?
+			# 	params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
+			# end
+			if current_user.role.role_level == 'branch'
+				params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference)
+			else
+				params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date)			
+			end
 		end
-	end
 
-	def per_page
-		params[:show].eql?('all') ? PurchaseOrder.count : params[:show]
-		return 10 if params[:show].nil?
-	end
+		def per_page
+			params[:show].eql?('all') ? PurchaseOrder.count : params[:show]
+			return 10 if params[:show].nil?
+		end
 end

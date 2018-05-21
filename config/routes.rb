@@ -77,6 +77,10 @@ Rails.application.routes.draw do
       get :send_email, on: :collection
       get :approve_purchase_order, on: :collection
     end
+    get :view_po_remotely, on: :collection
+    get :send_bulk_purchase_orders, on: :collection
+    get :group_of_purchase_orders, on: :collection
+    post :mail_bulk_of_purchase_orders, on: :collection
     post 'send_email_notification' => 'purchase_orders#send_email_notification'
     patch 'approve' => 'purchase_orders#approve'
     patch 'hold' => 'purchase_orders#hold'
