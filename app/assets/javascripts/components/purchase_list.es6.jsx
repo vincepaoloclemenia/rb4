@@ -368,16 +368,16 @@ class PurchaseList extends React.Component{
             return(
                 <tbody>
                     <tr className='bg-total'>
-                        <td className='text-right label-total' colSpan="7">Total VAT</td>
-                        <td className='label-total-num' colSpan="2">{this.state.itemTotalVat}</td>
+                        <td className='text-right label-total' colSpan="10">Total VAT</td>
+                        <td className='label-total-num'>{this.state.itemTotalVat}</td>
                     </tr>
                     <tr className='bg-total'>
-                        <td className='text-right label-total' colSpan="7">Total Net</td>
-                        <td className='label-total-num' colSpan="2">{this.state.itemTotalNet}</td>
+                        <td className='text-right label-total' colSpan="10">Total Net</td>
+                        <td className='label-total-num'>{this.state.itemTotalNet}</td>
                     </tr>
                     <tr className='bg-total'>
-                        <td className='text-right label-total' colSpan="7">Total Amount</td>
-                        <td className='label-total-num' colSpan="2">{this.state.itemTotalAmount}</td>
+                        <td className='text-right label-total' colSpan="10">Total Amount</td>
+                        <td className='label-total-num'>{this.state.itemTotalAmount}</td>
                     </tr>
                 </tbody>
             ) 
@@ -428,16 +428,16 @@ class PurchaseList extends React.Component{
                             </tr> 
                         )}   
                         <tr className='bg-total'>
-                            <td className='text-right label-total' colSpan="7">Total VAT</td>
-                            <td className='label-total-num' colSpan="2">{purchase.total_vat}</td>
+                            <td className='text-right label-total' colSpan="10">Total VAT</td>
+                            <td className='label-total-num'>{purchase.total_vat}</td>
                         </tr>
                         <tr className='bg-total'>
-                            <td className='text-right label-total' colSpan="7">Total Net</td>
-                            <td className='label-total-num' colSpan="2">{purchase.total_net}</td>
+                            <td className='text-right label-total' colSpan="10">Total Net</td>
+                            <td className='label-total-num'>{purchase.total_net}</td>
                         </tr>
                         <tr className='bg-total'>
-                            <td className='text-right label-total' colSpan="7">Total Amount</td>
-                            <td className='label-total-num' colSpan="2">{purchase.total_amount}</td>
+                            <td className='text-right label-total' colSpan="10">Total Amount</td>
+                            <td className='label-total-num'>{purchase.total_amount}</td>
                         </tr>
                     </tbody>                         
                 )

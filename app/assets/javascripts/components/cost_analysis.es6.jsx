@@ -18,6 +18,7 @@ class CostAnalysis extends React.Component{
     }
 
     searchPurchases(){
+
         if(this.props.branchUser){
             if($("#q_date_range").val() === ''){ return }
             this.setState({ fetching: true })
@@ -35,6 +36,7 @@ class CostAnalysis extends React.Component{
                 }
             })
         }else{
+            this.setState({ fetching: true })
             if(this.state.branch.length === 0 && $("#q_date_range").val() === ''){ return }
             $.ajax({
                 url: '/api/item_and_costs/filtered_records_for_brand.json',

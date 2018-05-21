@@ -189,7 +189,7 @@ class PurchaseOrdersController < ApplicationController
 				end
 			end	
 			redirect_to purchase_order_generator_index_path, notice: "Your email to #{@supplier.name} has been sent."				
-			@pos.update_all(date_sent: DateTime.now, sent: true)
+			@pos.update_all(date_sent: DateTime.now, sent: true, status: "Approved")
 		end	
 	end
 
