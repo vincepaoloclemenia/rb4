@@ -4,7 +4,13 @@ class ActivitiesContainer extends React.Component{
         this.state= { recentActivities: [], nextPage: null, fetchingData: false }
     }
 
-    componentWillMount(){
+    componentDidMount(){
+        $('.activities-container').on('mouseenter', function(){
+            $('.activities-list').css('overflow-y', 'auto');
+        })
+        $('.activities-container').on('mouseleave', function(){
+            $('.activities-list').css('overflow-y', 'hidden');
+        })  
         this.fetchActivities()
     }
 
