@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control, except: [:account, :update_account, :change_password]
 	before_action :set_user, only: [:edit, :update, :destroy]
+	before_action :restrict_user, only: :account
 
 	def index
 		@users = current_client.users
@@ -16,11 +17,7 @@ class UsersController < ApplicationController
 	end
 
 	def account
-		@user = current_client.users.find_by_username(params[:username])
-		if current_user == @user
-		else
-			redirect_to account_path(username: current_user.username)
-		end
+		
 	end
 
 	def update_account
@@ -74,6 +71,13 @@ class UsersController < ApplicationController
 	end
 
 	private
+
+		def restrict_user
+			@user = current_client.users.find_by_username(params[:username])
+			if current_user.username != params[:username]
+				redirect_to account_path(username: current_user.username)
+			end
+		end
 
 		def set_user
 			@user = current_client.users.find(params[:id])
