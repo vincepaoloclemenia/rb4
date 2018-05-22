@@ -74,46 +74,48 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def after_in
-    if current_user.flag >= 1 && current_user.flag < 6
-      redirect_to wizard_path
-    end
-  end
-
-  def after_sign_out_path_for(resource)
-    flash[:notice] = "Logged out successfully"
-    new_user_session_path
-  end
-
-  def restrict_users
-    controllers = Section.all.where.not(name: ['sales', 'purchase_items', 'purchases']).pluck(:name)
-    if user_signed_in?
-      if current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('branch')
-        redirect_to dashboard_path, alert: "Access denied" if controllers.include?(params[:controller])
+    def after_in
+      if current_user.flag >= 1 && current_user.flag < 6
+        redirect_to wizard_path
       end
     end
-  end
 
-  protected
+    def after_sign_out_path_for(resource)
+      flash[:notice] = "Logged out successfully"
+      new_user_session_path
+    end
 
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:flag, :username, :email, :password, :password_confirmation, :remember_me) }
-    devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
-    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
-  end
-
-  def access_control
-    section = Section.find_by_name(params[:controller])  
-    if section && user_signed_in?
-      if ["index","update","create","destroy"].include?(params[:action])
-        action = params[:action].eql?("index") ? "is_read" : "is_#{params[:action]}"  
-        permission = current_user.role.permissions.find_by_section_id(section.id)
-        unless permission.send(action.to_sym)
-          redirect_to dashboard_path, alert: "Access denied"
+    def restrict_users
+      controllers = Section.all.where.not(name: ['sales', 'purchase_items', 'purchases']).pluck(:name)
+      if user_signed_in?
+        if current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('branch')
+          redirect_to dashboard_path, alert: "Access denied" if controllers.include?(params[:controller])
         end
       end
     end
-  end
+
+  protected
+
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:flag, :username, :email, :password, :password_confirmation, :remember_me) }
+      devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
+      devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
+    end
+
+    def access_control
+      section = Section.find_by_name(params[:controller])  
+      if section && user_signed_in?
+        if ["index","update","create","destroy"].include?(params[:action])
+          action = params[:action].eql?("index") ? "is_read" : "is_#{params[:action]}"  
+          permission = current_user.role.permissions.find_by_section_id(section.id)
+          unless permission.send(action.to_sym)
+            respond_to do |format|
+              format.html { redirect_to dashboard_path, alert: "Access denied" }
+            end
+          end
+        end
+      end
+    end
   
 
 end

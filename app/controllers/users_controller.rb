@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 	
 	before_action :authenticate_user!
-	before_action :access_control
+	before_action :access_control, except: [:account, :update_account, :change_password]
 	before_action :set_user, only: [:edit, :update, :destroy]
 
 	def index
@@ -75,35 +75,35 @@ class UsersController < ApplicationController
 
 	private
 
-	def set_user
-		@user = current_client.users.find(params[:id])
-	end
-
-	def user_params
-		role = Role.find(params[:user][:client_user_access_attributes][:role_id])
-		if role.role_level == 'client'
-			params[:user][:client_user_access_attributes].delete(:brand_id)
-			params[:user][:client_user_access_attributes].delete(:branch_id)
-		elsif role.role_level == 'brand'
-			params[:user][:client_user_access_attributes].delete(:branch_id)
-		else
+		def set_user
+			@user = current_client.users.find(params[:id])
 		end
-		params.require(:user).permit(:email, :username, :first_name, :last_name, :password, :password_confirmation, :confirmed_at, client_user_access_attributes: [:id, :role_id, :client_id, :brand_id, :branch_id])
-	end
 
-	def client_user_access_params
-		params.require(:user).require(:client_user_access_attributes).permit(:role_id, :client_id, :brand_id, :branch_id)
-	end
+		def user_params
+			role = Role.find(params[:user][:client_user_access_attributes][:role_id])
+			if role.role_level == 'client'
+				params[:user][:client_user_access_attributes].delete(:brand_id)
+				params[:user][:client_user_access_attributes].delete(:branch_id)
+			elsif role.role_level == 'brand'
+				params[:user][:client_user_access_attributes].delete(:branch_id)
+			else
+			end
+			params.require(:user).permit(:email, :username, :first_name, :last_name, :password, :password_confirmation, :confirmed_at, client_user_access_attributes: [:id, :role_id, :client_id, :brand_id, :branch_id])
+		end
 
-	def change_password_params
-		params.require(:user).permit(:current_password, :password, :password_confirmation)
-	end
+		def client_user_access_params
+			params.require(:user).require(:client_user_access_attributes).permit(:role_id, :client_id, :brand_id, :branch_id)
+		end
 
-	def account_params
-		params.require(:user).permit(:first_name, :last_name, :avatar, :email, :username, :current_password)
-	end
+		def change_password_params
+			params.require(:user).permit(:current_password, :password, :password_confirmation)
+		end
 
-	private
+		def account_params
+			params.require(:user).permit(:first_name, :last_name, :avatar, :email, :username, :current_password)
+		end
+
+	
 		def send_mail(email, generated_password)
 			UserMailer.send_user_mail(email, generated_password).deliver
 		end
