@@ -25,17 +25,17 @@ class Api::ItemAndCostsController < ApplicationController
     end
 
     def filtered_records_for_brand
-        if params[:date].present?
+        @purchases = if params[:date].present?
             @from = Date.strptime(params[:date][0], "%m/%d/%Y")
             @to = Date.strptime(params[:date][1], "%m/%d/%Y") 
             if params[:branches].present?
-                @purchases = current_brand.purchase_items.includes(:purchase).where( purchases: { purchase_date: @from..@to, branch_id: params[:branches] } ).group_by { |pi| pi.item.category.parent.name }
+                current_brand.purchase_items.includes(:purchase).where( purchases: { purchase_date: @from..@to, branch_id: params[:branches] } ).group_by { |pi| pi.item.category.parent.name }
             else
-                @purchases = current_brand.purchase_items.includes(:purchase).where( purchases: { purchase_date: @from..@to } ).group_by { |pi| pi.item.category.parent.name }
+                current_brand.purchase_items.includes(:purchase).where( purchases: { purchase_date: @from..@to } ).group_by { |pi| pi.item.category.parent.name }
             end
         else
             if params[:branches].present? 
-                @purchases = current_brand.purchase_items.includes(:purchase).where( purchases: { branch_id: params[:branches] } ).group_by { |pi| pi.item.category.parent.name }                
+                current_brand.purchase_items.includes(:purchase).where( purchases: { branch_id: params[:branches] } ).group_by { |pi| pi.item.category.parent.name }                
             end
         end
     end

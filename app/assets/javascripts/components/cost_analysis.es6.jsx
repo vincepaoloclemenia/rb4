@@ -14,14 +14,14 @@ class CostAnalysis extends React.Component{
             lastWeekTotal: '',
             lastMonthTotal: '',
             overAll: '',
+            searching: false
         }
     }
 
     searchPurchases(){
-
         if(this.props.branchUser){
             if($("#q_date_range").val() === ''){ return }
-            this.setState({ fetching: true })
+            this.setState({ searching: true, fetching: true })
             $.ajax({
                 url: '/api/item_and_costs/filtered_records_for_branch.json',
                 method: 'GET',
@@ -36,8 +36,8 @@ class CostAnalysis extends React.Component{
                 }
             })
         }else{
-            this.setState({ fetching: true })
-            if(this.state.branch.length === 0 && $("#q_date_range").val() === ''){ return }
+            if(this.state.branch.length === 0 || $("#q_date_range").val() === ''){ return }
+            this.setState({ searching: true, fetching: true })
             $.ajax({
                 url: '/api/item_and_costs/filtered_records_for_brand.json',
                 method: 'GET',
@@ -86,8 +86,8 @@ class CostAnalysis extends React.Component{
                     </div>
                     
                     <div className='tab'>
-                        <button type='button' onClick={() => this.setState({ display: 'week', purchases: [] })} className={this.state.display === 'week' ? 'tablinks active' : 'tablinks'}>This Week's ({this.state.lwRange})</button>
-                        <button type='button' onClick={() => this.setState({ display: 'month', purchases: [] })} className={this.state.display === 'month' ? 'tablinks active' : 'tablinks'}>This Month's ({this.state.tmRange})</button>                               
+                        <button type='button' onClick={() => this.setState({ display: 'week', searching: false })} className={this.state.display === 'week' ? 'tablinks active' : 'tablinks'}>This Week's ({this.state.lwRange})</button>
+                        <button type='button' onClick={() => this.setState({ display: 'month', searching: false })} className={this.state.display === 'month' ? 'tablinks active' : 'tablinks'}>This Month's ({this.state.tmRange})</button>                               
                     </div>
                     
                     
@@ -158,9 +158,59 @@ class CostAnalysis extends React.Component{
         }
     }
     renderData(){
-        if(this.state.fetching){ return }
-        else{
-            if(this.state.purchases.length === 0){
+        if(this.state.fetching){ return 
+        }else{
+            if(this.state.searching){
+                return(
+                    <tbody >
+                        { this.state.purchases.map((purchase, index) => 
+                            [
+                                <tr key={index}>
+                                    <td className='category' colSpan='18'>{purchase.parent_category}</td>
+                                </tr>,
+                                purchase.purchases.map((pur, i) => 
+                                    [ 
+                                        <tr key={i}>
+                                            <td className='subcategory' colSpan='1'></td>
+                                            <td className='subcategory' colSpan='17'>{pur.subcategory}</td>
+                                        </tr>,
+                                        pur.purchase_items.map((purchase_item, item) =>                                       
+                                            <tr key={item}>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{purchase_item.item_name}</td>
+                                                <td>{purchase_item.unit}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{purchase_item.quantity}</td>
+                                                <td>{purchase_item.purchase_item_amount}</td>
+                                                <td>{purchase_item.item_total_net}</td>
+                                            </tr>
+                                        ),                                    
+                                        <tr key={i+1} className='bg-total'>
+                                            <td className='subcategory' colSpan='1'></td>
+                                            <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
+                                            <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
+                                            <td className='subcategory' colSpan="8"></td>
+                                        </tr> 
+                                    ]
+                                ),
+                                <tr key={index+1} className='bg-total'>
+                                    <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
+                                    <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
+                                    <td className='category' colSpan="8"></td>
+                                </tr>   
+                            ]
+                        )}
+                        <tr className='bg-total'>
+                            <td className='total-overall' colSpan="9">Total</td>
+                            <td className='label-total-num total-overall' colSpan="1">{this.state.overAll}</td>
+                            <td className='total-overall' colSpan="8"></td>
+                        </tr>   
+                    </tbody>
+                )
+            }else{
                 if(this.state.display === 'week'){
                     return(
                         <tbody >
@@ -258,57 +308,6 @@ class CostAnalysis extends React.Component{
                         <tr className='bg-total'>
                             <td className='total-overall' colSpan="9">Total</td>
                             <td className='label-total-num total-overall' colSpan="1">{this.state.lastMonthTotal}</td>
-                            <td className='total-overall' colSpan="8"></td>
-                        </tr>   
-                    </tbody>
-
-                )
-            }else{
-                return(
-                    <tbody >
-                        { this.state.purchases.map((purchase, index) => 
-                            [
-                                <tr key={index}>
-                                    <td className='category' colSpan='18'>{purchase.parent_category}</td>
-                                </tr>,
-                                purchase.purchases.map((pur, i) => 
-                                    [ 
-                                        <tr key={i}>
-                                            <td className='subcategory' colSpan='1'></td>
-                                            <td className='subcategory' colSpan='17'>{pur.subcategory}</td>
-                                        </tr>,
-                                        pur.purchase_items.map((purchase_item, item) =>                                       
-                                            <tr key={item}>
-                                                <td></td>
-                                                <td></td>
-                                                <td>{purchase_item.item_name}</td>
-                                                <td>{purchase_item.unit}</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>{purchase_item.quantity}</td>
-                                                <td>{purchase_item.purchase_item_amount}</td>
-                                                <td>{purchase_item.item_total_net}</td>
-                                            </tr>
-                                        ),                                    
-                                        <tr key={i+1} className='bg-total'>
-                                            <td className='subcategory' colSpan='1'></td>
-                                            <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
-                                            <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
-                                            <td className='subcategory' colSpan="8"></td>
-                                        </tr> 
-                                    ]
-                                ),
-                                <tr key={index+1} className='bg-total'>
-                                    <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
-                                    <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
-                                    <td className='category' colSpan="8"></td>
-                                </tr>   
-                            ]
-                        )}
-                        <tr className='bg-total'>
-                            <td className='total-overall' colSpan="9">Total</td>
-                            <td className='label-total-num total-overall' colSpan="1">{this.state.overAll}</td>
                             <td className='total-overall' colSpan="8"></td>
                         </tr>   
                     </tbody>
