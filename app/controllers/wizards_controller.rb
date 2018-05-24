@@ -104,7 +104,7 @@ class WizardsController < ApplicationController
 			if brand.errors.empty?
 				format.js
 			else
-				format.json { render json: @errors.join(", "), status: :unprocessable_entity }
+				format.json { render json: brand.errors.full_messages.join(", "), status: :unprocessable_entity }
 			end
 		end
 	end

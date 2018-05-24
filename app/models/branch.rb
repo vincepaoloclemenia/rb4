@@ -15,9 +15,9 @@ class Branch < ActiveRecord::Base
   # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }
   
   validates :name, presence: true, length: { maximum: 50 }, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
-  validates :company_registered_name, :aka, presence: true, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
-  validates :tin_number, presence: true, uniqueness: true
-  validate :validate_alias, on: [:create, :update]
+  validates :company_registered_name, :aka, presence: true, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }, if: :wizard_done?
+  validates :tin_number, presence: true, uniqueness: true, if: :wizard_done?
+  validate :validate_alias, on: [:create, :update], if: :wizard_done?
   after_create :set_default_color
 
   def self.all_unsubscribed
@@ -159,6 +159,10 @@ class Branch < ActiveRecord::Base
     records << purchase_items.all.to_a
     records << sales.all.to_a
     records
+  end
+
+  def wizard_done?
+    self.brand.client.users.includes(:role).where( roles: { role_level: [nil, "client"] } ).first.flag >= 6
   end
 
 end

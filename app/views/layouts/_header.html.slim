@@ -5,37 +5,51 @@ header.header.navbar data-behavior="animated-navbar"
 			a.hamburger-icon.visible-xs data-toggle="offscreen" data-move="ltr"
 				i.icon-menu.menu-icon
 
-		li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
-			a
-				i.fa.fa-envelope aria-hidden="true"	
+		- if wizard_done?
+			li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
+				a
+					i.fa.fa-envelope aria-hidden="true"	
 
 				 
-		- if wizard_done? && (current_user.role.role_level == 'brand' || current_user.role.role_level == 'client')
+		- if wizard_done?
+			- if (current_user.role.role_level == 'brand' || current_user.role.role_level == 'client')
+				li.user-menu
+					a href="javascript:;" data-toggle="dropdown"
+						= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
+					- if current_user.role.role_level == 'client'
+						ul.dropdown-menu
+							- current_client.brands.each do |brand|
+								li
+									- if current_brand.name == brand.name
+										= link_to "#{brand.name}<i class='icon-glyph-26 pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
+									- else
+										= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put						
+		- if wizard_done?
+			li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
+				a href="javascript:;" data-toggle="dropdown" 
+					= current_user.username 
+					/img.header-avatar.img-circle src="/img/avatar-mummy.png"
+					= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle with-gap"
+				ul.dropdown-menu
 
-			li.user-menu
-				a href="javascript:;" data-toggle="dropdown"
-					= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
-				- if current_user.role.role_level == 'client'
-					ul.dropdown-menu
-						- current_client.brands.each do |brand|
-							li
-								- if current_brand.name == brand.name
-									= link_to "#{brand.name}<i class='icon-glyph-26 pull-right green-color'></i>".html_safe, change_brand_path(brand_id: brand.id), method: :put
-								- else
-									= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put						
-
-		li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
-			a href="javascript:;" data-toggle="dropdown" 
-				= current_user.username 
-				/img.header-avatar.img-circle src="/img/avatar-mummy.png"
-				= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle with-gap"
+					li
+						= link_to "Manage this account", account_path(username: current_user.username)
+					li.dropdown-submenu
+						= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
+							
+		- else
+			li class="user-menu"
+				a href="javascript:;" data-toggle="dropdown" 
+					= current_user.username 
+					/img.header-avatar.img-circle src="/img/avatar-mummy.png"
+					= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle with-gap"
 				
-			ul.dropdown-menu
+				ul.dropdown-menu
 
-				li
-					= link_to "Manage this account", account_path(username: current_user.username)
-				li.dropdown-submenu
-					= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
+					li
+						= link_to "Manage this account", account_path(username: current_user.username)
+					li.dropdown-submenu
+						= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }
 
 javascript:
 	(function ($, window, delay) {
