@@ -23,15 +23,24 @@ class Client < ActiveRecord::Base
 
 	after_create :create_initial_role, :create_initial_setting
 
+	def on_free_trial?
+		subscriptions.find_by_plan_id(1).end_date >= Date.today
+	end
+
+	def has_paid_subscription?
+		subscriptions.where.not(plan_id: 1).map { |subs| subs.payment_provided? }.include? true
+	end
+
 	private
 
-	def create_initial_role
-		roles.create(name: "Company Administrator", description: "Client Administrators have the full access to the whole company", role_level: "client")
-		roles.create(name: "Brand Administrator", description: "Brand Administrators can manage the only brand assigned to them", role_level: "brand")
-		roles.create(name: "Branch Administrator", description: "Branch Administrators can manage the only branch assigned to them", role_level: "branch")
-	end
+		def create_initial_role
+			roles.create(name: "Company Administrator", description: "Client Administrators have the full access to the whole company", role_level: "client")
+			roles.create(name: "Brand Administrator", description: "Brand Administrators can manage the only brand assigned to them", role_level: "brand")
+			roles.create(name: "Branch Administrator", description: "Branch Administrators can manage the only branch assigned to them", role_level: "branch")
+		end
 
-	def create_initial_setting
-		Setting.create(client_id: self.id)
-	end
+		def create_initial_setting
+			Setting.create(client_id: self.id)
+		end
+
 end

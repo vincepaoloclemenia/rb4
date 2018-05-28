@@ -161,8 +161,10 @@ class Branch < ActiveRecord::Base
     records
   end
 
-  def wizard_done?
-    self.brand.client.users.includes(:role).where( roles: { role_level: [nil, "client"] } ).first.flag >= 6
-  end
+  protected
+
+    def wizard_done?
+      self.brand.client.users.includes(:role).where( roles: { role_level: [nil, "client"] } ).first.flag >= 6
+    end
 
 end

@@ -5,159 +5,160 @@
 		a.toggle-sidebar.hamburger-icon.hidden-xs.v3 data-toggle="layout-small-menu" href="javascript:;"
 				i.icon-glyph-160
 
-	nav.ps-container role="navigation"
-		ul.nav
-			li class="#{is_menu_open?('dashboard')}"
-				= link_to '<i class="fa icon-glyph-144"></i> <span>Dashboard</span>'.html_safe, dashboard_path
-			li.menu-accordion class="#{is_menu_open?('data_entry')}"
-				= link_to '<i class="fa icon-glyph-108"></i> <span>Data Entry</span>'.html_safe, 'javascript:;'
-				ul.sub-menu
-					- if view_access_control('purchases','show')
-						li class ='#{what_controller?('purchases', 'index')}'
-							= link_to "Purchases", purchases_path
-					- if view_access_control('sales','show')
-						li class ='#{what_controller?('sales', 'new')}'
-							= link_to "Sales", new_sale_path, "no-turbolink" => true
-					- if view_access_control('inventories','show')
-						li class ='#{what_controller?('inventories', 'index')}'
-							= link_to "Inventories", inventories_path
-			li.menu-accordion class="#{is_menu_open?('purchase_reports')}"
-				= link_to '<i class="fa icon-glyph-95"></i> <span>Purchase Reports</span>'.html_safe, 'javascript:;'
-				ul.sub-menu
-					- if view_access_control('purchases','show')
-						li class ='#{what_controller?('reports', 'purchase_listings')}'
-							= link_to "Purchase List", purchase_listings_path
-					li class ='#{what_controller?('reports', 'purchase_summary')}'
-						= link_to "Purchase Summary", purchase_summary_path
-					li class ='#{what_controller?('reports', 'item_purchase_detail')}'
-						= link_to "Purchase Item Detail", item_purchase_detail_path
-			li.menu-accordion class="#{is_menu_open?('labor_reports')}"
-				= link_to '<i class="fa icon-glyph-72"></i> <span>Labor Report</span>'.html_safe, 'javascript:;'
-				ul.sub-menu
-					li class = '#{what_controller?('labor_hours', 'index')}' 
-						= link_to "Labor Hours Listing", labor_hours_path
-					li class = '#{what_controller?('reports', 'man_hours')}'
-						= link_to "Man Hours Report", man_hours_path
-			li.menu-accordion class="#{is_menu_open?('sales_reports')}"
-				= link_to '<i class="fa icon-glyph-14"></i> <span>Sales Report</span>'.html_safe, 'javascript:;'
-				ul.sub-menu
-					- if view_access_control("sales","show")
-						li class = '#{what_controller?('sales', 'index')}'
-							= link_to "Daily & Weekly Sales Reports", sales_path
-			
-			li.menu-accordion class="#{is_menu_open?('purchasing')}"
-				= link_to '<i class="fa icon-glyph-109"></i> <span>Purchasing</span>'.html_safe, 'javascript:;'
-				ul.sub-menu					
-					li class = '#{what_controller?('purchase_order_generator', 'index')}'
-						= link_to "Purchase Order Generator", purchase_order_generator_index_path					
-					li class = '#{what_controller?('purchase_orders', 'index')}'
-						= link_to "Pending Purchase Orders", purchase_orders_path
-					li class = '#{what_controller?('purchase_orders_summary', 'index')}'
-						= link_to "Summary", purchase_orders_summary_index_path	
+	- if current_client.on_free_trial? || current_client.has_paid_subscription?
+		nav.ps-container role="navigation"
+			ul.nav
+				li class="#{is_menu_open?('dashboard')}"
+					= link_to '<i class="fa icon-glyph-144"></i> <span>Dashboard</span>'.html_safe, dashboard_path
+				li.menu-accordion class="#{is_menu_open?('data_entry')}"
+					= link_to '<i class="fa icon-glyph-108"></i> <span>Data Entry</span>'.html_safe, 'javascript:;'
+					ul.sub-menu
+						- if view_access_control('purchases','show')
+							li class ='#{what_controller?('purchases', 'index')}'
+								= link_to "Purchases", purchases_path
+						- if view_access_control('sales','show')
+							li class ='#{what_controller?('sales', 'new')}'
+								= link_to "Sales", new_sale_path, "no-turbolink" => true
+						- if view_access_control('inventories','show')
+							li class ='#{what_controller?('inventories', 'index')}'
+								= link_to "Inventories", inventories_path
+				li.menu-accordion class="#{is_menu_open?('purchase_reports')}"
+					= link_to '<i class="fa icon-glyph-95"></i> <span>Purchase Reports</span>'.html_safe, 'javascript:;'
+					ul.sub-menu
+						- if view_access_control('purchases','show')
+							li class ='#{what_controller?('reports', 'purchase_listings')}'
+								= link_to "Purchase List", purchase_listings_path
+						li class ='#{what_controller?('reports', 'purchase_summary')}'
+							= link_to "Purchase Summary", purchase_summary_path
+						li class ='#{what_controller?('reports', 'item_purchase_detail')}'
+							= link_to "Purchase Item Detail", item_purchase_detail_path
+				li.menu-accordion class="#{is_menu_open?('labor_reports')}"
+					= link_to '<i class="fa icon-glyph-72"></i> <span>Labor Report</span>'.html_safe, 'javascript:;'
+					ul.sub-menu
+						li class = '#{what_controller?('labor_hours', 'index')}' 
+							= link_to "Labor Hours Listing", labor_hours_path
+						li class = '#{what_controller?('reports', 'man_hours')}'
+							= link_to "Man Hours Report", man_hours_path
+				li.menu-accordion class="#{is_menu_open?('sales_reports')}"
+					= link_to '<i class="fa icon-glyph-14"></i> <span>Sales Report</span>'.html_safe, 'javascript:;'
+					ul.sub-menu
+						- if view_access_control("sales","show")
+							li class = '#{what_controller?('sales', 'index')}'
+								= link_to "Daily & Weekly Sales Reports", sales_path
+				
+				li.menu-accordion class="#{is_menu_open?('purchasing')}"
+					= link_to '<i class="fa icon-glyph-109"></i> <span>Purchasing</span>'.html_safe, 'javascript:;'
+					ul.sub-menu					
+						li class = '#{what_controller?('purchase_order_generator', 'index')}'
+							= link_to "Purchase Order Generator", purchase_order_generator_index_path					
+						li class = '#{what_controller?('purchase_orders', 'index')}'
+							= link_to "Pending Purchase Orders", purchase_orders_path
+						li class = '#{what_controller?('purchase_orders_summary', 'index')}'
+							= link_to "Summary", purchase_orders_summary_index_path	
 
-			li.menu-accordion class="#{is_menu_open?('management_reports')}"
-				= link_to '<i class="fa icon-glyph-63"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
-				ul.sub-menu
-					li class = '#{what_controller?('directionals', 'index')}'
-						= link_to "Directionals", directionals_path
-					li class = '#{what_controller?('item_cost_analysis_reports', 'index')}'
-						= link_to "Item Cost Analysis", item_cost_analysis_reports_path
-					li class = '#{what_controller?('reports', 'invoice_entry_report')}'
-						= link_to "Invoice Entry", invoice_entry_report_path
-					li class = '#{what_controller?('reports', 'price_movement_report')}'
-						= link_to "Price Movement", price_movement_report_path
-					li class = '#{what_controller?('profit_and_losses', 'index')}'
-						= link_to "Profit and Loss", profit_and_losses_path
-			li.menu-accordion class="#{is_menu_open?('accounts_management')}"
-				= link_to '<i class="fa icon-glyph-83"></i> <span>Accounts Management</span>'.html_safe, 'javascript:;'
-				ul.sub-menu
-					- if view_access_control("users","show")
-						li class = '#{what_controller?('users', 'index')}'
-							= link_to "Users", company_users_path
-					- if view_access_control("roles","show")
-						li class = '#{what_controller?('roles', 'index')}'
-							= link_to "Roles", roles_path
-			li.menu-accordion class="#{is_menu_open?('setup')}"
-				a href="javascript:;"
-					i.fa.icon-glyph-67
-					span  Setup
-				ul.sub-menu
-					li.menu-accordion class="#{is_menu_open?('company_setup')}"
-						= link_to '<i class="toggle-accordion"></i> <span>Company Setup</span>'.html_safe, 'javascript:;'
-						ul.sub-menu
-							- if view_access_control("clients","show")
-								li class ='#{what_controller?('clients', 'show')}'
-									= link_to "Company", client_path
-							- if view_access_control("brands","show")
-								li class ='#{what_controller?('brands', 'index')}'
-									= link_to "Brands & Branches", brands_path
-					li.menu-accordion class="#{is_menu_open?('labor_setup')}"
-						= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
-						ul.sub-menu
-							li class = '#{what_controller?('employees', 'index')}'
-								= link_to "Employee List", employees_path
-							li class = '#{what_controller?('employee_types', 'index')}'
-								= link_to "Employee Types", employee_types_path
-					li.menu-accordion class="#{is_menu_open?('sales_setup')}"
-						= link_to '<i class="toggle-accordion"></i> <span>Sales Setup</span>'.html_safe, 'javascript:;'
-						ul.sub-menu
-							li
-								= link_to "Non Sales Misc", 'javascript:;'
-							li
-								= link_to "Sales Statistics", 'javascript:;'
-							li
-								= link_to "Revenues", 'javascript:;'
-							- if view_access_control('settlements','show')
-								li class = '#{what_controller?('settlements', 'index')}'
-									= link_to "Settlements", settlements_path
-							- if view_access_control('shifts','show')
-								li class = '#{what_controller?('shifts', 'index')}'
-									= link_to "Shift", shifts_path
-					li.menu-accordion class="#{is_menu_open?('purchase_setup')}"
-						= link_to '<i class="toggle-accordion"></i> <span>Purchase Setup</span>'.html_safe, 'javascript:;'
-						ul.sub-menu
-							- if view_access_control('units','show')
-								li class = '#{what_controller?('units', 'index')}'
-									= link_to "Units", units_path
-							- if view_access_control('categories','show')
-								li class = '#{what_controller?('categories', 'index')}'
-									= link_to "Categories", categories_path
-							- if view_access_control('items','show')
-								li class = '#{what_controller?('items', 'index')}'
-									= link_to "Items", items_path
-							- if view_access_control('conversions','show')
-								li class = '#{what_controller?('conversions', 'index')}'
-									= link_to "Conversions", conversions_path
-							- if view_access_control('suppliers','show')
-								li class = '#{what_controller?('suppliers', 'index')}'
-									= link_to "Suppliers", suppliers_path
-			- if view_access_control("subscriptions","show")
-				li class="#{is_menu_open?('subscriptions')}"
-					= link_to "<i class='fa icon-glyph-170'></i> <span>Subscriptions</span>".html_safe, subscriptions_path
-			- if view_access_control("bills","show")
-				li class="#{is_menu_open?('billing')}"
-					= link_to "<i class='fa icon-glyph-56'></i> <span>Billing</span>".html_safe, bills_path
-					/= link_to "<i class='fa icon-maxicons1-money'></i> <span>Billing</span> <span class='label bg-danger pull-right'>2</span>".html_safe, bills_path
-				//span.label.bg-danger.pull-right 2
-			li
-				a href="#{settings_path}"
-					i.fa.icon-glyph-90
-					span Settings
-				/ ul.sub-menu
-				/ 	li
-				/ 		a href="javascript:;"
-				/ 			span Subscriptions List
-				/ 	li
-				/ 		a href="javascript:;"
-				/ 			span Billing
-			li.visible-xs
-				a href="!"
-					i.fa.icon-glyph-73
-					span Support
-			.pg-scrollbar-x-rail style="left: 0px; bottom: 3px; display: block;"
-				.ps-scrollbar-x style="left: 0px; width: 0px;"
-			.pg-scrollbar-y-rail style="top: 0px; height: 639px; right: 0px; display: block;"
-				.ps-scrollbar-y style="top: 0px; height: 0px;"
+				li.menu-accordion class="#{is_menu_open?('management_reports')}"
+					= link_to '<i class="fa icon-glyph-63"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'
+					ul.sub-menu
+						li class = '#{what_controller?('directionals', 'index')}'
+							= link_to "Directionals", directionals_path
+						li class = '#{what_controller?('item_cost_analysis_reports', 'index')}'
+							= link_to "Item Cost Analysis", item_cost_analysis_reports_path
+						li class = '#{what_controller?('reports', 'invoice_entry_report')}'
+							= link_to "Invoice Entry", invoice_entry_report_path
+						li class = '#{what_controller?('reports', 'price_movement_report')}'
+							= link_to "Price Movement", price_movement_report_path
+						li class = '#{what_controller?('profit_and_losses', 'index')}'
+							= link_to "Profit and Loss", profit_and_losses_path
+				li.menu-accordion class="#{is_menu_open?('accounts_management')}"
+					= link_to '<i class="fa icon-glyph-83"></i> <span>Accounts Management</span>'.html_safe, 'javascript:;'
+					ul.sub-menu
+						- if view_access_control("users","show")
+							li class = '#{what_controller?('users', 'index')}'
+								= link_to "Users", company_users_path
+						- if view_access_control("roles","show")
+							li class = '#{what_controller?('roles', 'index')}'
+								= link_to "Roles", roles_path
+				li.menu-accordion class="#{is_menu_open?('setup')}"
+					a href="javascript:;"
+						i.fa.icon-glyph-67
+						span  Setup
+					ul.sub-menu
+						li.menu-accordion class="#{is_menu_open?('company_setup')}"
+							= link_to '<i class="toggle-accordion"></i> <span>Company Setup</span>'.html_safe, 'javascript:;'
+							ul.sub-menu
+								- if view_access_control("clients","show")
+									li class ='#{what_controller?('clients', 'show')}'
+										= link_to "Company", client_path
+								- if view_access_control("brands","show")
+									li class ='#{what_controller?('brands', 'index')}'
+										= link_to "Brands & Branches", brands_path
+						li.menu-accordion class="#{is_menu_open?('labor_setup')}"
+							= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
+							ul.sub-menu
+								li class = '#{what_controller?('employees', 'index')}'
+									= link_to "Employee List", employees_path
+								li class = '#{what_controller?('employee_types', 'index')}'
+									= link_to "Employee Types", employee_types_path
+						li.menu-accordion class="#{is_menu_open?('sales_setup')}"
+							= link_to '<i class="toggle-accordion"></i> <span>Sales Setup</span>'.html_safe, 'javascript:;'
+							ul.sub-menu
+								li
+									= link_to "Non Sales Misc", 'javascript:;'
+								li
+									= link_to "Sales Statistics", 'javascript:;'
+								li
+									= link_to "Revenues", 'javascript:;'
+								- if view_access_control('settlements','show')
+									li class = '#{what_controller?('settlements', 'index')}'
+										= link_to "Settlements", settlements_path
+								- if view_access_control('shifts','show')
+									li class = '#{what_controller?('shifts', 'index')}'
+										= link_to "Shift", shifts_path
+						li.menu-accordion class="#{is_menu_open?('purchase_setup')}"
+							= link_to '<i class="toggle-accordion"></i> <span>Purchase Setup</span>'.html_safe, 'javascript:;'
+							ul.sub-menu
+								- if view_access_control('units','show')
+									li class = '#{what_controller?('units', 'index')}'
+										= link_to "Units", units_path
+								- if view_access_control('categories','show')
+									li class = '#{what_controller?('categories', 'index')}'
+										= link_to "Categories", categories_path
+								- if view_access_control('items','show')
+									li class = '#{what_controller?('items', 'index')}'
+										= link_to "Items", items_path
+								- if view_access_control('conversions','show')
+									li class = '#{what_controller?('conversions', 'index')}'
+										= link_to "Conversions", conversions_path
+								- if view_access_control('suppliers','show')
+									li class = '#{what_controller?('suppliers', 'index')}'
+										= link_to "Suppliers", suppliers_path
+				- if view_access_control("subscriptions","show")
+					li class="#{is_menu_open?('subscriptions')}"
+						= link_to "<i class='fa icon-glyph-170'></i> <span>Subscriptions</span>".html_safe, subscriptions_path
+				- if view_access_control("bills","show")
+					li class="#{is_menu_open?('billing')}"
+						= link_to "<i class='fa icon-glyph-56'></i> <span>Billing</span>".html_safe, bills_path
+						/= link_to "<i class='fa icon-maxicons1-money'></i> <span>Billing</span> <span class='label bg-danger pull-right'>2</span>".html_safe, bills_path
+					//span.label.bg-danger.pull-right 2
+				li
+					a href="#{settings_path}"
+						i.fa.icon-glyph-90
+						span Settings
+					/ ul.sub-menu
+					/ 	li
+					/ 		a href="javascript:;"
+					/ 			span Subscriptions List
+					/ 	li
+					/ 		a href="javascript:;"
+					/ 			span Billing
+				li.visible-xs
+					a href="!"
+						i.fa.icon-glyph-73
+						span Support
+				.pg-scrollbar-x-rail style="left: 0px; bottom: 3px; display: block;"
+					.ps-scrollbar-x style="left: 0px; width: 0px;"
+				.pg-scrollbar-y-rail style="top: 0px; height: 639px; right: 0px; display: block;"
+					.ps-scrollbar-y style="top: 0px; height: 0px;"
 
 
 javascript:

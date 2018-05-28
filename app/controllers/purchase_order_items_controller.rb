@@ -1,6 +1,6 @@
 class PurchaseOrderItemsController < ApplicationController
 	before_action :authenticate_user!
-	# before_action :access_control
+	before_action :access_control
 
 	def index
 		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])

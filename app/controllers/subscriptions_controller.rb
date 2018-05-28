@@ -70,7 +70,8 @@ class SubscriptionsController < ApplicationController
 	      return_url: process_subscription_url(:plan_id => plan.id, branches: branches),
 	      cancel_url: subscriptions_url,
 	      description: "#{subscription.plan.name} for a total of #{branches.count} #{'branch'.pluralize(branches.count)}",
-	      amount: subscription.plan.amount * branches.count
+				amount: subscription.plan.amount * branches.count,
+				currency: "PHP"
 	    )
 	 	end
 	end

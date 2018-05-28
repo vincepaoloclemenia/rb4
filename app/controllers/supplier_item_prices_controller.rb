@@ -1,6 +1,6 @@
 class SupplierItemPricesController < ApplicationController
-	# before_action :authenticate_user!
-	# before_action :access_control
+	before_action :authenticate_user!
+	before_action :access_control
 
 	def index
 		@supplier_item_prices = SupplierItemPrice.where(supplier_id: params[:sp])

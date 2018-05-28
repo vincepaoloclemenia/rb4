@@ -26,6 +26,14 @@ class UserPresenter < BasePresenter
         end
     end
 
+    def client_on_free_trial?
+        user.client.on_free_trial?
+    end
+
+    def has_paid_subscriptions?
+        user.client.has_paid_subscription?
+    end
+
     private
 
         def permitted?(page)

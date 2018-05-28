@@ -38,7 +38,7 @@
 		.col-xs-12
 			hr
 				p
-					| Rate per branch: $ 
+					| Rate per branch: Php 
 					span#amount-value
 					| &nbsp;
 					span#period-value
@@ -55,7 +55,7 @@
 								td style="text-align: right"
 									b Total
 								td#total style="text-align: right"
-									b $ 0.00
+									b Php 0.00
 			hr
 	.modal-footer.no-border
 		span.inline.float-right
@@ -84,9 +84,9 @@ javascript:
 			$.each(selected, function( index, value ){
 				var id = $(this).prop("id");
 				var label = $("label[for="+id+"]");
-				$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>$ "+amount+"</td><tr>");
+				$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>Php "+amount+"</td><tr>");
 			});
-			$('#total').html("<b>$ "+selected.length * amount+"<br>"+period+"</b>");
+			$('#total').html("<b>Php "+selected.length * amount+"<br>"+period+"</b>");
 		});
 	});
 
@@ -98,9 +98,9 @@ javascript:
 		$.each(selected, function( index, value ){
 			var id = $(this).prop("id");
 			var label = $("label[for="+id+"]");
-			$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>$ "+amount+"</td><tr>");
+			$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>Php "+amount+"</td><tr>");
 		});
-		$('#total').html("<b>$ "+selected.length * amount+"<br>"+period+"</b>");
+		$('#total').html("<b>Php "+selected.length * amount+"<br>"+period+"</b>");
 	});
 
 	$('form').submit(function(e){

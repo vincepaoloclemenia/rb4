@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   
 	before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :find_wizard_flag
+  #before_action :access_control, if: :wizard_done?
   #before_action :restrict_users
 
   helper_method :current_client, :current_brand, :view_access_control
@@ -100,6 +101,10 @@ class ApplicationController < ActionController::Base
       devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:flag, :username, :email, :password, :password_confirmation, :remember_me) }
       devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
       devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
+    end
+
+    def wizard_done?
+      current_client.users.includes(:role).where( roles: { role_level: [ nil, "client"] }).first.flag >= 6
     end
 
     def access_control
