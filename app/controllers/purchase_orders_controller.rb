@@ -157,12 +157,13 @@ class PurchaseOrdersController < ApplicationController
 
 	def mail_bulk_of_purchase_orders
 		@pos = current_brand.purchase_orders.where(id: params[:purchase_orders])
+		@date = params[:po_email][:delivery_date]
+		@time = params[:po_email][:delivery_time]
+		@pos.map { |purchase_order| purchase_order.update( po_date: Date.today, po_number: po_approval_format(purchase_order, delivery_time: @time, delivery_date: @date ) ) }
 		@purchase_orders = @pos.group_by { |pur| pur.branch.name }
 		@subject = params[:po_email][:subject]
 		@contact = params[:po_email][:contact_person]
 		@address = params[:po_email][:delivery_address]
-		@date = params[:po_email][:delivery_date]
-		@time = params[:po_email][:delivery_time]
 		@supplier = Supplier.find(params[:supplier])
 		@message = params[:po_email][:body]
 		@recipients = params[:po_email][:recipients]
