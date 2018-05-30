@@ -14,9 +14,13 @@ class Subscription < ActiveRecord::Base
     where("plan_id != ?", 1)
   end
 
+  def payment_provided?
+    paypal_payment_token.present?
+  end
+
   def save_with_payment
     if valid?
-      if paypal_payment_token.present?
+      if payment_provided?
         save_with_paypal_payment
       end
     end
@@ -30,7 +34,7 @@ class Subscription < ActiveRecord::Base
     response = paypal.make_recurring
     self.paypal_recurring_profile_token = response.profile_id
     self.paypal_email = self.paypal.checkout_details.email
-    self.status = "Processing"
+    self.status = "Active"
     # self.start_date = DateTime.now
     # case self.plan_id
     # when 2
@@ -41,10 +45,6 @@ class Subscription < ActiveRecord::Base
     # end
 
     save!
-  end
-
-  def payment_provided?
-    paypal_payment_token.present?
   end
 
   # Remove subscription of branches with 'Cancelled' subscription

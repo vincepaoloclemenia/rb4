@@ -9,8 +9,8 @@ class Client < ActiveRecord::Base
 	has_many :suppliers
 	has_many :purchases
 	has_many :purchase_items, through: :purchases
-	has_many :subscriptions
-	has_many :bills, through: :subscriptions
+	has_one :subscription
+	#has_many :bills, through: :subscriptions
 	has_one :setting, dependent: :destroy
 	has_many :purchase_orders, dependent: :destroy
 	has_many :order_lists, through: :brands, dependent: :destroy
@@ -23,12 +23,24 @@ class Client < ActiveRecord::Base
 
 	after_create :create_initial_role, :create_initial_setting
 
+	def free_trial? 
+		subscription.plan_id == 1
+	end
+
 	def on_free_trial?
-		subscriptions.find_by_plan_id(1).end_date >= Date.today
+		free_trial? && subscription.end_date >= Date.today
+	end
+
+	def free_trial_expired?
+		free_trial? && subscription.end_date <= Date.today
 	end
 
 	def has_paid_subscription?
-		subscriptions.where.not(plan_id: 1).map { |subs| subs.payment_provided? }.include? true
+		subscription.plan_id != 1 && subscription.payment_provided? && subscription.end_date >= Date.today
+	end 
+
+	def unpaid_subscription?
+		subscription.plan_id != 1 && subscription.payment_provided? && subscription.end_date <= Date.today		
 	end
 
 	private

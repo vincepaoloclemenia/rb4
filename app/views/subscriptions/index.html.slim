@@ -1,17 +1,27 @@
 - content_for :title, 'Restobot | Subscriptions'
 .panel
 	.panel-heading.border.pb45
-		.pull-left.mt7 Subscriptions
+		.pull-left.mt7 Your Current Subscription
+
 		.pull-right
 			- if view_access_control('subscriptions','create')
-				= link_to "<i class='icon-glyph-164 f14 mr5'></i> New Subscription".html_safe, new_subscription_path, class: "btn btn-success btn-round btn-outline", remote: true
+				= link_to "<i class='icon-glyph-164 f14 mr5'></i> Subscribe".html_safe, subscribe_subscriptions_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
+		- if current_client.free_trial_expired?
+			.alert.alert-danger role="alert"
+				.row
+					.hidden-xs.col-sm-1.text-right
+						i.icon-glyph-93.f35
+					.col-xs-11.mt5
+						| Your Free Trial has already Expired. To continue using Restobot, please subscribe now.
+						/- if subtitle
+						/	br = subtitle.html_safe
 		- if @free_trial
 			.no-more-tables
 				table.table.table-bordered.table-striped.mb0
 					thead
 						tr.bg-thead
-							th width="180" Plan
+							th width="180" Subscription Type
 							th width="200" Branches
 							th width="180" Start date
 							th width="180" End date
@@ -20,10 +30,16 @@
 					tbody
 						tr
 							td = @free_trial.plan.name
-							td = @free_trial.branches.pluck(:name).join(", ")
+							td 
+								= link_to @branches_count, show_branches_subscriptions_path, class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "More Info" }, remote: true
 							td = to_default_date_format(@free_trial.start_date)
 							td = to_default_date_format(@free_trial.end_date)
-							td = distance_of_time_in_words_to_now(@free_trial.end_date)
+							td 
+								- if current_client.free_trial?
+									span class="#{current_client.on_free_trial? ? 'green' : 'red'}" = distance_of_time_in_words_to_now(@free_trial.end_date)
+								- elsif current_client.has_paid_subscription?
+									span class="#{current_client.has_paid_subscription? ? 'green' : 'red'}" = distance_of_time_in_words_to_now(@free_trial.end_date)
+
 							td = @free_trial.status
 				hr
 
@@ -58,4 +74,4 @@
 		/								- unless subscription.cancelled?
 		/									= link_to "Cancel", cancel_subscription_path(subscription), method: :delete, class: "btn btn-xs btn-danger", data: { confirm: "Are you sure want to cancel?" }
 /
-/= render "partials/modal"
+= render "partials/modal"

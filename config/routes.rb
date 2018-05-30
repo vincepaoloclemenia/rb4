@@ -54,7 +54,8 @@ Rails.application.routes.draw do
     resources :purchase_items
   end
   resources :subscriptions do
-    get 'show_branches'
+    get 'show_branches', on: :collection
+    get 'subscribe', on: :collection
   end
 
   resources :purchase_order_generator, only: [:index, :new] do

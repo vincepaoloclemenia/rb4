@@ -1,2 +1,14 @@
-- @subscription.branches.pluck(:name).each do |b|
-	p = b
+.panel
+	- @branches.pluck(:name).each do |b|
+		.row.mb15.ml15
+			.col-xs-6
+				p = b
+			.col-xs-6
+				p = "#{ current_client.on_free_trial? ? 'Php 0.00 / month' : 'Php 2500 / month'}"
+
+	.row.mt15
+		.col-xs-6
+			p <b> Total: </b>
+		.col-xs-6
+			p
+				b = "Php #{ current_client.on_free_trial? ? '0.00' : @branches.count * 2500 } monthly subscription"

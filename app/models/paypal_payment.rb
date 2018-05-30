@@ -32,7 +32,7 @@ private
       # description: "#{@subscription.plan.name} payment for a total of #{} #{'branch'.pluralize(@subscription.branches.count)}",
       # amount: @subscription.plan.price * @subscription.branches.count,
       ipn_url: ipn_url,
-      currency: "USD"
+      currency: "PHP"
     )
     response = PayPal::Recurring.new(options).send(action)
     raise response.errors.inspect if response.errors.present?

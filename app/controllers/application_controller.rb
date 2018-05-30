@@ -9,10 +9,14 @@ class ApplicationController < ActionController::Base
   #before_action :access_control, if: :wizard_done?
   #before_action :restrict_users
 
-  helper_method :current_client, :current_brand, :view_access_control
+  helper_method :current_client, :current_brand, :view_access_control, :current_subscription
 
   def current_client
     current_user.client
+  end
+
+  def current_subscription
+    current_client.subscription
   end
 
   def type_of_user?(user)
@@ -109,15 +113,23 @@ class ApplicationController < ActionController::Base
 
     def access_control
       section = Section.find_by_name(params[:controller])  
-      if section && user_signed_in?
-        if ["index","update","create","destroy"].include?(params[:action])
-          action = params[:action].eql?("index") ? "is_read" : "is_#{params[:action]}"  
-          permission = current_user.role.permissions.find_by_section_id(section.id)
-          unless permission.send(action.to_sym)
-            respond_to do |format|
-              format.html { redirect_to dashboard_path, alert: "Access denied" }
+      if current_client.has_paid_subscription? || current_client.on_free_trial?
+        if section && user_signed_in?
+          if ["index","update","create","destroy"].include?(params[:action])
+            action = params[:action].eql?("index") ? "is_read" : "is_#{params[:action]}"  
+            permission = current_user.role.permissions.find_by_section_id(section.id)
+            unless permission.send(action.to_sym)
+              respond_to do |format|
+                format.html { redirect_to dashboard_path, alert: "Access denied" }
+              end
             end
           end
+        end
+      else
+        if current_client.free_trial_expired?
+          redirect_to subscriptions_path, alert: "Sorry, your free trial has already expired"
+        elsif current_client.unpaid_subscription?
+          redirect_to subscriptions_path, alert: "Sorry, you have reached your due for subscription usage. Please pay your balance to continue using Restobot. Thank you."
         end
       end
     end
