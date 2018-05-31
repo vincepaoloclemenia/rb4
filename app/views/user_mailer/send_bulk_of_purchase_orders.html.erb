@@ -13,6 +13,7 @@
     table { padding: 5px }
     tr.highlighted { background-color: #C0EBFD }
     td.bold { font-weight: 700 }
+    span.branch-label: { margin-left: 15px; font-weight: 700 }
     td.align-right { text-align: right }
     p.pdf-body{ font-family: 'Open Sans', sans-serif;font-size: 15px; text-justify: justify; margin-top: 15px; color: grey; z-index: 999; }
     .row { margin-right: -15px; margin-left: -15px }
@@ -81,7 +82,6 @@
             <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
                 <thead>
                     <tr>
-                        <th>Branch Name</th>
                         <th>Item Name</th>
                         <th>Packaging</th>
                         <th>Quantity</th>
@@ -92,15 +92,20 @@
                 </thead>
                 <tbody>
                     <% @purchase_orders.keys.each do |branch| %>
-                        <tr>
-                            <td>
-                                <%= branch %>
+                        <% @purchase_orders[branch].map do |pur| %>
+                        <tr >   
+                            <td colspan='6'>
+                                Branch: <span class='branch-label'><%= pur.branch.name %></span>
+                                <br/>
+                                PO Number: <span class='branch-label'><%= pur.po_number %></span>
+                                <br/>
+                                Delivery Date: <span class='branch-label'><%= pur.delivery_date.strftime("%b %d, %Y") %></span>
+                                <br/>
+                                Delivery Time: <span class='branch-label'><%= pur.delivery_time %></span>
                             </td>
                         </tr>
-                        <% @purchase_orders[branch].map do |pur| %>
                             <% pur.purchase_order_items.map do |pi| %>
                                 <tr>
-                                    <td></td>
                                     <td>
                                         <%= pi.item.name %>
                                     </td>
@@ -122,15 +127,15 @@
                                 </tr>
                             <% end %>
                             <tr class='highlighted'>
-                                <td colspan='6'>Subtotal</td>
+                                <td colspan='5'>Subtotal</td>
                                 <td class='bold'><%= number_to_currency(pur.sub_total, unit: "₱ ") %></td>
                             </tr>
                             <tr class='highlighted'>
-                                <td colspan='6'>12% VAT</td>
+                                <td colspan='5'>12% VAT</td>
                                 <td class='bold'><%= number_to_currency(pur.vat, unit: "₱ ") %></td>
                             </tr>
                             <tr class='highlighted'>
-                                <td colspan='6'>Total</td>
+                                <td colspan='5'>Total</td>
                                 <td class='bold'><%= number_to_currency(pur.total_amount, unit: "₱ ") %></td>
                             </tr>
                         <% end %>

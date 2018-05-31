@@ -24,9 +24,9 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				td data-title="Date" = purchase.purchase_date.strftime("%b %d %Y")
 				td data-title="Branch" = purchase.branch.name
 				td data-title="Supplier" = purchase.supplier.name
-				td data-title="Net Amount" = to_peso(nvt[:net])
-				td data-title="VAT Amount" = to_peso(nvt[:vat])
-				td data-title="Total Amount" = to_peso(nvt[:total])
+				td data-title="Net Amount" = to_peso(purchase.overall_net)
+				td data-title="VAT Amount" = to_peso(purchase.overall_vat)
+				td data-title="Total Amount" = to_peso(purchase.overall_amount)
 				td.action data-title="Action"
 					= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, purchase_purchase_items_path(purchase_id: purchase.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Items" }
 					- if view_access_control('purchases','update')

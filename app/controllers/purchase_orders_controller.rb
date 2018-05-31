@@ -14,7 +14,7 @@ class PurchaseOrdersController < ApplicationController
 		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
 		if current_user.role.role_level.eql? 'branch'
 			@po_number = po_number_format(current_user.branch) 
-			@po_ref =  PurchaseOrder.all.select(:id).order("id ASC").last.nil? ? 1 : (PurchaseOrder.all.select(:id).order("id ASC").last.id + 1).to_s
+			@po_ref =  PurchaseOrder.all.present? ? PurchaseOrder.maximum(:id).next : 1 
 		end
 	end
 
@@ -157,9 +157,9 @@ class PurchaseOrdersController < ApplicationController
 
 	def mail_bulk_of_purchase_orders
 		@pos = current_brand.purchase_orders.where(id: params[:purchase_orders])
-		@date = params[:po_email][:delivery_date]
+		@date = Date.strptime(params[:po_email][:delivery_date], "%m/%d/%Y")
 		@time = params[:po_email][:delivery_time]
-		@pos.map { |purchase_order| purchase_order.update( po_date: Date.today, po_number: po_approval_format(purchase_order, delivery_time: @time, delivery_date: @date ) ) }
+		@pos.map { |purchase_order| purchase_order.update( po_date: Date.today, po_number: po_approval_format(purchase_order), delivery_time: @time, delivery_date: @date ) }
 		@purchase_orders = @pos.group_by { |pur| pur.branch.name }
 		@subject = params[:po_email][:subject]
 		@contact = params[:po_email][:contact_person]

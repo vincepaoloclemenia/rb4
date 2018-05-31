@@ -8,7 +8,7 @@ class Purchase < ActiveRecord::Base
 	belongs_to :created_by, class_name: 'User', :foreign_key => 'user_created_by_id'
 	belongs_to :modified_by, class_name: 'User', foreign_key: 'user_modified_by_id'
 	
-	default_scope -> { order(created_at: :desc)}
+	default_scope -> { order(purchase_date: :desc)}
 
 	accepts_nested_attributes_for :purchase_items,  :reject_if => :all_blank, :allow_destroy => :true
 
@@ -57,6 +57,18 @@ class Purchase < ActiveRecord::Base
 		end
 		
 		return { net: total_net, vat: total_vat, total: total_amount }
+	end
+
+	def overall_vat
+		purchase_items.map(&:item_total_vat).sum.round(2)
+	end
+
+	def overall_net
+		purchase_items.map(&:item_total_net).sum.round(2)
+	end
+
+	def overall_amount
+		purchase_items.map(&:item_total_amount).sum.round(2)
 	end
 
 	def self.with_purchase_items

@@ -30,7 +30,7 @@ class UserMailer < ApplicationMailer
 		@address = address
 		@time = time
 		@contact = contact
-		@date = Date.strptime(date, "%m/%d/%Y")
+		@date = date
 		@subject = subject
 		@body = message
 		mail(to: @email, subject: @subject, content_type: 'text/html')

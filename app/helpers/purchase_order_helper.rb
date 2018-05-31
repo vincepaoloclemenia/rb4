@@ -18,9 +18,13 @@ module PurchaseOrderHelper
     end
 
     def po_approval_format(po)
-      ref = "%02d" % po.po_reference
-      date = Date.today.strftime('%m%d%y') 
-      return "PO-#{po.branch.aka}-"+ref.to_s+date.to_s
+      if po.po_reference.present?
+        ref = "%02d" % po.po_reference
+        date = Date.today.strftime('%m%d%y') 
+        return "PO-#{po.branch.aka}-"+ref.to_s+date.to_s
+      else
+        return po.pr_number.gsub('PR', 'PO')
+      end
     end
 
 end
