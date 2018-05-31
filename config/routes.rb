@@ -158,6 +158,8 @@ Rails.application.routes.draw do
       get :filtered_records_for_branch, on: :collection
     end
 
+    resources :items, only: :index
+
     resources :suppliers, only: [:create, :update]
 
     resources :activities, only: :index

@@ -17,6 +17,9 @@ class Item < ActiveRecord::Base
   pg_search_scope :search_category, associated_against: { category: [:id] },
                   using: { tsearch: { any_word: true } }
 
+  pg_search_scope :search_by_ids, against: [:id],
+                                    using: { tsearch: { any_word: true } }
+
   def self.search(term)
     if term
       where('name LIKE ?', "%#{term}%")
