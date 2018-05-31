@@ -18,7 +18,11 @@
 			= f.label :purchase_date
 				| Purchase Date
 				small.field-req  *
-			= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+			- if params[:action] == 'new'
+				= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+			- else
+				= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+
 	.row.mb10
 		.col-xs-12
 			= f.label :supplier_id, "Supplier"
@@ -45,4 +49,8 @@
 		span.inline.float-right
 			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 			|
-			= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+			- if params[:action] == 'new'
+				= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+			- else
+				= f.submit "Update", class: "btn btn-primary", data: { "disable-wth" => "Updating.." }
+

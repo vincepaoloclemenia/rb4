@@ -26,7 +26,12 @@ table.table.table-bordered.table-striped.mb0
 				td data-title="Total Action" = to_peso(pi.purchase_item_total_amount)
 				td.action data-title="Action"
 					- if view_access_control('purchase_items','destroy')
-						= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+						- if branch_admin?
+							- if purchase.allowed_to_modify?
+								= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+						- else
+							= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+
 		tr.bg-total
 			td.text-right.label-total colspan="7" Net Amount:
 			td.label-total-num colspan="2" = to_peso(purchase_items.map(&:item_total_net).sum.round(2))

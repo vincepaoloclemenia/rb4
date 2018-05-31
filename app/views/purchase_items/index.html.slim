@@ -2,9 +2,16 @@
 	.panel-heading.border.pb45
 		.pull-left.mt7 Purchase
 		.pull-right
-			button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-item-modal"
-				i.icon-maxicons2-paste.mr5
-				| Add Purchase Item
+			- if branch_admin?
+				- if @purchase.allowed_to_modify?
+					button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-item-modal"
+						i.icon-maxicons2-paste.mr5
+						| Add Purchase Item
+			- else
+				button.btn.btn-success.btn-round.btn-outline data-toggle="modal" data-target=".add-purchase-item-modal"
+					i.icon-maxicons2-paste.mr5
+					| Add Purchase Item
+
 	.panel-body
 		.no-more-tables
 			table.table.table-bordered.table-striped.mb0

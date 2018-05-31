@@ -1,0 +1,13 @@
+$('#modal h4').html('Edit Purchase <%= @purchase.invoice_number %>');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("#purchase_purchase_date").val("<%= @purchase.purchase_date.strftime("%m/%d/%Y")%>")
+
+$("[data-toggle='toggle']").bootstrapToggle();

@@ -293,10 +293,10 @@ class PurchaseList extends React.Component{
                 </div>
                 <div className='row pb10'>                  
                     <div className='col-md-6 col-xs-6 mb5'>
-                        <label htmlFor='date_range'>Branches</label>
+                        <label htmlFor='branches_names'>Branches</label>
                         <Select.Creatable
                             multi={true}
-                            name='supplier_names'
+                            name='branches_names'
                             optionClassName='form-control'
                             options={this.state.branches}
                             onChange={ value => this.setState({ branch: value }) }

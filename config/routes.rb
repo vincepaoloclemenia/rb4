@@ -145,6 +145,7 @@ Rails.application.routes.draw do
       get :searched_purchases, on: :collection
       get :export_excel, on: :collection
       get :default_excel, on: :collection
+      get :purchased_items, on: :collection
     end
 
     resources :item_and_costs, only: [] do

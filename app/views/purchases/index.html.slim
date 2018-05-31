@@ -1,55 +1,34 @@
 - content_for :title, "Restobot | Purchases"
-.collapse#show-search class="#{ 'in' if params[:q].present? }"
-	.panel
-		.panel-body
-			= search_form_for @q do |f|
-				.row
-					.col-xs-12.col-lg-3
-						= f.label :invoice_number_cont, "Invoice No."
-						= f.text_field :invoice_number_cont, class: "form-control", placeholder: "Search"
-					.col-xs-12.col-lg-3
-						= f.label :purchase_date_cont, "Purchase Date"
-						= f.text_field :purchase_date_cont, class: "form-control drp", placeholder: "Search"
-					.col-xs-12.col-lg-3
-						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: "Select Branch" }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
-					.col-xs-12.col-lg-3
-						= f.label :supplier_id_eq, "Supplier"
-						= f.select :supplier_id_eq, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
-				.row.mt10
-					.col-xs-12
-						.pull-right
-							button.btn.btn-primary data-tt="tooltip" data-placement="top"
-								| Search
 
-.panel
-	.panel-heading.border.pb45
-		.pull-left.mt7 Purchases
-		.pull-right
-			- if view_access_control('purchases','create')
-				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_path, class: "btn btn-success btn-round btn-outline", remote: true
-	.panel-body
-		- if current_brand.purchases.empty?
-			= render "partials/no_records_found", subtitle: 'To start tracking your purchase click <b>"Create Purchase"</b> button'
-		- else
-			| Show
-			.btn-group.mb10
-				- params[:show] = "10" if params[:show].nil?
-				= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
-				ul.dropdown-menu role="menu"
-					li
-						= link_to "10", purchases_path(request.params.except(:action,:controller).merge(show: "10"))
-					li
-						= link_to "25", purchases_path(request.params.except(:action,:controller).merge(show: "25"))
-					li
-						= link_to "50", purchases_path(request.params.except(:action,:controller).merge(show: "50"))
-					li
-						= link_to "100", purchases_path(request.params.except(:action,:controller).merge(show: "100"))
-					li.divider
-					li
-						= link_to "Show All", purchases_path(request.params.except(:action,:controller).merge(show: "all"))
-			.no-more-tables#purchase-list
-				= render "purchase_list", purchases: @purchases
+= react_component 'Purchases', { branchUser: branch_admin? }
+/.panel
+/	.panel-heading.border.pb45
+/		.pull-left.mt7 Purchases
+/		.pull-right
+/			- if view_access_control('purchases','create')
+/				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_path, class: "btn btn-success btn-round btn-outline", remote: true
+/	.panel-body
+/		- if current_brand.purchases.empty?
+/			= render "partials/no_records_found", subtitle: 'To start tracking your purchase click <b>"Create Purchase"</b> button'
+/		- else
+/			| Show
+/			.btn-group.mb10
+/				- params[:show] = "10" if params[:show].nil?
+/				= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
+/				ul.dropdown-menu role="menu"
+/					li
+/						= link_to "10", purchases_path(request.params.except(:action,:controller).merge(show: "10"))
+/					li
+/						= link_to "25", purchases_path(request.params.except(:action,:controller).merge(show: "25"))
+/					li
+/						= link_to "50", purchases_path(request.params.except(:action,:controller).merge(show: "50"))
+/					li
+/						= link_to "100", purchases_path(request.params.except(:action,:controller).merge(show: "100"))
+/					li.divider
+/					li
+/						= link_to "Show All", purchases_path(request.params.except(:action,:controller).merge(show: "all"))
+/			.no-more-tables#purchase-list
+/				= render "purchase_list", purchases: @purchases
 
 = render "partials/modal"
 

@@ -1,6 +1,7 @@
 class PurchasesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
+	before_action :restrict_actions, only: [:update, :destroy]
 
 	def index
 		get_total_purchases_per_branch
@@ -43,6 +44,11 @@ class PurchasesController < ApplicationController
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq		
 	end
 
+	def edit
+		@purchase = current_brand.purchases.find params[:id]
+		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq				
+	end
+
 	def create
 		@purchase = current_brand.purchases.create(purchase_params)
 		@purchase.user_created_by_id = current_user.id
@@ -55,25 +61,19 @@ class PurchasesController < ApplicationController
 		end
 	end
 
-	def update
-		@purchase = current_brand.purchases.find(params[:id])
-		respond_to do |format|
-			if @purchase.update(purchase_params)
-				@purchase.update(user_modified_by_id: current_user.id)
-				index
-				@success = true
-				flash[:notice] = "Purchase successfully updated"
-			else
-				@success = false
-				flash[:alert] = @purchase.errors.full_messages.join(", ")
-			end
-			format.js
+	def update	
+		if @purchase.update(purchase_params)
+			redirect_to purchases_path
+			flash[:notice] = "Purchase was successfully updated"
+		else
+			redirect_to purchases_path
+			flash[:alert] = @purchase.errors.full_messages.join(', ')
 		end
+		
 		#redirect_to purchases_path
 	end
 
-	def destroy
-		@purchase = current_brand.purchases.find(params[:id])
+	def destroy	
 		respond_to do |format|
 			if @purchase.destroy
 				index
@@ -90,15 +90,23 @@ class PurchasesController < ApplicationController
 
 	private
 
-	def purchase_params
-		if params[:purchase][:purchase_date].present?
-			params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
+		def purchase_params
+			if params[:purchase][:purchase_date].present?
+				params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
+			end
+			params.require(:purchase).permit(:branch_id, :purchase_date, :invoice_number, :supplier_id)
 		end
-		params.require(:purchase).permit(:branch_id, :purchase_date, :invoice_number, :supplier_id)
-	end
 
-	def per_page
-		params[:show].eql?('all') ? current_brand.purchases.count : params[:show]
-		return 10 if params[:show].nil?
-	end
+		def per_page
+			params[:show].eql?('all') ? current_brand.purchases.count : params[:show]
+			return 10 if params[:show].nil?
+		end
+
+		def restrict_actions
+			@purchase = current_brand.purchases.find(params[:id])
+			if branch_admin? && @purchase.unable_to_modify?
+				redirect_to purchases_path
+				flash[:alert] = "Unable to delete or edit. You can only do these actions within 12 hours after creation"
+			end
+		end
 end

@@ -19,10 +19,18 @@ class Purchase < ActiveRecord::Base
 	pg_search_scope :search_purchase_item, associated_against: { purchase_items: [:item_id] }, using: { tsearch: { any_word: true } }
 	pg_search_scope :search_branch, associated_against: { branch: [:id] }, using: { tsearch: { any_word: true } }
 
+	#validate :restrict_modification
+
 	def self.get_total_purchases_per_branch(branch, date)
 		@branch_purchases = Purchase.where(branch_id: branch.id, purchase_date: date)
 		return get_total_purchases(@branch_purchases)
 	end
+
+	#def restrict_modification
+	#	if created_at + 12.hours < DateTime.now
+	#		errors.add("Unable ", "to delete or edit. You can only do this within 12 hours after creation")
+	#	end
+	#end
 
 	def self.get_total_purchases(purchases)
 		total_amount = 0
@@ -32,6 +40,14 @@ class Purchase < ActiveRecord::Base
 			end
 		end
 		return total_amount
+	end
+
+	def allowed_to_modify?
+		created_at + 12.hours > DateTime.now
+	end
+
+	def unable_to_modify?
+		created_at + 12.hours < DateTime.now
 	end
 
 	def compute_net_vat_total
