@@ -51,6 +51,6 @@ class SupplierItemPricesController < ApplicationController
 	private
 
 	def supplier_params
-		params.require(:supplier_item_price).permit(:supplier_id, :item_id, :supplier_amount, :packaging, :unit_id)
+		params.require(:supplier_item_price).permit(:brand_name, :supplier_id, :item_id, :supplier_amount, :packaging, :unit_id)
 	end
 end

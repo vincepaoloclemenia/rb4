@@ -11,6 +11,7 @@
     table tr th { padding: 10px; font-family: 'Noto Sans', sans-serif; background-color: #1D75A1; color: white }
     .pdf-container{ margin: 30px }
     table { padding: 5px }
+    table tr td.center { text-align: center }
     tr.highlighted { background-color: #C0EBFD }
     td.bold { font-weight: 700 }
     td.align-right { text-align: right }
@@ -89,6 +90,7 @@
                 <thead>
                     <tr>
                         <th>Item Name</th>
+                        <th>Item Brand</th>
                         <th>Packaging</th>
                         <th>Quantity</th>
                         <th>Unit</th>
@@ -103,9 +105,12 @@
                                 <%= pi.item.name %>
                             </td>
                             <td>
+                                <%= pi.item_brand? ? pi.item_brand : "---" %>
+                            </td>
+                            <td class='center'>
                                 <%= pi.packaging %>
                             </td>
-                            <td>
+                            <td class='center'>
                                 <%= pi.quantity.to_s %>
                             </td>
                             <td>
@@ -120,16 +125,16 @@
                         </tr>
                     <% end %>
                     <tr class='highlighted'>
-                        <td colspan='5'>Subtotal</td>
-                        <td class='bold' colspan='1'><%= number_to_currency(@purchase_order.sub_total, unit: "₱ ") %></td>
+                        <td colspan='6'>Subtotal</td>
+                        <td class='bold'><%= number_to_currency(@purchase_order.sub_total, unit: "₱ ") %></td>
                     </tr>
                     <tr class='highlighted'>
-                        <td colspan='5'>12% VAT</td>
-                        <td class='bold' colspan='1'><%= number_to_currency(@purchase_order.vat, unit: "₱ ") %></td>
+                        <td colspan='6'>12% VAT</td>
+                        <td class='bold'><%= number_to_currency(@purchase_order.vat, unit: "₱ ") %></td>
                     </tr>
                     <tr class='highlighted'>
-                        <td colspan='5'>Total</td>
-                        <td class='bold' colspan='1'><%= number_to_currency(@purchase_order.total_amount, unit: "₱ ") %></td>
+                        <td colspan='6'>Total</td>
+                        <td class='bold'><%= number_to_currency(@purchase_order.total_amount, unit: "₱ ") %></td>
                     </tr>
                 </tbody>
             </table>

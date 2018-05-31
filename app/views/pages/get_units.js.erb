@@ -7,6 +7,7 @@ select.empty();
 <% end %>
 
 $('#packaging').val("<%= @packaging %>")
+$('#item_brand').val("<%= @supplier_unit.brand_name %>")
 
 <% if @supplier_unit.nil? || @unit.nil? %>
 	$('#purchase_order_item_quantity').prop( 'readonly', true )

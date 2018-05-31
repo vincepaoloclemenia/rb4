@@ -5,6 +5,7 @@
                 thead
                     tr.bg-thead
                         th width="145" Item Name
+                        th width="145" Item Brand
                         th width="160" data-sortable="false" Packaging
                         th width="110" Quantity
                         th width="115" Unit
@@ -14,6 +15,7 @@
                     - @po.purchase_order_items.each do |pi|
                         tr
                             td data-title="Item Name" = pi.item.name
+                            td data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
                             td data-title="Packaging" = pi.packaging
                             td data-title="Quantity" = pi.quantity.to_i.to_s
                             td data-title="Unit" = pi.unit.name
@@ -21,11 +23,11 @@
                             td data-titile='Total Price' = to_peso(pi.total_amount)
 
                     tr.bg-total
-                        td.text-right.label-total colspan='4' data-title="Sub Total" Sub Total
-                        td.label-total-num colspan='2' data-title='Vat' = to_peso(@po.sub_total)
+                        td.text-right.label-total colspan='6' data-title="Sub Total" Sub Total
+                        td.label-total-num data-title='Vat' = to_peso(@po.sub_total)
                     tr.bg-total
-                        td.text-right.label-total colspan='4' data-title="12% Vat" 12% VAT
-                        td.label-total-num colspan='2' data-title='Vat' = to_peso(@po.vat)
+                        td.text-right.label-total colspan='6' data-title="12% Vat" 12% VAT
+                        td.label-total-num data-title='Vat' = to_peso(@po.vat)
                     tr.bg-total
-                        td.text-right.label-total colspan='4' data-title="Total Amount" Total Amount
-                        td.label-total-num colspan='2' data-title='Vat' = to_peso(@po.total_amount)
+                        td.text-right.label-total colspan='6' data-title="Total Amount" Total Amount
+                        td.label-total-num data-title='Vat' = to_peso(@po.total_amount)

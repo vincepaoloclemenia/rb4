@@ -74,6 +74,6 @@ class PurchaseOrderItemsController < ApplicationController
 	end
 
 	def purchase_order_item_params
-		params.require(:purchase_order_item).permit(:item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks, :total_amount, :packaging)
+		params.require(:purchase_order_item).permit(:item_brand, :item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks, :total_amount, :packaging)
 	end
 end

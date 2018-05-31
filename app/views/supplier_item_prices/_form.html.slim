@@ -13,24 +13,30 @@
 				=	f.text_field :item_name, class: 'form-control', value: @supplier_item_price.item.name, disabled: true
 				= f.hidden_field :item_id, value: @supplier_item_price.item.id
 	.row.mb10
-		.col-xs-12
+		.col-xs-6
 			= f.label :supplier_item_unit
 			  | Unit:
 			  small.field-req  *
 			= f.select :unit_id, current_brand.units.not_deleted.pluck(:name, :id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
 	    = f.hidden_field :supplier_id, value: @sp_id.to_i
-	.row.mb10
-		.col-xs-12
+		.col-xs-6
 			= f.label :packaging
 			  | Packaging:
 			  small.field-req  *
 			= f.text_field :packaging, class: "form-control", placeholder: "Packaging", id: 'supplier-packaging'
+		
 	.row.mb10
-		.col-xs-12
+		.col-xs-6
 			= f.label :supplier_amount
 			  | Price:
 			  small.field-req  *
 			= f.number_field :supplier_amount, step: '.01', class: "form-control", placeholder: "Supplier Price", id: 'supplier-amount'
+		.col-xs-6
+			= f.label :brand_name
+			  | Brand:
+			  small.field-req  *
+			= f.text_field :brand_name, class: "form-control", placeholder: "Item's Brand Name", id: 'brand-name'
+	
 	.row.mb10
 		.col-xs-12.mt20
 			| (
