@@ -73,13 +73,13 @@ class BrandsController < ApplicationController
 	def create_purchase_order_setting
 		if params[:purchase_order_setting]
 			po = params[:purchase_order_setting]
-			monday = po[:allow_monday] == '1' ? { day: 1, allowed: true, from: po[:monday_from], to: po[:monday_to] } : { day: 1, allowed: false, from: '', to: '' }
-			tuesday = po[:allow_tuesday] == '1' ? { day: 2, allowed: true, from: po[:tuesday_from], to: po[:tuesday_to] } : { day: 2, allowed: false, from: '', to: '' }
-			wednesday = po[:allow_wednesday] == '1' ? { day: 3, allowed: true, from: po[:wednesday_from], to: po[:wednesday_to] } : { day: 3, allowed: false, from: '', to: '' }
-			thursday = po[:allow_thursday] == '1' ? { day: 4, allowed: true, from: po[:thursday_from], to: po[:thursday_to] } : { day: 4, allowed: false, from: '', to: '' }
-			friday = po[:allow_friday] == '1' ? { day: 5, allowed: true, from: po[:friday_from], to: po[:friday_to] } : { day: 5, allowed: false, from: '', to: '' }
-			saturday = po[:allow_saturday] == '1' ? { day: 6, allowed: true, from: po[:saturday_from], to: po[:saturday_to] } : { day: 6, allowed: false, from: '', to: '' }
-			sunday = po[:allow_sunday] == '1' ? { day: 0, allowed: true, from: po[:sunday_from], to: po[:sunday_to] } : { day: 0, allowed: false, from: '', to: '' }
+			monday = po[:allow_monday] == '1' ? { day: "monday", allowed: true, from: po[:monday_from], to: po[:monday_to] } : { day: "monday", allowed: false, from: '', to: '' }
+			tuesday = po[:allow_tuesday] == '1' ? { day: "tuesday", allowed: true, from: po[:tuesday_from], to: po[:tuesday_to] } : { day: "tuesday", allowed: false, from: '', to: '' }
+			wednesday = po[:allow_wednesday] == '1' ? { day: "wednesday", allowed: true, from: po[:wednesday_from], to: po[:wednesday_to] } : { day: "wednesday", allowed: false, from: '', to: '' }
+			thursday = po[:allow_thursday] == '1' ? { day: "thursday", allowed: true, from: po[:thursday_from], to: po[:thursday_to] } : { day: "thursday", allowed: false, from: '', to: '' }
+			friday = po[:allow_friday] == '1' ? { day: "friday", allowed: true, from: po[:friday_from], to: po[:friday_to] } : { day: "friday", allowed: false, from: '', to: '' }
+			saturday = po[:allow_saturday] == '1' ? { day: "saturday", allowed: true, from: po[:saturday_from], to: po[:saturday_to] } : { day: "saturday", allowed: false, from: '', to: '' }
+			sunday = po[:allow_sunday] == '1' ? { day: "sunday", allowed: true, from: po[:sunday_from], to: po[:sunday_to] } : { day: "sunday", allowed: false, from: '', to: '' }
 			current_brand.create_brand_setting(
 				send_pos: po[:send_pos],
 				purchase_order_schedule: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]			
@@ -92,13 +92,13 @@ class BrandsController < ApplicationController
 	def update_purchase_order_setting
 		if params[:purchase_order_setting]
 			po = params[:purchase_order_setting]
-			monday = po[:allow_monday] == '1' ? { day: 1, allowed: true, from: po[:monday_from], to: po[:monday_to] } : { day: 1, allowed: false, from: '', to: '' }
-			tuesday = po[:allow_tuesday] == '1' ? { day: 2, allowed: true, from: po[:tuesday_from], to: po[:tuesday_to] } : { day: 2, allowed: false, from: '', to: '' }
-			wednesday = po[:allow_wednesday] == '1' ? { day: 3, allowed: true, from: po[:wednesday_from], to: po[:wednesday_to] } : { day: 3, allowed: false, from: '', to: '' }
-			thursday = po[:allow_thursday] == '1' ? { day: 4, allowed: true, from: po[:thursday_from], to: po[:thursday_to] } : { day: 4, allowed: false, from: '', to: '' }
-			friday = po[:allow_friday] == '1' ? { day: 5, allowed: true, from: po[:friday_from], to: po[:friday_to] } : { day: 5, allowed: false, from: '', to: '' }
-			saturday = po[:allow_saturday] == '1' ? { day: 6, allowed: true, from: po[:saturday_from], to: po[:saturday_to] } : { day: 6, allowed: false, from: '', to: '' }
-			sunday = po[:allow_sunday] == '1' ? { day: 0, allowed: true, from: po[:sunday_from], to: po[:sunday_to] } : { day: 0, allowed: false, from: '', to: '' }
+			monday = po[:allow_monday] == '1' ? { day: "monday", allowed: true, from: po[:monday_from], to: po[:monday_to] } : { day: "monday", allowed: false, from: '', to: '' }
+			tuesday = po[:allow_tuesday] == '1' ? { day: "tuesday", allowed: true, from: po[:tuesday_from], to: po[:tuesday_to] } : { day: "tueday", allowed: false, from: '', to: '' }
+			wednesday = po[:allow_wednesday] == '1' ? { day: "wednesday", allowed: true, from: po[:wednesday_from], to: po[:wednesday_to] } : { day: "wednesday", allowed: false, from: '', to: '' }
+			thursday = po[:allow_thursday] == '1' ? { day: "thursday", allowed: true, from: po[:thursday_from], to: po[:thursday_to] } : { day: "thursday", allowed: false, from: '', to: '' }
+			friday = po[:allow_friday] == '1' ? { day: "friday", allowed: true, from: po[:friday_from], to: po[:friday_to] } : { day: "friday", allowed: false, from: '', to: '' }
+			saturday = po[:allow_saturday] == '1' ? { day: "saturday", allowed: true, from: po[:saturday_from], to: po[:saturday_to] } : { day: "saturday", allowed: false, from: '', to: '' }
+			sunday = po[:allow_sunday] == '1' ? { day: "sunday", allowed: true, from: po[:sunday_from], to: po[:sunday_to] } : { day: "sunday", allowed: false, from: '', to: '' }
 			current_brand.brand_setting.update(
 				send_pos: po[:send_pos],
 				purchase_order_schedule: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]			

@@ -58,7 +58,9 @@
                 <thead>
                     <tr>
                         <th>Item Name</th>
+                        <th>Item Brand</th>
                         <th>Packaging</th>
+                        <th>Remarks</th>
                         <th>Quantity</th>
                         <th>Unit</th>
                         <th>Price</th>
@@ -71,8 +73,14 @@
                             <td>
                                 <%= pi.item.name %>
                             </td>
+                            <td>
+                                <%= pi.item_brand? ? pi.item_brand : "---" %>
+                            </td>
                             <td class='po-item'>
                                 <%= pi.packaging %>
+                            </td>
+                            <td class='po-item'>
+                                <%= pi.remarks %>
                             </td>
                             <td class='po-item'>
                                 <%= pi.quantity.to_i %>
@@ -89,15 +97,12 @@
                         </tr>
                     <% end %>
                     <tr class='highlighted'>
-                        <td colspan='5'>Subtotal</td>
+                        <td colspan='7'>Subtotal</td>
                         <td class='bold' colspan='1'><%= to_peso(@purchase_order.sub_total) %></td>
                     </tr>
+                    
                     <tr class='highlighted'>
-                        <td colspan='5'>12% VAT</td>
-                        <td class='bold' colspan='1'><%= to_peso(@purchase_order.vat) %></td>
-                    </tr>
-                    <tr class='highlighted'>
-                        <td colspan='5'>Total</td>
+                        <td colspan='7'>Total</td>
                         <td class='bold' colspan='1'><%= to_peso(@purchase_order.total_amount) %></td>
                     </tr>
                 </tbody>

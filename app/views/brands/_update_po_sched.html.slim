@@ -19,12 +19,12 @@
                 label Monday
             div#1
                 .col-md-4
-                    = f.text_field :monday_from, class: "form-control", placeholder: "From", id: "monday_from", value: @setting.purchase_order_schedule[1]["from"]
+                    input.form-control type='time' name='purchase_order_setting[monday_from]' id='monday_from' value="#{@setting.purchase_order_schedule[1]['from']}"
+                    /= f.text_field :monday_from, class: "form-control", placeholder: "From", id: "monday_from", value: @setting.purchase_order_schedule[1]['from']
                 .col-md-1
                     label →            
                 .col-md-4  
-                    = f.text_field :monday_to, class: "form-control", placeholder: "To", id: "monday_to", value: @setting.purchase_order_schedule[1]["to"]
-
+                    input.form-control type='time' name='purchase_order_setting[monday_to]' id='monday_to' value="#{@setting.purchase_order_schedule[1]['to']}"
         
         .row.pb25.ml25
             .col-md-1
@@ -33,11 +33,11 @@
                 label Tuesday
             div#2
                 .col-md-4
-                    = f.text_field :tuesday_from, class: "form-control", placeholder: "From", id: "tuesday_from", value: @setting.purchase_order_schedule[2]["from"]
+                    input.form-control type='time' name='purchase_order_setting[tuesday_from]' id='tuesday_from' value="#{@setting.purchase_order_schedule[2]['from']}"
                 .col-md-1
                     label →                 
                 .col-md-4  
-                    = f.text_field :tuesday_to, class: "form-control", placeholder: "From", id: "tuesday_to", value: @setting.purchase_order_schedule[2]["to"]
+                    input.form-control type='time' name='purchase_order_setting[tuesday_to]' id='tuesday_to' value="#{@setting.purchase_order_schedule[2]['to']}"
         
         
         .row.pb25.ml25
@@ -47,11 +47,11 @@
                 label Wednesday
             div#3
                 .col-md-4
-                    = f.text_field :wednesday_from, class: "form-control", placeholder: "From", id: "wednesday_from", value: @setting.purchase_order_schedule[3]["from"]          
-                .col-md-1
+                    input.form-control type='time' name='purchase_order_setting[wednesday_from]' id='wednesday_from' value="#{@setting.purchase_order_schedule[3]['from']}"                
+                .col-md-1    
                     label →   
                 .col-md-4  
-                    = f.text_field :wednesday_to, class: "form-control", placeholder: "From", id: "wednesday_to", value: @setting.purchase_order_schedule[3]["to"]
+                    input.form-control type='time' name='purchase_order_setting[wednesday_to]' id='wednesday_to' value="#{@setting.purchase_order_schedule[3]['to']}"
 
         .row.pb25.ml25
             .col-md-1
@@ -60,11 +60,11 @@
                 label Thursday
             div#4
                 .col-md-4
-                    = f.text_field :thursday_from, class: "form-control", placeholder: "From", id: "thursday_from", value: @setting.purchase_order_schedule[4]["from"]              
+                    input.form-control type='time' name='purchase_order_setting[thursday_from]' id='thursday_from' value="#{@setting.purchase_order_schedule[4]['from']}"                
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :thursday_to, class: "form-control", placeholder: "From", id: "thursday_to", value: @setting.purchase_order_schedule[4]["to"]
+                    input.form-control type='time' name='purchase_order_setting[thursday_to]' id='thursday_to' value="#{@setting.purchase_order_schedule[4]['to']}"
         
         .row.pb25.ml25 
             .col-md-1
@@ -73,11 +73,11 @@
                 label Friday
             div#5
                 .col-md-4
-                    = f.text_field :friday_from, class: "form-control", placeholder: "From", id: "friday_from", value: @setting.purchase_order_schedule[5]["from"]              
+                    input.form-control type='time' name='purchase_order_setting[friday_from]' id='friday_from' value="#{@setting.purchase_order_schedule[5]['from']}"
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :friday_to, class: "form-control", placeholder: "From", id: "friday_to", value: @setting.purchase_order_schedule[5]["to"]  
+                    input.form-control type='time' name='purchase_order_setting[friday_to]' id='friday_to' value="#{@setting.purchase_order_schedule[5]['to']}"
         
         .row.pb25.ml25
             .col-md-1
@@ -86,11 +86,11 @@
                 label Saturday
             div#6
                 .col-md-4
-                    = f.text_field :saturday_from, class: "form-control", placeholder: "From", id: "saturday_from", value: @setting.purchase_order_schedule[6]["from"]           
+                    input.form-control type='time' name='purchase_order_setting[saturday_from]' id='saturday_from' value="#{@setting.purchase_order_schedule[6]['from']}"
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :saturday_to, class: "form-control", placeholder: "From", id: "saturday_to", value: @setting.purchase_order_schedule[6]["to"]     
+                    input.form-control type='time' name='purchase_order_setting[saturday_to]' id='saturday_to' value="#{@setting.purchase_order_schedule[6]['to']}"
         
         .row.pb25.ml25
             .col-md-1
@@ -99,11 +99,11 @@
                 label Sunday
             div#0
                 .col-md-4
-                    = f.text_field :sunday_from, class: "form-control", placeholder: "From", id: "sunday_from", value: @setting.purchase_order_schedule[0]["from"]                
+                    input.form-control type='time' name='purchase_order_setting[sunday_from]' id='sunday_from' value="#{@setting.purchase_order_schedule[0]['from']}"
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :sunday_to, class: "form-control", placeholder: "From", id: "sunday_to", value: @setting.purchase_order_schedule[0]["to"]      
+                    input.form-control type='time' name='purchase_order_setting[sunday_to]' id='sunday_to' value="#{@setting.purchase_order_schedule[0]['to']}"
 
     .modal-footer.no-border
 		span.inline.float-right
@@ -131,6 +131,13 @@ javascript:
         $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
         $("#schedule_panel").slideUp()
     }
+
+    $(".form-control").each(function(i, obj){
+        $(obj).on('keypress', function(evt){
+            if (evt.which < 48 || evt.which > 58) { evt.preventDefault(); }
+        })
+    })
+        
     
     
     

@@ -43,7 +43,7 @@
                             td colspan='6' data-title="Supplier" = supplier.name
                             td data-title='Action'
                                 = link_to "<i class='fa blue fa-envelope f14'></i>".html_safe, send_bulk_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Send to #{supplier.name}" }, remote: true
-                                /= link_to "<i class='fa green icon-glyph-162 f14'></i>".html_safe, group_of_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Send to #{supplier.name}" }, remote: true    
+                                /= link_to "<i class='fa green icon-glyph-162 f14'></i>".html_safe, group_of_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF format" }, remote: true    
                         - purchase_orders[supplier_id].map do |purchase_order|
                             
                             tr  

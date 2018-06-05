@@ -2,6 +2,7 @@ class PurchaseOrderGeneratorController < ApplicationController
     include PurchaseOrderHelper
     before_action :authenticate_user!
     before_action :access_control
+    before_action :restrict_branch_admins, if: :branch_admin?
     
     def index
         
@@ -23,5 +24,12 @@ class PurchaseOrderGeneratorController < ApplicationController
             render json: { po_number: @po_number, pr_number: @pr_number, deliveryTime: @branch.delivery_time }
 		end
     end
+
+    private
+
+        def restrict_branch_admins
+            flash[:alert] = "Access denied"
+            redirect_to dashboard_path
+        end
 
 end

@@ -92,6 +92,7 @@
                         <th>Item Name</th>
                         <th>Item Brand</th>
                         <th>Packaging</th>
+                        <th>Remarks</th>
                         <th>Quantity</th>
                         <th>Unit</th>
                         <th>Price</th>
@@ -111,6 +112,9 @@
                                 <%= pi.packaging %>
                             </td>
                             <td class='center'>
+                                <%= pi.remarks %>
+                            </td>
+                            <td class='center'>
                                 <%= pi.quantity.to_s %>
                             </td>
                             <td>
@@ -124,14 +128,6 @@
                             </td>
                         </tr>
                     <% end %>
-                    <tr class='highlighted'>
-                        <td colspan='6'>Subtotal</td>
-                        <td class='bold'><%= number_to_currency(@purchase_order.sub_total, unit: "₱ ") %></td>
-                    </tr>
-                    <tr class='highlighted'>
-                        <td colspan='6'>12% VAT</td>
-                        <td class='bold'><%= number_to_currency(@purchase_order.vat, unit: "₱ ") %></td>
-                    </tr>
                     <tr class='highlighted'>
                         <td colspan='6'>Total</td>
                         <td class='bold'><%= number_to_currency(@purchase_order.total_amount, unit: "₱ ") %></td>

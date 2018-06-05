@@ -14,7 +14,7 @@
     table { padding: 5px }
     tr.highlighted { background-color: #C0EBFD }
     td.bold { font-weight: 700 }
-    table tbody tr td span.branch-label: { margin-left: 15px; font-weight: 700 }
+    table tbody tr td span.branch-label: { margin-left: 500px; font-weight: 700 }
     td.align-right { text-align: right }
     p.pdf-body{ font-family: 'Open Sans', sans-serif;font-size: 15px; text-justify: justify; margin-top: 15px; color: grey; z-index: 999; }
     .row { margin-right: -15px; margin-left: -15px }
@@ -96,16 +96,17 @@
                 <tbody>
                     <% @purchase_orders.keys.each do |branch| %>
                         <% @purchase_orders[branch].map do |pur| %>
-                        <tr >   
-                            <td colspan='7'>
-                                Branch: <span class='branch-label'><%= pur.branch.name %></span>
-                                <br/>
-                                PO Number: <span class='branch-label'><%= pur.po_number %></span>
-                                <br/>
-                                Delivery Date: <span class='branch-label'><%= pur.delivery_date.strftime("%b %d, %Y") %></span>
-                                <br/>
-                                Delivery Time: <span class='branch-label'><%= pur.delivery_time %></span>
-                            </td>
+                        <tr>   
+                            <td colspan='3'>Branch: </td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.branch.name %> </td>
+                        </tr>
+                        <tr>    
+                            <td colspan='3'>PO Number:</td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.po_number %></td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'>Delivery Date:</td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.delivery_date.strftime("%b %d, %Y") %></td>
+                        </tr>
+                        <tr>     
+                            <td colspan='3'>Delivery Time:</td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.delivery_time %></td>
                         </tr>
                             <% pur.purchase_order_items.map do |pi| %>
                                 <tr>
@@ -135,11 +136,7 @@
                                     </td>
                                 </tr>
                             <% end %>
-                            <tr class='highlighted'>
-                                <td colspan='7'>Subtotal</td>
-                                <td class='bold'><%= number_to_currency(pur.sub_total, unit: "₱ ") %></td>
-                            </tr>
-                            <tr class='highlighted'>
+                            <tr class='highlighted '>
                                 <td colspan='7'>Total</td>
                                 <td class='bold'><%= number_to_currency(pur.total_amount, unit: "₱ ") %></td>
                             </tr>

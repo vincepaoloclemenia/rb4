@@ -2,6 +2,7 @@ class PurchaseOrdersController < ApplicationController
 	include PurchaseOrderHelper
 	before_action :authenticate_user!
 	before_action :access_control
+	before_action :restrict_branch_admins, only: [:create], if: :branch_admin?
 
 	def index
 		@purchase_orders = current_brand.purchase_orders.unsent_pos.group_by { |po| po.supplier_id }
@@ -232,6 +233,21 @@ class PurchaseOrdersController < ApplicationController
 				params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference)
 			else
 				params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date)			
+			end
+		end
+
+		def restrict_branch_admins
+			if current_brand.brand_setting.present? && current_brand.brand_setting.send_pos?
+				setting = current_brand.brand_setting.purchase_order_schedule[Date.today.wday]
+				if !eval(setting["allowed"])
+					flash[:alert] = "You are currently not allowed to submit Purchase Order due to schedule created by your Admin."
+					redirect_to dashboard_path
+				else
+					if Time.now < setting["from"].to_time || Time.now > setting["to"].to_time
+						flash[:alert] = "The allowed schedule for you to submit your purchase order today is from #{setting["from"].to_time.strftime("%l:%M %P")} - #{setting["to"].to_time.strftime("%l:%M %P")}"
+						redirect_to dashboard_path
+					end
+				end
 			end
 		end
 
