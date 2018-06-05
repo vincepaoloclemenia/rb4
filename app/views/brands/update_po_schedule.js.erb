@@ -1,0 +1,11 @@
+$('#modal h4').html('Purchase Order Schedule (<%= current_brand.name %>)');
+
+$('.modal-body').html('<%= j render("update_po_sched") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "35%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

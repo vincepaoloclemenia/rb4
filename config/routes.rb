@@ -23,6 +23,10 @@ Rails.application.routes.draw do
   resource :client, only: [:show, :edit, :update]
   resources :brands do
     resources :branches
+    get :set_purchase_order_restriction, on: :collection
+    get :update_po_schedule, on: :collection
+    post :create_purchase_order_setting, on: :collection
+    put :update_purchase_order_setting, on: :collection
   end
   resources :roles do
     get 'manage_permissions' => 'permissions#index'
@@ -117,6 +121,7 @@ Rails.application.routes.draw do
   get 'get_price' => 'pages#get_price'
   get 'get_units' => 'pages#get_units'
   get 'take_units' => 'pages#take_units'
+  get 'validate_time' => "pages#validate_time"
   
 
   namespace :api do

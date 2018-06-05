@@ -163,12 +163,7 @@ class WizardsController < ApplicationController
 		current_user.update(flag: 6)
 		current_user.client_user_access.update(role_id: current_user.client.roles.first.id)
 		#insert free trial subscription here
-		plan = Plan.find(1)
-		subscription = current_client.subscriptions.create(plan_id: plan.id, status: "Active", start_date: DateTime.now, 
-																											end_date: (DateTime.now + (plan.duration_in_days).days))
-		current_client.brands.first.branches.each do |b|
-			subscription.branch_subscriptions.find_or_create_by(branch_id: b.id)
-		end
+		current_client.create_subscription(plan_id: 1, status: "Active", start_date: DateTime.now, end_date: (DateTime.now + (plan.duration_in_days).days))
 		redirect_to dashboard_path
 	end
 

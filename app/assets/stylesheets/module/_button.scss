@@ -53,3 +53,9 @@ button.inline{
     margin-left: 1.5em;
     &:hover{ background: tomato; color: white }
 }
+
+.btn-setting{
+    border-radius: 50%;
+    border: none;
+    color: $main-theme
+}

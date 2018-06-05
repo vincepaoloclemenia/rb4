@@ -81,13 +81,12 @@ class SubscriptionsController < ApplicationController
 			redirect_to subscriptions_path, alert: "Subscription creation failed. You dont have branches to pay yet."
 		else
 			plan = Plan.find(params[:subscription][:plan_id])
-			current_client.subscription.update(plan_id: plan.id)
 	    subscription = current_client.subscription
 	    redirect_to subscription.paypal.checkout_url(
 	      return_url: process_subscription_url(:plan_id => plan.id),
 	      cancel_url: subscriptions_url,
 	      description: "#{subscription.plan.name} for a total of #{branches.count} #{'branch'.pluralize(branches.count)}",
-				amount: subscription.plan.amount * branches.count,
+				amount: plan.amount * branches.count,
 				currency: "PHP"
 	    )
 	 	end

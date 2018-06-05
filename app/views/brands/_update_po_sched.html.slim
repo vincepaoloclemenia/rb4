@@ -1,0 +1,142 @@
+= form_for :purchase_order_setting, url: update_purchase_order_setting_brands_path, method: :put do |f|
+    
+    .alert.alert-info role="alert"
+        .row   
+            .col-xs-1.text-right
+                i.icon-glyph-73.f116
+            .col-xs-11 id="information_board"
+                
+
+    .row.mb25    
+        .col-md-offset-5.col-md-4
+            = f.check_box :send_pos, checked: @setting.send_pos, data: {off: "Daily", offstyle: "default", on: "Customized", onstyle: "success", style:"android", toggle: "toggle"}, id: "schedule"
+   
+    .panel-body id='schedule_panel'
+        .row.pb25.ml25
+            .col-md-1
+                = f.check_box :allow_monday, checked: eval(@setting.purchase_order_schedule[1]["allowed"])
+            .col-md-2
+                label Monday
+            div#1
+                .col-md-4
+                    = f.text_field :monday_from, class: "form-control", placeholder: "From", id: "monday_from", value: @setting.purchase_order_schedule[1]["from"]
+                .col-md-1
+                    label →            
+                .col-md-4  
+                    = f.text_field :monday_to, class: "form-control", placeholder: "To", id: "monday_to", value: @setting.purchase_order_schedule[1]["to"]
+
+        
+        .row.pb25.ml25
+            .col-md-1
+                = f.check_box :allow_tuesday, checked: eval(@setting.purchase_order_schedule[2]["allowed"])
+            .col-md-2
+                label Tuesday
+            div#2
+                .col-md-4
+                    = f.text_field :tuesday_from, class: "form-control", placeholder: "From", id: "tuesday_from", value: @setting.purchase_order_schedule[2]["from"]
+                .col-md-1
+                    label →                 
+                .col-md-4  
+                    = f.text_field :tuesday_to, class: "form-control", placeholder: "From", id: "tuesday_to", value: @setting.purchase_order_schedule[2]["to"]
+        
+        
+        .row.pb25.ml25
+            .col-md-1
+                = f.check_box :allow_wednesday, checked: eval(@setting.purchase_order_schedule[3]["allowed"])
+            .col-md-2
+                label Wednesday
+            div#3
+                .col-md-4
+                    = f.text_field :wednesday_from, class: "form-control", placeholder: "From", id: "wednesday_from", value: @setting.purchase_order_schedule[3]["from"]          
+                .col-md-1
+                    label →   
+                .col-md-4  
+                    = f.text_field :wednesday_to, class: "form-control", placeholder: "From", id: "wednesday_to", value: @setting.purchase_order_schedule[3]["to"]
+
+        .row.pb25.ml25
+            .col-md-1
+                = f.check_box :allow_thursday, checked: eval(@setting.purchase_order_schedule[4]["allowed"])
+            .col-md-2
+                label Thursday
+            div#4
+                .col-md-4
+                    = f.text_field :thursday_from, class: "form-control", placeholder: "From", id: "thursday_from", value: @setting.purchase_order_schedule[4]["from"]              
+                .col-md-1
+                    label →   
+                .col-md-4  
+                    = f.text_field :thursday_to, class: "form-control", placeholder: "From", id: "thursday_to", value: @setting.purchase_order_schedule[4]["to"]
+        
+        .row.pb25.ml25 
+            .col-md-1
+                = f.check_box :allow_friday, checked: eval(@setting.purchase_order_schedule[5]["allowed"])
+            .col-md-2
+                label Friday
+            div#5
+                .col-md-4
+                    = f.text_field :friday_from, class: "form-control", placeholder: "From", id: "friday_from", value: @setting.purchase_order_schedule[5]["from"]              
+                .col-md-1
+                    label →   
+                .col-md-4  
+                    = f.text_field :friday_to, class: "form-control", placeholder: "From", id: "friday_to", value: @setting.purchase_order_schedule[5]["to"]  
+        
+        .row.pb25.ml25
+            .col-md-1
+                = f.check_box :allow_saturday, checked: eval(@setting.purchase_order_schedule[6]["allowed"])
+            .col-md-2
+                label Saturday
+            div#6
+                .col-md-4
+                    = f.text_field :saturday_from, class: "form-control", placeholder: "From", id: "saturday_from", value: @setting.purchase_order_schedule[6]["from"]           
+                .col-md-1
+                    label →   
+                .col-md-4  
+                    = f.text_field :saturday_to, class: "form-control", placeholder: "From", id: "saturday_to", value: @setting.purchase_order_schedule[6]["to"]     
+        
+        .row.pb25.ml25
+            .col-md-1
+                = f.check_box :allow_sunday, checked: eval(@setting.purchase_order_schedule[0]["allowed"])
+            .col-md-2
+                label Sunday
+            div#0
+                .col-md-4
+                    = f.text_field :sunday_from, class: "form-control", placeholder: "From", id: "sunday_from", value: @setting.purchase_order_schedule[0]["from"]                
+                .col-md-1
+                    label →   
+                .col-md-4  
+                    = f.text_field :sunday_to, class: "form-control", placeholder: "From", id: "sunday_to", value: @setting.purchase_order_schedule[0]["to"]      
+
+    .modal-footer.no-border
+		span.inline.float-right
+			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+			|
+			button.btn.btn-primary type="submit" Save
+   
+
+javascript:
+    
+    $("#schedule").on("change", function(e){
+        if(e.target.checked){
+            $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins.")           
+            $("#schedule_panel").slideDown();
+        }else{
+            $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
+            $("#schedule_panel").slideUp()
+        }
+    })
+    
+    if($("#schedule").is(":checked")){
+        $("#schedule_panel").slideDown();
+        $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins.")	    
+    }else{
+        $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
+        $("#schedule_panel").slideUp()
+    }
+    
+    
+    
+    
+    
+
+
+
+

@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require cocoon
 //= require highcharts/highcharts
-//= require turbolinks
 //= require flash
 //= require react
 //= require react_ujs

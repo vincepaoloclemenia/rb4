@@ -94,6 +94,16 @@ class PagesController < ApplicationController
 		end
 	end
 
+	def validate_time
+		if params[:from]
+			begin
+				params[:from].to_time
+			rescue ArgumentError
+				render json: { error: "Invalid time input" }
+			end
+		end		
+	end
+
 	def get_plan_info
 		@plan = Plan.find(params[:plan_id])
 		render json: { amount: @plan.amount, period: @plan.period },

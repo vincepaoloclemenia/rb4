@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180531075759) do
+ActiveRecord::Schema.define(version: 20180601170935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "activities", force: :cascade do |t|
     t.datetime "created_at",      null: false
@@ -84,6 +85,19 @@ ActiveRecord::Schema.define(version: 20180531075759) do
   end
 
   add_index "branches", ["brand_id"], name: "index_branches_on_brand_id", using: :btree
+
+  create_table "brand_settings", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.boolean  "send_pos",                default: false
+    t.string   "send_pos_from"
+    t.string   "send_pos_to"
+    t.integer  "selected_branches",       default: [],                 array: true
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.hstore   "purchase_order_schedule", default: [],                 array: true
+  end
+
+  add_index "brand_settings", ["brand_id"], name: "index_brand_settings_on_brand_id", using: :btree
 
   create_table "brands", force: :cascade do |t|
     t.integer  "client_id"

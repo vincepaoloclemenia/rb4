@@ -5,17 +5,17 @@ class DashboardController < ApplicationController
 	include ReportsHelper
 
 	def index
-		@range_date = (Date.today - 7)..(Date.today - 1)
-		@formatted_dates = @range_date.map{|d| d.strftime("%b %d, %Y | %a")}
-		@colours = current_brand.branches.all.map { |b| b.color }
-		@branches = current_brand.branches.order(:id)		
+		#@range_date = (Date.today - 7)..(Date.today - 1)
+		#@formatted_dates = @range_date.map{|d| d.strftime("%b %d, %Y | %a")}
+		#@colours = current_brand.branches.all.map { |b| b.color }
+		#@branches = current_brand.branches.order(:id)		
 		#Tables/Modules
-		@branches_sales = branches_sales
-		@brand_sales = brand_sales
-		@update_customer_count = update_customer_count(@branches)
-		@price_movement = price_movement_dashboard
-		@branch_purchases = branch_purchases
-		@brand_purchases = brand_purchases
+		#@branches_sales = branches_sales
+		#@brand_sales = brand_sales
+		#@update_customer_count = update_customer_count(@branches)
+		#@price_movement = price_movement_dashboard
+		#@branch_purchases = branch_purchases
+		#@brand_purchases = brand_purchases
 	end
 
 	def get_dashboard_items(date_range, brand, module_type)
