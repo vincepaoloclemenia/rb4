@@ -116,7 +116,7 @@ javascript:
     
     $("#schedule").on("change", function(e){
         if(e.target.checked){
-            $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins.")           
+            $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins. If there is a day checked and neither the 'from' and 'to' field is filled up, that would be understood as 'whole day'.")           
             $("#schedule_panel").slideDown();
         }else{
             $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
@@ -126,17 +126,18 @@ javascript:
     
     if($("#schedule").is(":checked")){
         $("#schedule_panel").slideDown();
-        $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins.")	    
+        $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins. If there is a day and neither the 'from' and 'to' field is filled up, that would be understood as 'whole day'.")	    
     }else{
         $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
         $("#schedule_panel").slideUp()
     }
 
     $(".form-control").each(function(i, obj){
-        $(obj).on('keypress', function(evt){
-            if (evt.which < 48 || evt.which > 58) { evt.preventDefault(); }
+        $(obj).on('change', function(evt){
+            console.log(evt.target.value, i)
         })
     })
+    
         
     
     

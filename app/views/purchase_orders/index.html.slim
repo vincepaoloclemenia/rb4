@@ -38,17 +38,23 @@
 					.hidden-xs.col-sm-1.text-right
 						i.icon-glyph-93.f35
 					.col-xs-11.mt5
-						| You currently not allowed to send Purchase Orders as of this moment due to schedule set by your Admin. The schedule is as follows:
+						| Submission of Purchase Orders is unavailable as of this moment due to schedule set by your Admin. The schedule is as follows:
 						br
-						- setting = current_brand.brand_setting.purchase_order_schedule
-						- setting.map do |set|
-							- if eval(set["allowed"])
-								.row.mt25
-									.col-xs-offset-2.col-xs-4
-										b = set["day"].capitalize
-									.col-xs-6
-										b = "#{set['from'].to_time.strftime('%l:%M %p')} - #{set['to'].to_time.strftime('%l:%M %p')}"
-					
+						
+			.col-sm-offset-2.col-sm-8
+				.alert.alert-info role="alert"
+					.row
+						.col-md-offset-3.col-md-8
+							- setting = current_brand.brand_setting.purchase_order_schedule
+							- setting.map do |set|
+								- if eval(set["allowed"])
+									.row.pb5.mt5
+										.col-xs-offset-1.col-xs-4
+											b = set["day"].capitalize
+										.col-xs-6
+											b = "#{set['from'].to_time.strftime('%l:%M %p')} - #{set['to'].to_time.strftime('%l:%M %p')}"
+
+
 	- if current_user.role.role_level.eql?('branch')
 		= render 'pos_for_branch'
 	- else

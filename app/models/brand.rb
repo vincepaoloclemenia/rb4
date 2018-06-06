@@ -77,7 +77,7 @@ class Brand < ActiveRecord::Base
   def restrict_branch_admins?
     if brand_setting.present? && brand_setting.send_pos?
       setting = brand_setting.purchase_order_schedule[Date.today.wday]
-      return !eval(setting["allowed"]) || (Time.now < setting["from"].to_time || Time.now > setting["to"].to_time)
+      return !eval(setting["allowed"]) || ((setting["from"].present? && setting["to"].present?) && Time.now < setting["from"].to_time || Time.now > setting["to"].to_time)
     else 
       false
     end

@@ -19,11 +19,11 @@
                 label Monday
             div#1
                 .col-md-4
-                    = f.text_field :monday_from, class: "form-control", placeholder: "From", id: "monday_from"
+                    input.form-control type='time' name='purchase_order_setting[monday_from]' id='monday_from'
                 .col-md-1
                     label →            
                 .col-md-4  
-                    = f.text_field :monday_to, class: "form-control", placeholder: "To", id: "monday_to"
+                    input.form-control type='time' name='purchase_order_setting[monday_to]' id='monday_to'
 
         
         .row.pb25.ml25
@@ -33,11 +33,11 @@
                 label Tuesday
             div#2
                 .col-md-4
-                    = f.text_field :tuesday_from, class: "form-control", placeholder: "From", id: "tuesday_from"
+                    input.form-control type='time' name='purchase_order_setting[tuesday_from]' id='tuesday_from'
                 .col-md-1
                     label →                 
                 .col-md-4  
-                    = f.text_field :tuesday_to, class: "form-control", placeholder: "From", id: "tuesday_to"
+                    input.form-control type='time' name='purchase_order_setting[tuesday_to]' id='tuesday_to'
         
         
         .row.pb25.ml25
@@ -47,11 +47,11 @@
                 label Wednesday
             div#3
                 .col-md-4
-                    = f.text_field :wednesday_from, class: "form-control", placeholder: "From", id: "wednesday_from"          
+                    input.form-control type='time' name='purchase_order_setting[wednesday_from]' id='wednesday_from'         
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :wednesday_to, class: "form-control", placeholder: "From", id: "wednesday_to"
+                    input.form-control type='time' name='purchase_order_setting[wednesday_to]' id='wednesday_to'
 
         .row.pb25.ml25
             .col-md-1
@@ -60,11 +60,11 @@
                 label Thursday
             div#4
                 .col-md-4
-                    = f.text_field :thursday_from, class: "form-control", placeholder: "From", id: "thursday_from"           
+                    input.form-control type='time' name='purchase_order_setting[thursday_from]' id='thursday_from'         
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :thursday_to, class: "form-control", placeholder: "From", id: "thursday_to"
+                    input.form-control type='time' name='purchase_order_setting[thursday_to]' id='thursday_to'         
         
         .row.pb25.ml25 
             .col-md-1
@@ -73,11 +73,11 @@
                 label Friday
             div#5
                 .col-md-4
-                    = f.text_field :friday_from, class: "form-control", placeholder: "From", id: "friday_from"            
+                    input.form-control type='time' name='purchase_order_setting[friday_from]' id='friday_from'         
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :friday_to, class: "form-control", placeholder: "From", id: "friday_to"  
+                    input.form-control type='time' name='purchase_order_setting[friday_to]' id='friday_to'         
         
         .row.pb25.ml25
             .col-md-1
@@ -86,11 +86,11 @@
                 label Saturday
             div#6
                 .col-md-4
-                    = f.text_field :saturday_from, class: "form-control", placeholder: "From", id: "saturday_from"           
+                    input.form-control type='time' name='purchase_order_setting[saturday_from]' id='saturday_from'         
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :saturday_to, class: "form-control", placeholder: "From", id: "saturday_to"   
+                    input.form-control type='time' name='purchase_order_setting[saturday_to]' id='saturday_to'         
         
         .row.pb25.ml25
             .col-md-1
@@ -99,11 +99,11 @@
                 label Sunday
             div#0
                 .col-md-4
-                    = f.text_field :sunday_from, class: "form-control", placeholder: "From", id: "sunday_from"           
+                    input.form-control type='time' name='purchase_order_setting[sunday_from]' id='sunday_from'         
                 .col-md-1
                     label →   
                 .col-md-4  
-                    = f.text_field :sunday_to, class: "form-control", placeholder: "From", id: "sunday_to" 
+                    input.form-control type='time' name='purchase_order_setting[sunday_to]' id='sunday_to'         
 
     .modal-footer.no-border
 		span.inline.float-right
@@ -115,7 +115,7 @@
 javascript:
     $("#schedule").on("change", function(e){
         if(e.target.checked){
-            $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins.")           
+            $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins. If there is a day checked and neither the 'from' and 'to' field is filled up, that would be understood as 'whole day'.")           
             $("#schedule_panel").slideDown();
         }else{
             $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
@@ -124,7 +124,7 @@ javascript:
     })
 
     if($('#schedule').val() === true ){
-        $("#information_board").html("<b><b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><b>NOTE:</b> Days that are left unchecked automatically ignore the Purchase Order submissions from Branch Admins.")
+        $("#information_board").html("<b><b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><br/><b>NOTE:</b> Days that are left unchecked automatically ignore the Purchase Order submissions from Branch Admins. If there is a day checked and neither the 'from' and 'to' field is filled up, that would be understood as 'whole day'.")
 		$("#schedule_panel").slideDown();
 	}else{
         $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
