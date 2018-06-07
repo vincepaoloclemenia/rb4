@@ -49,10 +49,26 @@
 							- setting.map do |set|
 								- if eval(set["allowed"])
 									.row.pb5.mt5
-										.col-xs-offset-1.col-xs-4
-											b = set["day"].capitalize
-										.col-xs-6
-											b = "#{set['from'].to_time.strftime('%l:%M %p')} - #{set['to'].to_time.strftime('%l:%M %p')}"
+										- if set["from"].present? && set["to"].blank?
+											.col-xs-offset-1.col-xs-4
+												b = set["day"].capitalize
+											.col-xs-6
+												b = "From #{set['from'].to_time.strftime('%l:%M %p')} onwards."
+										- elsif set["from"].blank? && set["to"].present?
+											.col-xs-offset-1.col-xs-4
+												b = set["day"].capitalize
+											.col-xs-6
+												b = "#{Date.today.beginning_of_day.strftime('%l:%M %p')} - #{set['to'].to_time.strftime('%l:%M %p')}."
+										- elsif set["from"].blank? && set["to"].blank?
+											.col-xs-offset-1.col-xs-4
+												b = set["day"].capitalize
+											.col-xs-6
+												b = "Whole day"
+										- else
+											.col-xs-offset-1.col-xs-4
+												b = set["day"].capitalize
+											.col-xs-6
+												b = "#{set['from'].to_time.strftime('%l:%M %p')} - #{set['to'].to_time.strftime('%l:%M %p')}"
 
 
 	- if current_user.role.role_level.eql?('branch')

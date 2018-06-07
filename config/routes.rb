@@ -72,6 +72,7 @@ Rails.application.routes.draw do
   delete 'subscription/:id/cancel', to: 'subscriptions#cancel', as: 'cancel_subscription'
   
   resources :purchase_orders_summary, only: :index
+  resources :purchase_orders_listing, only: :index
   resources :supplier_item_prices
   resources :order_per_suppliers
   resources :order_lists do

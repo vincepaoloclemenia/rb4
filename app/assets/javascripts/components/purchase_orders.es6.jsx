@@ -194,9 +194,6 @@ class PurchaseOrders extends React.Component{
                 <div className='panel'>
                     <div className='panel-heading border pb45'>
                         <div className='pull-left mt7'>Purchase Orders List</div>
-                        <div className='pull-right'>
-                            <button className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download PDF </button>
-                        </div>
                     </div>
                     <div className='panel-body'>
                         <div className='row mt25'>
