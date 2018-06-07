@@ -14,6 +14,30 @@ class PurchaseOrderItemsController < ApplicationController
 		@purchase_order_item = PurchaseOrderItem.new
 	end
 
+	def edit
+		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		@purchase_order_item = @purchase_order.purchase_order_items.find params[:id]
+	end
+
+	def update
+		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		@purchase_order_item = @purchase_order.purchase_order_items.find params[:id]
+		@purchase_order_item.branch_id = @purchase_order.branch.id
+		@purchase_order_item.brand_id = @purchase_order.brand.id
+		@purchase_order_item.update(purchase_order_item_params)
+		respond_to do |format|
+			if @purchase_order_item.save
+				index
+				@success = true
+				flash[:notice] = "Purchase Item successfully saved"
+			else
+				@success = false
+				flash[:alert] = @purchase_order_item.errors.full_messages.join(", ")
+			end
+			format.js
+		end
+	end
+
 	def create
 		purchase_order = PurchaseOrder.find(params[:purchase_order_id])
 		@purchase_order_item = purchase_order.purchase_order_items.new(purchase_order_item_params)

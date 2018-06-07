@@ -7,12 +7,11 @@
 			= link_to "<i class='fa green icon-glyph-26 f14'></i> Approve PO".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-success btn-round btn-outline", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
 
 		.pull-right
-			- if @purchase_order.user == current_user
-				- if @purchase_order.approved? 
-					- if current_user.role.role_level != 'branch'
-						= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Add New Purchase Order Item".html_safe,  new_purchase_order_purchase_order_item_path(@purchase_order), class: "btn btn-success btn-round btn-outline", remote: true
-				- else
+			- if @purchase_order.approved? 
+				- if current_user.role.role_level != 'branch'
 					= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Add New Purchase Order Item".html_safe,  new_purchase_order_purchase_order_item_path(@purchase_order), class: "btn btn-success btn-round btn-outline", remote: true
+			- else
+				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Add New Purchase Order Item".html_safe,  new_purchase_order_purchase_order_item_path(@purchase_order), class: "btn btn-success btn-round btn-outline", remote: true
 
 		.pull-right
 			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'

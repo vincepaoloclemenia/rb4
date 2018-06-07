@@ -55,7 +55,10 @@
         span.inline.float-right
             = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
             |
-            = f.submit "Add", class: "btn btn-primary"
+            - if @purchase_order_item.new_record?
+                = f.submit "Add", class: "btn btn-primary"
+            - else
+                = f.submit "Save", class: "btn btn-primary"
 
 javascript:
 
