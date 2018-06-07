@@ -26,10 +26,7 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 				td.action data-title="Action"
 					/ - if view_access_control('purchase_order_items','destroy')
 					= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_order_purchase_order_item_path(purchase_order_id: @purchase_order.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
-		tr.highlight
-			td.align-right colspan='7' data-title="Sub Total" Sub Total
-			td colspan='2' data-title='Vat' = to_peso(purchase_order.sub_total)
-		
+		/Removed Subtotal as per request	
 		tr.highlight
 			td.align-right colspan='7' data-title="Total Amount" Total Amount
 			td colspan='2' data-title='Vat' = to_peso(purchase_order.total_amount)

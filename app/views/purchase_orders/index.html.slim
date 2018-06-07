@@ -32,7 +32,7 @@
 			/- else
 			/	= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_po_purchase_orders_path, class: "btn btn-success btn-round btn-outline", remote: true
 	.panel-body
-		- if current_brand.restrict_branch_admins?
+		- if current_brand.restrict_branch_admins? && branch_admin?
 			.alert.alert-danger role="alert"
 				.row
 					.hidden-xs.col-sm-1.text-right

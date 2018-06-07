@@ -14,7 +14,6 @@
     table { padding: 5px }
     tr.highlighted { background-color: #C0EBFD }
     td.bold { font-weight: 700 }
-    table tbody tr td span.branch-label: { margin-left: 500px; font-weight: 700 }
     td.align-right { text-align: right }
     p.pdf-body{ font-family: 'Open Sans', sans-serif;font-size: 15px; text-justify: justify; margin-top: 15px; color: grey; z-index: 999; }
     .row { margin-right: -15px; margin-left: -15px }
@@ -86,7 +85,6 @@
                         <th>Item Name</th>
                         <th>Item Brand</th>
                         <th>Packaging</th>
-                        <th>Remarks</th>
                         <th>Quantity</th>
                         <th>Unit</th>
                         <th>Price</th>
@@ -97,33 +95,42 @@
                     <% @purchase_orders.keys.each do |branch| %>
                         <% @purchase_orders[branch].map do |pur| %>
                         <tr>   
-                            <td colspan='3'>Branch: </td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.branch.name %> </td>
+                            <td style='border:none;' colspan='1'>Branch: </td>
+                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.branch.name %> </td>
                         </tr>
                         <tr>    
-                            <td colspan='3'>PO Number:</td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.po_number %></td>
+                            <td style='border:none;' colspan='1'>PO Number:</td>
+                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.po_number %></td>
                         </tr>
                         <tr>
-                            <td colspan='3'>Delivery Date:</td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.delivery_date.strftime("%b %d, %Y") %></td>
+                            <td style='border:none;' colspan='1'>Delivery Date:</td>
+                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.delivery_date.strftime("%b %d, %Y") %></td>
                         </tr>
                         <tr>     
-                            <td colspan='3'>Delivery Time:</td><td style="color:<%= pur.branch.color %>;" colspan='5'><%= pur.delivery_time %></td>
+                            <td style='border:none;' colspan='1'>Delivery Time:</td>
+                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.delivery_time %></td>
+                        </tr>
+                        <tr>     
+                            <td style='border:none;' colspan='1'>Remarks</td>
+                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.remarks %></td>
+                        </tr>
+                        <tr>     
+                            <td style='border:none;' colspan='1'>Tin Number</td>
+                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.branch.tin_number %></td>
                         </tr>
                             <% pur.purchase_order_items.map do |pi| %>
                                 <tr>
                                     <td>
                                         <%= pi.item.name %>
                                     </td>
-                                    <td>
+                                    <td class='center'>
                                         <%= pi.item_brand? ? pi.item_brand : "---" %>
                                     </td>
                                     <td class='center'>
                                         <%= pi.packaging %>
                                     </td>
                                     <td class='center'>
-                                        <%= pi.remarks %>
-                                    </td>
-                                    <td class='center'>
-                                        <%= pi.quantity.to_s %>
+                                        <%= pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s %>
                                     </td>
                                     <td>
                                         <%= pi.unit.name%>
@@ -137,7 +144,7 @@
                                 </tr>
                             <% end %>
                             <tr class='highlighted '>
-                                <td colspan='7'>Total</td>
+                                <td colspan='6'>Total</td>
                                 <td class='bold'><%= number_to_currency(pur.total_amount, unit: "₱ ") %></td>
                             </tr>
                         <% end %>

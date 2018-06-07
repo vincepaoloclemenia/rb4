@@ -15,6 +15,24 @@ json.approved_purchase_orders do |json|
         json.terms po.terms
         json.status po.status
         json.supplier po.supplier
+        json.client_and_sent client_admin? || !po.sent
+        json.date_sent po.date_sent.present? ? time_ago_in_words(po.date_sent) + " ago" : "Unsent"
+    end
+end
+
+json.suppliers do |json|
+    json.array! @suppliers.each_with_index.to_a do |sup, index|
+        json.label sup.name
+        json.input sup.id
+        json.value index
+    end
+end
+
+json.branches do |json|
+    json.array! @branches.each_with_index.to_a do |branch, index|
+        json.label branch.name
+        json.input branch.id
+        json.value index
     end
 end
 

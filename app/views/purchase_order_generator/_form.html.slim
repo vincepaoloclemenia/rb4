@@ -72,6 +72,13 @@
 							small.field-req   *
 							|  )
 							i  indicates field is required
+
+	.row.mb10
+			.col-xs-12
+				= f.label :remarks
+					|Remarks
+				= f.text_area :remarks, class: "form-control", rows:"3", placeholder: "Write your remarks" 
+	
 	.modal-footer.no-border
 		span.inline.float-right
 			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }

@@ -7,7 +7,6 @@
                         th width="145" Item Name
                         th width="145" Item Brand
                         th width="160" data-sortable="false" Packaging
-                        th width="160" data-sortable="false" Remarks
                         th width="110" Quantity
                         th width="115" Unit
                         th width="120" Unit Price
@@ -18,16 +17,11 @@
                             td data-title="Item Name" = pi.item.name
                             td data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
                             td data-title="Packaging" = pi.packaging
-                            td data-title="Packaging" = pi.remarks
-                            td data-title="Quantity" = pi.quantity.to_i.to_s
+                            td data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s 
                             td data-title="Unit" = pi.unit.name
                             td data-title="Unit Price" = to_peso(pi.price_selected)
                             td data-titile='Total Price' = to_peso(pi.total_amount)
 
                     tr.bg-total
-                        td.text-right.label-total colspan='7' data-title="Sub Total" Sub Total
-                        td.label-total-num data-title='Vat' = to_peso(@po.sub_total)
-    
-                    tr.bg-total
-                        td.text-right.label-total colspan='7' data-title="Total Amount" Total Amount
+                        td.text-right.label-total colspan='6' data-title="Total Amount" Total Amount
                         td.label-total-num data-title='Vat' = to_peso(@po.total_amount)

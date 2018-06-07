@@ -70,7 +70,7 @@ class PurchaseOrderSummary extends React.Component{
     }
 
     renderTableForBranchUsers(purchaseOrders){
-        if(purchaseOrders.length != 0){
+        if(purchaseOrders.length > 0){
             return(
                 purchaseOrders.map((po, index) => 
                     <tr key={index}>
@@ -80,13 +80,21 @@ class PurchaseOrderSummary extends React.Component{
                         <td data-title='PO No.'>{po.po_number ? po.po_number : '---' }</td>
                         <td data-title='PO Date'>{po.pr_date ?  po.po_date : '---' }</td>
                         <td data-title='Supplier.'>{po.supplier.name}</td>
-                        <td data-title='Status'>{po.status}</td>
+                        <td data-title='Status'>{po.status} --- {po.sent ? <span className='green'>Sent {po.date_sent}</span> : <span className='red'>Unsent</span> }</td>
                         <td className='action' data-title='Action'>
                             <a className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="View" rel="nofollow" href={`/purchase_orders/${po.id}/purchase_order_items`}><i className='icon-glyph-41 f14'></i></a>
-                            <a onClick={() => this.fetchData() } className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="Delete" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href={`/purchase_orders/${po.id}`}><i className="icon-glyph-76 f14"></i></a>
+                            {this.renderDeleteButton(po)}
                         </td>
                     </tr>
                 )
+            )
+        }
+    }
+
+    renderDeleteButton(po){
+        if(po.allowed_to_delete){
+            return(
+                <a onClick={() => this.fetchData() } className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="Delete" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href={`/purchase_orders/${po.id}`}><i className="icon-glyph-76 f14"></i></a>                
             )
         }
     }

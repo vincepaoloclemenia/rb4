@@ -9,10 +9,14 @@ class ApplicationController < ActionController::Base
   #before_action :access_control, if: :wizard_done?
   #before_action :restrict_users
 
-  helper_method :current_client, :current_brand, :view_access_control, :current_subscription, :branch_admin?
+  helper_method :client_admin?, :current_client, :current_brand, :view_access_control, :current_subscription, :branch_admin?
 
   def branch_admin?
     current_user.role.role_level == 'branch'
+  end
+
+  def client_admin?
+    current_user.role.role_level == 'client'
   end
 
   def current_client
