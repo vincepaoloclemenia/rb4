@@ -33,17 +33,39 @@ class PurchaseOrderApproved extends React.Component{
 
     handleNextPurchaseOrders(){
         this.setState({ fetching: true })
-        $.ajax({
-            url: `/api/purchase_order_summary.json?page=${this.state.nextPage}`,
-            method: 'GET',
-            success: (data) => {
-                this.setState({
-                    fetching: false,
-                    nextPage: data.next_page,
-                    purchaseOrders: [ ...this.state.purchaseOrders, ...data.approved_purchase_orders ]
-                });
-            }
-        })
+        if(this.state.searching){
+            $.ajax({
+                url: `/api/purchase_order_summary.json`,
+                method: 'GET',
+                data: {
+                    search: { 
+                        branch: this.state.branch ? [this.state.branch.input] : [] , 
+                        supplier: this.state.supplier ? [this.state.supplier.input] : [], 
+                        date: $("#q_purchase_date_cont").val() === '' ? [] : $("#q_purchase_date_cont").val().split(" - ") 
+                    },
+                    page: this.state.nextPage
+                },
+                success: (data) => {
+                    this.setState({
+                        fetching: false,
+                        nextPage: data.next_page,
+                        purchaseOrders: [ ...this.state.purchaseOrders, ...data.approved_purchase_orders ]
+                    });
+                }
+            })
+        }else{
+            $.ajax({
+                url: `/api/purchase_order_summary.json?page=${this.state.nextPage}`,
+                method: 'GET',
+                success: (data) => {
+                    this.setState({
+                        fetching: false,
+                        nextPage: data.next_page,
+                        purchaseOrders: [ ...this.state.purchaseOrders, ...data.approved_purchase_orders ]
+                    });
+                }
+            })
+        }
     }
 
     resetEverything(){
