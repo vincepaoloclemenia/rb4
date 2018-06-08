@@ -147,7 +147,7 @@ class PurchaseOrdersListing extends React.Component{
                                     <td>{item.po_number}</td>
                                     <td>{item.po_date}</td>
                                     <td>{item.remarks}</td>
-                                    <td>{item.po_number}</td>
+                                    <td>{item.item}</td>
                                     <td>{item.po_number}</td>
                                     <td style={{ textAlign: 'center' }}>{item.packaging}</td>
                                     <td style={{ textAlign: 'center' }}>{item.quantity}</td>
