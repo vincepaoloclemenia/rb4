@@ -53,8 +53,10 @@
 							= link_to "Purchase Order Generator", purchase_order_generator_index_path					
 						li class = '#{what_controller?('purchase_orders', 'index')}'
 							= link_to "Pending Purchase Orders", purchase_orders_path
+						li class = '#{what_controller?('purchase_orders_listing', 'index')}'
+							= link_to "Purchase Order Listing", purchase_orders_listing_index_path
 						li class = '#{what_controller?('purchase_orders_summary', 'index')}'
-							= link_to "Summary", purchase_orders_summary_index_path	
+							= link_to "Purchase Orders Summary", purchase_orders_summary_index_path	
 
 				li.menu-accordion class="#{is_menu_open?('management_reports')}"
 					= link_to '<i class="fa icon-glyph-63"></i> <span>Management Reports</span>'.html_safe, 'javascript:;'

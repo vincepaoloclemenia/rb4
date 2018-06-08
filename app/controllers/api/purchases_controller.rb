@@ -73,7 +73,7 @@ class Api::PurchasesController < ApplicationController
     private
         
         def get_user_privilege
-            @user = current_user.role.role_level == 'branch' ? current_user.branch : current_brand
+            @user = branch_admin? ? current_user.branch : client_admin? ? current_brand : current_user.brand
         end
 
 end

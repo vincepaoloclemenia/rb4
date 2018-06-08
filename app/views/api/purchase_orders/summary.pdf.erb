@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Purchase Order Summary (<%= @date_range %>)</title>
+            <%= wicked_pdf_stylesheet_link_tag 'style' %>
+            <%= wicked_pdf_stylesheet_link_tag 'pdf' %>
+        <meta charset='utf-8'>
+    </head>
+    <style type="text/css">
+        @import url(http://fonts.googleapis.com/css?family=Lora|Ubuntu|Noto+Sans|Ubuntu|Vollkorn+SC|Work+Sans|Open+Sans|Patua+One|Francois+One);
+        td.small-font-size { font-size: 11px }
+        h4 { font-family: 'Noto Sans', sans-serif }
+    </style>
+    <body id='pdf-body'>
+        <div class='pdf-container'>    
+			<h4>Purchase List Summary ( <%= @date_range %> )</h4>       
+			<table class="table table-bordered table-striped mb0">
+				<thead>
+					<tr class="big-head">
+						<th>PO NUMBER</th>
+						<th>PO DATE</th>
+						<th>REMARKS</th>
+						<th>ITEM NAME</th>
+						<th>ITEM BRAND</th>
+						<th>PACKAGING</th>
+						<th>QUANTITY</th>
+						<th>UNIT</th>
+						<th>UNIT PRICE</th>
+						<th>TOTAL PRICE</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @purchase_orders.keys.each do |supplier| %>
+                        <tr class='total-amount'>
+                            <td style="text-align: center" class='subcategory' colspan='10' ><%= supplier.name %></td>        
+                        </tr>
+                        <% @purchase_orders[supplier].each do |item| %>
+                            <tr>
+                                <td class='small-font-size'><%= item.purchase_order.po_number %></td>
+                                <td class='small-font-size'><%= item.purchase_order.po_date.strftime("%b %d, %Y") %></td>
+                                <td class='small-font-size'><%= item.purchase_order.remarks %></td>
+                                <td class='small-font-size'><%= item.item.name %></td>
+                                <td class='small-font-size'><%= item.item_brand %></td>
+                                <td class='small-font-size'><%= item.packaging %></td>
+                                <td class='small-font-size'><%= item.quantity % 1 == 0 ? item.quantity.to_i : item.quantity %></td>
+                                <td class='small-font-size'><%= item.unit.name %></td>
+                                <td class='small-font-size'><%= to_peso(item.price_selected)%></td>
+                                <td class='small-font-size'><%= to_peso(item.total_amount) %></td>
+                            </tr>
+                            
+                        <% end %>
+                        <tr class='bg-total'>
+                            <td style="text-align:right" colspan='8' data-title='Total Amount'>Total amount ordered from <%= supplier.name %></td>
+                            <td class='label-total-num' colspan='2' data-title='Total Amount'><%= to_peso(@purchase_orders[supplier].map(&:total_amount).sum) %></td>
+                        </tr>   	
+                    <% end %>
+				</tbody>
+			</table>
+		</div>
+    </body>
+</html>
