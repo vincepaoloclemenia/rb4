@@ -13,7 +13,7 @@ class PaymentNotificationsController < ApplicationController
       # process payment
      	case params[:txn_type]
      	when "recurring_payment_profile_created"
-     		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
+     		subscription = current_subscription
      		subscription.update_attributes(status: params[:profile_status], 
                                       start_date: DateTime.now.in_time_zone,
                                       end_date: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly),
@@ -26,7 +26,7 @@ class PaymentNotificationsController < ApplicationController
      		# 													branches: subscription.branches.pluck(:name).join(", "),
        #                            client_id: subscription.client_id)
      	when "recurring_payment"
-     		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
+     		subscription = current_subscription
      		subscription.update_attributes(start_date: DateTime.now.in_time_zone,
                                       end_date: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly),
                                       previous_payment: DateTime.strptime(params[:payment_date], "%I:%M:%S %b %d, %Y %Z").in_time_zone, 
@@ -42,20 +42,20 @@ class PaymentNotificationsController < ApplicationController
                                   end_date: DateTime.now.in_time_zone + 1.send(subscription.plan.period_without_ly))
      	when "recurring_payment_outstanding_payment"
      	when "recurring_payment_expired"
-     		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
+     		subscription = current_subscription
      		subscription.update_attributes(status: params[:profile_status])
      	when "recurring_payment_failed"
      	when "recurring_payment_profile_cancel"
         #cancel recurring profile (DELETE)
-     		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
+     		subscription = current_subscription
      		subscription.update_attributes(status: params[:profile_status])
      	when "recurring_payment_skipped"
      	when "recurring_payment_suspended"
         #suspend recurring profile (PAUSE)
-     		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
+     		subscription = current_subscription
      		subscription.update_attributes(status: params[:profile_status])
      	when "recurring_payment_suspended_due_to_max_failed_payment"
-     		subscription = Subscription.find_by_paypal_recurring_profile_token(params[:recurring_payment_id])
+     		subscription = current_subscription
      		subscription.update_attributes(status: params[:profile_status])
      	when "express_checkout"
      	else

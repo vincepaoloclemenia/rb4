@@ -110,6 +110,17 @@ class PagesController < ApplicationController
 					status: :ok
 	end
 
+	def get_total_amount
+		@plan = Plan.find(params[:plan_id].to_i)
+		if current_client.has_subscribed?
+			branches_count = current_client.branches.size
+			selected_branches = params[:branches].to_i
+			render json: { amount: (@plan.amount * (branches_count + selected_branches)).to_i, period: @plan.period }
+		else
+			render json: { amount: (@plan.amount * params[:branches].to_i).to_i, period: @plan.period  }
+		end
+	end
+
 	def registration_validate_email
 		@taken = User.all.pluck(:email).include? params[:email]
 		@email = params[:email]

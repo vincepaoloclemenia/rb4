@@ -6,8 +6,8 @@ class Branch < ActiveRecord::Base
   has_many :inventories, dependent: :restrict_with_error
   has_many :purchases
   has_many :purchase_items, through: :purchases
-  has_many :branch_subscriptions
-  has_many :subscriptions, through: :branch_subscriptions
+  has_one :branch_subscription
+  has_one :subscription, through: :branch_subscription
   has_many :purchase_orders, dependent: :destroy
   has_many :order_lists, dependent: :destroy
 
@@ -45,15 +45,11 @@ class Branch < ActiveRecord::Base
   end
 
   def free_trial
-    self.subscriptions.find_by_plan_id(1)
+    subscription.free_trial
   end
 
   def free_trial?
     free_trial.present?
-  end
-
-  def subscription
-    self.subscriptions.where.not(plan_id: 1).find_by_status(["Active","Processing"])
   end
 
   def subscribed?

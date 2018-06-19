@@ -14,6 +14,7 @@ class SubscriptionsController < ApplicationController
 	def subscribe
 		@subscription = current_client.subscription
 		@branches = current_client.branches.pluck :name
+		@action = current_client.has_subscribed? ? "update" : "create"
 	end
 
   def cancel
@@ -22,7 +23,7 @@ class SubscriptionsController < ApplicationController
     ppr = PayPal::Recurring.new(:profile_id => subscription.paypal_recurring_profile_token)
     response = ppr.cancel
     if response.success?
-      subscription.status = "Processing"
+      subscription.status = "Cancelled"
       subscription.save
       respond_to do |format|
         format.html { redirect_to subscriptions_path, notice: 'Subscription cancellation in progress..' }
@@ -48,47 +49,76 @@ class SubscriptionsController < ApplicationController
   end
 
 	def process_subscription
-		if params[:plan_id] && params[:PayerID] && params[:token]
-			current_client.subscription.update(
-				free_trial: false, 
-				plan_id: params[:plan_id],
-				paypal_customer_token: params[:PayerID],
-				paypal_payment_token: params[:token],
-				start_date: DateTime.now,
-				end_date: DateTime.now + 1.month
-			)
+		if params[:branches] && params[:PayerID] && params[:token]
+			branches = params[:branches]
+			plan = Plan.find 2
 			@subscription = current_subscription
-
-			if @subscription.payment_provided?
-				branches = current_client.branches
-				plan = @subscription.plan
-				@subscription.branch_count = branches.count
-				@subscription.amount = plan.amount * branches.count
-				@subscription.period = plan.period
-				if @subscription.save_with_payment
-					redirect_to subscriptions_path, notice: "Subscription is now being processed by PayPal. This could only take a few moments."
-				else
-					redirect_to subscriptions_path, alert: @subscriptions.errors.full_messages.join(", ")
+			@subscription.paypal_customer_token = params[:PayerID]
+			@subscription.paypal_payment_token = params[:token]	
+			@subscription.plan_id = plan.id
+			@subscription.branch_count = branches.count
+			@subscription.amount = plan.amount * branches.count
+			@subscription.period = plan.period	
+			if @subscription.save_with_payment
+				current_client.unsubscribed_branches.where(id: branches).each do |branch|
+					branch.create_branch_subscription(subscription_id: @subscription.id)
 				end
+				redirect_to subscriptions_path, notice: "Subscription is now being processed by PayPal. This could only take a few moments."
+			else
+				redirect_to subscriptions_path, alert: @subscription.errors.full_messages.join(", ")
+			end
+		end
+	end
+
+	def update_subscription
+		if params[:branches] && params[:PayerID] && params[:token]
+			branches = params[:branches]
+			existing_branch_count = current_client.branches.size
+			plan = Plan.find 2
+			@subscription = current_subscription
+			@subscription.paypal_payment_token = params[:token]
+			@subscription.paypal_customer_token = params[:PayerID]
+			@subscription.plan_id = plan.id
+			@subscription.branch_count = branches.count
+			@subscription.amount = plan.amount * ( branches.count + existing_branch_count )
+			@subscription.period = plan.period
+			if @subscription.update_with_payment
+				current_client.unsubscribed_branches.where(id: branches).each do |branch|
+					branch.create_branch_subscription(subscription_id: @subscription.id)
+				end
+				redirect_to subscriptions_path, notice: "You have successfully updated your subscription for additional #{branches.count + existing_branch_count} branch(es). This could only take a few moments."
+			else
+				redirect_to subscriptions_path, alert: @subscription.errors.full_messages.join(", ")
 			end
 		end
 	end
 
 	def paypal_checkout
-		branches = current_client.branches
+		branches = params[:subscription][:branches].select { |b| b.present? }
 		#branches = params[:subscription][:branches].select { |b| b.present? }
 		if branches.empty?
 			redirect_to subscriptions_path, alert: "Subscription creation failed. You dont have branches to pay yet."
 		else
-			plan = Plan.find(params[:subscription][:plan_id])
-	    subscription = current_client.subscription
-	    redirect_to subscription.paypal.checkout_url(
-	      return_url: process_subscription_url(:plan_id => plan.id),
-	      cancel_url: subscriptions_url,
-	      description: "#{subscription.plan.name} for a total of #{branches.count} #{'branch'.pluralize(branches.count)}",
-				amount: plan.amount * branches.count,
-				currency: "PHP"
-	    )
-	 	end
+			plan = Plan.find 2
+			subscription = current_client.subscription
+			if params[:subscription][:paypal_action].eql? 'create'
+				redirect_to subscription.paypal.checkout_url(
+					return_url: process_subscription_url(:plan_id => plan.id, branches: branches),
+					cancel_url: subscriptions_url,
+					description: "#{plan.name} for a total of #{branches.count} #{'branch'.pluralize(branches.count)}",
+					amount: plan.amount * branches.count,
+					currency: "PHP"
+				)
+			else
+				branches_count = current_client.branches.size + branches.count
+				redirect_to subscription.paypal.checkout_url(
+					return_url: update_subscription_url(:plan_id => plan.id, branches: branches),
+					cancel_url: subscriptions_url,
+					description: "#{plan.name} for a total of #{branches_count} #{'branch'.pluralize(branches_count)}",
+					amount: plan.amount * branches_count,
+					currency: "PHP"
+				)
+			end
+		 end
 	end
 end

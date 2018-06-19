@@ -2,15 +2,15 @@ class Client < ActiveRecord::Base
 	has_many :client_user_accesses
 	has_many :users, through: :client_user_accesses
 	has_many :brands
-	has_many :branches, through: :brands
+	has_many :all_branches, through: :brands, class_name: 'Branch', source: :all_branches
 	has_many :roles
 	has_many :settlements
-	has_many :employees, through: :branches
+	has_many :employees, through: :all_branches
 	has_many :suppliers
 	has_many :purchases
 	has_many :purchase_items, through: :purchases
 	has_one :subscription
-	#has_many :bills, through: :subscriptions
+	has_many :bills, through: :subscription
 	has_one :setting, dependent: :destroy
 	has_many :purchase_orders, dependent: :destroy
 	has_many :order_lists, through: :brands, dependent: :destroy
@@ -27,6 +27,18 @@ class Client < ActiveRecord::Base
 		subscription.plan_id == 1
 	end
 
+	def branches
+		if on_free_trial?
+			all_branches
+		else
+			all_branches.includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil })
+		end
+	end
+
+	def unsubscribed_branches
+		all_branches.includes(:branch_subscription).where( branch_subscriptions: { branch_id: nil })
+	end
+
 	def on_free_trial?
 		free_trial? && subscription.end_date >= Date.today
 	end
@@ -36,11 +48,15 @@ class Client < ActiveRecord::Base
 	end
 
 	def has_paid_subscription?
-		subscription.plan_id != 1 && subscription.payment_provided? && subscription.end_date >= Date.today
+		subscription.plan_id == 2 && subscription.payment_provided?
 	end 
 
 	def unpaid_subscription?
 		subscription.plan_id != 1 && subscription.payment_provided? && subscription.end_date <= Date.today		
+	end
+
+	def has_subscribed? 
+		subscription.plan_id == 2
 	end
 
 	private

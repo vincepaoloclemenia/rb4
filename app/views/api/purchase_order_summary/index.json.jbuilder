@@ -5,7 +5,7 @@ json.approved_purchase_orders do |json|
         json.date_sent po.date_sent? ? po.date_sent.strftime("%b %d, %Y | %l:%M %p") : "Unsent"
         json.sent po.sent
         json.user po.user
-        json.branch po.branch
+        json.branch po.branch.name
         json.brand po.brand
         json.pr_number po.pr_number
         json.po_number po.po_number
@@ -14,7 +14,7 @@ json.approved_purchase_orders do |json|
         json.remarks po.remarks
         json.terms po.terms
         json.status po.status
-        json.supplier po.supplier
+        json.supplier po.supplier.name
         json.client_and_sent client_admin? || !po.sent
         json.date_sent po.date_sent.present? ? time_ago_in_words(po.date_sent) + " ago" : "Unsent"
     end

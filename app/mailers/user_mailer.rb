@@ -11,6 +11,7 @@ class UserMailer < ApplicationMailer
 
 	def send_purchase_order(purchase_order, purchase_order_items, user, recipient, subject, contact, title, message)
 		@purchase_order = purchase_order
+		@name = @purchase_order.brand.name
 		@purchase_order_items = purchase_order_items
 		@user = user
 		@email = recipient
@@ -19,11 +20,12 @@ class UserMailer < ApplicationMailer
 		@contact_title = title
 		@body = message
 		#attachments.inline["#{@purchase_order.brand.avatar_file_name}"] = File.read("#{Rails.root}/public#{@purchase_order.brand.avatar.url}")		
-		mail(to: @email, subject: @subject, content_type: 'text/html')
+		mail(from: "#{@name} <restobot@talentium.ph>", to: @email, subject: @subject, content_type: 'text/html')
 	end
 	
 	def send_bulk_of_purchase_orders(brand, supplier, purchase_orders, recipient, address, time, date, contact, subject, message)
 		@brand = brand
+		@name = @brand.name
 		@supplier = supplier
 		@purchase_orders = purchase_orders
 		@email = recipient
@@ -33,6 +35,6 @@ class UserMailer < ApplicationMailer
 		@date = date
 		@subject = subject
 		@body = message
-		mail(to: @email, subject: @subject, content_type: 'text/html')
+		mail(from: "#{@name} <restobot@talentium.ph>", to: @email, subject: @subject, content_type: 'text/html')
 	end
 end

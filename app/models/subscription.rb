@@ -14,6 +14,10 @@ class Subscription < ActiveRecord::Base
     where("plan_id != ?", 1)
   end
 
+  def paypal
+    PaypalPayment.new(self)
+  end
+
   def payment_provided?
     paypal_payment_token.present?
   end
@@ -22,12 +26,12 @@ class Subscription < ActiveRecord::Base
     if valid?
       if payment_provided?
         save_with_paypal_payment
+      else
+        errors.add("No payment provided yet.", " Sorry, your transaction cannot be completed.")
       end
+    else
+      errors.add("Invalid", " details. Transaction cannot be completed.")
     end
-  end
-
-  def paypal
-    PaypalPayment.new(self)
   end
 
   def save_with_paypal_payment
@@ -35,16 +39,25 @@ class Subscription < ActiveRecord::Base
     self.paypal_recurring_profile_token = response.profile_id
     self.paypal_email = self.paypal.checkout_details.email
     self.status = "Active"
-    # self.start_date = DateTime.now
-    # case self.plan_id
-    # when 2
-    #   self.end_date = DateTime.now + 1.month
-    # when 3
-    #   self.end_date = DateTime.now + 1.year
-    # else
-    # end
-
+    self.start_date = DateTime.now.in_time_zone('Pacific Time (US & Canada)')
+    self.end_date = DateTime.now.in_time_zone('Pacific Time (US & Canada)') + 1.month
     save!
+  end
+
+  def update_with_payment
+    if valid?
+      if payment_provided?
+        update_with_paypal_payment
+      else
+        errors.add("No payment provided yet.", " Sorry, your transaction cannot be completed.")
+      end
+    else
+      errors.add("Invalid", " details. Transaction cannot be completed.")
+    end
+  end
+
+  def update_with_paypal_payment
+    response = paypal.update_recurring
   end
 
   # Remove subscription of branches with 'Cancelled' subscription

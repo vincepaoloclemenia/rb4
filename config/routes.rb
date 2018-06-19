@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   resources :payment_notifications
   post 'paypal_checkout' => 'subscriptions#paypal_checkout'
   get 'process_subscription' => 'subscriptions#process_subscription'
+  get 'update_subscription' => 'subscriptions#update_subscription'
   delete 'subscription/:id/cancel', to: 'subscriptions#cancel', as: 'cancel_subscription'
   
   resources :purchase_orders_summary, only: :index 
@@ -119,6 +120,7 @@ Rails.application.routes.draw do
   get 'new_password_validate_email' => 'pages#new_password_validate_email'
   put 'change_brand' => 'pages#change_brand'
   get 'get_plan_info' => 'pages#get_plan_info'
+  get 'get_total_amount' => 'pages#get_total_amount'
   get 'get_price' => 'pages#get_price'
   get 'get_units' => 'pages#get_units'
   get 'take_units' => 'pages#take_units'

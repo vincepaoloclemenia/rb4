@@ -79,10 +79,10 @@ class PurchaseOrderOnhold extends React.Component{
             return(
                 purchaseOrders.map((po, index) => 
                     <tr key={index}>    
-                        <td data-title='Branch'>{po.branch.name}</td>
+                        <td data-title='Branch'>{po.branch}</td>
                         <td data-title='PR No.'>{po.pr_number}</td>
                         <td data-title='PR Date'>{po.pr_date ? po.pr_date : '---' }</td>
-                        <td data-title='Supplier.'>{po.supplier.name}</td>
+                        <td data-title='Supplier.'>{po.supplier}</td>
                         <td data-title='PO No.'>{po.po_number ? po.po_number : '---' }</td>
                         <td data-title='PO Date'>{po.po_date ? po.po_date : '---' }</td>
                         <td data-title='Status'>{po.status}</td>

@@ -1,6 +1,6 @@
 PayPal::Recurring.configure do |config|
 	config.sandbox = true
-	config.username = "pclemenia_api1.talentium.ph"
-	config.password = "6NQQRLGZMXGVZF5W"
-	config.signature = "Ai5WQD.0Wr-X3e3nArQqzScD4vOJAPPawp8-vHxjAtjCurBddmDMeThU"
+	config.username = "talentium_seller_api1.talentium.ph"
+	config.password = "QH6UELVENLZH7JYL"
+	config.signature = "AAZBo41292784GRQg0xxLmq7RGd-AFXqpVZica9yHfPBz7HmBSTOqRTM"
 end

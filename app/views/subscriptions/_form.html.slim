@@ -4,53 +4,75 @@
 			p.bg-danger Please select at least one branch
 	.row.mb10
 		.col-xs-12
-			= f.label :plan_id, "Monthly Subscription of Php #{Plan.find(2).amount.to_i} per Branch"
+			= f.label :plan_id, "Monthly Subscription of Php #{Plan.find(2).amount.to_i}"
 			= f.hidden_field :plan_id, value: 2
-	/.row.mb10
-	/	.col-xs-12
-	/		.no-more-tables
-	/			table.table.table-bordered.mb0
-	/				thead
-	/					tr
-	/						th style="text-align: center" width="15%" Branch
-	/						th Branch
-	/				tbody
-	/					- if current_client.branches.all_unsubscribed.empty?
-	/						tr
-	/							td colspan="2"
-	/								| No branch available. You can create new branches 
-	/								= link_to "here", brand_path(current_brand)
-	/					- else
-	/						= f.collection_check_boxes :branches, current_client.branches.all_unsubscribed, :id, :name do |b|
-	/							- if b.object.subscription && b.object.subscription.plan_id.eql?(1)
-	/								tr
-	/									= b.label do
-	/										td style="text-align: center" = b.check_box
-	/										td = "#{b.label} (Free Trial: #{distance_of_time_in_words_to_now(b.object.subscription.end_date)} left)".html_safe
-	/							- else
-	/								tr
-	/									= b.label do
-	/										td style="text-align: center" = b.check_box
-	/										td = b.label
+			= f.hidden_field :paypal_action, value: @action
+	.row.mb10
+		.col-xs-12
+			.no-more-tables
+				table.table.table-bordered.mb0
+					thead
+						tr
+							th style="text-align: center" width="15%"
+								span#all_select Select All 
+								br
+								input#select_all type="checkbox"
+							th Branch
+					tbody
+						- if current_client.unsubscribed_branches.empty?
+							tr
+								td colspan="2"
+									| No branch available. You can create new branches 
+									= link_to "here", brand_path(current_brand)
+						- else
+							= f.collection_check_boxes :branches, current_client.unsubscribed_branches, :id, :name, class: 'checkbox' do |b|
+								- if current_client.on_free_trial?
+									tr
+										= b.label do
+											td style="text-align: center" = b.check_box
+											td = "#{b.label} (Free Trial: #{distance_of_time_in_words_to_now(current_subscription.end_date)} left)".html_safe
+								- else
+									tr
+										= b.label do
+											td style="text-align: center" = b.check_box
+											td = b.label
 
-			/= f.select :branches, current_client.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select branches to include" }, style: "width: 100%; display: none;", multiple: true
+			/= f.select :branches, current_client.unsubscribed_branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select branches to include" }, style: "width: 100%; display: none;", multiple: true
 	.row.mb10
 		.col-xs-12
 			hr
+				p
+					| Rate per branch: Php 
+					span#amount-value
+					| &nbsp;
+					span#period-value
 				.no-more-tables
 					table.table.table-bordered.mb0
 						thead
 							tr.bg-thead
-								th width="80%" Number of Branches 
+								th width="80%" Branch
 								th width="20%" style="text-align: right" Amount
 						tbody#branches
 
 						tfoot
+							- if current_client.has_subscribed?
+								tr
+									td style="text-align: right"
+										b Your Current Monthly Subscription
+									td style="text-align: right"
+										b = "Php #{current_client.branches.size * current_subscription.plan.amount}"
 							tr
-								td style="text-align: left"
-									b = "#{@branches.count} Branches"
+								td style="text-align: right"
+									- if current_client.has_subscribed?
+										b Total Monthly Subscription
+									- else
+										b Total		
 								td#total style="text-align: right"
-									b = "Php #{@branches.count * 2500}"
+									- if current_client.has_subscribed?
+										b = "Php #{current_client.branches.size * current_subscription.plan.amount}"
+									- else
+										b Php 0.00
+							
 			hr
 	.modal-footer.no-border
 		span.inline.float-right
@@ -58,11 +80,52 @@
 			= f.submit "Subscribe via PayPal", class: "btn btn-primary"
 
 javascript:
-	/*var plan_id = $('#subscription_plan_id').val();
+	var plan_id = $('#subscription_plan_id').val();
 	var get_plan_info_path = "#{get_plan_info_path}?plan_id="+plan_id;
 	$.getJSON(get_plan_info_path, function( json ){
 		$('#amount-value').html(json.amount);
 		$('#period-value').html(json.period);
+	});
+	
+	$("#select_all").on('change', function(){
+		if($(this).prop('checked')){
+			var amount = 2500;
+			var period = "monthly";
+			var selected = $('input[type=checkbox]').not("#select_all").length;
+			$('#branches').empty();
+			$('input:checkbox').not(this).prop('checked', this.checked).each(function(index, value){		
+				var id = $(this).prop("id");
+				var label = $("label[for="+id+"]");
+				$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>Php "+amount+"</td><tr>");
+			});
+			$('#all_select').text("Unselect All")
+			$.ajax({
+				url: "#{get_total_amount_url}",
+				method: 'GET',
+				data: {
+					branches: selected,
+					plan_id: $('#subscription_plan_id').val()
+				},
+				success: (data) => {
+					$('#total').html("<b>Php "+data.amount+"<br>"+period+"</b>");
+				}
+			});	
+		}else{
+			$('#branches').empty();
+			$('input:checkbox').not(this).removeAttr('checked');
+			$.ajax({
+				url: "#{get_total_amount_url}",
+				method: 'GET',
+				data: {
+					branches: 0,
+					plan_id: $('#subscription_plan_id').val()
+				},
+				success: (data) => {
+					$('#total').html("<b>Php "+data.amount+"<br>"+data.period+"</b>");
+				}
+			});	
+			$('#all_select').text("Select All")
+		}
 	});
 
 	$('#subscription_plan_id').on('change', function(){
@@ -71,22 +134,19 @@ javascript:
 		$.getJSON(get_plan_info_path, function( json ){
 			$('#amount-value').html(json.amount);
 			$('#period-value').html(json.period);
-
 			var selected = $('input:checked');
-			var amount = $('#amount-value').text();
-			var period = $('#period-value').text();
+			var amount = 2500;
+			var period = "monthly";
 			$('#branches').empty();
 			$.each(selected, function( index, value ){
 				var id = $(this).prop("id");
 				var label = $("label[for="+id+"]");
 				$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>Php "+amount+"</td><tr>");
 			});
-			$('#total').html("<b>Php "+selected.length * amount+"<br>"+period+"</b>");
 		});
 	});
-
-	$('input[type=checkbox]').on('change', function(){
-		var selected = $('input:checked');
+	$('input[type=checkbox]').not("#select_all").on('change', function(){
+		var selected = $('input:checked').not("#select_all");
 		var amount = $('#amount-value').text();
 		var period = $('#period-value').text();
 		$('#branches').empty();
@@ -95,9 +155,18 @@ javascript:
 			var label = $("label[for="+id+"]");
 			$('#branches').append("<tr><td>"+label.text()+"</td><td style='text-align: right'>Php "+amount+"</td><tr>");
 		});
-		$('#total').html("<b>Php "+selected.length * amount+"<br>"+period+"</b>");
+		$.ajax({
+			url: "#{get_total_amount_url}",
+			method: 'GET',
+			data: {
+				branches: selected.length,
+				plan_id: $('#subscription_plan_id').val()
+			},
+			success: (data) => {
+				$('#total').html("<b>Php "+data.amount+"<br>"+period+"</b>");
+			}
+		});	
 	});
-
 	$('form').submit(function(e){
 		$('#no-branch-selected-error').hide();
 		var selected = $('input:checked');
@@ -108,4 +177,4 @@ javascript:
 			e.preventDefault();
 			$('#no-branch-selected-error').show();
 		}
-	});*/
+	});
