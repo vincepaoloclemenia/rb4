@@ -85,13 +85,15 @@ class Brand < ActiveRecord::Base
   def restrict_branch_admins?
     if brand_setting.present? && brand_setting.send_pos?
       setting = brand_setting.purchase_order_schedule[Date.today.wday]
-      complete_range = (eval(setting["allowed"]) && setting["from"].present? && setting["to"].present? && ( Time.now < setting["from"].to_time || Time.now > setting["to"].to_time ))
+      complete_range = (eval(setting["allowed"]) && setting["from"].present? && setting["to"].present? && ( setting["from"].to_time < Time.now || Time.now > setting["to"].to_time ))
       from_range_only = (eval(setting["allowed"]) && setting["from"].blank? && setting["to"].present? && Time.now > setting["to"].to_time)
-      to_range_only = (eval(setting["allowed"]) && setting["from"].present? && setting["to"].blank? && Time.now < setting["from"].to_time)
+      to_range_only = (eval(setting["allowed"]) && setting["from"].present? && setting["to"].blank? && setting["from"].to_time < Time.now )
       return !eval(setting["allowed"]) || complete_range || from_range_only || to_range_only
-    else 
-      false
     end
+  end
+
+  def allow_submission?
+    !restrict_branch_admins?
   end
 
   def average_revenues(range)

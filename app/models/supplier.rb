@@ -2,6 +2,7 @@ class Supplier < ActiveRecord::Base
   belongs_to :brand
   belongs_to :client
   belongs_to :branch
+  has_many :purchase_orders, dependent: :destroy
   has_and_belongs_to_many :items
   has_many :prices, class_name: 'SupplierItemPrice'
   validates :client_id, presence: true

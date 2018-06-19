@@ -8,7 +8,7 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :purchase_order_items, dependent: :destroy
   has_many :items, through: :purchase_order_items, dependent: :destroy
 
-  default_scope -> { order(created_at: :desc) }
+  default_scope -> { where.not(supplier_id: nil).order(created_at: :desc) }
   scope :approved_pos, ->  { where status: 'Approved' }
   scope :new_pos, -> { includes(:purchase_order_items).where( status: 'Pending' ).where.not( purchase_order_items: { purchase_order_id: nil } ) }
   scope :on_hold_pos, -> { where status: 'On Hold' }

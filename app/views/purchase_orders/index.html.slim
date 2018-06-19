@@ -27,7 +27,7 @@
 		.pull-right
 			/ - if view_access_control('purchase_orders','create')
 			/ - if current_user.role.role_level.eql?('branch')
-			- if current_user.role.role_level == 'branch' && !current_brand.restrict_branch_admins?
+			- if branch_admin? && current_brand.allow_submission?
 				= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_purchase_order_path, class: "btn btn-success btn-round btn-outline", remote: true
 			/- else
 			/	= link_to "<i class='icon-glyph-164 mr5 f14' ></i> Create Purchase".html_safe, new_po_purchase_orders_path, class: "btn btn-success btn-round btn-outline", remote: true
