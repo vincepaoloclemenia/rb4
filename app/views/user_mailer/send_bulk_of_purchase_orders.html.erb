@@ -74,7 +74,7 @@
                                         <th>Company Name</th>
                                         <td><%= pur.branch.company_registered_name %></td>
                                         <th>Delivery date and time</th>
-                                        <td><%= pur.delivery_date.strftime('%B %d, %Y') %>, <%= pur.delivery_time %></td>
+                                        <td><%= pur.delivery_date.strftime('%B %d, %Y') %>, <%= pur.delivery_time.to_time.strftime("%l:%M %P") %></td>
                                     </tr>
                                     <tr>                         
                                         <th>Tin Number</th>

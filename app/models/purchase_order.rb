@@ -21,6 +21,7 @@ class PurchaseOrder < ActiveRecord::Base
   
   #validates :delivery_date, :delivery_time, presence: true, if: :approved?
   before_save :check_if_restricted?, if: :branch_user?
+  validate :validate_date, on: :update
 
   pg_search_scope :search_po_number, against: [ :po_number ], using: { tsearch: { prefix: true, any_word: true } }
   pg_search_scope :search_status, against: [ :status ]  
@@ -63,6 +64,34 @@ class PurchaseOrder < ActiveRecord::Base
   def self.dynamic_search(po_num, suppliers, branches, items, status, creator )
     keywords = "all#{po_num == '' ? '' : '.search_po_number(po_num)'}#{suppliers.present? ? '.search_suppliers(suppliers)' : ''}#{branches.present? ? '.search_branches(branches)' : ''}#{items.present? ? '.search_items(items)' : ''}#{status == '' ? '' : '.search_status(status)'}#{creator == '' ? '' : '.search_creator(creator)'}"
 		eval(keywords)
+  end
+
+  def valid_date?
+    if delivery_date.nil?
+      return false
+    else
+      del_dd = Proc.new do |dd|
+        begin
+          dd.strftime("%B %d, %Y")
+          return true
+        rescue ArgumentError
+          false
+        end
+      end
+      return del_dd.call(delivery_date)
+    end
+  end
+
+  def valid_time?
+    if delivery_time.nil?
+      return false
+    else
+      return delivery_time.to_time.present?
+    end
+  end
+
+  def validate_date
+    errors.add("Invalid", " date") unless delivery_date != '' || valid_date?
   end
 
 end

@@ -159,12 +159,12 @@ class PurchaseOrdersController < ApplicationController
 	def send_email_notification
 		@purchase_order = current_brand.purchase_orders.find(params[:po])
 		@purchase_order_items = @purchase_order.purchase_order_items.all
-		@subject = params[:po_email][:subject]
-		@person = params[:po_email][:contact_person]
-		@recipients = params[:po_email][:recipients]
-		@title = params[:po_email][:contact_title]
-		@message = params[:po_email][:body]
-		@from = params[:po_email][:from]
+		@subject = po[:subject]
+		@person = po[:contact_person]
+		@recipients = po[:recipients]
+		@title = po[:contact_title]
+		@message = po[:body]
+		@from = po[:from]
 		
 		@recipients.map do |recipient|
 			if recipient == ''
@@ -187,11 +187,13 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def mail_bulk_of_purchase_orders
-		@subject = params[:po_email][:subject]
+		po = params[:po_email]
+		@subject = po[:subject]
 		@supplier = Supplier.find(params[:supplier])	
-		@recipients = params[:po_email][:recipients]
-		if @subject == '' || @recipients == [] || @supplier.nil? 
-			redirect_to purchase_order_generator_index_path, alert: "Your mail information was incomplete. Sending Failed"
+		@recipients = po[:recipients].select { |x| x.present? }
+		@pos = current_brand.purchase_orders.where(id: params[:purchase_orders])
+		if @subject == '' || @recipients.empty? || @pos.map { |x| x.valid_time? && x.valid_date? }.include?(false)
+			redirect_to purchase_orders_path, alert: "Incomplete information. Sending of email cannot be completed."
 		else
 			@pos = current_brand.purchase_orders.where(id: params[:purchase_orders])
 			@pos.map { |purchase_order| purchase_order.update( po_date: Date.today, po_number: po_approval_format(purchase_order) ) }
@@ -220,7 +222,7 @@ class PurchaseOrdersController < ApplicationController
 			end	
 			redirect_to purchase_order_generator_index_path, notice: "Your email to #{@supplier.name} has been sent."				
 			@pos.update_all(date_sent: DateTime.now, sent: true, status: "Approved")
-		end	
+		end
 	end
 
 	def purchase_order

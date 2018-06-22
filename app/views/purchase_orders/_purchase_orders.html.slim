@@ -20,10 +20,10 @@
                         label Delivery Time
                     .col-xs-3
                         label 
-                            b = po.delivery_time.nil? ? "<i style='color: red'>Invalid Time / no time </i>".html_safe : po.delivery_time.to_time.nil? ? "<i style='color: red'>Invalid Time / no time </i>".html_safe : po.delivery_time.to_time.strftime("%l:%M %P")
+                            b = po.delivery_time.nil? ? "<i style='color: red'>Invalid Time / No delivery time</i>".html_safe : po.delivery_time.to_time.nil? ? "<i style='color: red'>Invalid Time / no time </i>".html_safe : po.delivery_time.to_time.strftime("%l:%M %P")
                     .col-xs-2
                         label
-                            = link_to "<i class='icon-glyph mr5' ></i>Edit".html_safe, purchase_order_edit_delivery_details_path(po, purchases: ids, supplier_id: po.supplier.id), class: "btn btn-edit", data: { tt: "tooltip", placement: "top", "original-title" => "Edit Delivery Date" }, remote: true
+                            = link_to "<i class='icon-glyph mr5' ></i>Edit details".html_safe, purchase_order_edit_delivery_details_path(po, purchases: ids, supplier_id: po.supplier.id), class: "btn btn-edit", data: { tt: "tooltip", placement: "top", "original-title" => "Edit Delivery Date" }, remote: true
 
             table.table.table-bordered.table-striped.mb0 data-sortable="true"
                 thead
