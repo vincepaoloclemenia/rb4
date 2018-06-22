@@ -50,7 +50,8 @@
       = f.label :delivery_time
         | Delivery Time
         small.field-req  * <i>For Purchasing Purposes</i>
-      = f.text_field :delivery_time, class: "form-control", placeholder: "Delivery Time"
+      input.form-control type='time' name='branch[delivery_time]' id='delivery_time'         
+
     .col-xs-12.col-lg-4.mb10
       = f.label :landline_no
       = f.number_field :landline_no, class: "form-control"

@@ -245,7 +245,7 @@ class PurchaseOrders extends React.Component{
                 <tbody>
                     <tr className='total-amount'>
                         <td colSpan='9' data-title='Total Amount'>Total Amount</td>
-                        <td colSpan='2' data-title='Total Amount'>{this.state.totalAmount}</td>
+                        <td className='text-pull-right' colSpan='2' data-title='Total Amount'>{this.state.totalAmount}</td>
                     </tr>     
                 </tbody>
             )
@@ -281,9 +281,9 @@ class PurchaseOrders extends React.Component{
                                 <td data-title='Status'>{po.status}</td>    
                                 <td data-title='Item Name'>{poi.item.name}</td>      
                                 <td data-title='Packaging'>{poi.packaging}</td>   
-                                <td data-title='Quantity'>{poi.quantity}</td>    
-                                <td data-title='Item Price'>{poi.price_selected}</td>      
-                                <td data-title='Total Price'>{poi.total_price}</td>                            
+                                <td className='text-centered' data-title='Quantity'>{poi.quantity}</td>    
+                                <td className='text-pull-right' data-title='Item Price'>{poi.price_selected}</td>      
+                                <td className='text-pull-right' data-title='Total Price'>{poi.total_price}</td>                            
                             </tr>  
                         )}                                    
                     </tbody>
@@ -303,14 +303,14 @@ class PurchaseOrders extends React.Component{
                             <td data-title='Status'>{po.status}</td>    
                             <td data-title='Item Name'>{poi.item.name}</td>      
                             <td data-title='Packaging'>{poi.packaging}</td>   
-                            <td data-title='Quantity'>{poi.quantity}</td>    
-                            <td data-title='Item Price'>{poi.price_selected}</td>      
-                            <td data-title='Total Price'>{poi.total_price}</td>                            
+                            <td className='text-centered' data-title='Quantity'>{poi.quantity}</td>    
+                            <td className='text-pull-right' data-title='Item Price'>{poi.price_selected}</td>      
+                            <td className='text-pull-right' data-title='Total Price'>{poi.total_price}</td>                            
                         </tr>    
                     )}                                
                     <tr key={index} className='total-amount'>
                         <td colSpan='9' data-title='Total Amount'>Total Amount</td>
-                        <td colSpan='2' data-title='Total Amount'>{po.total_amount}</td>
+                        <td className='text-pull-right' colSpan='2' data-title='Total Amount'>{po.total_amount}</td>
                     </tr>          
                 </tbody>
             )

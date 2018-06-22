@@ -46,111 +46,100 @@
                     <img class='brand-avatar' alt='<%= @brand.name %>' src="<%= 'http://restobotv4.cloudapp.net' + @brand.avatar.url %>" />
                 </center>
             </div>
-            <div class='row'>
-                <div class='col-xs-12'>
-                    <div class='pull-right'>
-                        <h5 class='po-labels'>PO DATE: <span><%= @date.strftime('%B %d, %Y') %></span></h5>
-                    </div>
-                </div>
-            </div>
-            <div class='row mb10'>
-                <table id='po-details'>
-                    <thead>
-                        <tr>
-                            <th>Company</th>
-                            <td><%= @brand.name %></td>
-                            <th>Delivery Address</th>
-                            <td><%= @address %></td>
-                        </tr>                        
-                        <tr>
-                            <th>Supplier</th>
-                            <td><%= @supplier.name %></td> 
-                            <th>Contact Person</th>
-                            <td><%= @contact %></td>   
-                                
-                        </tr>
-                        <tr>
-                            <th>Delivery date and time</th>
-                            <td><%= @date.strftime('%B %d, %Y') %>, <%= @time %></td>
-                            <th></th>
-                            <td></td>      
-                        </tr>
+
+            <div class='row mb15'>
+                <% @purchase_orders.keys.each do |branch| %>
+                    
+                    <% @purchase_orders[branch].map do |pur| %>
+                        <div class='row'>
+                            <div class='col-xs-12'>
+                                <div class='pull-left'>
+                                    <h5 class='po-labels'>PO NUMBER: <span><%= pur.po_number %></span></h5>
+                                </div>
+                                <div class='pull-right'>
+                                    <h5 class='po-labels'>PO DATE: <span><%= pur.po_date.strftime('%B %d, %Y') %></span></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row mb10'>
+                            <table id='po-details'>
+                                <thead>
+                                    <tr>
+                                        <th>Branch</th>
+                                        <td><%= pur.branch.name %></td>
+                                        <th>Delivery Address</th>
+                                        <td><%= pur.branch.address1 %></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Company Name</th>
+                                        <td><%= pur.branch.company_registered_name %></td>
+                                        <th>Delivery date and time</th>
+                                        <td><%= pur.delivery_date.strftime('%B %d, %Y') %>, <%= pur.delivery_time %></td>
+                                    </tr>
+                                    <tr>                         
+                                        <th>Tin Number</th>
+                                        <td><%= pur.branch.tin_number.present? ? pur.branch.tin_number : 'NA' %></td>    
+                                        <th>Supplier</th>
+                                        <td><%= pur.supplier.name %></td>        
+                                    </tr>
+                                    <tr>                
+                                        <th>Remarks</th>
+                                        <td><%= pur.remarks %></td>     
+                                        <th>Contact Person</th>
+                                        <td><%= pur.supplier.contact_person %></td>     
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                         
-                    </thead>
-                </table>
-            </div>
-            <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Item Brand</th>
-                        <th>Packaging</th>
-                        <th>Quantity</th>
-                        <th>Unit</th>
-                        <th>Price</th>
-                        <th>Total Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% @purchase_orders.keys.each do |branch| %>
-                        <% @purchase_orders[branch].map do |pur| %>
-                        <tr>   
-                            <td style='border:none;' colspan='1'>Branch: </td>
-                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.branch.name %> </td>
-                        </tr>
-                        <tr>    
-                            <td style='border:none;' colspan='1'>PO Number:</td>
-                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.po_number %></td>
-                        </tr>
-                        <tr>
-                            <td style='border:none;' colspan='1'>Delivery Date:</td>
-                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.delivery_date.strftime("%b %d, %Y") %></td>
-                        </tr>
-                        <tr>     
-                            <td style='border:none;' colspan='1'>Delivery Time:</td>
-                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.delivery_time %></td>
-                        </tr>
-                        <tr>     
-                            <td style='border:none;' colspan='1'>Remarks</td>
-                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.remarks %></td>
-                        </tr>
-                        <tr>     
-                            <td style='border:none;' colspan='1'>Tin Number</td>
-                            <td style="color:<%= pur.branch.color %>;border:none;" colspan='5'><%= pur.branch.tin_number %></td>
-                        </tr>
-                            <% pur.purchase_order_items.map do |pi| %>
+                        <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <%= pi.item.name %>
-                                    </td>
-                                    <td class='center'>
-                                        <%= pi.item_brand? ? pi.item_brand : "---" %>
-                                    </td>
-                                    <td class='center'>
-                                        <%= pi.packaging %>
-                                    </td>
-                                    <td class='center'>
-                                        <%= pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s %>
-                                    </td>
-                                    <td>
-                                        <%= pi.unit.name%>
-                                    </td>
-                                    <td>
-                                        <%= number_to_currency(pi.price_selected, unit: "₱ ") %>
-                                    </td>
-                                    <td>
-                                        <%= number_to_currency(pi.total_amount, unit: "₱ ") %>
-                                    </td>
+                                    <th>Item Name</th>
+                                    <th>Item Brand</th>
+                                    <th>Packaging</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Price</th>
+                                    <th>Total Amount</th>
                                 </tr>
-                            <% end %>
-                            <tr class='highlighted '>
-                                <td colspan='6'>Total</td>
-                                <td class='bold'><%= number_to_currency(pur.total_amount, unit: "₱ ") %></td>
-                            </tr>
-                        <% end %>
+                            </thead>
+                            <tbody>
+                                <% pur.purchase_order_items.each do |pi| %>
+                                    <tr>
+                                        <td>
+                                            <%= pi.item.name %>
+                                        </td>
+                                        <td >
+                                            <%= pi.item_brand? ? pi.item_brand : "---" %>
+                                        </td>
+                                        <td >
+                                            <%= pi.packaging %>
+                                        </td>
+                                        <td class='center'>
+                                            <%= pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s %>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <%= pi.unit.name%>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <%= number_to_currency(pi.price_selected, unit: "₱ ") %>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <%= number_to_currency(pi.total_amount, unit: "₱ ") %>
+                                        </td>
+                                    </tr>
+                                <% end %>
+                                <tr class='highlighted'>
+                                    <td colspan='6'>Total</td>
+                                    <td style="text-align:right" class='bold'><%= number_to_currency(pur.total_amount, unit: "₱ ") %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
                     <% end %>
-                </tbody>
-            </table>
+                <% end %> 
+            </div>
             <% if @body.present? %>                             
                 <p class='pdf-body'>
                     <%= @body %>

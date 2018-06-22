@@ -2,8 +2,8 @@ class SubscriptionsController < ApplicationController
 	before_action :authenticate_user!
 
 	def index
-		@subscriptions = current_client.subscription
-		@free_trial = current_client.subscription
+		@subscriptions = current_client.subscriptions
+		@free_trial = current_client.trial
 		@branches_count = current_client.branches.count
 	end
 
@@ -12,7 +12,7 @@ class SubscriptionsController < ApplicationController
 	end
 
 	def subscribe
-		@subscription = current_client.subscription
+		@subscription = current_client.subscriptions.new
 		@branches = current_client.branches.pluck :name
 		@action = current_client.has_subscribed? ? "update" : "create"
 	end
@@ -52,7 +52,7 @@ class SubscriptionsController < ApplicationController
 		if params[:branches] && params[:PayerID] && params[:token]
 			branches = params[:branches]
 			plan = Plan.find 2
-			@subscription = current_subscription
+			@subscription = current_client.subscriptions.build
 			@subscription.paypal_customer_token = params[:PayerID]
 			@subscription.paypal_payment_token = params[:token]	
 			@subscription.plan_id = plan.id
@@ -63,7 +63,7 @@ class SubscriptionsController < ApplicationController
 				current_client.unsubscribed_branches.where(id: branches).each do |branch|
 					branch.create_branch_subscription(subscription_id: @subscription.id)
 				end
-				redirect_to subscriptions_path, notice: "Subscription is now being processed by PayPal. This could only take a few moments."
+				redirect_to subscriptions_path, notice: "Thank you for Subscribing! Your subscription is now being processed through PayPal. This would only take a few moments."
 			else
 				redirect_to subscriptions_path, alert: @subscription.errors.full_messages.join(", ")
 			end
@@ -71,11 +71,11 @@ class SubscriptionsController < ApplicationController
 	end
 
 	def update_subscription
-		if params[:branches] && params[:PayerID] && params[:token]
+		if params[:branches] && params[:PayerID] && params[:token] && params[:subscription_id]
 			branches = params[:branches]
 			existing_branch_count = current_client.branches.size
 			plan = Plan.find 2
-			@subscription = current_subscription
+			@subscription = current_client.subscriptions.find params[:subscription_id]
 			@subscription.paypal_payment_token = params[:token]
 			@subscription.paypal_customer_token = params[:PayerID]
 			@subscription.plan_id = plan.id
@@ -100,7 +100,7 @@ class SubscriptionsController < ApplicationController
 			redirect_to subscriptions_path, alert: "Subscription creation failed. You dont have branches to pay yet."
 		else
 			plan = Plan.find 2
-			subscription = current_client.subscription
+			subscription = current_client.subscriptions.build(plan_id: plan.id)
 			if params[:subscription][:paypal_action].eql? 'create'
 				redirect_to subscription.paypal.checkout_url(
 					return_url: process_subscription_url(:plan_id => plan.id, branches: branches),

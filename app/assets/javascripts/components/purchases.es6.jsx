@@ -279,9 +279,9 @@ class Purchases extends React.Component{
                     <td data-title='Date'>{purchase.purchase_date}</td>
                     <td data-title='Branch'>{purchase.branch_name}</td>
                     <td data-title='Supplier.'>{purchase.supplier_name}</td>
-                    <td data-title='Net Amount'>{purchase.total_net}</td>
-                    <td data-title='Vat Amount'>{purchase.total_vat }</td>
-                    <td data-title='Total Amount'>{purchase.total_amount}</td>
+                    <td className='text-pull-right' data-title='Net Amount'>{purchase.total_net}</td>
+                    <td className='text-pull-right' data-title='Vat Amount'>{purchase.total_vat }</td>
+                    <td className='text-pull-right' data-title='Total Amount'>{purchase.total_amount}</td>
                     <td className='action' data-title='Action'>
                         <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="View Purchase Items" href={`/purchases/${purchase.id}/purchase_items`}><i className="icon-glyph-41 f14"></i></a>
                         {this.renderActionButtons(purchase)}

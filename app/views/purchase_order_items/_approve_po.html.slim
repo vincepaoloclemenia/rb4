@@ -1,22 +1,56 @@
 = form_for(:approval, url: purchase_order_approve_path(@po), method: :patch) do |f|
-    .row.mb10
+	.row.mb10
 		.col-xs-6
 			= f.label :delivery_date
 				| Delivery Date
 				small.field-req  *
-			input.form-control name='approval[delivery_date]' placeholder="Delivery Date"
-        .col-xs-6
+			input.form-control name='approval[delivery_date]' placeholder="Delivery Date" value="#{@po.delivery_date.present? ? @po.delivery_date.strftime('%m/%d/%Y') : '' }"
+		.col-xs-6
 			= f.label :delivery_time
 				| Delivery Time
 				small.field-req  *
-			= f.text_field :delivery_time, value: @delivery_time, class: 'form-control', placeholder: "Delivery Time"
-                
+			input.form-control type='time' name='approval[delivery_time]' id='delivery_time' value="#{@po.delivery_time}"
+				
 
-    .modal-footer.no-border
+	.modal-footer.no-border
 		span.inline.float-right
 			= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 			|
 			button.btn.btn-primary type="submit" Approve
+
+	.panel
+		.panel-heading.border.pb45
+			.pull-left Purchase Order Items
+			.pull-right 
+				= link_to "<i class='icon-glyph mr5 f14' ></i> Edit Purchase Order Items".html_safe, purchase_order_purchase_order_items_path(@po), class: "btn btn-success btn-round btn-outline"
+
+		.panel-body    
+			.row
+				.no-more-tables
+					table.table.table-bordered.table-striped.mb0 data-sortable="true"
+						thead
+							tr.bg-thead
+								th width="145" Item Name
+								th width="145" Item Brand
+								th width="160" data-sortable="false" Packaging
+								th width="110" Quantity
+								th width="115" Unit
+								th width="120" Unit Price
+								th width="120" Total Price 
+						tbody
+							- @po.purchase_order_items.each do |pi|
+								tr
+									td data-title="Item Name" = pi.item.name
+									td data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
+									td data-title="Packaging" = pi.packaging
+									td.text-centered data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s 
+									td.text-centered data-title="Unit" = pi.unit.name
+									td.text-pull-right data-title="Unit Price" = to_peso(pi.price_selected)
+									td.text-pull-right data-titile='Total Price' = to_peso(pi.total_amount)
+
+							tr.bg-total
+								td.text-right.label-total colspan='6' data-title="Total Amount" Total Amount
+								td.label-total-num.text-pull-right data-title='Vat' = to_peso(@po.total_amount)
 
 javascript:
     $('[name="approval[delivery_date]"]').datepicker({

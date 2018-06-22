@@ -179,33 +179,33 @@ class CostAnalysis extends React.Component{
                                                 <td></td>
                                                 <td></td>
                                                 <td>{purchase_item.item_name}</td>
-                                                <td>{purchase_item.unit}</td>
+                                                <td className='text-centered'>{purchase_item.unit}</td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>{purchase_item.quantity}</td>
-                                                <td>{purchase_item.purchase_item_amount}</td>
-                                                <td>{purchase_item.item_total_net}</td>
+                                                <td className='text-centered'>{purchase_item.quantity}</td>
+                                                <td className='text-pull-right'>{purchase_item.purchase_item_amount}</td>
+                                                <td className='text-pull-right'>{purchase_item.item_total_net}</td>
                                             </tr>
                                         ),                                    
                                         <tr key={i+1} className='bg-total'>
                                             <td className='subcategory' colSpan='1'></td>
                                             <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
-                                            <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
+                                            <td style={{ textAlign: 'right' }} className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
                                             <td className='subcategory' colSpan="8"></td>
                                         </tr> 
                                     ]
                                 ),
                                 <tr key={index+1} className='bg-total'>
                                     <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
-                                    <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
+                                    <td style={{ textAlign: 'right' }} className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
                                     <td className='category' colSpan="8"></td>
                                 </tr>   
                             ]
                         )}
                         <tr className='bg-total'>
                             <td className='total-overall' colSpan="9">Total</td>
-                            <td className='label-total-num total-overall' colSpan="1">{this.state.overAll}</td>
+                            <td style={{ textAlign: 'right' }} className='label-total-num total-overall' colSpan="1">{this.state.overAll}</td>
                             <td className='total-overall' colSpan="8"></td>
                         </tr>   
                     </tbody>
@@ -230,34 +230,34 @@ class CostAnalysis extends React.Component{
                                                 <tr key={item}>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>{purchase_item.item_name}</td>
-                                                    <td>{purchase_item.unit}</td>
+                                                    <td className='text-centered'>{purchase_item.item_name}</td>
+                                                    <td className='text-centered'>{purchase_item.unit}</td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>{purchase_item.quantity}</td>
-                                                    <td>{purchase_item.purchase_item_amount}</td>
-                                                    <td>{purchase_item.item_total_net}</td>
+                                                    <td className='text-centered'>{purchase_item.quantity}</td>
+                                                    <td className='text-pull-right'>{purchase_item.purchase_item_amount}</td>
+                                                    <td className='text-pull-right'>{purchase_item.item_total_net}</td>
                                                 </tr>
                                             ),                                    
                                             <tr key={i+1} className='bg-total'>
                                                 <td className='subcategory' colSpan='1'></td>
                                                 <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
-                                                <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
+                                                <td style={{ textAlign: 'right' }} className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
                                                 <td className='subcategory' colSpan="8"></td>
                                             </tr> 
                                         ]
                                     ),
                                     <tr key={index+1} className='bg-total'>
                                         <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
-                                        <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
+                                        <td style={{ textAlign: 'right' }} className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
                                         <td className='category' colSpan="8"></td>
                                     </tr>   
                                 ]
                             )}
                             <tr className='bg-total'>
                                 <td className='total-overall' colSpan="9">Total</td>
-                                <td className='label-total-num total-overall' colSpan="1">{this.state.lastWeekTotal}</td>
+                                <td style={{ textAlign: 'right' }} className='label-total-num total-overall' colSpan="1">{this.state.lastWeekTotal}</td>
                                 <td className='total-overall' colSpan="8"></td>
                             </tr>   
                         </tbody>
@@ -281,33 +281,33 @@ class CostAnalysis extends React.Component{
                                                 <td></td>
                                                 <td></td>
                                                 <td>{purchase_item.item_name}</td>
-                                                <td>{purchase_item.unit}</td>
+                                                <td className='text-centered'>{purchase_item.unit}</td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>{purchase_item.quantity}</td>
-                                                <td>{purchase_item.purchase_item_amount}</td>
-                                                <td>{purchase_item.item_total_net}</td>
+                                                <td className='text-centered'>{purchase_item.quantity}</td>
+                                                <td className='text-pull-right'>{purchase_item.purchase_item_amount}</td>
+                                                <td className='text-pull-right'>{purchase_item.item_total_net}</td>
                                             </tr>
                                         ),                                    
                                         <tr key={i+1} className='bg-total'>
                                             <td className='subcategory' colSpan='1'></td>
                                             <td className='subcategory' colSpan="8">Total for Subcategory {pur.subcategory}: </td>
-                                            <td className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
+                                            <td style={{ textAlign: 'right' }} className='label-total-num subcategory' colSpan="1">{pur.total_amount_per_category}</td>
                                             <td className='subcategory' colSpan="8"></td>
                                         </tr> 
                                     ]
                                 ),
                                 <tr key={index+1} className='bg-total'>
                                     <td className='category' colSpan="9">Total Amount for Category {purchase.parent_category}</td>
-                                    <td className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
+                                    <td style={{ textAlign: 'right' }} className='label-total-num category' colSpan="1">{purchase.total_amount_within_month}</td>
                                     <td className='category' colSpan="8"></td>
                                 </tr>   
                             ]
                         )}
                         <tr className='bg-total'>
                             <td className='total-overall' colSpan="9">Total</td>
-                            <td className='label-total-num total-overall' colSpan="1">{this.state.lastMonthTotal}</td>
+                            <td style={{ textAlign: 'right' }} className='label-total-num total-overall' colSpan="1">{this.state.lastMonthTotal}</td>
                             <td className='total-overall' colSpan="8"></td>
                         </tr>   
                     </tbody>

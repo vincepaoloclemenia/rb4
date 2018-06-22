@@ -59,3 +59,10 @@ button.inline{
     border: none;
     color: $main-theme
 }
+
+.btn.btn-edit{
+    border: none;
+    font-size: 13px;
+    color: $blue;
+    &:hover{ color: $main-theme ; text-decoration: underline }
+}

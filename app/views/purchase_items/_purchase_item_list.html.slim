@@ -18,12 +18,12 @@ table.table.table-bordered.table-striped.mb0
 			tr
 				td data-title="Item Name" = pi.item.name
 				td data-title="Item Description" = pi.remarks
-				td data-title="Quantity" = pi.quantity.to_s
-				td data-title="Unit" = pi.unit_name
+				td.text-centered data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_d
+				td.text-centered data-title="Unit" = pi.unit_name
 				td data-title="Packaging" = pi.packaging
-				td data-title="Unit Price" = to_peso(pi.purchase_item_amount)
-				td data-title="VAT Type" = pi.vat_type
-				td data-title="Total Action" = to_peso(pi.purchase_item_total_amount)
+				td.text-pull-right data-title="Unit Price" = to_peso(pi.purchase_item_amount)
+				td.text-centered data-title="VAT Type" = pi.vat_type
+				td.text-pull-right data-title="Total Action" = to_peso(pi.purchase_item_total_amount)
 				td.action data-title="Action"
 					- if view_access_control('purchase_items','destroy')
 						- if branch_admin?

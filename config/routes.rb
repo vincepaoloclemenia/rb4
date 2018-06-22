@@ -87,12 +87,15 @@ Rails.application.routes.draw do
     get :view_po_remotely, on: :collection
     get :send_bulk_purchase_orders, on: :collection
     get :group_of_purchase_orders, on: :collection
+    get :hold_po, on: :collection
     post :mail_bulk_of_purchase_orders, on: :collection
     post 'send_email_notification' => 'purchase_orders#send_email_notification'
     patch 'approve' => 'purchase_orders#approve'
     patch 'hold' => 'purchase_orders#hold'
     patch 'reject' => 'purchase_orders#reject'
     get 'purchase_order' => 'purchase_orders#purchase_order'
+    get 'edit_delivery_details' => 'purchase_orders#edit_delivery_details'
+    put 'update_delivery_details' => 'purchase_orders#update_delivery_details'
   end
   
   resource :wizard, only: [:show] do

@@ -1,0 +1,11 @@
+$('#modal h4').html("Hold Purchase Order <%= @purchase_order.pr_number %> (<%= @purchase_order.branch.name %>)");
+
+$('.modal-body').html('<%= j render("hold_form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

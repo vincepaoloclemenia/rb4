@@ -369,15 +369,15 @@ class PurchaseList extends React.Component{
                 <tbody>
                     <tr className='bg-total'>
                         <td className='text-right label-total' colSpan="10">Total VAT</td>
-                        <td className='label-total-num'>{this.state.itemTotalVat}</td>
+                        <td className='label-total-num text-pull-right'>{this.state.itemTotalVat}</td>
                     </tr>
                     <tr className='bg-total'>
                         <td className='text-right label-total' colSpan="10">Total Net</td>
-                        <td className='label-total-num'>{this.state.itemTotalNet}</td>
+                        <td className='label-total-num text-pull-right'>{this.state.itemTotalNet}</td>
                     </tr>
                     <tr className='bg-total'>
                         <td className='text-right label-total' colSpan="10">Total Amount</td>
-                        <td className='label-total-num'>{this.state.itemTotalAmount}</td>
+                        <td className='label-total-num text-pull-right'>{this.state.itemTotalAmount}</td>
                     </tr>
                 </tbody>
             ) 
@@ -398,11 +398,11 @@ class PurchaseList extends React.Component{
                                 <td>{purchase.supplier.name}</td>
                                 <td>{purchase_item.item.name}</td>
                                 <td>{purchase_item.category}</td>
-                                <td>{purchase_item.quantity}</td>
-                                <td>{purchase_item.unit_cost}</td>
-                                <td>{purchase_item.item_total_vat}</td>
-                                <td>{purchase_item.item_total_net}</td>
-                                <td>{purchase_item.item_total_amount}</td>
+                                <td className='text-centered'>{purchase_item.quantity}</td>
+                                <td className='text-pull-right'>{purchase_item.unit_cost}</td>
+                                <td className='text-pull-right'>{purchase_item.item_total_vat}</td>
+                                <td className='text-pull-right'>{purchase_item.item_total_net}</td>
+                                <td className='text-pull-right'>{purchase_item.item_total_amount}</td>
                             </tr> 
                         )}   
                     </tbody>                         
@@ -420,24 +420,24 @@ class PurchaseList extends React.Component{
                                 <td>{purchase.supplier.name}</td>
                                 <td>{purchase_item.item.name}</td>
                                 <td>{purchase_item.category}</td>
-                                <td>{purchase_item.quantity}</td>
-                                <td>{purchase_item.unit_cost}</td>
-                                <td>{purchase_item.item_total_vat}</td>
-                                <td>{purchase_item.item_total_net}</td>
-                                <td>{purchase_item.item_total_amount}</td>
+                                <td className='text-centered'>{purchase_item.quantity}</td>
+                                <td className='text-pull-right'>{purchase_item.unit_cost}</td>
+                                <td className='text-pull-right'>{purchase_item.item_total_vat}</td>
+                                <td className='text-pull-right'>{purchase_item.item_total_net}</td>
+                                <td className='text-pull-right'>{purchase_item.item_total_amount}</td>
                             </tr> 
                         )}   
                         <tr className='bg-total'>
                             <td className='text-right label-total' colSpan="10">Total VAT</td>
-                            <td className='label-total-num'>{purchase.total_vat}</td>
+                            <td className='label-total-num text-pull-right'>{purchase.total_vat}</td>
                         </tr>
                         <tr className='bg-total'>
                             <td className='text-right label-total' colSpan="10">Total Net</td>
-                            <td className='label-total-num'>{purchase.total_net}</td>
+                            <td className='label-total-num text-pull-right'>{purchase.total_net}</td>
                         </tr>
                         <tr className='bg-total'>
                             <td className='text-right label-total' colSpan="10">Total Amount</td>
-                            <td className='label-total-num'>{purchase.total_amount}</td>
+                            <td className='label-total-num text-pull-right'>{purchase.total_amount}</td>
                         </tr>
                     </tbody>                         
                 )

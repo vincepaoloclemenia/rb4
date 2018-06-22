@@ -39,6 +39,15 @@
         background: $main-theme;
         color: white
     }
+    td.text-pull-right{
+        text-align: right;
+    }
+    td.text-centered{
+        text-align: center;
+    }
+    td.text-align-left{
+        text-align: left;
+    }   
 }
 .gap-top15{
     margin-top: 5%;

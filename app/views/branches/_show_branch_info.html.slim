@@ -25,11 +25,11 @@
       .col-xs-4
         .text-light-grey
           | Fax No.
-        label.text-dark-grey = branch.delivery_time   
+        label.text-dark-grey = branch.fax_no
       .col-xs-4
         .text-light-grey
           | Delivery Time.
-        label.text-dark-grey = branch.delivery_time     
+        label.text-dark-grey = branch.delivery_time? ? branch.delivery_time.to_time.strftime("%l:%M %P") : "--:-- --"
     .row.mb10
       .col-xs-6
         .text-light-grey

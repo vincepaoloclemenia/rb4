@@ -1,0 +1,11 @@
+$('#modal h4').html('Edit Delivery Details ( <%= @purchase_order.pr_number %> )');
+
+$('.modal-body').html('<%= j render("delivery_form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

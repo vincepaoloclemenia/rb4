@@ -54,7 +54,7 @@
 			= f.label :delivery_date
 				| Delivery Time
 				small.field-req  *     
-			= f.text_field :delivery_time, class: 'form-control', placeholder: 'Delivery time'
+            input.form-control type='time' name='purchase_order[delivery_time]' id='purchase_order_delivery_time'         
 			
 			- if @suppliers.nil?
 

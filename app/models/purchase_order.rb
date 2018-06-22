@@ -13,12 +13,14 @@ class PurchaseOrder < ActiveRecord::Base
   scope :new_pos, -> { includes(:purchase_order_items).where( status: 'Pending' ).where.not( purchase_order_items: { purchase_order_id: nil } ) }
   scope :on_hold_pos, -> { where status: 'On Hold' }
   scope :rejected_pos, -> { where status: 'Rejected' }
+  scope :no_delivery_date, -> { where delivery_date: nil, delivery_time: nil, status: 'On Hold' }
   scope :sent_purchase_orders, -> { where sent: true, status: 'Approved' }
   scope :unsent_pos, -> { includes(:purchase_order_items).where(sent: false, status: ["Approved", "Pending"]).where.not( purchase_order_items: { purchase_order_id: nil } ) }
 
   accepts_nested_attributes_for :purchase_order_items,  :reject_if => :all_blank, :allow_destroy => :true
   
-  validates :delivery_date, :delivery_time, presence: true, if: :approved?
+  #validates :delivery_date, :delivery_time, presence: true, if: :approved?
+  before_save :check_if_restricted?, if: :branch_user?
 
   pg_search_scope :search_po_number, against: [ :po_number ], using: { tsearch: { prefix: true, any_word: true } }
   pg_search_scope :search_status, against: [ :status ]  
@@ -29,6 +31,16 @@ class PurchaseOrder < ActiveRecord::Base
   
   def approved?
     status == 'Approved'
+  end
+
+  def branch_user?
+    self.user.role.role_level == 'branch'
+  end
+
+  def check_if_restricted?
+    if brand.restrict_branch_admins?
+      errors.add("Sorry", " , adding of Purchase Order cannot be completed.")
+    end
   end
 
   def self.text_search(*query)

@@ -152,13 +152,13 @@ class PurchaseOrdersListing extends React.Component{
                                     <td style={{ textAlign: 'center' }}>{item.packaging}</td>
                                     <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                                     <td style={{ textAlign: 'center' }}>{item.unit}</td>
-                                    <td>{item.unit_price}</td>
-                                    <td>{item.total}</td>
+                                    <td className='text-pull-right'>{item.unit_price}</td>
+                                    <td className='text-pull-right'>{item.total}</td>
                                 </tr>
                             ),
                             <tr key={index+1}className='total-amount bg-total'>
                                 <td style={{ textAlign: 'right' }} colSpan='9' data-title='Total Amount'>Total amount ordered from {poi.supplier}</td>
-                                <td className='label-total-num' data-title='Total Amount'>{poi.over_all}</td>
+                                <td className='label-total-num text-pull-right' data-title='Total Amount'>{poi.over_all}</td>
                             </tr>         
                         ]
                     )

@@ -3,6 +3,7 @@ class PurchaseOrdersController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
 	before_action :restrict_branch_admins, only: [:create], if: :branch_admin?
+	before_action :set_ids_and_supplier, only: [:edit_delivery_details, :send_bulk_purchase_orders, :update_delivery_details]
 
 	def index
 		@purchase_orders = current_brand.purchase_orders.unsent_pos.group_by { |po| po.supplier_id }
@@ -23,8 +24,8 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def create
-		if current_user.role.role_level.eql? 'branch'
-			@purchase_order = current_user.branch.purchase_orders.create(purchase_order_params)
+		if branch_admin?
+			@purchase_order = current_user.branch.purchase_orders.build(purchase_order_params)
 			@purchase_order.brand_id = current_user.brand.id
 			@purchase_order.client_id = current_user.client.id
 			@purchase_order.status = 'Pending'
@@ -38,7 +39,7 @@ class PurchaseOrdersController < ApplicationController
 			end
 		else
 			@date = params[:purchase_order][:delivery_date].present? ? Date.strptime(params[:purchase_order][:delivery_date], '%m/%d/%Y') : nil
-			@purchase_order = current_client.purchase_orders.create(purchase_order_params)
+			@purchase_order = current_client.purchase_orders.build(purchase_order_params)
 			@purchase_order.brand_id = current_brand.id
 			@purchase_order.delivery_date = @date
 			@purchase_order.user_id = current_user.id
@@ -102,15 +103,44 @@ class PurchaseOrdersController < ApplicationController
 		end
 	end
 
+	def edit_delivery_details
+		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+	end
+
+	def update_delivery_details
+		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+		po = params[:purchase_order]
+		date = Date.strptime(po[:delivery_date], "%m/%d/%Y")
+		@purchase_order.update(delivery_date: date, delivery_time: po[:delivery_time])
+		respond_to do |format|
+			if @purchase_order.save
+				send_bulk_purchase_orders
+				@success = true
+				flash[:notice] = "Delivery details successfully updated"
+			else
+				@success = false
+				flash[:alert] = @purchase_order.errors.full_messages.join(", ")
+			end
+			format.js
+		end
+	end
+
+	def hold_po
+		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+	end
+
 	def hold
-		if params[:purchase_order_id].present?
+		if params[:purchase_order_id] && params[:hold][:note].present?
+			h = params[:hold]
 			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
-			@purchase_order.update(status: 'On Hold')
+			@purchase_order.update(status: 'On Hold', note: h[:note] )
 			if @purchase_order.save
 				redirect_to purchase_orders_path, notice: "#{@purchase_order.branch.name} purchase order was marked 'On Hold' "
 			else
 				redirect_to purchase_orders_path, alert: @purchase_order.errors.full_messages.join(', ')
 			end
+		else
+			redirect_to purchase_orders_path, alert: "Missing parameters. Action cannot be completed."			
 		end
 	end
 
@@ -157,21 +187,19 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def mail_bulk_of_purchase_orders
-		@pos = current_brand.purchase_orders.where(id: params[:purchase_orders])
-		@date = Date.strptime(params[:po_email][:delivery_date], "%m/%d/%Y")
-		@time = params[:po_email][:delivery_time]
-		@pos.map { |purchase_order| purchase_order.update( po_date: Date.today, po_number: po_approval_format(purchase_order), delivery_time: @time, delivery_date: @date ) }
-		@purchase_orders = @pos.group_by { |pur| pur.branch.name }
 		@subject = params[:po_email][:subject]
-		@contact = params[:po_email][:contact_person]
-		@address = params[:po_email][:delivery_address]
-		@supplier = Supplier.find(params[:supplier])
-		@message = params[:po_email][:body]
+		@supplier = Supplier.find(params[:supplier])	
 		@recipients = params[:po_email][:recipients]
-		@brand = current_brand
-		if @subject == '' || @date == '' || @time == ''
+		if @subject == '' || @recipients == [] || @supplier.nil? 
 			redirect_to purchase_order_generator_index_path, alert: "Your mail information was incomplete. Sending Failed"
 		else
+			@pos = current_brand.purchase_orders.where(id: params[:purchase_orders])
+			@pos.map { |purchase_order| purchase_order.update( po_date: Date.today, po_number: po_approval_format(purchase_order) ) }
+			@purchase_orders = @pos.group_by { |pur| pur.branch.name }
+			@contact = params[:po_email][:contact_person]
+			@address = params[:po_email][:delivery_address]
+			@message = params[:po_email][:body]
+			@brand = current_brand
 			@recipients.map do |recipient|
 				if recipient == ''
 					next
@@ -215,25 +243,22 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def send_bulk_purchase_orders
-		@ids = params[:purchases]
-		@supplier = Supplier.find params[:supplier_id]
 		@contact_person = @supplier.contact_person
 		@contact_title = @supplier.contact_title
 		@subject = "PO - #{current_brand.name.gsub(/\//, '').split.map(&:first).join.upcase} - #{@supplier.name} - #{Date.today.strftime('%B %-d')}"		
-		@purchase_orders = current_brand.purchase_orders.find(params[:purchases]).group_by { |pur| pur.branch.name }
+		@purchase_orders = current_brand.purchase_orders.find(@ids).group_by { |pur| pur.branch.name }
+		@pos_without_date = current_brand.purchase_orders.where( branch_id: @supplier.id ).no_delivery_date
 	end
 
 	private
 
 		def purchase_order_params
-			# if params[:purchase][:purchase_date].present?
-			# 	params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
-			# end
-			if current_user.role.role_level == 'branch'
-				params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference)
-			else
-				params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date)			
-			end
+			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date)						
+		end
+
+		def set_ids_and_supplier
+			@ids = params[:purchases]
+			@supplier = Supplier.find params[:supplier_id]
 		end
 
 		def restrict_branch_admins

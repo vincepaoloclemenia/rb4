@@ -1,0 +1,51 @@
+- purchase_orders = purchase_orders || @purchase_orders 
+- ids = ids || @ids
+- purchase_orders.keys.map do |branch|
+    - br = Branch.find_by_name branch
+    .no-more-tables style='border: 1px solid #{br.color}'
+        - purchase_orders[branch].each do |po|
+            .row.mb10.pt25
+                .col-xs-12
+                    .row.pl15
+                        h5 
+                            b = "#{branch} (#{po.pr_number})"
+            .row.mb10.pl15
+                .delivery_details
+                    .col-xs-2
+                        label Delivery Date:
+                    .col-xs-3
+                        label 
+                            b = po.delivery_date? ? po.delivery_date.strftime("%B %d, %Y") : "--/--/----"
+                    .col-xs-2
+                        label Delivery Time
+                    .col-xs-3
+                        label 
+                            b = po.delivery_time.nil? ? "<i style='color: red'>Invalid Time / no time </i>".html_safe : po.delivery_time.to_time.nil? ? "<i style='color: red'>Invalid Time / no time </i>".html_safe : po.delivery_time.to_time.strftime("%l:%M %P")
+                    .col-xs-2
+                        label
+                            = link_to "<i class='icon-glyph mr5' ></i>Edit".html_safe, purchase_order_edit_delivery_details_path(po, purchases: ids, supplier_id: po.supplier.id), class: "btn btn-edit", data: { tt: "tooltip", placement: "top", "original-title" => "Edit Delivery Date" }, remote: true
+
+            table.table.table-bordered.table-striped.mb0 data-sortable="true"
+                thead
+                    tr.bg-thead 
+                        th width="145" Item Name
+                        th width="145" Item Brand
+                        th width="160" data-sortable="false" Packaging
+                        th width="110" Quantity
+                        th width="115" Unit
+                        th width="120" Unit Price
+                        th width="120" Total Price 
+                tbody
+                    - po.purchase_order_items.each do |pi|
+                        tr				
+                            td data-title="Item Name" = pi.item.name
+                            td data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
+                            td data-title="Packaging" = pi.packaging
+                            td data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s 
+                            td data-title="Unit" = pi.unit.name
+                            td.text-pull-right data-title="Unit Price" = to_peso(pi.price_selected)
+                            td.text-pull-right data-titile='Total Price' = to_peso(pi.total_amount)
+
+                    tr.bg-total
+                        td.text-right.label-total colspan='6' data-title="Total Amount" Total Amount
+                        td.label-total-num.text-pull-right style='text-align: right' data-title='Vat' = to_peso(po.total_amount)

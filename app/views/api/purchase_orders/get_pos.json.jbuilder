@@ -15,7 +15,7 @@ if @items.present?
             json.supplier po.supplier
             json.po_items po.purchase_order_items.poi_search(@items) do |poi|
                 json.item poi.item
-                json.quantity poi.quantity
+                json.quantity poi.quantity % 1 == 0 ? poi.quantity.to_i : poi.quantity
                 json.packaging poi.packaging
                 json.price_selected to_peso(poi.price_selected)
                 json.total_price to_peso(poi.total_amount)
@@ -40,7 +40,7 @@ else
             json.supplier po.supplier
             json.po_items po.purchase_order_items do |poi|
                 json.item poi.item
-                json.quantity poi.quantity
+                json.quantity poi.quantity % 1 == 0 ? poi.quantity.to_i : poi.quantity
                 json.packaging poi.packaging
                 json.price_selected to_peso(poi.price_selected)
                 json.total_price to_peso(poi.total_amount)

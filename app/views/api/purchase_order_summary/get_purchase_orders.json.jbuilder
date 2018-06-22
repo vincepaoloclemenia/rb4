@@ -15,6 +15,7 @@ json.purchase_orders do |json|
         json.supplier po.supplier.name
         json.allowed_to_delete branch_admin? && !po.sent?
         json.sent po.sent
+        json.note po.note
         json.date_sent po.date_sent.present? ? time_ago_in_words(po.date_sent) + " ago" : "Unsent"
     end
 end

@@ -106,7 +106,7 @@ class PagesController < ApplicationController
 
 	def get_plan_info
 		@plan = Plan.find(params[:plan_id])
-		render json: { amount: @plan.amount, period: @plan.period },
+		render json: { amount: @plan.amount % 1 == 0 ? @plan.amount.to_i : @plan.amount, period: @plan.period },
 					status: :ok
 	end
 
@@ -115,7 +115,7 @@ class PagesController < ApplicationController
 		if current_client.has_subscribed?
 			branches_count = current_client.branches.size
 			selected_branches = params[:branches].to_i
-			render json: { amount: (@plan.amount * (branches_count + selected_branches)).to_i, period: @plan.period }
+			render json: { branch_count: "(#{selected_branches}) #{selected_branches > 1 ? 'branches' : 'branch' }", new_amount: @plan.amount * selected_branches, amount: (@plan.amount * (branches_count + selected_branches)).to_i, period: @plan.period }
 		else
 			render json: { amount: (@plan.amount * params[:branches].to_i).to_i, period: @plan.period  }
 		end

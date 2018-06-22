@@ -1,0 +1,61 @@
+
+= form_for(:hold, url: purchase_order_hold_path(purchase_order_id: @purchase_order.id), method: :patch) do |f|
+    /.row.mb10
+        .col-xs-6
+            = f.label :delivery_date
+                | Delivery Date
+                small.field-req  *
+            - date = @purchase_order.delivery_date? ? @purchase_order.delivery_date.strftime("%m/%d/%Y") : ''
+            / = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+            = f.text_field :delivery_date, value: date, class: "form-control", placeholder: "Preferred Delivery Date"
+
+        /.col-xs-6
+            = f.label :delivery_time
+                | Delivery Time
+                small.field-req  *
+            / = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+            input.form-control type='time' name='purchase_order[delivery_time]' id='delivery_time' value="#{@purchase_order.delivery_time}"
+
+    .row.mb10
+        .col-xs-12
+            = f.label :note
+                | Note
+            
+            = f.text_area :note, class: 'form-control', rows:"3", placeholder: "Write your note here"
+    
+    .modal-footer.no-border
+        span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            |
+            button.btn.btn-primary type="submit" Hold
+
+.panel
+    .panel-heading.border.pb15
+        .pull-left Purchase Order Items
+    .panel-body    
+        .row
+            .no-more-tables
+                table.table.table-bordered.table-striped.mb0 data-sortable="true"
+                    thead
+                        tr.bg-thead
+                            th width="145" Item Name
+                            th width="145" Item Brand
+                            th width="160" data-sortable="false" Packaging
+                            th width="110" Quantity
+                            th width="115" Unit
+                            th width="120" Unit Price
+                            th width="120" Total Price 
+                    tbody
+                        - @purchase_order.purchase_order_items.each do |pi|
+                            tr
+                                td data-title="Item Name" = pi.item.name
+                                td data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
+                                td data-title="Packaging" = pi.packaging
+                                td.text-centered data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s 
+                                td.text-centered data-title="Unit" = pi.unit.name
+                                td.text-pull-right data-title="Unit Price" = to_peso(pi.price_selected)
+                                td.text-pull-right data-titile='Total Price' = to_peso(pi.total_amount)
+
+                        tr.bg-total
+                            td.text-right.label-total colspan='6' data-title="Total Amount" Total Amount
+                            td.label-total-num.text-pull-right data-title='Vat' = to_peso(@purchase_order.total_amount)

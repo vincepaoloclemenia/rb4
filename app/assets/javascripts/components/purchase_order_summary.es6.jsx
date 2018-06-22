@@ -71,16 +71,20 @@ class PurchaseOrderSummary extends React.Component{
 
     renderTableForBranchUsers(purchaseOrders){
         if(purchaseOrders.length > 0){
+            var green = "#E4FFF1";
+            var red = "#FFCBC2";
+            var yellow = "#FFFFE7";
+            var grey = "#D4D4D4"
             return(
                 purchaseOrders.map((po, index) => 
-                    <tr key={index}>
+                    <tr style={{backgroundColor: `${ po.status === "Approved" ? `${green}` : po.status === 'On Hold' ? `${yellow}` : `${red}` }`}} key={index}>
                         <td data-title='Created by'>{po.user.first_name} {po.user.last_name}</td>
                         <td data-title='PR No.'>{po.pr_number}</td>
                         <td data-title='PR Date'>{po.pr_date}</td>
                         <td data-title='PO No.'>{po.po_number ? po.po_number : '---' }</td>
                         <td data-title='PO Date'>{po.pr_date ?  po.po_date : '---' }</td>
                         <td data-title='Supplier.'>{po.supplier}</td>
-                        <td data-title='Status'>{po.status} --- {po.sent ? <span className='green'>Sent {po.date_sent}</span> : <span className='red'>Unsent</span> }</td>
+                        <td style={{ width: '250px' }} data-title='Status'>{po.status} --- {po.sent ? <span className='green'>Sent {po.date_sent}</span> : po.status === 'On Hold' ? `NOTE: ${po.note}` : <span className='red'>Unsent yet</span>  }</td>
                         <td className='action' data-title='Action'>
                             <a className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="View" rel="nofollow" href={`/purchase_orders/${po.id}/purchase_order_items`}><i className='icon-glyph-41 f14'></i></a>
                             {this.renderDeleteButton(po)}

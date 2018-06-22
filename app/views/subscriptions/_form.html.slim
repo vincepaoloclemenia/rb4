@@ -30,7 +30,7 @@
 									tr
 										= b.label do
 											td style="text-align: center" = b.check_box
-											td = "#{b.label} (Free Trial: #{distance_of_time_in_words_to_now(current_subscription.end_date)} left)".html_safe
+											td = "#{b.label} (Free Trial: #{distance_of_time_in_words_to_now(current_client.trial.end_date)} left)".html_safe
 								- else
 									tr
 										= b.label do
@@ -60,16 +60,21 @@
 									td style="text-align: right"
 										b Your Current Monthly Subscription
 									td style="text-align: right"
-										b = "Php #{current_client.branches.size * current_subscription.plan.amount}"
+										b = "Php #{current_client.branches.size * Plan.find(2).amount}"
+								tr
+									td style="text-align: right"
+										b Added Monthly Subscription for <span id="branch_count">(0 branch)</span>
+									td style="text-align: right"
+										b#added = "Php 0.00"
 							tr
 								td style="text-align: right"
 									- if current_client.has_subscribed?
-										b Total Monthly Subscription
+										b New Total Monthly Subscription
 									- else
 										b Total		
 								td#total style="text-align: right"
 									- if current_client.has_subscribed?
-										b = "Php #{current_client.branches.size * current_subscription.plan.amount}"
+										b = "Php #{current_client.branches.size * Plan.find(2).amount}"
 									- else
 										b Php 0.00
 							
@@ -107,6 +112,8 @@ javascript:
 					plan_id: $('#subscription_plan_id').val()
 				},
 				success: (data) => {
+					$('#branch_count').html(data.branch_count);
+					$('#added').html("<b>Php "+data.new_amount+"<br>"+period+"</b>");
 					$('#total').html("<b>Php "+data.amount+"<br>"+period+"</b>");
 				}
 			});	
@@ -121,6 +128,8 @@ javascript:
 					plan_id: $('#subscription_plan_id').val()
 				},
 				success: (data) => {
+					$('#branch_count').html("(0) branch");
+					$('#added').html("<b>Php 0.00 monthly</b>");
 					$('#total').html("<b>Php "+data.amount+"<br>"+data.period+"</b>");
 				}
 			});	
@@ -163,7 +172,10 @@ javascript:
 				plan_id: $('#subscription_plan_id').val()
 			},
 			success: (data) => {
-				$('#total').html("<b>Php "+data.amount+"<br>"+period+"</b>");
+				$('#branch_count').html(data.branch_count);
+				$('#added').html("<b>Php "+data.new_amount+"<br>"+period+"</b>");
+				$('#total').html("<b>Php "+data.amount+"<br>"+data.period+"</b>");
+				//$('#total').html("<b>Php "+data.amount+"<br>"+data.period+"</b>");
 			}
 		});	
 	});

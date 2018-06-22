@@ -20,10 +20,12 @@ class Branch < ActiveRecord::Base
   validate :validate_alias, on: [:create, :update], if: :wizard_done?
   after_create :set_default_color
 
-  def self.all_unsubscribed
-    # select { |b| b.subscription.nil? || b.subscription.plan_id.eql?(1) }
-    select { |b| b.subscription.nil? || b.free_trial? }
-    # joins(:subscriptions).where.not("subscriptions.status = ?", "Active")
+  def free_trial?
+    subscription.free_trial?
+  end
+
+  def subscribed?
+    free_trial? || subscription.present?
   end
 
   def validate_alias
@@ -42,18 +44,6 @@ class Branch < ActiveRecord::Base
   
   def self.all_subscribed_name_id
     self.all_subscribed.collect { |b| [b.name, b.id] }
-  end
-
-  def free_trial
-    subscription.free_trial
-  end
-
-  def free_trial?
-    free_trial.present?
-  end
-
-  def subscribed?
-    free_trial.present? || subscription.present?
   end
 
   def set_default_color

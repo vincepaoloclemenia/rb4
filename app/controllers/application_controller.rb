@@ -23,10 +23,6 @@ class ApplicationController < ActionController::Base
     current_user.client
   end
 
-  def current_subscription
-    current_client.subscription
-  end
-
   def type_of_user?(user)
   end
 

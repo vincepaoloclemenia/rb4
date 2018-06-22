@@ -16,13 +16,13 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 		- purchase_order_items.each do |pi|
 			tr
 				td data-title="Item Name" = pi.item.name
-				td data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
-				td data-title="Packaging" = pi.packaging
-				td data-title="Remarks" = pi.remarks
-				td data-title="Quantity" = pi.quantity.to_i.to_s
-				td data-title="Unit" = pi.unit.name
-				td data-title="Unit Price" = to_peso(pi.price_selected)
-				td data-titile='Total Price' = to_peso(pi.total_amount)
+				td.text-align-left data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
+				td.text-align-left data-title="Packaging" = pi.packaging
+				td.text-align-left data-title="Remarks" = pi.remarks
+				td.text-centered data-title="Quantity" = pi.quantity.to_i.to_s
+				td.text-centered data-title="Unit" = pi.unit.name
+				td.text-pull-right data-title="Unit Price" = to_peso(pi.price_selected)
+				td.text-pull-right data-titile='Total Price' = to_peso(pi.total_amount)
 				td.action data-title="Action"
 					- if client_admin? || !purchase_order.sent?
 						= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_purchase_order_purchase_order_item_path(purchase_order_id: @purchase_order.id, id: pi.id), data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, class: "btn btn-default btn-xs mb10", remote: true

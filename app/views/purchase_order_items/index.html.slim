@@ -42,7 +42,7 @@
 					tr
 						td data-title="Supplier" = @purchase_order.supplier.name
 						td data-title="PR No." = @purchase_order.pr_number
-						td data-title="PR Date" = @purchase_order.pr_date
+						td data-title="PR Date" = @purchase_order.pr_date.strftime("%B %d, %Y")
 						td data-title='Status' = @purchase_order.status
 						td data-title='Status' = @purchase_order.remarks
 						td data-title="PO Date" = @purchase_order.po_date.nil? ? '--/--/----' : @purchase_order.po_date
