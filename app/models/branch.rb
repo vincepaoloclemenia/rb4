@@ -21,29 +21,17 @@ class Branch < ActiveRecord::Base
   after_create :set_default_color
 
   def free_trial?
-    subscription.free_trial?
+    brand.client.on_free_trial?
   end
 
   def subscribed?
-    free_trial? || subscription.present?
+    branch_subscription.present?
   end
 
   def validate_alias
     if !( /\s/ =~ aka ).nil?
       errors.add('Alias', 'should not have spaces')
     end
-  end
-
-  def self.all_unsubscribed_name_id
-    self.all_unsubscribed.collect { |b| [b.name, b.id] }
-  end
-
-  def self.all_subscribed
-    select { |b| b.subscribed? || b.free_trial? }
-  end
-  
-  def self.all_subscribed_name_id
-    self.all_subscribed.collect { |b| [b.name, b.id] }
   end
 
   def set_default_color
