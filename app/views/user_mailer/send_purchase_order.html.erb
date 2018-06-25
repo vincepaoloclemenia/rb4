@@ -116,17 +116,17 @@
                             <td>
                                 <%= pi.unit.name%>
                             </td>
-                            <td>
+                            <td style="text-align:right" >
                                 <%= number_to_currency(pi.price_selected, unit: "₱ ") %>
                             </td>
-                            <td>
+                            <td style="text-align:right" >
                                 <%= number_to_currency(pi.total_amount, unit: "₱ ") %>
                             </td>
                         </tr>
                     <% end %>
                     <tr class='highlighted'>
                         <td colspan='6'>Total</td>
-                        <td class='bold'><%= number_to_currency(@purchase_order.total_amount, unit: "₱ ") %></td>
+                        <td style="text-align:right" class='bold'><%= number_to_currency(@purchase_order.total_amount, unit: "₱ ") %></td>
                     </tr>
                 </tbody>
             </table>

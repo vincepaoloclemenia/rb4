@@ -157,6 +157,7 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def send_email_notification
+		po = params[:po_email]
 		@purchase_order = current_brand.purchase_orders.find(params[:po])
 		@purchase_order_items = @purchase_order.purchase_order_items.all
 		@subject = po[:subject]

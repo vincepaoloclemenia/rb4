@@ -66,6 +66,10 @@ class PurchaseOrder < ActiveRecord::Base
 		eval(keywords)
   end
 
+  def self.all_unpurchased_orders
+    all.where(saved_as_purchase: false)
+  end
+
   def valid_date?
     if delivery_date.nil?
       return false
