@@ -15,7 +15,7 @@ class SalesController < ApplicationController
 		@colours = current_user.role.role_level.eql?('branch') ? [current_user.branch.color] : current_brand.branches.all.map { |b| b.color }
 		@q = current_brand.sales.ransack(params[:q])
 		#@sales = @q.result.paginate(page: params[:page], per_page: per_page)
-		@branches = current_brand.branches.includes(:sales)
+		@branches = current_brand.branches
 		# @sales = current_brand.sales
 	end
 

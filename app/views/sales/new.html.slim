@@ -4,7 +4,7 @@
 		.panel-heading.border Details
 		.panel-body
 			.row
-			- if current_user.role.role_level.eql?('branch')
+			- if branch_admin?
 				= render partial: 'branch_user', locals: { f: f }
 			- else
 				= render partial: 'client_brand_user', locals: { f: f }
