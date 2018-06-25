@@ -1,0 +1,11 @@
+$('#modal h4').html('Purchase Order Setup (<%= @branch.name %>)');
+
+$('.modal-body').html('<%= j render("edit_branch_po_setup") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "35%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

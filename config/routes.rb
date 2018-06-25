@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   resources :brands do
     resources :branches
     get :set_purchase_order_restriction, on: :collection
+    get :setup_branch_po_setup, on: :collection
+    post :create_branch_po_setup, on: :collection
+    put :update_branch_po_setup, on: :collection
     get :update_po_schedule, on: :collection
     post :create_purchase_order_setting, on: :collection
     put :update_purchase_order_setting, on: :collection

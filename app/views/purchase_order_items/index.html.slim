@@ -49,8 +49,7 @@
 						td data-title="PO No." = @purchase_order.po_number.nil? ? '---' : @purchase_order.po_number
 						- if @purchase_order.approved?
 							td data-title='Delivery Date' = @purchase_order.delivery_date.nil? ? '--/--/----' : @purchase_order.delivery_date.strftime("%b %d, %Y")
-							td data-title='Delivery Time' = @purchase_order.delivery_time
-
+							td data-title='Delivery Time' = @purchase_order.delivery_time.present? && @purchase_order.delivery_time_to.present? ? "#{@purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{@purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" : "<i>Left blank</i>".html_safe
 .panel
 	.panel-heading.border Purchase Order Items
 	.panel-body

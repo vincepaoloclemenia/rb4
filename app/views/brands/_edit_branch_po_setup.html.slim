@@ -1,0 +1,56 @@
+- if @branch_setup.new_record?
+    .panel-body
+        = form_for @branch_setup, url: create_branch_po_setup_brands_path(branch_id: @branch.id), method: :post do |f|
+            .row.mb15
+                .col-xs-12
+                    = f.label :delivery_address
+                        | <b>Delivery Address</b>
+                    = f.text_field :delivery_address, class: 'form-control', placeholder: "Specify logistic address"
+            .row
+                .col-xs-12
+                    label 
+                        b Delivery Time
+            .row.mb10
+                .col-xs-6
+                    = f.label :delivery_from
+                        | From
+                        small.field-req  *
+                    input.form-control type='time' name='branch_purchase_order_setup[delivery_from]' placeholder="Delivery Date" id='df'
+                .col-xs-6
+                    = f.label :delivery_to
+                        | To
+                        small.field-req  *
+                    input.form-control type='time' name='branch_purchase_order_setup[delivery_to]' placeholder="Delivery Date" id='df'
+            .modal-footer.no-border
+                span.inline.float-right
+                    = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                    |
+                    = f.submit "Save", class: "btn btn-primary", data: { "disable-with" => "Saving.." }
+- else
+    .panel-body
+        = form_for @branch_setup, url: update_branch_po_setup_brands_path(branch_id: @branch.id), method: :put do |f|
+            .row.mb15
+                .col-xs-12
+                    = f.label :delivery_address
+                        | <b>Delivery Address</b>
+                    = f.text_field :delivery_address, class: 'form-control', placeholder: "Specify logistic address"
+            .row
+                .col-xs-12
+                    label 
+                        b Delivery Time
+            .row.mb10
+                .col-xs-6
+                    = f.label :delivery_from
+                        | From
+                        small.field-req  *
+                    input.form-control value="#{@branch_setup.delivery_from}" type='time' name='branch_purchase_order_setup[delivery_from]' placeholder="Delivery Date" id='df'
+                .col-xs-6
+                    = f.label :delivery_to
+                        | To
+                        small.field-req  *
+                    input.form-control value="#{@branch_setup.delivery_to}" type='time' name='branch_purchase_order_setup[delivery_to]' placeholder="Delivery Date" id='df'
+            .modal-footer.no-border
+                span.inline.float-right
+                    = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                    |
+                    = f.submit "Save", class: "btn btn-primary", data: { "disable-with" => "Saving.." }

@@ -10,41 +10,49 @@
         = render "brand_info", brand: @brand
 
       #branches-list.tab-pane class="#{brand_pane_active?('branches')}"
-        | Show
-        .btn-group.mb10
-          button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
-            span.mr5 10
-            span.caret
-          ul.dropdown-menu role="menu"
-            li
-              a href="javascript:;"  10
-            li
-              a href="javascript:;"  25
-            li
-              a href="javascript:;"  50
-            li
-              a href="javascript:;"  100
-            li.divider
-            li
-              a href="javascript:;"  Show All
-        - if view_access_control("branches","create")
-          .pull-right
-            = link_to "<i class='icon-glyph-164 f14 mr5'></i>Add Branch".html_safe, new_brand_branch_path(@brand), class: "btn btn-primary btn-outline mb5", remote: true
-        - if @branches.empty?
-          = render "partials/no_records_found"
-        - else
-          .no-more-tables
-            table.table.table-bordered.table-striped.mb0 data-sortable=""
-              thead
-                tr.bg-thead
-                  th width="300"  Branch
-                  th data-sortable="false" width="700"  Address
-              tbody
-                - @branches.each do |branch|
-                  tr
-                    td data-title="Branch"
-                      = link_to "<span class='label label-primary' style='background-color: #{branch.color}'>#{branch.name}</span>".html_safe, brand_branch_path(branch, brand_id: @brand), class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "View Information" }, remote: true
-                    td data-title="Description" = branch.address1
+        .panel
+          .panel-body
+            .pull-left
+              | Show
+              .btn-group
+                button.btn.btn-default.btn-sm.dropdown-toggle data-toggle="dropdown" type="button"
+                  span.mr5 10
+                  span.caret
+                ul.dropdown-menu role="menu"
+                  li
+                    a href="javascript:;"  10
+                  li
+                    a href="javascript:;"  25
+                  li
+                    a href="javascript:;"  50
+                  li
+                    a href="javascript:;"  100
+                  li.divider
+                  li
+                    a href="javascript:;"  Show All
+            - if view_access_control("branches","create")  
+              .row.mb10 
+                .pull-right        
+                  = link_to "<i class='icon-glyph-164 f14 mr5'></i>Add Branch".html_safe, new_brand_branch_path(@brand), class: "btn btn-primary btn-outline mb5", remote: true
+            - if @branches.empty?
+              = render "partials/no_records_found"
+            - else   
+              .no-more-tables
+                table.table.table-bordered.table-striped.mb0 data-sortable=""
+                  thead
+                    tr.bg-thead
+                      th width="300"  Branch
+                      th data-sortable="false" width="700"  Address
+                      th data-sortable="false" width="300"  Purchase Order Setup
+                  tbody
+                    - @branches.each do |branch|
+                      tr
+                        td data-title="Branch"
+                          = link_to "<span class='label label-primary' style='background-color: #{branch.color}'>#{branch.name}</span>".html_safe, brand_branch_path(branch, brand_id: @brand), class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "View Information" }, remote: true
+                        td data-title="Address" = branch.address1
+                        td data-title="Purchase Order Setup"
+                          = link_to "<i class='fa blue icon-glyph-109 mr5'></i> Edit".html_safe, setup_branch_po_setup_brands_path(branch_id: branch.id), data: { tt: "tooltip", placement: "top", "original-title" => "Edit PO Setup" }, remote: true
+
 
                   / = render "show_branch_modal", branch: branch
                   / = render "edit_branch_modal", branch: branch

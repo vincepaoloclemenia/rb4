@@ -1,4 +1,7 @@
 - if branch_admin?
+	- address = current_user.branch.branch_purchase_order_setup.nil? ? "" : current_user.branch.branch_purchase_order_setup.delivery_address
+	- from = current_user.branch.branch_purchase_order_setup.nil? ? "" : current_user.branch.branch_purchase_order_setup.delivery_from
+	- to = current_user.branch.branch_purchase_order_setup.nil? ? "" : current_user.branch.branch_purchase_order_setup.delivery_to
 	= form_for @purchase_order do |f|
 		.row.mb10
 			.col-xs-6
@@ -39,19 +42,30 @@
 								i  indicates field is required
 
 		.row.mb10	
-			.col-xs-6
+			.col-xs-12
 				= f.label :delivery_date
 					| Delivery Date
 					small.field-req  *
 				/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
 				= f.text_field :delivery_date, class: "form-control", placeholder: "Preferred Delivery Date", id: 'delivery_date'
-
+				= f.hidden_field :delivery_address, value: address
+		.row
+			.col-xs-12
+				label Delivery Time				
+		.row.mb10	
 			.col-xs-6
 				= f.label :delivery_time
-					| Delivery Time
+					| From
 					small.field-req  *
 				/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
-                input.form-control type='time' name='purchase_order[delivery_time]' id='delivery_time'         
+                input.form-control type='time' value="#{from}" name='purchase_order[delivery_time]' id='delivery_time'         
+			.col-xs-6
+				= f.label :delivery_time_to
+					| To
+					small.field-req  *
+				/ = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+                input.form-control type='time' value="#{to}" name='purchase_order[delivery_time_to]' id='delivery_time_to'         
+
 
 
 		.row.mb10

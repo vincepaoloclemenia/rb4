@@ -68,13 +68,16 @@
                                         <th>Branch</th>
                                         <td><%= pur.branch.name %></td>
                                         <th>Delivery Address</th>
-                                        <td><%= pur.branch.address1 %></td>
+                                        <td><%= pur.delivery_address.blank? ? "<i>Left blank</i>".html_safe : pur.delivery_address%></td>
                                     </tr>
                                     <tr>
                                         <th>Company Name</th>
                                         <td><%= pur.branch.company_registered_name %></td>
                                         <th>Delivery date and time</th>
-                                        <td><%= pur.delivery_date.strftime('%B %d, %Y') %>, <%= pur.delivery_time.to_time.strftime("%l:%M %P") %></td>
+                                        <td>
+                                            <%= pur.delivery_date.strftime('%B %d, %Y') %>, 
+                                            <%= pur.delivery_time.nil? || pur.delivery_time_to.nil? ? "<i>Left blank</i>".html_safe : "#{pur.delivery_time.to_time.strftime('%l:%M %P')} - #{pur.delivery_time_to.to_time.strftime('%l:%M %P')}" %>
+                                        </td>
                                     </tr>
                                     <tr>                         
                                         <th>Tin Number</th>

@@ -91,10 +91,9 @@ class PurchaseOrdersController < ApplicationController
 		if params[:purchase_order_id].present? && params[:approval].present?
 			approval = params[:approval]
 			@delivery_date = Date.strptime(approval[:delivery_date], '%m/%d/%Y')
-			@delivery_time = "#{approval[:from_time]} #{approval[:from_ampm]} - #{approval[:to_time]} #{approval[:to_ampm]}"
 			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
 			@po_number = po_approval_format(@purchase_order)
-			@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today, delivery_date: @delivery_date, delivery_time: @delivery_time )
+			@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today, delivery_date: @delivery_date, delivery_time: approval[:delivery_time], delivery_time_to: approval[:delivery_time_to], delivery_address: approval[:delivery_address] )
 			if @purchase_order.save
 				redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "You approved #{@purchase_order.branch.name} purchase order"
 			else
@@ -111,7 +110,7 @@ class PurchaseOrdersController < ApplicationController
 		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
 		po = params[:purchase_order]
 		date = Date.strptime(po[:delivery_date], "%m/%d/%Y")
-		@purchase_order.update(delivery_date: date, delivery_time: po[:delivery_time])
+		@purchase_order.update(delivery_date: date, delivery_time: po[:delivery_time], delivery_time_to: po[:delivery_time_to], delivery_address: po[:delivery_address])
 		respond_to do |format|
 			if @purchase_order.save
 				send_bulk_purchase_orders
@@ -256,7 +255,7 @@ class PurchaseOrdersController < ApplicationController
 	private
 
 		def purchase_order_params
-			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date)						
+			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date, :delivery_address, :delivery_time_to)						
 		end
 
 		def set_ids_and_supplier

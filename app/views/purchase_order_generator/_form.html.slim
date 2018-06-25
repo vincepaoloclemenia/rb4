@@ -42,19 +42,32 @@
 				| Supplier
 				small.field-req  *
 			= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-
 	.row.mb10
-		.col-xs-6
+		.col-xs-12
+			= f.label :delivery_address
+				| Delivery Address
+				small.field-req  *
+			= f.text_field :delivery_address, class: 'form-control', placeholder: "Specify logistic address", id: "del-add"
+	.row.mb10
+		.col-xs-12
 			= f.label :delivery_date
 				| Delivery Date
 				small.field-req  *
 			input.form-control name='purchase_order[delivery_date]' placeholder="Delivery Date" id='dd'
-
+	.row
+		.col-xs-12
+			label Delivery Time
+	.row.mb10
 		.col-xs-6    
-			= f.label :delivery_date
-				| Delivery Time
+			= f.label "From"
+				| From
 				small.field-req  *     
             input.form-control type='time' name='purchase_order[delivery_time]' id='purchase_order_delivery_time'         
+		.col-xs-6    
+			= f.label "To"
+				| To
+				small.field-req  *     
+            input.form-control type='time' name='purchase_order[delivery_time_to]' id='purchase_order_delivery_time_to'  	
 			
 			- if @suppliers.nil?
 

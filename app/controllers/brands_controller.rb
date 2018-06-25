@@ -70,6 +70,36 @@ class BrandsController < ApplicationController
 		@setting = current_brand.brand_setting	
 	end
 
+	def setup_branch_po_setup
+		@branch = Branch.find params[:branch_id]
+		@branch_setup = if @branch.branch_purchase_order_setup.present?
+							@branch.branch_purchase_order_setup
+						else
+							@branch.build_branch_purchase_order_setup
+						end
+	end
+
+	def create_branch_po_setup
+		@branch = Branch.find params[:branch_id]	
+		action = @branch.build_branch_purchase_order_setup(po_setup_params)
+		if action.save
+			redirect_to brand_path(@branch.brand), notice: "Purchase Order Setup for #{@branch.name} has successfully updated."
+		else
+			redirect_to brand_path(@branch.brand), alert: action.errors.full_messages.join(", ")
+		end		
+	end
+
+	def update_branch_po_setup
+		@branch = Branch.find params[:branch_id]	
+		@setup = @branch.branch_purchase_order_setup
+		@setup.update(po_setup_params)
+		if @setup.save
+			redirect_to brand_path(@branch.brand), notice: "Purchase Order Setup for #{@branch.name} has successfully updated."
+		else
+			redirect_to brand_path(@branch.brand), alert: @setup.errors.full_messages.join(", ")
+		end		
+	end
+
 	def create_purchase_order_setting
 		if params[:purchase_order_setting]
 			po = params[:purchase_order_setting]
@@ -109,6 +139,10 @@ class BrandsController < ApplicationController
 	end
 
 	private
+
+		def po_setup_params
+			params.require(:branch_purchase_order_setup).permit(:delivery_address, :delivery_from, :delivery_to)
+		end
 
 		def set_brand
 			@brand = current_client.brands.find(params[:id])

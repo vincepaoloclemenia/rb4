@@ -17,7 +17,9 @@ $("#br").change(function(){
 		success: function(data){
 			$("#prn").val(data.pr_number)
 			$("#pro").val(data.po_number)
-			$("#purchase_order_delivery_time").val(data.deliveryTime)
+			$("#del-add").val(data.address)
+			$("#purchase_order_delivery_time").val(data.from)
+			$("#purchase_order_delivery_time_to").val(data.to)
 		}
 	});
 });

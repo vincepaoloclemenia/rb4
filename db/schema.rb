@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180621031934) do
+ActiveRecord::Schema.define(version: 20180625074018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,17 @@ ActiveRecord::Schema.define(version: 20180621031934) do
 
   add_index "bills", ["client_id"], name: "index_bills_on_client_id", using: :btree
   add_index "bills", ["subscription_id"], name: "index_bills_on_subscription_id", using: :btree
+
+  create_table "branch_purchase_order_setups", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.string   "delivery_address"
+    t.string   "delivery_from"
+    t.string   "delivery_to"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "branch_purchase_order_setups", ["branch_id"], name: "index_branch_purchase_order_setups_on_branch_id", using: :btree
 
   create_table "branch_subscriptions", force: :cascade do |t|
     t.integer  "branch_id"
@@ -480,6 +491,8 @@ ActiveRecord::Schema.define(version: 20180621031934) do
     t.boolean  "sent",                                      default: false
     t.string   "note"
     t.boolean  "saved_as_purchase",                         default: false
+    t.string   "delivery_time_to"
+    t.string   "delivery_address"
   end
 
   add_index "purchase_orders", ["user_id"], name: "index_purchase_orders_on_user_id", using: :btree

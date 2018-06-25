@@ -1,15 +1,30 @@
 = form_for(:approval, url: purchase_order_approve_path(@po), method: :patch) do |f|
 	.row.mb10
-		.col-xs-6
+		.col-xs-12
 			= f.label :delivery_date
-				| Delivery Date
+				| <b> Delivery Date </b>
 				small.field-req  *
 			input.form-control name='approval[delivery_date]' placeholder="Delivery Date" value="#{@po.delivery_date.present? ? @po.delivery_date.strftime('%m/%d/%Y') : '' }"
+	.row.mb10
+		.col-xs-12
+			= f.label :delivery_address
+				| <b> Delivery Address </b>
+			= f.text_field :delivery_address, class: 'form-control', value: @po.delivery_address
+	.row
+		.col-xs-12
+			label
+				b Delivery Time
+	.row.mb10
 		.col-xs-6
 			= f.label :delivery_time
-				| Delivery Time
+				| From
 				small.field-req  *
 			input.form-control type='time' name='approval[delivery_time]' id='delivery_time' value="#{@po.delivery_time}"
+		.col-xs-6
+			= f.label :delivery_time_to
+				| To
+				small.field-req  *
+			input.form-control type='time' name='approval[delivery_time_to]' id='delivery_time_to' value="#{@po.delivery_time_to}"
 				
 
 	.modal-footer.no-border

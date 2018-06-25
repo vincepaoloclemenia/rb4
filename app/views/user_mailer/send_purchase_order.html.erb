@@ -63,13 +63,15 @@
                             <th>Branch</th>
                             <td><%= @purchase_order.branch.name %></td>
                             <th>Delivery Address</th>
-                            <td><%= @purchase_order.branch.address1 %></td>
+                            <td><%= @purchase_order.delivery_address.blank? ? "<i>Left blank</i>".html_safe : @purchase_order.delivery_address%></td>
                         </tr>
                         <tr>
                             <th>Company Name</th>
                             <td><%= @purchase_order.branch.company_registered_name %></td>
                             <th>Delivery date and time</th>
-                            <td><%= @purchase_order.delivery_date.strftime('%B %d, %Y') %>, <%= @purchase_order.delivery_time %></td>
+                            <td><%= @purchase_order.delivery_date.strftime('%B %d, %Y') %>, 
+                                <%= @purchase_order.delivery_time.nil? || @purchase_order.delivery_time_to.nil? ? "<i>Left blank</i>".html_safe : "#{@purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{@purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" %>
+                            </td>
                         </tr>
                         <tr>                         
                             <th>Tin Number</th>
