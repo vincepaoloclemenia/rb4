@@ -100,7 +100,7 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def time_range
-    if delivery_time && delivery_time_to
+    if delivery_time.present? && delivery_time_to.present?
       if delivery_time.to_time > delivery_time_to.to_time
         errors.add("Invalid", " delivery time range")
       end

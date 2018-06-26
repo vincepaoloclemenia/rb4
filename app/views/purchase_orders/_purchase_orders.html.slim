@@ -19,9 +19,10 @@
                         label
                 .row.pl15
                     .col-xs-5
-                        b = "#{po.delivery_date? ? po.delivery_date.strftime("%B %d, %Y") : "<i style='color: red'> No delivery date yet</i>"}, #{po.delivery_time.nil? || po.delivery_time_to.nil? ? "<i style='color: red'> No delivery time</i>".html_safe : po.delivery_time.to_time.nil? || po.delivery_time_to.to_time.nil? ? "<i style='color: red'> Invalid Time </i>".html_safe : "#{po.delivery_time.to_time.strftime('%l:%M %P')} - #{po.delivery_time_to.to_time.strftime('%l:%M %P')}" }"
+                        b = po.delivery_date? ? "#{po.delivery_date.strftime("%B %d, %Y")}" + " --- " : "<i style='color: red'> No delivery date yet</i>".html_safe + " --- " 
+                        b = po.delivery_time.nil? || po.delivery_time_to.nil? ? "<i style='color: red'> No delivery time</i>".html_safe : po.delivery_time.to_time.nil? || po.delivery_time_to.to_time.nil? ? "<i style='color: red'> Invalid Time </i>".html_safe : "#{po.delivery_time.to_time.strftime('%l:%M %P')} - #{po.delivery_time_to.to_time.strftime('%l:%M %P')}"
                     .col-xs-5
-                        b = po.delivery_address
+                        b = po.delivery_address? ? po.delivery_address : "<i style='color: red'> No delivery address yet</i>".html_safe
                     .col-xs-2
                         = link_to "<i class='icon-glyph mr5' ></i>Edit details".html_safe, purchase_order_edit_delivery_details_path(po, purchases: ids, supplier_id: po.supplier.id), class: "btn btn-edit", data: { tt: "tooltip", placement: "top", "original-title" => "Edit Delivery Date" }, remote: true
 
