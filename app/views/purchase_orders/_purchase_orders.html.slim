@@ -10,20 +10,20 @@
                         h5 
                             b = "#{branch} (#{po.pr_number})"
             .row.mb10.pl15
-                .delivery_details
-                    .col-xs-2
-                        label Delivery Date:
-                    .col-xs-3
-                        label 
-                            b = po.delivery_date? ? po.delivery_date.strftime("%B %d, %Y") : "--/--/----"
-                    .col-xs-2
-                        label Delivery Time
-                    .col-xs-3
-                        label 
-                            b = po.delivery_time.nil? ? "<i style='color: red'> No delivery time</i>".html_safe : po.delivery_time.to_time.nil? ? "<i style='color: red'> Invalid Time </i>".html_safe : po.delivery_time.to_time.strftime("%l:%M %P")
+                .row.pl15
+                    .col-xs-5
+                        label Delivery Date and Time:
+                    .col-xs-5
+                        label Delivery Address
                     .col-xs-2
                         label
-                            = link_to "<i class='icon-glyph mr5' ></i>Edit details".html_safe, purchase_order_edit_delivery_details_path(po, purchases: ids, supplier_id: po.supplier.id), class: "btn btn-edit", data: { tt: "tooltip", placement: "top", "original-title" => "Edit Delivery Date" }, remote: true
+                .row.pl15
+                    .col-xs-5
+                        b = "#{po.delivery_date? ? po.delivery_date.strftime("%B %d, %Y") : "<i style='color: red'> No delivery date yet</i>"}, #{po.delivery_time.nil? || po.delivery_time_to.nil? ? "<i style='color: red'> No delivery time</i>".html_safe : po.delivery_time.to_time.nil? || po.delivery_time_to.to_time.nil? ? "<i style='color: red'> Invalid Time </i>".html_safe : "#{po.delivery_time.to_time.strftime('%l:%M %P')} - #{po.delivery_time_to.to_time.strftime('%l:%M %P')}" }"
+                    .col-xs-5
+                        b = po.delivery_address
+                    .col-xs-2
+                        = link_to "<i class='icon-glyph mr5' ></i>Edit details".html_safe, purchase_order_edit_delivery_details_path(po, purchases: ids, supplier_id: po.supplier.id), class: "btn btn-edit", data: { tt: "tooltip", placement: "top", "original-title" => "Edit Delivery Date" }, remote: true
 
             table.table.table-bordered.table-striped.mb0 data-sortable="true"
                 thead

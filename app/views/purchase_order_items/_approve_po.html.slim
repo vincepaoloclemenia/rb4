@@ -9,7 +9,7 @@
 		.col-xs-12
 			= f.label :delivery_address
 				| <b> Delivery Address </b>
-			= f.text_field :delivery_address, class: 'form-control', value: @po.delivery_address
+			= f.text_field :delivery_address, class: 'form-control', value: @po.delivery_address, placeholder: "Specify logistics/delivery address"
 	.row
 		.col-xs-12
 			label

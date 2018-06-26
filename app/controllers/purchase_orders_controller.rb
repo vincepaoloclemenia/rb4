@@ -25,7 +25,9 @@ class PurchaseOrdersController < ApplicationController
 
 	def create
 		if branch_admin?
+			@date = params[:purchase_order][:delivery_date].present? ? Date.strptime(params[:purchase_order][:delivery_date], '%m/%d/%Y') : nil			
 			@purchase_order = current_user.branch.purchase_orders.build(purchase_order_params)
+			@purchase_order.delivery_date = @date
 			@purchase_order.brand_id = current_user.brand.id
 			@purchase_order.client_id = current_user.client.id
 			@purchase_order.status = 'Pending'
@@ -90,15 +92,21 @@ class PurchaseOrdersController < ApplicationController
 	def approve
 		if params[:purchase_order_id].present? && params[:approval].present?
 			approval = params[:approval]
-			@delivery_date = Date.strptime(approval[:delivery_date], '%m/%d/%Y')
-			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
-			@po_number = po_approval_format(@purchase_order)
-			@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today, delivery_date: @delivery_date, delivery_time: approval[:delivery_time], delivery_time_to: approval[:delivery_time_to], delivery_address: approval[:delivery_address] )
-			if @purchase_order.save
-				redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "You approved #{@purchase_order.branch.name} purchase order"
+			if approval[:delivery_date].blank?
+				redirect_to purchase_orders_path, alert: "Date cannot be blank"
 			else
-				redirect_to purchase_order_purchase_order_items_path(@purchase_order), alert: @purchase_order.errors.full_messages.join(', ')
+				@delivery_date = Date.strptime(approval[:delivery_date], '%m/%d/%Y')				
+				@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+				@po_number = po_approval_format(@purchase_order)
+				@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today, delivery_date: @delivery_date, delivery_time: approval[:delivery_time], delivery_time_to: approval[:delivery_time_to], delivery_address: approval[:delivery_address] )
+				if @purchase_order.save
+					redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "You approved #{@purchase_order.branch.name} purchase order"
+				else
+					redirect_to purchase_order_purchase_order_items_path(@purchase_order), alert: @purchase_order.errors.full_messages.join(', ')
+				end
 			end
+		else
+			redirect_to purchase_orders_path, alert: "Missing required information."
 		end
 	end
 
@@ -109,18 +117,26 @@ class PurchaseOrdersController < ApplicationController
 	def update_delivery_details
 		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
 		po = params[:purchase_order]
-		date = Date.strptime(po[:delivery_date], "%m/%d/%Y")
-		@purchase_order.update(delivery_date: date, delivery_time: po[:delivery_time], delivery_time_to: po[:delivery_time_to], delivery_address: po[:delivery_address])
-		respond_to do |format|
-			if @purchase_order.save
-				send_bulk_purchase_orders
-				@success = true
-				flash[:notice] = "Delivery details successfully updated"
-			else
-				@success = false
-				flash[:alert] = @purchase_order.errors.full_messages.join(", ")
+		if po[:delivery_date].present? 
+			date = Date.strptime(po[:delivery_date], "%m/%d/%Y")
+			@purchase_order.update(delivery_date: date, delivery_time: po[:delivery_time], delivery_time_to: po[:delivery_time_to], delivery_address: po[:delivery_address])
+			respond_to do |format|
+				if @purchase_order.save
+					send_bulk_purchase_orders
+					@success = true
+					flash[:notice] = "Delivery details successfully updated"
+				else
+					@success = false
+					flash[:alert] = @purchase_order.errors.full_messages.join(", ")
+				end
+				format.js
 			end
-			format.js
+		else
+			respond_to do |format|
+				@success = false
+				flash[:alert] = "Date cannot be left blank"
+				format.js
+			end
 		end
 	end
 
@@ -157,33 +173,32 @@ class PurchaseOrdersController < ApplicationController
 
 	def send_email_notification
 		po = params[:po_email]
-		@purchase_order = current_brand.purchase_orders.find(params[:po])
-		@purchase_order_items = @purchase_order.purchase_order_items.all
-		@subject = po[:subject]
-		@person = po[:contact_person]
-		@recipients = po[:recipients]
-		@title = po[:contact_title]
-		@message = po[:body]
-		@from = po[:from]
-		
-		@recipients.map do |recipient|
-			if recipient == ''
-				next
+		if po[:delivery_date]
+			@purchase_order = current_brand.purchase_orders.find(params[:po])
+			@purchase_order.update(
+				delivery_date: Date.strptime(po[:delivery_date], "%m/%d/%Y"),
+				delivery_address: po[:delivery_address],
+				delivery_time: po[:delivery_time],
+				delivery_time_to: po[:delivery_time_to]
+			)
+			if @purchase_order.save
+				if @purchase_order.send_single_purchase_order(
+					po[:subject],
+					po[:contact_person],
+					po[:recipients],
+					po[:contact_title],
+					po[:body]
+				)
+					redirect_to purchase_order_generator_index_path, notice: "Your email to #{@purchase_order.supplier.name} has been sent."	
+				else
+					redirect_to purchase_order_generator_index_path, alert: @purchase_order.errors.full_messages.join(", ")
+				end					
 			else
-				UserMailer.send_purchase_order(
-					@purchase_order, 
-					@purchase_order_items, 
-					current_user,
-					recipient,
-					@subject,
-					@person,
-					@title,
-					@message
-				).deliver_now
-				@purchase_order.update(date_sent: DateTime.now, sent: true)
-			end
-		end	
-		redirect_to purchase_order_generator_index_path, notice: "Your email to #{@purchase_order.supplier.name} has been sent."	
+				redirect_to purchase_order_generator_index_path, alert: @purchase_order.errors.full_messages.join(", ")
+			end				
+		else
+			redirect_to purchase_order_purchase_order_items_path(@purchase_order), alert: "Delivery date cannot be left blank."
+		end
 	end
 
 	def mail_bulk_of_purchase_orders

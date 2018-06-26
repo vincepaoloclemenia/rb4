@@ -109,13 +109,13 @@
                             <td class='center'>
                                 <%= pi.item_brand? ? pi.item_brand : "---" %>
                             </td>
-                            <td class='center'>
+                            <td>
                                 <%= pi.packaging %>
                             </td>
                             <td class='center'>
                                 <%= pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_s %>
                             </td>
-                            <td>
+                            <td class='center'>
                                 <%= pi.unit.name%>
                             </td>
                             <td style="text-align:right" >

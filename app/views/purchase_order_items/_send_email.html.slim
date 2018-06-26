@@ -1,11 +1,38 @@
 = form_for(:po_email, url: purchase_order_send_email_notification_path(po: @po)) do |f|
-	/.row.mb10
-	/	.col-xs-12
-	/		= f.label :from
-	/			| Brand Email
-	/			small.field-req  *
-	/		= f.email_field :from, required: true, class: "form-control", placeholder:"Brand email", value: @email
-	.row.mb10
+	.panel
+		.panel-heading.border.pb10 Verify Purchase Order Details
+		.panel-body
+			.row.mb10
+				.col-xs-12
+					= f.label :delivery_address
+						| <b> Delivery Address </b>
+						small.field-req  *
+					= f.text_field :delivery_address, class: 'form-control', value: "#{@po.delivery_address}", placeholder: "Please specify delivery address here."
+
+			.row.mb10
+				.col-xs-12
+					= f.label :delivery_date
+						| <b> Delivery Date </b>
+						small.field-req  *
+					input.form-control name='po_email[delivery_date]' placeholder="Delivery Date" value="#{@po.delivery_date.present? ? @po.delivery_date.strftime('%m/%d/%Y') : '' }"
+			
+			.row
+				.col-xs-12
+					label
+						b Delivery Time
+			.row.mb10
+				.col-xs-6
+					= f.label :delivery_time
+						| From
+						small.field-req  *
+					input.form-control type='time' name='po_email[delivery_time]' id='delivery_time' value="#{@po.delivery_time}"
+				.col-xs-6
+					= f.label :delivery_time_to
+						| To
+						small.field-req  *
+					input.form-control type='time' name='po_email[delivery_time_to]' id='delivery_time_to' value="#{@po.delivery_time_to}"
+
+	.row.mb10.pt10
 		.col-xs-12
 			= f.label :recipients
 				| To:

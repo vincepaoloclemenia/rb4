@@ -19,9 +19,10 @@ class PurchaseOrder < ActiveRecord::Base
 
   accepts_nested_attributes_for :purchase_order_items,  :reject_if => :all_blank, :allow_destroy => :true
   
-  #validates :delivery_date, :delivery_time, presence: true, if: :approved?
+  validates :delivery_address, :delivery_time, :delivery_time_to, presence: true
   before_save :check_if_restricted?, if: :branch_user?
   validate :validate_date, on: :update
+  validate :time_range
 
   pg_search_scope :search_po_number, against: [ :po_number ], using: { tsearch: { prefix: true, any_word: true } }
   pg_search_scope :search_status, against: [ :status ]  
@@ -96,6 +97,40 @@ class PurchaseOrder < ActiveRecord::Base
 
   def validate_date
     errors.add("Invalid", " date") unless delivery_date != '' || valid_date?
+  end
+
+  def time_range
+    if delivery_time && delivery_time_to
+      if delivery_time.to_time > delivery_time_to.to_time
+        errors.add("Invalid", " delivery time range")
+      end
+    end
+  end
+
+  def send_single_purchase_order(subject, contact, recipients, contact_title, body)
+    if recipients.reject { |c| c.empty? }.size >= 1 && subject 
+      recipients.map do |recipient|
+        if recipient == ''
+          next
+        else
+          UserMailer.send_purchase_order(
+            self, 
+            self.purchase_order_items, 
+            self.user,
+            recipient,
+            subject,
+            contact,
+            contact_title,
+            body
+          ).deliver_now
+          self.update(date_sent: DateTime.now, sent: true)
+        end
+      end	
+      true
+    else
+      errors.add("Something went wrong.", " Email cannot be submitted due to incomplete information. Please check recipients and subject before sending.")
+      false
+    end
   end
 
 end

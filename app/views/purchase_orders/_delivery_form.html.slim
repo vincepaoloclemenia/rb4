@@ -1,38 +1,42 @@
 
 = form_for @purchase_order, url: purchase_order_update_delivery_details_path(@purchase_order, purchases: @ids, supplier_id: @supplier.id), method: :put, remote: true do |f|
-    .row.mb10.pt10
-        .col-xs-6
-            = f.label :delivery_date
-                | <b> Delivery Date </b>
-                small.field-req  *
-            = f.text_field :delivery_date, value: "#{@purchase_order.delivery_date? ? @purchase_order.delivery_date.strftime('%m/%d/%Y') : '' }", class: "form-control", placeholder: "Preferred Delivery Date", id: 'delivery_date'
-        
-    .row.mb10
-        .col-xs-12
-            = f.label :delivery_address
-            = f.text_field :delivery_address, class: "form-control"
-    .row
-        .col-xs-12
-            label
-                b Delivery Time
-    .row.mb10
-        .col-xs-6
-            = f.label :delivery_time
-                | From
-                small.field-req  *
-			input.form-control type='time' name='purchase_order[delivery_time]' value="#{@purchase_order.delivery_time}"
-        .col-xs-6
-            = f.label :delivery_time
-                | To
-                small.field-req  *
-			input.form-control type='time' name='purchase_order[delivery_time_to]' value="#{@purchase_order.delivery_time_to}"
+    .panel
+        .panel-heading.border.pb10 Verify Purchase Order Details
+		.panel-body    
+            .row.mb10.pt10
+                .col-xs-12
+                    = f.label :delivery_date
+                        | <b> Delivery Date </b>
+                        small.field-req  *
+                    = f.text_field :delivery_date, value: "#{@purchase_order.delivery_date? ? @purchase_order.delivery_date.strftime('%m/%d/%Y') : '' }", class: "form-control", placeholder: "Preferred Delivery Date", id: 'delivery_date'
+            .row.mb10    
+                .col-xs-12
+                    = f.label :delivery_address
+                        | <b> Delivery Address </b>
+                        small.field-req  *
+                    = f.text_field :delivery_address, class: "form-control", placeholder: "Specify logistics/delivery address"
+            .row
+                .col-xs-12
+                    label
+                        b Delivery Time
+            .row.mb10
+                .col-xs-6
+                    = f.label :delivery_time
+                        | From
+                        small.field-req  *
+                    input.form-control type='time' name='purchase_order[delivery_time]' value="#{@purchase_order.delivery_time}"
+                .col-xs-6
+                    = f.label :delivery_time
+                        | To
+                        small.field-req  *
+                    input.form-control type='time' name='purchase_order[delivery_time_to]' value="#{@purchase_order.delivery_time_to}"
 
-    
-    .modal-footer.no-border
-        span.inline.float-right
-            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-            |
-            button.btn.btn-primary type="submit" Update
+            
+            .modal-footer.no-border
+                span.inline.float-right
+                    = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                    |
+                    button.btn.btn-primary type="submit" Update
       
 javascript:
     $('[name="purchase_order[delivery_date]"]').datepicker({
