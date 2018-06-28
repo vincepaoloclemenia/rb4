@@ -35,7 +35,7 @@
 						td data-title="Updated by" = @purchase.modified_by.full_name if @purchase.modified_by.present?
 .panel
 	.panel-heading.border Purchase Items
-	.panel-body
+	.panel-body				
 		| Show
 		.btn-group.mb10
 			- params[:show] = "10" if params[:show].nil?
@@ -53,7 +53,8 @@
 				li
 					= link_to "Show All", purchase_purchase_items_path(show: "all", purchase_id: @purchase.id)
 		.no-more-tables#purchase-item-list
-			= render "purchase_item_list", purchase_items: @purchase_items, purchase: @purchase
+			.row.pt10
+				= render "purchase_item_list", purchase_items: @purchase_items, purchase: @purchase
 
 
 .modal.add-purchase-item-modal tabindex="-1" role="dialog" aria-hidden="true"

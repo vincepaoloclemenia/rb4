@@ -45,8 +45,9 @@ class PurchaseItemsController < ApplicationController
 	end
 
 	def destroy
-		purchase = current_brand.purchases.find(params[:purchase_id])
-		@purchase_item = purchase.purchase_items.find(params[:id])
+		@purchase = current_brand.purchases.find(params[:purchase_id])
+		@purchase_item = @purchase.purchase_items.find(params[:id])
+		@purchase_order = PurchaseOrder.find_by_id params[:purchase_order_id]
 		respond_to do |format|
 			if @purchase_item.destroy
 				index
@@ -69,7 +70,7 @@ class PurchaseItemsController < ApplicationController
 	end
 
 	def purchase_item_params
-		params.require(:purchase_item).permit(:item_id, :unit_name, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
+		params.require(:purchase_item).permit(:purchase_order_item_id, :item_id, :unit_name, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
 																				:remarks, :date_of_purchase, :packaging)
 	end
 

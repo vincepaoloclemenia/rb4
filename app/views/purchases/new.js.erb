@@ -1,6 +1,9 @@
 $('#modal h4').html('New Purchase');
-
-$('.modal-body').html('<%= j render("form") %>');
+<% if branch_admin? %>
+	$('.modal-body').html('<%= j render("branch_form") %>');
+<% else %>
+	$('.modal-body').html('<%= j render("form") %>');
+<% end %>
 
 $('#modal').modal("show");
 

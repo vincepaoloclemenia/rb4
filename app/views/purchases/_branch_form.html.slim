@@ -1,0 +1,102 @@
+#purchase_form	
+	= form_for @purchase do |f|
+		= f.hidden_field :branch_id, value: current_user.branch.id
+		= f.hidden_field :client_id, value: current_client.id
+		.row.mb10
+			.col-xs-6
+				= f.label :invoice_number
+					| Invoice No.
+					small.field-req  *
+				= f.text_field :invoice_number, class: "form-control"
+			.col-xs-6
+				= f.label :purchase_date
+					| Purchase Date
+					small.field-req  *
+				- if params[:action] == 'new'
+					= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+				- else
+					= f.text_field :purchase_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+
+		.row.mb10
+			.col-xs-12
+				= f.label :supplier_id, "Supplier"
+					| Supplier
+					small.field-req  *
+				= f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+			- if @suppliers.nil?
+				.alert.alert-info.mt5 role="alert"
+					.row
+						.col-xs-1.text-right
+							i.icon-glyph-73.f25
+						.col-xs-11
+							| You currently have no list of suppliers.<br> Go to:&nbsp;
+							b Setup > Purchase Setup > Suppliers >&nbsp;
+							= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+
+		.row.mb10
+			.col-xs-12.mt20
+				| (
+				small.field-req   *
+				|  )
+				i  indicates field is 
+
+		.pull-left.mb10
+			button.btn.btn-primary#toggle_button type='button' Create Through PO?
+
+		.modal-footer.no-border
+			span.inline.float-right
+				= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+				|
+				- if params[:action] == 'new'
+					= f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+				- else
+					= f.submit "Update", class: "btn btn-primary", data: { "disable-wth" => "Updating.." }
+
+
+
+.panel#purchase_orders
+	.panel-heading
+		.pull-left.mt7 Purchase Order Lookup
+		.pull-right
+			button.btn.btn-primary#back_to_form type='button' Back
+
+	.panel-body
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| You can create purchase record through lookup. Just click the link provided below
+		.row.mb10
+			.col-xs-12
+				label List of Purchase Orders
+				= select_tag "purchase_order_id", options_from_collection_for_select(@purchase_orders, "id", "po_number"), include_blank: true, class: 'chosen', id: "pos", data: { placeholder: "Select Purchase Order" }, style: "width: 100%; display: none;"
+		
+		.row.mb10#purchase_order_lookup_link
+			center
+				= link_to "Please Select Purchase Order", "#", class: 'btn btn-link', id: "po_lookup_link", remote: true, data: { "disable-wth" => "Redirecting.." } 
+
+javascript:
+	$(document).ready(function(){
+		$("#purchase_orders").slideUp()
+		$("#toggle_button").on('click', function(){
+			$("#purchase_orders").slideDown()
+			$("#purchase_form").slideUp()
+		})
+		$("#back_to_form").on('click', function(){
+			$("#purchase_orders").slideUp()
+			$("#purchase_form").slideDown()
+		})
+
+		$("#pos").on('change', function(){
+			var link = $("#po_lookup_link")
+			if($(this).val()){
+				link.attr("href", "/purchases/purchase_new_record?purchase_order_id="+$(this).val()).text("Create purchase record via "+$(this).children("option").filter(":selected").text())
+				link.attr("data-dismiss", "modal")
+				link.css("font-weight", "900")
+			}else{
+				link.attr("href", "").text("No available link")
+			}
+		})
+	})
+		

@@ -1,6 +1,10 @@
 = form_for(:po_email, url: purchase_order_send_email_notification_path(po: @po)) do |f|
 	.panel
-		.panel-heading.border.pb10 Verify Purchase Order Details
+		.panel-heading.pb10 
+			.pull-left.mt7.mb10 Verify Purchase Order Details
+			.pull-right 
+				= link_to "<i class='icon-glyph mr5 f14' ></i> Edit Items".html_safe, purchase_order_purchase_order_items_path(@po), class: "btn btn-success btn-round btn-outline"
+
 		.panel-body
 			.row.mb10
 				.col-xs-12

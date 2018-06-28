@@ -1,6 +1,19 @@
 - purchase_items = purchase_items || @purchase_items
 - purchase = purchase || @purchase
 - nvt = net_vat_total_computation(purchase_items)
+- if @purchase.purchase_order.present? && !@purchase.complete_purchase_items?
+	.row.mb10
+		.col-xs-offset-2.col-xs-8
+			.alert.alert-info role="alert"
+				.row
+					.col-xs-1.text-right
+						i.icon-glyph-73.f25
+					.col-xs-11 
+						h4.f15 style='line-height: 1.6'
+							| This purchase record was created through purchase order (#{@purchase.purchase_order.po_number}) and currently has ordered items that were not included in the purchase items list. Click this  
+							b 
+								u = link_to " link ".html_safe, purchase_order_lookup_purchases_path(purchase: @purchase.id, purchase_order_id: @purchase.purchase_order.id), data: { tt: "tooltip", placement: "top", "original-title" => "Add Items through Purchase Order" }
+							| to add the remaining items.
 table.table.table-bordered.table-striped.mb0
 	thead
 		tr.bg-thead

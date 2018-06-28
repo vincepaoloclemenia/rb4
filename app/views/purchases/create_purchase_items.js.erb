@@ -1,0 +1,13 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+<% if @success %>
+	$('.modal').modal('hide');
+	$('body').removeClass('modal-open');
+	$('.modal-backdrop').remove();
+	$('#purchase_items').html("<%= j render partial: 'purchase_items_list', purchase_order: @purchase_order, purchase: @purchase %>");
+	$('#purchased_items').html("<%= j render partial: 'purchased_items_via_po', purchase_order: @purchase_order, purchase: @purchase %>");
+	$('.chosen').chosen({
+		width: "100%"
+	});
+<% end %>

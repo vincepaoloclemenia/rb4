@@ -5,8 +5,10 @@ class Purchase < ActiveRecord::Base
 	belongs_to :branch
 	belongs_to :supplier
   	has_many :purchase_items, dependent: :destroy
+	has_many :items, through: :purchase_items
 	belongs_to :created_by, class_name: 'User', :foreign_key => 'user_created_by_id'
 	belongs_to :modified_by, class_name: 'User', foreign_key: 'user_modified_by_id'
+	belongs_to :purchase_order
 	
 	default_scope -> { order(purchase_date: :desc)}
 
@@ -44,6 +46,16 @@ class Purchase < ActiveRecord::Base
 
 	def allowed_to_modify?
 		created_at + 12.hours > DateTime.now
+	end
+	
+	def item_added_already?(id)
+		if purchase_order.present?
+			items.pluck(:id).include? id
+		end
+	end
+
+	def complete_purchase_items?
+		purchase_items.pluck(:purchase_order_item_id).to_set.superset?(purchase_order.purchase_order_items.pluck(:id).to_set)
 	end
 
 	def unable_to_modify?

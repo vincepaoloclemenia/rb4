@@ -1,0 +1,49 @@
+- purchase = purchase || @purchase
+.panel-heading
+    .pull-left.mt7 Purchased Items
+    .pull-right
+        - if purchase.complete_purchase_items?
+            = link_to "<i class='icon-glyph-164 mr5 f14' ></i> Add more items".html_safe, purchase_purchase_items_path(purchase), class: "btn btn-success btn-round btn-outline"
+
+.panel-body
+    .no-more-tables
+        table.table.table-bordered.table-striped.mb0
+            thead
+                tr.bg-thead
+                    th width="145" Item Name
+                    th width="160" data-sortable="false" Item Description
+                    th width="110" Quantity
+                    th width="115" Unit
+                    th width="145" Packaging
+                    th width="120" Unit Price
+                    th width="140" VAT Type
+                    th width="140" Total Amount
+                    th width="60" data-sortable="false" Action
+            tbody
+                - purchase.purchase_items.each do |pi|
+                    tr
+                        td data-title="Item Name" = pi.item.name
+                        td data-title="Item Description" = pi.remarks
+                        td.text-centered data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_d
+                        td.text-centered data-title="Unit" = pi.unit_name
+                        td data-title="Packaging" = pi.packaging
+                        td.text-pull-right data-title="Unit Price" = to_peso(pi.purchase_item_amount)
+                        td.text-centered data-title="VAT Type" = pi.vat_type
+                        td.text-pull-right data-title="Total Action" = to_peso(pi.purchase_item_total_amount)
+                        td.action data-title="Action"
+                            - if view_access_control('purchase_items','destroy')
+                                - if branch_admin?
+                                    - if purchase.allowed_to_modify?
+                                        = link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: purchase.id, id: pi.id, purchase: purchase.id, purchase_order_id: purchase.purchase_order.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+                                - else
+                                    = link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: purchase.id, id: pi.id, purchase: purchase.id, purchase_order_id: purchase.purchase_order.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
+
+                tr.bg-total
+                    td.text-right.label-total colspan="7" Net Amount:
+                    td.label-total-num colspan="2" = to_peso(purchase.purchase_items.map(&:item_total_net).sum.round(2))
+                tr.bg-total
+                    td.text-right.label-total colspan="7" VAT Amount:
+                    td.label-total-num colspan="2" = to_peso(purchase.purchase_items.map(&:item_total_vat).sum.round(2))
+                tr.bg-total
+                    td.text-right.label-total colspan="7" Total Amount:
+                    td.label-total-num colspan="2" = to_peso(purchase.purchase_items.map(&:item_total_amount).sum.round(2))

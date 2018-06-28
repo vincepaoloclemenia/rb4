@@ -40,6 +40,16 @@ i#search{
         border-color: $light-blue;
     }
 }
+
+.btn-link{
+    background-color: transparent;
+    color: $blue;
+    border: none;
+    &:hover{
+        color: $main-theme;
+        text-decoration: underline;
+    }
+}
 .btn.btn-primary.inline{
     display: inline-block;
 }

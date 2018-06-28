@@ -6,6 +6,10 @@ retriggerFlash();
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
 	$('#purchase-item-list').html("<%= j render partial: 'purchase_item_list', purchase_items: @purchase_items, purchase: @purchase %>");
+	$('#purchased_items').html("<%= j render partial: 'purchases/purchased_items_via_po', purchase: @purchase %>");
+	<% if @purchase_order %>
+		$('#purchase_items').html("<%= j render partial: 'purchases/purchase_items_list', purchase_order: @purchase_order, purchase: @purchase %>");
+	<% end %>
 	$('.chosen').chosen({
 		width: "100%"
 	});

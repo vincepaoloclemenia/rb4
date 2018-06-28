@@ -1,0 +1,36 @@
+- purchase_order = purchase_order || @purchase_order
+- purchase = purchase || @purchase
+.panel-heading
+    .pull-left.mt7 Purchase Order Items 
+
+.panel-body
+    .no-more-tables
+        table.table.table-bordered.table-striped.mb0 data-sortable="true"
+            thead
+                tr.bg-thead
+                    th width="145" Item Name
+                    th width="145" Item Brand
+                    th width="160" data-sortable="false" Packaging
+                    th width="160" data-sortable="false" Remarks
+                    th width="110" Quantity
+                    th width="115" Unit
+                    th width="120" Unit Price
+                    th width="120" Total Price
+                    th width="60" data-sortable="false" Add Items
+            tbody
+                - purchase_order.purchase_order_items.each do |pi|
+                    tr
+                        td data-title="Item Name" = pi.item.name
+                        td.text-align-left data-title="Item Brand" = pi.item_brand? ? pi.item_brand : "---"
+                        td.text-align-left data-title="Packaging" = pi.packaging
+                        td.text-align-left data-title="Remarks" = pi.remarks
+                        td.text-centered data-title="Quantity" = pi.quantity.to_i.to_s
+                        td.text-centered data-title="Unit" = pi.unit.name
+                        td.text-pull-right data-title="Unit Price" = to_peso(pi.price_selected)
+                        td.text-pull-right data-titile='Total Price' = to_peso(pi.total_amount)
+                        td.action data-title="Add Items"
+                            - if purchase.item_added_already?(pi.item.id)
+                                span.green Item added already
+                            - else
+                                = link_to "<i class='icon-glyph-164 f14' ></i>".html_safe, purchase_add_purchase_item_path(purchase, purchase_order_item_id: pi.id, purchase_order_id: purchase_order.id), data: { tt: "tooltip", placement: "top", "original-title" => "Add Item" }, class: "btn btn-default btn-xs mb10", remote: true
+

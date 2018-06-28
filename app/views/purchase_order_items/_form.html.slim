@@ -16,7 +16,7 @@
                 | Unit
                 small.field-req  *
             /= f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }
-            = f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, readonly: true, id: 'unit', id: 'unit'
+            = f.select :unit_id, [], { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }, readonly: true, id: 'unit'
         .col-xs-6.col-md-6
             = f.label :packaging
             = f.text_field :packaging, class: 'form-control', readonly: true, id: 'packaging'

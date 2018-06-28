@@ -1,0 +1,9 @@
+$('#modal h4').html('New Purchase via <%= @purchase_order.po_number %> (<%= @purchase_order.branch.name %>)');
+
+$('.modal-body').html('<%= j render("purchase_create_form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});

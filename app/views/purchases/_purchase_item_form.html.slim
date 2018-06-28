@@ -1,0 +1,109 @@
+= form_for @purchase_item, url: create_purchase_items_purchases_path(purchase: @purchase.id, purchase_order_id: @purchase_order.id), method: :post, remote: true do |f|
+    .panel-body
+        .row.mb10
+            .col-xs-12		
+                = f.hidden_field :purchase_order_item_id, value: @purchase_order_item.id					
+                = f.label :item_id
+                    | Item
+                    small.field-req  *							
+                = f.select :item_id, [[@purchase_order_item.item.name, @purchase_order_item.item.id]], { include_blank: false }, class: "form-control", data: { placeholder: "Select" }								
+        .row.mb10
+            .col-xs-6
+                = f.label :unit_id
+                    | Unit
+                    small.field-req  *
+                = f.text_field :unit_name, value: @purchase_order_item.unit.name, readonly: true, class: "form-control", data: { placeholder: "Select" }, id: 'unit'
+
+            .col-xs-6
+                = f.label :vat_type
+                    | VAT Type
+                    small.field-req  *
+                = f.select :vat_type, [['VAT-Inclusive','VAT-Inclusive'],['VAT-Exclusive','VAT-Exclusive'],['VAT-Exempted','VAT-Exempted']], { include_blank: "Select" }, class: "form-control", id: 'type-of-vat'
+        
+        .row.mb10
+            .col-xs-4.col-lg-4.mt5
+                = f.label :quantity
+                    | Quantity
+                    small.field-req  *
+                = f.number_field :quantity, value: @purchase_order_item.quantity, class: "form-control", placeholder: "0", step: :any, readonly: true
+            .col-xs-4.col-lg-4.mt5
+                = f.label :purchase_item_amount
+                    | Unit Price
+                    small.field-req  *
+                .input-group
+                    span.input-group-addon PHP
+                    = f.number_field :purchase_item_amount, value: @purchase_order_item.price_selected, class: "form-control", placeholder: "0", step: '.01', readonly: true
+            .col-xs-4.col-lg-4.mt5
+                label for='entry_amount'
+                    | PO Total Amount
+                .input-group
+                    span.input-group-addon PHP
+                    input.form-control id='entry_amount' value="#{@purchase_order_item.total_amount}" name='entry_amount' type='number' placeholder='0' readonly='true' step='any'
+                
+        .row.mb10
+            .col-xs-4.mt5
+                label for='total_vat'
+                    | Total VAT
+                .input-group
+                    span.input-group-addon PHP
+                    input.form-control id='total_vat' type='number' placeholder='0' readonly='true'
+            .col-xs-4.mt5
+                label for='total_net'
+                    | Total NET
+                .input-group
+                    span.input-group-addon PHP
+                    input.form-control id='total_net' type='number' placeholder='0' readonly='true'	
+            .col-xs-4.mt5
+                = f.label :purchase_item_total_amount
+                    | Total Amount
+                    small.field-req  *
+                .input-group
+                    span.input-group-addon PHP
+                    = f.number_field :purchase_item_total_amount, class: "form-control", placeholder: "0", step: '.01', readonly: true
+            
+        .row.mb10
+            .col-xs-12
+                = f.label :remarks
+                = f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2, id: 'remarks'
+        .row.mb10
+            .col-xs-12.mt20
+                | (
+                small.field-req   *
+                |  )
+                i  indicates field is required
+        .modal-footer.no-border
+            span.inline.float-right
+                = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                |
+                = f.submit "Add", class: "btn btn-primary", id: 'add'
+
+javascript:
+    $("#type-of-vat").on("change", function(){
+		if($(this).val() !== ''){
+			var entryAmount = $("#entry_amount").val()
+			var qty = $("#purchase_item_quantity").val()
+			if(qty > 0 && entryAmount > 0){
+				if($(this).val() === 'VAT-Inclusive'){
+					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / 1.12 / qty).toFixed(2))
+					$("#total_vat").prop("value", (entryAmount - (entryAmount / 1.12)).toFixed(2))
+					$("#total_net").prop("value", (entryAmount / 1.12).toFixed(2))
+					$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount)
+				}else if($(this).val() === 'VAT-Exclusive'){
+					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
+					$("#total_vat").prop("value", (entryAmount * 1.12 - entryAmount).toFixed(2))
+					$("#total_net").prop("value", entryAmount)
+					$("#purchase_item_purchase_item_total_amount").prop("value", (entryAmount * 1.12).toFixed(2) )
+				}else if($(this).val() === 'VAT-Exempted'){
+					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
+					$("#total_vat").prop("value", 0.00)
+					$("#total_net").prop("value", entryAmount)
+					$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount )
+				}
+			}
+		}else{
+			$("#purchase_item_quantity").prop("disabled", true)
+			$("#purchase_item_quantity").val('')
+			$("#entry_amount").prop("disabled", true)
+			$("#entry_amount").val('')
+		}
+	})

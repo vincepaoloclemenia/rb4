@@ -1,0 +1,28 @@
+= form_for @purchase, url: purchase_create_purchases_path(purchase_order_id: @purchase_order.id, branch_id: @purchase_order.branch.id), method: :post do |f|    
+    .panel-body  
+        = f.hidden_field :client_id, value: current_client.id
+        = f.hidden_field :brand_id, value: @purchase_order.brand.id
+        = f.hidden_field :purchase_order_id, value: @purchase_order.id
+        .row.mb10
+            .col-xs-12
+                = f.label "Supplier"
+                    | Supplier
+                = f.select :supplier_id, [[@purchase_order.supplier.name, @purchase_order.supplier.id]], { include_blank: false }, class: "form-control", readonly: true
+        .row.mb10    
+            .col-xs-12
+                = f.label "Purchase Date"
+                    | Purchase Date 
+                    small.field-req  * <i> Based from purchase order delivery date </i>
+                = f.text_field :purchase_date, class: 'form-control', placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: "#{@purchase_order.delivery_date.strftime('%m/%d/%Y')}"
+        .row.mb10    
+            .col-xs-12
+                = f.label "Invoice Number"
+                    | Invoice
+                    small.field-req  *
+                = f.text_field :invoice_number, class: 'form-control', placeholder: "Invoice no."
+        .modal-footer.no-border
+            span.inline.float-right
+                = link_to "Back", new_purchase_path, class: "btn btn-default", remote: true, data: { dismiss: "modal" }
+                |
+                = f.submit "Create", class: "btn btn-primary", data: { "disable-with" => "Creating.." }
+                

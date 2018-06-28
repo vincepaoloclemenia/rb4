@@ -17,7 +17,6 @@ class PurchaseItem < ActiveRecord::Base
 		purchase.purchase_items
 		branches = current_brand.branches
 		branches.each do |branch|
-
 		end
 	end
 

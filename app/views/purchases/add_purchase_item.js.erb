@@ -1,0 +1,11 @@
+$('#modal h4').html('Add New Purchase Item (<span style="color:<%= @purchase.branch.color %>"><%= @purchase.invoice_number %></span>)');
+
+$('.modal-body').html('<%= j render("purchase_item_form") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

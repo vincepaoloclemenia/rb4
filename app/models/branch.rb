@@ -136,6 +136,10 @@ class Branch < ActiveRecord::Base
     records
   end
 
+  def sent_approved_purchased_orders
+    purchase_orders.where(status: "Approved", sent: true, saved_as_purchase: false)
+  end
+
   protected
 
     def wizard_done?

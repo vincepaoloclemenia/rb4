@@ -59,6 +59,11 @@ Rails.application.routes.draw do
   resources :sale_reports, only: :show
   resources :purchases do
     resources :purchase_items
+    get :purchase_order_lookup, on: :collection
+    post :purchase_create, on: :collection
+    get :purchase_new_record, on: :collection
+    post :create_purchase_items, on: :collection
+    get "add_purchase_item" => "purchases#add_purchase_item"
   end
   resources :subscriptions do
     get 'show_branches', on: :collection
@@ -161,6 +166,7 @@ Rails.application.routes.draw do
       get :export_excel, on: :collection
       get :default_excel, on: :collection
       get :purchased_items, on: :collection
+      get :get_pos_for_purchasing, on: :collection
     end
 
     resources :item_and_costs, only: [] do

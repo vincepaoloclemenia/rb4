@@ -1,13 +1,11 @@
 = form_for @purchase do |f|
-	- if current_user.role.role_level.eql?('branch')
-		= f.hidden_field :branch_id, value: current_user.branch.id
-	- else 
-		.row.mb10
-			.col-xs-12
-				= f.label :branch_id
-					| Branch
-					small.field-req  *
-				= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+	= f.hidden_field :client_id, value: current_client.id
+	.row.mb10
+		.col-xs-12
+			= f.label :branch_id
+				| Branch
+				small.field-req  *
+			= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, id: "branches", style: "width: 100%; display: none;"
 	.row.mb10
 		.col-xs-6
 			= f.label :invoice_number
@@ -38,7 +36,7 @@
 						| You currently have no list of suppliers.<br> Go to:&nbsp;
 						b Setup > Purchase Setup > Suppliers >&nbsp;
 						= link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
-
+	
 	.row.mb10
 		.col-xs-12.mt20
 			| (
@@ -54,3 +52,67 @@
 			- else
 				= f.submit "Update", class: "btn btn-primary", data: { "disable-wth" => "Updating.." }
 
+.panel#purchase_orders
+	.panel-heading
+		.pull-left.mt7 Purchase Order Lookup
+	.panel-body
+		.alert.alert-info role="alert"
+			.row
+				.col-xs-1.text-right
+					i.icon-glyph-73.f25
+				.col-xs-11
+					| You can create purchase record through lookup. Just click the link provided below
+		.row.mb10
+			.col-xs-12
+				label List of Purchase Orders
+				select.chosen data-placeholder="Select" readonly="readonly" id="purchase_order_id" name="purchase_order_id"
+		.row.mb10
+			center
+				= link_to "", "", class: 'btn btn-link', id: "po_lookup_link", remote: true, data: { "disable-wth" => "Redirecting.." } 
+javascript:
+	$(document).ready(function(){
+		$("#purchase_orders").slideUp()
+	})
+	$("#branches").on('change', function(){
+		$.ajax({
+			url: "/api/purchases/get_pos_for_purchasing.json",
+			method: 'GET',
+			data: { branch_id: $(this).val() },
+			success: (data) => {
+				if(data){
+					$("#purchase_orders").slideDown()
+					var select = $("#purchase_order_id")
+					select.empty()
+					$.each(data, function(index, obj) {   
+						select.append($("<option></option>")
+									.attr("value", obj.id)
+									.text(obj.po_number)); 
+					});
+					select.trigger("chosen:updated")
+					if(select.val()){
+						var link = $("#po_lookup_link")
+						link.css("font-weight", "900")
+						link.attr("href", "/purchases/purchase_new_record?purchase_order_id="+select.val()).text("Create purchase record via "+select.children("option").filter(":selected").text())
+						link.attr("data-dismiss", "modal")
+					}else{
+						var link = $("#po_lookup_link")
+						link.attr("href", "").text("No available link")
+					}
+				}else{
+					var link = $("#po_lookup_link")
+					link.attr("href", "").text("No available link")
+					$("#purchase_order_id").empty()
+					$("#purchase_orders").slideUp()
+				}
+			}
+		})	
+	})
+	$("#purchase_order_id").on('change', function(){
+		var link = $("#po_lookup_link")
+		if($(this).val()){
+			link.attr("href", "/purchases/purchase_new_record?purchase_order_id="+$(this).val()).text("Create purchase record via "+$(this).children("option").filter(":selected").text())
+			link.css("font-weight", "900")
+		}else{
+			link.attr("href", "").text("No available link")
+		}
+	})

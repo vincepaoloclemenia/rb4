@@ -1,0 +1,50 @@
+.panel
+    .panel-heading 
+        .pull-left.mt7
+            = "PURCHASE RECORD ( #{@purchase_order.branch.name} )"
+        .pull-right
+            
+    .panel-body  
+        
+        .row.mb25
+            .col-xs-offset-1.col-xs-10 style="border-left: 7px solid #{@purchase.branch.color}"    
+                .row.mb10.mt10 style='margin-left: 25px'
+                    .col-xs-6
+                        h4.f15
+                            b Supplier
+                    .col-xs-6
+                        h5 = @purchase.supplier.name      
+                .row.mb10.ml15 style='margin-left: 25px'
+                    .col-xs-6
+                        h4.f15 
+                            b Branch
+                    .col-xs-6
+                        h5 = @purchase.branch.name
+
+                .row.mb10.ml15 style='margin-left: 25px'
+                    .col-xs-6
+                        h4.f15 
+                            b Invoice Number
+                    .col-xs-6
+                        h5 = @purchase.invoice_number 
+                .row.mb10.ml15 style='margin-left: 25px'
+                    .col-xs-6
+                        h4.f15
+                            b Purchase Date
+                    .col-xs-6
+                        h5 = @purchase.purchase_date.strftime("%B %d, %Y")
+                .row.mb10.ml15 style='margin-left: 25px'
+                    .col-xs-6
+                        h4.f15 
+                            b Purchase Order Number
+                    .col-xs-6
+                        h5 = @purchase_order.po_number 
+                
+.panel#purchase_items
+    = render "purchase_items_list", purchase_order: @purchase_order, purchase: @purchase
+
+.panel#purchased_items
+    = render "purchased_items_via_po", purchase: @purchase
+
+                
+= render "partials/modal"
