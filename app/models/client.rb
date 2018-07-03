@@ -28,7 +28,7 @@ class Client < ActiveRecord::Base
 	end
 
 	def free_trial? 
-		trial.present? && trial.free_trial?
+		trial.present? 
 	end
 
 	def branches
@@ -57,6 +57,10 @@ class Client < ActiveRecord::Base
 
 	def has_subscribed? 
 		subscriptions.find_by_plan_id(2).present?
+	end
+
+	def not_subscribed_yet?
+		!has_subscribed?
 	end
 
 	private

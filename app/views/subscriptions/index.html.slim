@@ -16,32 +16,34 @@
 						| Your Free Trial has already Expired. To continue using Restobot, please subscribe now.
 						/- if subtitle
 						/	br = subtitle.html_safe
-		- if @free_trial
-			.no-more-tables
-				table.table.table-bordered.table-striped.mb0
-					thead
-						tr.bg-thead
-							th width="180" Subscription Type
-							th width="200" Branches
-							th width="180" Start date
-							th width="180" End date
-							th width="160" Days left
-							th width="100" Status
-					tbody
-						tr
-							td = @free_trial.plan.name
-							td 
-								= link_to @branches_count, show_branches_subscriptions_path, class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "More Info" }, remote: true
-							td = to_default_date_format(@free_trial.start_date)
-							td = to_default_date_format(@free_trial.end_date)
-							td 
-								- if current_client.free_trial?
-									span class="#{current_client.on_free_trial? ? 'green' : 'red'}" = distance_of_time_in_words_to_now(@free_trial.end_date)
-								- elsif current_client.has_paid_subscription?
-									span class="#{current_client.has_paid_subscription? ? 'green' : 'red'}" = distance_of_time_in_words_to_now(@free_trial.end_date)
+		- elsif current_client.has_paid_subscription?
 
-							td = @free_trial.status
-				hr
+		- elsif current_client.on_free_trial? #&& !current_client.has_paid_subscription?
+			.row.mb10
+				.col-xs-offset-1.col-xs-10
+					table.table.table-bordered.table-striped.mb0
+						thead
+							tr
+								th Free trial of #{distance_of_time_in_words(@free_trial.end_date, @free_trial.start_date)}
+								td From #{@free_trial.start_date.strftime("%B %d, %Y")} - #{@free_trial.end_date.strftime("%B %d, %Y")}
+							tr
+								th Status
+								td 
+									span.green #{@free_trial.status} 
+
+							tr
+								th Branches
+								td 
+									= link_to @branches_count, show_branches_subscriptions_path, class: "view-link", data: { tt: "tooltip", placement: "top", "original-title" => "More Info" }, remote: true
+
+							tr
+								th Days Remaining
+								td
+									- if current_client.free_trial?
+										span class="#{current_client.on_free_trial? ? 'green' : 'red'}" = distance_of_time_in_words_to_now(@free_trial.end_date)
+									- elsif current_client.has_paid_subscription?
+										span class="#{current_client.has_paid_subscription? ? 'green' : 'red'}" = distance_of_time_in_words_to_now(@free_trial.end_date)
+			
 
 		/.no-more-tables
 		/	table.table.table-bordered.table-striped.mb0 data-sortable="true"

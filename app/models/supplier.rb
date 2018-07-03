@@ -1,4 +1,6 @@
 class Supplier < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, use: :slugged
   belongs_to :brand
   belongs_to :client
   belongs_to :branch
@@ -26,6 +28,10 @@ class Supplier < ActiveRecord::Base
 
   def remaining_items
     items.where.not(id: prices.pluck(:item_id)).pluck(:name, :id)
+  end
+
+  def self.with_prices
+    all.includes(:prices).where.not( supplier_item_prices: { supplier_id: nil } )
   end
 
 end

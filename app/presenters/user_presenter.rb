@@ -31,7 +31,7 @@ class UserPresenter < BasePresenter
     end
 
     def has_paid_subscriptions?
-        user.client.has_paid_subscription?
+        user.branch.subscribed?
     end
 
     private

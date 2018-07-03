@@ -1,11 +1,12 @@
-.sidebar-panel.offscreen-left
-	.brand
-		.brand-logo
-			img src="/img/logo.png" height="20" alt=""
-		a.toggle-sidebar.hamburger-icon.hidden-xs.v3 data-toggle="layout-small-menu" href="javascript:;"
-				i.icon-glyph-160
+- if current_client.on_free_trial? || current_client.has_paid_subscription?	
+	.sidebar-panel.offscreen-left
+		.brand
+			.brand-logo
+				img src="/img/logo.png" height="20" alt=""
+			a.toggle-sidebar.hamburger-icon.hidden-xs.v3 data-toggle="layout-small-menu" href="javascript:;"
+					i.icon-glyph-160
 
-	- if current_client.on_free_trial? || current_client.has_paid_subscription?
+	
 		nav.ps-container role="navigation"
 			ul.nav
 				li class="#{is_menu_open?('dashboard')}"

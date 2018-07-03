@@ -86,7 +86,7 @@ class PurchaseOrderSummary extends React.Component{
                         <td data-title='Supplier.'>{po.supplier}</td>
                         <td data-title='Status'>{po.status} --- {po.sent ? <span className='green'>Sent {po.date_sent}</span> : po.status === 'On Hold' ? `NOTE: ${po.note}` : <span className='red'>Unsent yet</span>  }</td>
                         <td className='action' data-title='Action'>
-                            <a className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="View" rel="nofollow" href={`/purchase_orders/${po.id}/purchase_order_items`}><i className='icon-glyph-41 f14'></i></a>
+                            <a className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="View" rel="nofollow" href={`/purchase_orders/${po.slug}/purchase_order_items`}><i className='icon-glyph-41 f14'></i></a>
                             {this.renderDeleteButton(po)}
                         </td>
                     </tr>

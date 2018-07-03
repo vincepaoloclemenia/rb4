@@ -1,4 +1,6 @@
 class Brand < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, use: :slugged
   belongs_to :client
   has_many :all_branches, dependent: :destroy, class_name: 'Branch'
   has_many :client_user_accesses, dependent: :destroy										# => for rescue purposes, associated roles and branches

@@ -59,12 +59,16 @@ class SubscriptionsController < ApplicationController
 			@subscription.branch_count = branches.count
 			@subscription.amount = plan.amount * branches.count
 			@subscription.period = plan.period	
-			if @subscription.save_with_payment
-				current_client.unsubscribed_branches.where(id: branches).each do |branch|
-					branch.create_branch_subscription(subscription_id: @subscription.id)
+			if @subscription.request_pay
+				if @subscription.save_with_payment
+					current_client.unsubscribed_branches.where(id: branches).each do |branch|
+						branch.create_branch_subscription(subscription_id: @subscription.id)
+					end
+					redirect_to subscriptions_path, notice: "Thank you for Subscribing! Your subscription is now being processed through PayPal. This would only take a few moments."
+				else
+					redirect_to subscriptions_path, alert: @subscription.errors.full_messages.join(", ")
 				end
-				redirect_to subscriptions_path, notice: "Thank you for Subscribing! Your subscription is now being processed through PayPal. This would only take a few moments."
-			else
+			else 
 				redirect_to subscriptions_path, alert: @subscription.errors.full_messages.join(", ")
 			end
 		end

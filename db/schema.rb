@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180627093637) do
+ActiveRecord::Schema.define(version: 20180703080928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 20180627093637) do
     t.datetime "updated_at",                          null: false
     t.string   "email"
     t.text     "email_footer"
+    t.string   "slug"
   end
 
   add_index "brands", ["client_id"], name: "index_brands_on_client_id", using: :btree
@@ -494,6 +495,7 @@ ActiveRecord::Schema.define(version: 20180627093637) do
     t.boolean  "saved_as_purchase",                         default: false
     t.string   "delivery_time_to"
     t.string   "delivery_address"
+    t.string   "slug"
   end
 
   add_index "purchase_orders", ["user_id"], name: "index_purchase_orders_on_user_id", using: :btree
@@ -511,6 +513,7 @@ ActiveRecord::Schema.define(version: 20180627093637) do
     t.datetime "updated_at",                          null: false
     t.boolean  "saved_through_po",    default: false
     t.integer  "purchase_order_id"
+    t.string   "slug"
   end
 
   add_index "purchases", ["branch_id"], name: "index_purchases_on_branch_id", using: :btree
@@ -703,6 +706,7 @@ ActiveRecord::Schema.define(version: 20180627093637) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.string   "emails",         default: [],                 array: true
+    t.string   "slug"
   end
 
   add_index "suppliers", ["branch_id"], name: "index_suppliers_on_branch_id", using: :btree

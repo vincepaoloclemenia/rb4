@@ -17,5 +17,6 @@ json.purchase_orders do |json|
         json.sent po.sent
         json.note po.note
         json.date_sent po.date_sent.present? ? time_ago_in_words(po.date_sent) + " ago" : "Unsent"
+        json.slug po.slug
     end
 end

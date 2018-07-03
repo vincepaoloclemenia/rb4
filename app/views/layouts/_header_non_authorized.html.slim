@@ -1,0 +1,12 @@
+header.header.navbar data-behavior="animated-navbar" style='margin-left: 0px'		     
+     ul.nav.navbar-nav.navbar-right 
+		li.width10       
+            li class="user-menu"
+				a href="javascript:;" data-toggle="dropdown" 
+					= current_user.username 
+					/img.header-avatar.img-circle src="/img/avatar-mummy.png"
+					= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle with-gap"
+
+				ul.dropdown-menu
+					li.dropdown-submenu
+						= link_to "Logout", destroy_user_session_path, method: :delete, data: { keybinding: "o u t" }

@@ -3,7 +3,7 @@ class PurchaseOrderItemsController < ApplicationController
 	before_action :access_control
 
 	def index
-		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
 		@po_items =  @purchase_order.purchase_order_items
 		@purchase_order_items = @purchase_order.purchase_order_items.paginate(page: params[:page], per_page: per_page)
 		@purchase_order_item = PurchaseOrderItem.new
@@ -75,7 +75,7 @@ class PurchaseOrderItemsController < ApplicationController
 	end
 
 	def send_email
-		@po = current_brand.purchase_orders.find(params[:purchase_order_id])
+		@po = current_brand.purchase_orders.friendly.find(params[:purchase_order_id])
 		@email = current_brand.email.nil? ? '' : current_brand.email
 		@supplier_emails = @po.supplier.emails.map { |x| x }
 		@contact_person = @po.supplier.contact_person
@@ -84,7 +84,7 @@ class PurchaseOrderItemsController < ApplicationController
 	end
 
 	def approve_purchase_order
-		@po = current_brand.purchase_orders.find(params[:purchase_order_id])
+		@po = current_brand.purchase_orders.friendly.find(params[:purchase_order_id])
 		@delivery_time = @po.branch.delivery_time
 		@numbers = []
 		(1..12).each { |x| @numbers << [ x, x ] }

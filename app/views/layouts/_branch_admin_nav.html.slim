@@ -1,12 +1,13 @@
 - present current_user do |user_presenter|	
-	.sidebar-panel.offscreen-left
-		.brand
-			.brand-logo
-				img src="/img/logo.png" height="20" alt=""
-			a.toggle-sidebar.hamburger-icon.hidden-xs.v3 data-toggle="layout-small-menu" href="javascript:;"
-					i.icon-glyph-160
+	- if user_presenter.client_on_free_trial? || user_presenter.has_paid_subscriptions?
+		.sidebar-panel.offscreen-left
+			.brand
+				.brand-logo
+					img src="/img/logo.png" height="20" alt=""
+				a.toggle-sidebar.hamburger-icon.hidden-xs.v3 data-toggle="layout-small-menu" href="javascript:;"
+						i.icon-glyph-160
 
-		- if user_presenter.client_on_free_trial? || user_presenter.has_paid_subscriptions?
+		
 			nav.ps-container role="navigation"
 				ul.nav
 					li class="#{is_menu_open?('dashboard')}"

@@ -11,6 +11,13 @@ class PaypalPayment
   def checkout_url(options)
     process(:checkout, options).checkout_url
   end
+
+  def ask_payment
+    process :request_payment, payer_id: @subscription.paypal_customer_token,
+                              token: @subscription.paypal_payment_token,
+                              description: "#{@subscription.plan.name} for a total of #{@subscription.branch_count} #{'branch'.pluralize(@subscription.branch_count)}",
+                              amount: @subscription.amount
+  end
   
   def make_recurring
     #change the period in live
@@ -39,7 +46,7 @@ class PaypalPayment
 private
 
   def process(action, options = {})
-    ipn_url = ENV['RAILS_ENV'].eql?('development') ? "localhost:3000/payment_notification" : "http://restobotv4.cloudapp.net/payment_notifications"
+    ipn_url = ENV['RAILS_ENV'].eql?('development') ? "https://2c81ca3a.ngrok.com/payment_notifications" : "http://restobotv4.cloudapp.net/payment_notifications"
     options = options.reverse_merge(
       ipn_url: ipn_url,
       currency: "PHP"

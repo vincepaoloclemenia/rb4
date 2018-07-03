@@ -12,8 +12,8 @@
                 = f.label :unit_id
                     | Unit
                     small.field-req  *
-                = f.text_field :unit_name, value: @purchase_order_item.unit.name, readonly: true, class: "form-control", data: { placeholder: "Select" }, id: 'unit'
-
+                = f.text_field :unit_name, value: @purchase_order_item.item.unit.name, readonly: true, class: "form-control", data: { placeholder: "Select" }, id: 'unit'
+                = f.hidden_field :unit_id, value: @purchase_order_item.item_id
             .col-xs-6
                 = f.label :vat_type
                     | VAT Type
@@ -25,7 +25,7 @@
                 = f.label :quantity
                     | Quantity
                     small.field-req  *
-                = f.number_field :quantity, value: @purchase_order_item.quantity, class: "form-control", placeholder: "0", step: :any, readonly: true
+                = f.number_field :quantity, value: @purchase_order_item.quantity, class: "form-control", placeholder: "0", step: :any
             .col-xs-4.col-lg-4.mt5
                 = f.label :purchase_item_amount
                     | Unit Price
@@ -107,3 +107,13 @@ javascript:
 			$("#entry_amount").val('')
 		}
 	})
+    $('#purchase_item_quantity').on("keyup",function(){
+		if($(this).val() > 0){
+			$('#entry_amount').prop('readonly', false);
+			if($("#type-of-vat").val() === 'VAT-Inclusive' && $('#purchase_item_purchase_item_amount').val() > 0){
+				var qty = $('#purchase_item_quantity').val();
+				var itemAmount = $('#purchase_item_purchase_item_amount').val();
+				$('#total_net').prop('value', ((qty * itemAmount) / 1.12).toFixed(2));
+			}
+		}
+	});

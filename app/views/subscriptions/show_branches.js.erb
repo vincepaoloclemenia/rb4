@@ -1,4 +1,4 @@
-$('#modal h4').html("Branch list | <span class='<%= @color %>'><%= current_subscription.plan.name %> <%= @label %></span>");
+$('#modal h4').html("Branch list | <span class='<%= @color %>'><%= free_trial_subscription.plan.name %> <%= @label %></span>");
 
 $('.modal-body').html('<%= j render("show_branches") %>');
 

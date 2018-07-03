@@ -9,6 +9,7 @@ class PurchaseOrderItem < ActiveRecord::Base
 	validates :unit_id, :item_id, :quantity, presence: true
 	validates_uniqueness_of :item_id, scope: :purchase_order
 	after_create :update_purchase_order
+	after_update :update_purchase_order
 	after_destroy :update_purchase_order
 
 	pg_search_scope :poi_search,

@@ -34,6 +34,12 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  def request_pay
+    res = paypal.ask_payment
+    #res.approved? && res.completed?
+      
+  end
+
   def save_with_paypal_payment
     response = paypal.make_recurring
     self.paypal_recurring_profile_token = response.profile_id

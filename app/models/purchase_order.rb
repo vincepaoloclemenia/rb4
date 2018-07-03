@@ -1,5 +1,7 @@
 class PurchaseOrder < ActiveRecord::Base
   include PgSearch
+  extend FriendlyId
+  friendly_id :pr_number, use: :slugged
   belongs_to :user
 	belongs_to :client
   belongs_to :brand
@@ -18,8 +20,8 @@ class PurchaseOrder < ActiveRecord::Base
   scope :unsent_pos, -> { includes(:purchase_order_items).where(sent: false, status: ["Approved", "Pending"]).where.not( purchase_order_items: { purchase_order_id: nil } ) }
 
   accepts_nested_attributes_for :purchase_order_items,  :reject_if => :all_blank, :allow_destroy => :true
-  
-  validates :delivery_address, :delivery_time, :delivery_time_to, presence: true
+  validates_associated :purchase_order_items
+  #validates :delivery_address, :delivery_time, :delivery_time_to, presence: true
   before_save :check_if_restricted?, if: :branch_user?
   validate :validate_date, on: :update
   validate :time_range

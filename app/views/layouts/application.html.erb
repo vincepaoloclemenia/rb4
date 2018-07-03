@@ -26,10 +26,17 @@
 <body cz-shortcut-listen="true" <%= "data-no-turbolinks='true'".html_safe if ["index", "price_movement_report", "invoice_entry", "invoice_entry_report","man_hours","purchase_listings","purchase_summary","item_purchase_detail"].include?(params[:action]) && ["reports", "purchases","inventories","units","sales", "item_cost_analysis_reports"].include?(params[:controller]) %> >
 	<%= render "partials/flash" if flash %>
 	<% if user_signed_in? %>
+		<% @style = current_client.on_free_trial? || current_client.has_paid_subscription? ? '' : "margin-left: 0%" %>
 		<div class="app layout-fixed-header">
-			<%= render "layouts/nav" if user_signed_in? && wizard_done? %>
-			<div class="main-panel">
-				<%= render "layouts/header" if user_signed_in? %>
+			<%= render "layouts/nav" if wizard_done? %>
+			<div class="main-panel" style="<%= @style %>">
+				<% if branch_admin? && (current_client.on_free_trial? || current_user.branch.subscribed? )  %>
+					<%= render "layouts/header" if user_signed_in? %>
+				<% elsif current_client.on_free_trial? || current_client.has_paid_subscription? %>
+					<%= render "layouts/header" if user_signed_in? %>
+				<% else %>
+					<%= render "layouts/header_non_authorized" %>
+				<% end %>
 				<div class="main-content">
 					<%= yield %>
 				</div>

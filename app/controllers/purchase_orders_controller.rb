@@ -8,12 +8,12 @@ class PurchaseOrdersController < ApplicationController
 	def index
 		@purchase_orders = current_brand.purchase_orders.unsent_pos.group_by { |po| po.supplier_id }
 		@purchase_order = PurchaseOrder.new
-		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
+		@suppliers = current_brand.suppliers.with_prices.pluck(:name, :id).uniq
 	end
 
 	def new
 		@purchase_order = current_brand.purchase_orders.new
-		@suppliers = (current_brand.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq
+		@suppliers = current_brand.suppliers.with_prices.pluck(:name, :id).uniq
 		if current_user.role.role_level.eql? 'branch'
 			@po_number = po_number_format(current_user.branch) 
 			@po_ref =  PurchaseOrder.all.present? ? PurchaseOrder.maximum(:id).next : 1 
@@ -21,6 +21,10 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def show
+		@purchase_order = PurchaseOrder.find params[:id]
+		if @purchase_order.nil?
+			render action: 'index'
+		end
 	end
 
 	def create
@@ -34,7 +38,7 @@ class PurchaseOrdersController < ApplicationController
 			@purchase_order.user_id = current_user.id
 			if @purchase_order.save
 				flash[:notice] = 'Purchase order successfully created'
-				redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
+				redirect_to purchase_order_purchase_order_items_path(@purchase_order)
 			else
 				flash[:alert] = @purchase_order.errors.full_messages.join(', ')
 				redirect_to purchase_orders_path
@@ -47,7 +51,7 @@ class PurchaseOrdersController < ApplicationController
 			@purchase_order.user_id = current_user.id
 			if @purchase_order.save
 				flash[:notice] = 'Purchase order successfully created'
-				redirect_to purchase_order_purchase_order_items_path(purchase_order_id: @purchase_order.id)
+				redirect_to purchase_order_purchase_order_items_path(@purchase_order)
 			else
 				flash[:alert] = @purchase_order.errors.full_messages.join(', ')
 				redirect_to purchase_orders_path

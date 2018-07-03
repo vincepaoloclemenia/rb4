@@ -1,5 +1,7 @@
 class Purchase < ActiveRecord::Base
 	include PgSearch
+	extend FriendlyId
+	friendly_id :invoice_number, use: :slugged
 	belongs_to :client
 	belongs_to :brand
 	belongs_to :branch
