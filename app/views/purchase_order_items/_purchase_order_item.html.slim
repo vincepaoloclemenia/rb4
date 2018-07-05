@@ -1,0 +1,39 @@
+- supplier = supplier || @supplier
+- purchase_order = purchase_order || @purchase_order
+- supplier.prices.includes(:item).order("items.name ASC").each do |price|
+    - purchase_order_item = purchase_order.purchase_order_items.find_by_item_id(price.item.id) 
+    .no-more-tables
+        .po_item id="#{price.id}"
+            table.table.table-bordered.table-striped.mb0 data-sortable="true"
+                thead
+                    tr.bg-thead
+                        th width='150' Item name
+                        th width='150' Item brand
+                        th width='150' Packaging
+                        th width='150' Unit
+                        th width='150' Price
+                        - if purchase_order_item
+                            th width='150' Quantity
+                            th width='150' Total Amount
+                            th width='150' Actions
+                        - else 
+                            th width='450' style="text-align: center" Action
+                tbody
+                    tr
+                        td = price.item.name 
+                        td = price.brand_name
+                        td = price.packaging
+                        td.text-centered = price.unit.name
+                        td.align-right = to_peso(price.supplier_amount)
+                        - if purchase_order_item
+                            td.text-centered = purchase_order_item.quantity % 1 == 0 ? purchase_order_item.quantity.to_i : purchase_order_item.quantity
+                            td.align-right = to_peso(purchase_order_item.total_amount.round(2))
+                            td.text-centered
+                                = link_to "<i class='icon-glyph f14'></i>".html_safe, edit_purchase_order_purchase_order_item_path(purchase_order_item.id, purchase_order_id: purchase_order.id, supp_price: price.id), data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, class: "btn btn-default btn-xs mb10", remote: true
+                                = link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_order_purchase_order_item_path(id: purchase_order_item.id, purchase_order_id: purchase_order), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true  
+                        - else
+                            td
+                                center
+                                    = link_to "<i class='icon-glyph-164 mr5' ></i> Add".html_safe, new_purchase_order_purchase_order_item_path(purchase_order, supp_price: price.id), class: "btn btn-link", remote: true
+
+    

@@ -1,11 +1,3 @@
-$('#modal h4').html('Add New Purchase Order Item');
-
-$('.modal-body').html('<%= j render("form") %>');
-
-$('#modal').modal("show");
-
-$('.chosen').chosen({
-	width: "100%"
-});
-
-$("[data-toggle='toggle']").bootstrapToggle();
+var row = $("#<%= @price.id %>")
+row.hide().after('<%= j render("purchase_order_item_form") %>')
+	

@@ -2,20 +2,5 @@ $('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
 retriggerFlash();
 
 <% if @success %>
-	$('.modal').modal('hide');
-	$('body').removeClass('modal-open');
-	$('.modal-backdrop').remove();
-	$('#purchase-order-item-list').html("<%= j render partial: 'purchase_order_item_list', purchase_order_items: @purchase_order_items, purchase_order: @purchase_order %>");
-	$('.chosen').chosen({
-		width: "100%"
-	});
-
-    $('#quantity').val('');
-	$('#item').prop('selectedIndex', 0);
-	$('#supplier_price').val('');
-	$('#purchase_item_quantity').val('')
-	$('#packaging').val('');
-	$('#unit').empty();
-	$('#total_amount').val('');
-	$('#remarks').val('');
+	$('#purchase-order-items-list').html("<%= j render partial: 'purchase_order_item', supplier: @supplier, purchase_order: @purchase_order %>");
 <% end %>

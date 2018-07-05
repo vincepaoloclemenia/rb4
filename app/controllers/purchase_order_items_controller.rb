@@ -4,23 +4,26 @@ class PurchaseOrderItemsController < ApplicationController
 
 	def index
 		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
+		@supplier = @purchase_order.supplier
 		@po_items =  @purchase_order.purchase_order_items
 		@purchase_order_items = @purchase_order.purchase_order_items.paginate(page: params[:page], per_page: per_page)
 		@purchase_order_item = PurchaseOrderItem.new
 	end
 
 	def new
-		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
-		@purchase_order_item = PurchaseOrderItem.new
+		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
+		@purchase_order_item = @purchase_order.purchase_order_items.new
+		@price = SupplierItemPrice.find params[:supp_price]
 	end
 
 	def edit
-		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
 		@purchase_order_item = @purchase_order.purchase_order_items.find params[:id]
+		@price = SupplierItemPrice.find params[:supp_price]
 	end
 
 	def update
-		@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
 		@purchase_order_item = @purchase_order.purchase_order_items.find params[:id]
 		@purchase_order_item.branch_id = @purchase_order.branch.id
 		@purchase_order_item.brand_id = @purchase_order.brand.id
@@ -39,10 +42,10 @@ class PurchaseOrderItemsController < ApplicationController
 	end
 
 	def create
-		purchase_order = PurchaseOrder.find(params[:purchase_order_id])
-		@purchase_order_item = purchase_order.purchase_order_items.new(purchase_order_item_params)
-		@purchase_order_item.branch_id = purchase_order.branch.id
-		@purchase_order_item.brand_id = purchase_order.brand.id
+		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
+		@purchase_order_item = @purchase_order.purchase_order_items.new(purchase_order_item_params)
+		@purchase_order_item.branch_id = @purchase_order.branch.id
+		@purchase_order_item.brand_id = @purchase_order.brand.id
 		respond_to do |format|
 			if @purchase_order_item.save
 				index
@@ -58,7 +61,7 @@ class PurchaseOrderItemsController < ApplicationController
 	end
 
 	def destroy
-		purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+		purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
 		@purchase_order_item = purchase_order.purchase_order_items.find(params[:id])
 		respond_to do |format|
 			if @purchase_order_item.destroy
@@ -72,6 +75,16 @@ class PurchaseOrderItemsController < ApplicationController
 			format.js
 		end
 		#redirect_to purchase_order_purchase_order_items_path(purchase_order_id: purchase_order.id), notice: "Purchase Item successfully deleted"
+	end
+
+	def add_po_items
+		@purchase_order = PurchaseOrder.friendly.find params[:purchase_order_id]
+		@purchase_order.update(purchase_order_params)
+		if @purchase_order.save
+			redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "Purchase order successfully updated"
+		else
+			redirect_to purchase_order_purchase_order_items_path(@purchase_order), alert: @purchase_order.errors.full_messages.join(", ")
+		end
 	end
 
 	def send_email
@@ -99,5 +112,21 @@ class PurchaseOrderItemsController < ApplicationController
 
 	def purchase_order_item_params
 		params.require(:purchase_order_item).permit(:item_brand, :item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks, :total_amount, :packaging)
+	end
+
+	def purchase_order_params
+		params.require(:purchase_order).permit(
+			purchase_order_items_attributes: [
+				:unit_id,
+				:unit_name,
+				:quantity,
+				:price_selected,
+				:item_id,
+				:item_brand,
+				:purchase_order_id,
+				:total_amount,
+				:packaging
+			]
+		)
 	end
 end

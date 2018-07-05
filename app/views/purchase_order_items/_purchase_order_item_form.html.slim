@@ -1,0 +1,58 @@
+= form_for [@purchase_order, @purchase_order_item], remote: true do |f|
+    = f.hidden_field :item_id, value: @price.item.id
+    = f.hidden_field :unit_id, value: @price.unit.id
+    = f.hidden_field :packaging, value: @price.packaging
+    = f.hidden_field :item_brand, value: @price.brand_name
+    = f.hidden_field :price_selected, value: @price.supplier_amount, id: "price"
+    = f.hidden_field :brand_id, value: @purchase_order.brand.id
+    = f.hidden_field :branch_id, value: @purchase_order.branch_id
+    .po_item
+        table.table.table-bordered.table-striped.mb0 data-sortable="true"
+            thead
+                tr.bg-thead
+                    th width='150' Item name
+                    th width='150' Item brand
+                    th width='150' Packaging
+                    th width='150' Unit
+                    th width='150' Price       
+                    th width='150' Quantity
+                    th width='150' Total Amount
+                    th width='150' Actions
+            tbody
+                tr
+                    td = @price.item.name 
+                    td = @price.brand_name
+                    td = @price.packaging
+                    td.text-centered = @price.unit.name
+                    td.align-right = to_peso(@price.supplier_amount)
+                    td
+                        = f.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity'
+                    td
+                        = f.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true
+        
+                    td.text-centered
+                        = f.submit "Save", class: 'btn btn-link btn-xs mb10 mr2' 
+                        = link_to "Cancel", '#', class: "btn btn-link btn-xs mb10 mr2", onclick: "closeForm(#{@price.id})", data: { tt: "tooltip", placement: "top", "original-title" => "Cancel" }
+
+           
+               
+
+javascript:
+    $(document).ready(function(){
+        $("#quantity").on('keyup', function(){
+            $("#total_amount").val($(this).val() * $("#price").val())
+        })
+    })
+
+    function closeForm(id){
+        var row = $("#"+id)
+        event.preventDefault()
+        $(event.target).parents("form").fadeOut('fast', function(){
+            row.fadeIn('fast')
+        })
+    
+    }
+       
+   
+        
+

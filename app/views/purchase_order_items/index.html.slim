@@ -20,36 +20,53 @@
 				= link_to "Back To Purchase Orders", purchase_orders_path, class: "btn btn-success btn-round btn-outline mb10 mr2"
 		
 	.panel-body
-		.row.mb10.ml15
-		- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
-			= link_to "<i class='fa fa-envelope mr5'></i> Send PDF File to #{@purchase_order.supplier.name}".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-success btn-round btn-outline", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
-		.no-more-tables
+		.row.mb20.ml15
+			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
+				= link_to "<i class='fa fa-envelope mr5'></i> Send PDF File to #{@purchase_order.supplier.name}".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-success btn-round btn-outline", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
+		.col-xs-12	
 			table.table.table-bordered.table-striped.mb0
 				thead
-					tr.bg-thead
-						th Supplier
-						th PR No.
-						th PR Date						
-						th Status
-						th Remarks
-						th PO Date
-						th PO No.
-						- if @purchase_order.approved?	
-							th Delivery Date
-							th Delivery Time
-						
-				tbody
 					tr
-						td data-title="Supplier" = @purchase_order.supplier.name
-						td data-title="PR No." = @purchase_order.pr_number
-						td data-title="PR Date" = @purchase_order.pr_date.strftime("%B %d, %Y")
-						td data-title='Status' = @purchase_order.status
-						td data-title='Status' = @purchase_order.remarks
-						td data-title="PO Date" = @purchase_order.po_date.nil? ? '--/--/----' : @purchase_order.po_date
-						td data-title="PO No." = @purchase_order.po_number.nil? ? '---' : @purchase_order.po_number
-						- if @purchase_order.approved?
-							td data-title='Delivery Date' = @purchase_order.delivery_date.nil? ? '--/--/----' : @purchase_order.delivery_date.strftime("%b %d, %Y")
-							td data-title='Delivery Time' = @purchase_order.delivery_time.present? && @purchase_order.delivery_time_to.present? ? "#{@purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{@purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" : "<i>Left blank</i>".html_safe
+						th Supplier
+						td = @purchase_order.supplier.name
+					tr
+						th PR No.
+						td = @purchase_order.pr_number
+					tr 
+						th PR Date		
+						td = @purchase_order.pr_date.strftime("%B %d, %Y")
+					tr				
+						th Status
+						td = @purchase_order.status
+					tr
+						th Remarks
+						td = @purchase_order.remarks
+					tr
+						th PO Date
+						td = @purchase_order.po_date.nil? ? '--/--/----' : @purchase_order.po_date
+					tr
+						th PO No.
+						td = @purchase_order.po_number.nil? ? '---' : @purchase_order.po_number
+
+					- if @purchase_order.approved?	
+						tr	
+							th Delivery Date
+							td = @purchase_order.delivery_date.nil? ? '--/--/----' : @purchase_order.delivery_date.strftime("%b %d, %Y")
+						tr	
+							th Delivery Time
+							td = @purchase_order.delivery_time.present? && @purchase_order.delivery_time_to.present? ? "#{@purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{@purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" : "<i>Left blank</i>".html_safe
+				/tbody
+				/	tr
+				/		td data-title="Supplier" 
+				/		td data-title="PR No." = @purchase_order.pr_number
+				/		td data-title="PR Date" = @purchase_order.pr_date.strftime("%B %d, %Y")
+				/		td data-title='Status' = @purchase_order.status
+				/		td data-title='Status' = @purchase_order.remarks
+				/		td data-title="PO Date" = @purchase_order.po_date.nil? ? '--/--/----' : @purchase_order.po_date
+				/		td data-title="PO No." = @purchase_order.po_number.nil? ? '---' : @purchase_order.po_number
+				/		- if @purchase_order.approved?
+				/			td data-title='Delivery Date' = @purchase_order.delivery_date.nil? ? '--/--/----' : @purchase_order.delivery_date.strftime("%b %d, %Y")
+				/			td data-title='Delivery Time' = @purchase_order.delivery_time.present? && @purchase_order.delivery_time_to.present? ? "#{@purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{@purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" : "<i>Left blank</i>".html_safe
 .panel
 	.panel-heading.border Purchase Order Items
 	.panel-body
@@ -69,7 +86,11 @@
 				li.divider
 				li
 					= link_to "Show All", purchase_order_purchase_order_items_path(show: "all", purchase_order_id: @purchase_order.id)
-		.no-more-tables#purchase-order-item-list
-			= render "purchase_order_item_list", purchase_order_items: @purchase_order_items, purchase_order: @purchase_order
-	
+		
+		#purchase-order-items-list style='margin-left: 20px;margin-right:20px'	
+			= render partial: "purchase_order_item", locals: { purchase_order: @purchase_order, supplier: @supplier }
+														
 = render "partials/modal"
+
+javascript:
+	

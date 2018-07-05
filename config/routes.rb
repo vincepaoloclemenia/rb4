@@ -91,6 +91,7 @@ Rails.application.routes.draw do
     resources :purchase_order_items do
       get :send_email, on: :collection
       get :approve_purchase_order, on: :collection
+      patch :add_po_items, on: :collection
     end
     get :view_po_remotely, on: :collection
     get :send_bulk_purchase_orders, on: :collection

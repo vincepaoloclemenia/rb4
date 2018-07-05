@@ -1,21 +1,3 @@
-$('#modal h4').html('Edit Purchase Order Item');
-
-$('.modal-body').html('<%= j render("form") %>');
-
-$('#modal').modal("show");
-
-$('.chosen').chosen({
-	width: "100%"
-});
-
-$("[data-toggle='toggle']").bootstrapToggle();
-
-<% if @purchase_order_item %>
-    $.ajax({
-        url: "<%= get_units_path %>",
-        data: {
-            item_id : "<%= @purchase_order_item.item.id %>",
-            supplier_id: "<%= @purchase_order.supplier.id %>"
-        },
-    });
-<% end %>
+var row = $("#<%= @price.id %>")
+row.hide().after('<%= j render("purchase_order_item_form") %>')
+	
