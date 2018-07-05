@@ -1,8 +1,4 @@
 class AdminsPerRole extends React.Component{
-    constructor(props){
-        super(props)
-    }
-
     recognizeLength(){
         switch (this.props.admins.length){
             case 1:

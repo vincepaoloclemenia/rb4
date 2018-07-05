@@ -49,6 +49,9 @@ i#search{
         color: $main-theme;
         text-decoration: underline;
     }
+    &.red{
+        color: tomato;
+    }
 }
 .btn.btn-primary.inline{
     display: inline-block;

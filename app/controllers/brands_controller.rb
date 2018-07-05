@@ -145,7 +145,7 @@ class BrandsController < ApplicationController
 		end
 
 		def set_brand
-			@brand = current_client.brands.find(params[:id])
+			@brand = current_client.brands.friendly.find(params[:id])
 		end
 
 		def brand_params

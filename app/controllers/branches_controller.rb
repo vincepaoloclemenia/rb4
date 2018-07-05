@@ -49,7 +49,7 @@ class BranchesController < ApplicationController
 	private
 
 	def set_brand
-		@brand = current_client.brands.find(params[:brand_id])
+		@brand = current_client.brands.friendly.find(params[:brand_id])
 	end
 
 	def set_branch

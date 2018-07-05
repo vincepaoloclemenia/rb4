@@ -6,7 +6,7 @@
     = f.hidden_field :price_selected, value: @price.supplier_amount, id: "price"
     = f.hidden_field :brand_id, value: @purchase_order.brand.id
     = f.hidden_field :branch_id, value: @purchase_order.branch_id
-    .po_item
+    .po_item.adding_item
         table.table.table-bordered.table-striped.mb0 data-sortable="true"
             thead
                 tr.bg-thead
@@ -16,7 +16,7 @@
                     th width='150' Unit
                     th width='150' Price       
                     th width='150' Quantity
-                    th width='150' Total Amount
+                    th width='180' Total Amount
                     th width='150' Actions
             tbody
                 tr
@@ -26,13 +26,16 @@
                     td.text-centered = @price.unit.name
                     td.align-right = to_peso(@price.supplier_amount)
                     td
-                        = f.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity'
+                        = f.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center"
                     td
-                        = f.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true
+                        = f.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true, style: "text-align: right"
         
                     td.text-centered
-                        = f.submit "Save", class: 'btn btn-link btn-xs mb10 mr2' 
-                        = link_to "Cancel", '#', class: "btn btn-link btn-xs mb10 mr2", onclick: "closeForm(#{@price.id})", data: { tt: "tooltip", placement: "top", "original-title" => "Cancel" }
+                        - if @purchase_order_item.new_record?
+                            = f.submit "Add", class: 'btn btn-link btn-xs mb10 mr2' 
+                        - else
+                             = f.submit "Save", class: 'btn btn-link btn-xs mb10 mr2'
+                        = link_to "Cancel", '#', class: "btn btn-link red btn-xs mb10 mr2", onclick: "closeForm(#{@price.id})", data: { tt: "tooltip", placement: "top", "original-title" => "Cancel" }
 
            
                

@@ -21,7 +21,7 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def show
-		@purchase_order = PurchaseOrder.find params[:id]
+		@purchase_order = PurchaseOrder.friendly.find params[:id]
 		if @purchase_order.nil?
 			render action: 'index'
 		end
@@ -61,7 +61,7 @@ class PurchaseOrdersController < ApplicationController
 
 	def update
 		# @purchase_order = current_brand.purchases.find(params[:id])
-		@purchase_order = PurchaseOrder.find(params[:id])
+		@purchase_order = PurchaseOrder.friendly.find(params[:id])
 		respond_to do |format|
 			if @purchase_order.update(purchase_order_params)
 				# @purchase_order.update(user_modified_by_id: current_user.id)
@@ -78,7 +78,7 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def destroy
-		@purchase_order = PurchaseOrder.find(params[:id])
+		@purchase_order = PurchaseOrder.friendly.find(params[:id])
 		respond_to do |format|
 			if @purchase_order.destroy
 				index
@@ -100,7 +100,7 @@ class PurchaseOrdersController < ApplicationController
 				redirect_to purchase_orders_path, alert: "Date cannot be blank"
 			else
 				@delivery_date = Date.strptime(approval[:delivery_date], '%m/%d/%Y')				
-				@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+				@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
 				@po_number = po_approval_format(@purchase_order)
 				@purchase_order.update(status: 'Approved', po_number: @po_number, po_date: Date.today, delivery_date: @delivery_date, delivery_time: approval[:delivery_time], delivery_time_to: approval[:delivery_time_to], delivery_address: approval[:delivery_address] )
 				if @purchase_order.save
@@ -115,11 +115,11 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def edit_delivery_details
-		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+		@purchase_order = PurchaseOrder.friendly.find params[:purchase_order_id]
 	end
 
 	def update_delivery_details
-		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+		@purchase_order = PurchaseOrder.friendly.find params[:purchase_order_id]
 		po = params[:purchase_order]
 		if po[:delivery_date].present? 
 			date = Date.strptime(po[:delivery_date], "%m/%d/%Y")
@@ -145,13 +145,13 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def hold_po
-		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+		@purchase_order = PurchaseOrder.friendly.find params[:purchase_order_id]
 	end
 
 	def hold
 		if params[:purchase_order_id] && params[:hold][:note].present?
 			h = params[:hold]
-			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+			@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
 			@purchase_order.update(status: 'On Hold', note: h[:note] )
 			if @purchase_order.save
 				redirect_to purchase_orders_path, notice: "#{@purchase_order.branch.name} purchase order was marked 'On Hold' "
@@ -165,7 +165,7 @@ class PurchaseOrdersController < ApplicationController
 
 	def reject
 		if params[:purchase_order_id].present?
-			@purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+			@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
 			@purchase_order.update(status: 'Rejected')
 			if @purchase_order.save
 				redirect_to purchase_orders_path, notice: "You rejected #{@purchase_order.branch.name} purchase order"
@@ -178,7 +178,7 @@ class PurchaseOrdersController < ApplicationController
 	def send_email_notification
 		po = params[:po_email]
 		if po[:delivery_date]
-			@purchase_order = current_brand.purchase_orders.find(params[:po])
+			@purchase_order = current_brand.purchase_orders.friendly.find(params[:po])
 			@purchase_order.update(
 				delivery_date: Date.strptime(po[:delivery_date], "%m/%d/%Y"),
 				delivery_address: po[:delivery_address],
@@ -245,7 +245,7 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def purchase_order
-		@purchase_order = current_brand.purchase_orders.find(params[:purchase_order_id])
+		@purchase_order = current_brand.purchase_orders.friendly.find(params[:purchase_order_id])
 		@po_items =  @purchase_order.purchase_order_items
 		respond_to do |format|
 			format.html
@@ -255,19 +255,19 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def group_of_purchase_orders
-		@purchase_orders = current_brand.purchase_orders.find(params[:purchases])
+		@purchase_orders = current_brand.purchase_orders.friendly.find(params[:purchases])
 		@supplier = Supplier.find params[:supplier]
 	end
 
 	def view_po_remotely
-		@po = PurchaseOrder.find params[:purchase_order_id]
+		@po = PurchaseOrder.friendly.find params[:purchase_order_id]
 	end
 
 	def send_bulk_purchase_orders
 		@contact_person = @supplier.contact_person
 		@contact_title = @supplier.contact_title
 		@subject = "PO - #{current_brand.name.gsub(/\//, '').split.map(&:first).join.upcase} - #{@supplier.name} - #{Date.today.strftime('%B %-d')}"		
-		@purchase_orders = current_brand.purchase_orders.find(@ids).group_by { |pur| pur.branch.name }
+		@purchase_orders = current_brand.purchase_orders.friendly.find(@ids).group_by { |pur| pur.branch.name }
 		@pos_without_date = current_brand.purchase_orders.where( branch_id: @supplier.id ).no_delivery_date
 	end
 
