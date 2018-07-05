@@ -14,6 +14,7 @@ json.purchases do |json|
         json.total_net to_peso(purchase.overall_net)
         json.purchase_order_id purchase.purchase_order_id
         json.saved_through_po purchase.saved_through_po
+        json.slug purchase.slug
     end
 end
 

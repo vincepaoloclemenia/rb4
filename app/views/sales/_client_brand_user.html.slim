@@ -5,9 +5,15 @@
 .col-xs-12.col-lg-4.mb5
 	= f.label :sale_date, "Date <small class='field-req'>*</small>".html_safe
 	- if current_brand.sales.where(sale_date: Date.today).exists?
-		= f.text_field :sale_date, id: "sale_date_datepicker", placeholder: "mm/dd/yyyy", class: "form-control", data: { provide: "datepicker" }
+		= f.text_field :sale_date, id: "sale_date_datepicker", placeholder: "mm/dd/yyyy", class: "form-control"
 	- else
-		= f.text_field :sale_date, id: "sale_date_datepicker", placeholder: "#{Date.today.strftime('%m/%d/%Y')}", class: "form-control", data: { provide: "datepicker" }
+		= f.text_field :sale_date, id: "sale_date_datepicker", placeholder: "#{Date.today.strftime('%m/%d/%Y')}", class: "form-control"
 .col-xs-12.col-lg-4.mb5
 	= f.label :shift_id, "Shift".html_safe
 	= f.select :shift_id, current_brand.shifts.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+
+javascript:
+	$("#sale_date_datepicker").datepicker({
+		autoclose: true,
+        minDate: new Date()
+	})

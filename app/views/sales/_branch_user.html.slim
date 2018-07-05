@@ -8,3 +8,7 @@
 .col-xs-12.col-lg-6.mb5
 	= f.label :shift_id, "Shift".html_safe
 	= f.select :shift_id, current_brand.shifts.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+
+
+javascript:
+	$("#sale_date_datepicker").datepicker({})

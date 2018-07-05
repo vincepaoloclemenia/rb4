@@ -39,13 +39,13 @@
 				.col-xs-12.col-lg-3.mb5
 					= f.label :vat, "VAT <small class='field-req'>*</small>".html_safe
 					.input-group
-						= f.number_field :vat, class: "form-control", placeholder: "0"
+						= f.number_field :vat, class: "form-control", placeholder: "0", step: '.01'
 						span.input-group-addon %
 				.col-xs-12.col-lg-3.mb5
 					= f.label :service_charge, "Service Charge <small class='field-req'>*</small>".html_safe
 					.input-group
 						span.input-group-addon PHP
-						= f.number_field :service_charge, class: "form-control", placeholder: "0.00"
+						= f.number_field :service_charge, class: "form-control", placeholder: "0.00", step: '.01'
 
 	.panel
 		.panel-heading.border Sale By Settlements
@@ -55,22 +55,22 @@
 					= f.label :credit_card_sales
 					.input-group
 						span.input-group-addon PHP
-						= f.number_field :credit_card_sales, class: "form-control", placeholder: "0.00"
+						= f.number_field :credit_card_sales, class: "form-control", placeholder: "0.00", step: '.01'
 				.col-xs-12.col-lg-3.mb5
 					= f.label :cash_in_drawer
 					.input-group
 						span.input-group-addon PHP
-						= f.number_field :cash_in_drawer, class: "form-control", placeholder: "0.00"
+						= f.number_field :cash_in_drawer, class: "form-control", placeholder: "0.00", step: '.01'
 				.col-xs-12.col-lg-3.mb5
 					= f.label :gc_redeemed, "GC Redeemed"
 					.input-group
 						span.input-group-addon PHP
-						= f.number_field :gc_redeemed, class: "form-control", placeholder: "0.00"
+						= f.number_field :gc_redeemed, class: "form-control", placeholder: "0.00", step: '.01'
 				.col-xs-12.col-lg-3.mb5
 					= f.label :delivery_sales
 					.input-group
 						span.input-group-addon PHP
-						= f.number_field :delivery_sales, class: "form-control", placeholder: "0.00"
+						= f.number_field :delivery_sales, class: "form-control", placeholder: "0.00", step: '.01'
 			.row
 				- @settlements.each do |settlement|
 					= f.fields_for :sale_by_settlement_entries do |sbse|
@@ -79,7 +79,7 @@
 							= sbse.label :amount, "#{settlement.name}"
 							.input-group
 								span.input-group-addon PHP
-								= sbse.number_field :amount, class: "form-control", placeholder: "0.00"
+								= sbse.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
 
 	.panel
 		.panel-heading.border Cash for Deposit
@@ -89,12 +89,12 @@
 					= f.label :gc_sales, "GC Sales <small class='field-req'>*</small>".html_safe
 					.input-group
 						span.input-group-addon PHP
-						= f.number_field :gc_sales, class: "form-control", placeholder: "0.00"
+						= f.number_field :gc_sales, class: "form-control", placeholder: "0.00", step: '.01'
 				.col-xs-12.col-lg-3.mb5
 					= f.label :other_income
 					.input-group
 						span.input-group-addon PHP
-						= f.number_field :other_income, class: "form-control", placeholder: "0.00"
+						= f.number_field :other_income, class: "form-control", placeholder: "0.00", step: '.01'
 
 	- if @categories.any? 
 		.panel
@@ -108,7 +108,7 @@
 								= sbce.label :amount, "#{category.name}"
 								.input-group
 									span.input-group-addon PHP
-									= sbce.number_field :amount, class: "form-control", placeholder: "0.00"
+									= sbce.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
 	- else
 		.panel
 			.panel-body

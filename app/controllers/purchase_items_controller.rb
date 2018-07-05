@@ -5,13 +5,20 @@ class PurchaseItemsController < ApplicationController
 	before_action :find_purchased_item, only: :show
 
 	def index
-		@purchase = current_brand.purchases.find(params[:purchase_id])
+		@purchase = current_brand.purchases.friendly.find(params[:purchase_id])
 		@purchase_items = @purchase.purchase_items.paginate(page: params[:page], per_page: per_page)
 		@purchase_item = PurchaseItem.new
 	end
 
+	def new
+		@purchase = Purchase.friendly.find(params[:purchase_id])
+		@purchase_item = @purchase.purchase_items.new
+		@items = current_brand.items.where.not(id: @purchase.purchase_items.pluck(:item_id))		
+	end
+
 	def create
-		purchase = current_brand.purchases.find(params[:purchase_id])
+		purchase = current_brand.purchases.friendly.find(params[:purchase_id])
+		purchase.update(user_modified_by_id: current_user.id) unless purchase.created_by == current_user
 		@purchase_item = purchase.purchase_items.new(purchase_item_params)
 		@purchase_item.date_of_purchase = Date.today
 		respond_to do |format|
@@ -30,6 +37,7 @@ class PurchaseItemsController < ApplicationController
 					)
 				end
 				index
+				@items = current_brand.items.where.not(id: purchase.purchase_items.pluck(:item_id))				
 				@success = true
 				flash[:notice] = "Purchase Item successfully added"
 			else
@@ -46,6 +54,7 @@ class PurchaseItemsController < ApplicationController
 
 	def destroy
 		@purchase = current_brand.purchases.find(params[:purchase_id])
+		@purchase.update(user_modified_by_id: current_user.id) unless @purchase.created_by == current_user
 		@purchase_item = @purchase.purchase_items.find(params[:id])
 		@purchase_order = PurchaseOrder.find_by_id params[:purchase_order_id]
 		respond_to do |format|

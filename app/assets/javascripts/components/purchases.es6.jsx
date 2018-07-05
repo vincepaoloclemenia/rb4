@@ -283,7 +283,7 @@ class Purchases extends React.Component{
                     <td className='text-pull-right' data-title='Vat Amount'>{purchase.total_vat }</td>
                     <td className='text-pull-right' data-title='Total Amount'>{purchase.total_amount}</td>
                     <td className='action' data-title='Action'>
-                        <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="View Purchase Items" href={`/purchases/${purchase.id}/purchase_items`}><i className="icon-glyph-41 f14"></i></a>
+                        <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="View Purchase Items" href={`/purchases/${purchase.slug}/purchase_items`}><i className="icon-glyph-41 f14"></i></a>
                         {this.renderActionButtons(purchase)}
                     </td>
                 </tr>

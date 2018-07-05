@@ -3,5 +3,5 @@ retriggerFlash();
 
 <% if @success %>
 	$('#purchase-order-items-list').html("<%= j render partial: 'purchase_order_item', purchase_order: @purchase_order, supplier: @supplier %>");
-	
+	$('#purchase_order_details').html("<%= j render partial: 'purchase_order_profile', purchase_order: @purchase_order %>");
 <% end %>

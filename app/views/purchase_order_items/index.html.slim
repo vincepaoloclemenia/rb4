@@ -17,42 +17,8 @@
 			.pull-right.mr5
 				- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
 					= link_to "<i class='fa blue icon-glyph-11 f14'></i>".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
-		.panel-body
-			
-				
-			.col-xs-12	
-				table.table.table-bordered.table-striped.mb0
-					thead
-						tr
-							th Supplier
-							td = @purchase_order.supplier.name
-						tr
-							th PR No.
-							td = @purchase_order.pr_number
-						tr 
-							th PR Date		
-							td = @purchase_order.pr_date.strftime("%B %d, %Y")
-						tr				
-							th Status
-							td = @purchase_order.status
-						tr
-							th Remarks
-							td = @purchase_order.remarks
-						tr
-							th PO Date
-							td = @purchase_order.po_date.nil? ? '--/--/----' : @purchase_order.po_date
-						tr
-							th PO No.
-							td = @purchase_order.po_number.nil? ? '---' : @purchase_order.po_number
-
-						- if @purchase_order.approved?	
-							tr	
-								th Delivery Date
-								td = @purchase_order.delivery_date.nil? ? '--/--/----' : @purchase_order.delivery_date.strftime("%b %d, %Y")
-							tr	
-								th Delivery Time
-								td = @purchase_order.delivery_time.present? && @purchase_order.delivery_time_to.present? ? "#{@purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{@purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" : "<i>Left blank</i>".html_safe
-
+		.panel-body#purchase_order_details	
+			= render "purchase_order_profile", purchase_order: @purchase_order
 .col-lg-9
 	.panel
 		.panel-heading.border Purchase Order Items

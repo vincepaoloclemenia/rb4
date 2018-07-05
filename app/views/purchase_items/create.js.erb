@@ -6,16 +6,8 @@ retriggerFlash();
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
 	$('#purchase-item-list').html("<%= j render partial: 'purchase_item_list', purchase_items: @purchase_items, purchase: @purchase %>");
+	$('#purchase').html("<%= j render partial: 'purchase_profile', purchase: @purchase %>");
 	$('.chosen').chosen({
 		width: "100%"
 	});
-	
-	$('#purchase_item_purchase_item_total_amount').val('');
-	$('#purchase_item_item_id').prop('selectedIndex', 0);
-	$('#purchase_item_purchase_item_amount').val('');
-	$('#purchase_item_quantity').val('')
-	$('#vat-type').prop('selectedIndex', 0);
-	$('#packaging').val('');
-	$('#remarks').val('');
-	
 <% end %>

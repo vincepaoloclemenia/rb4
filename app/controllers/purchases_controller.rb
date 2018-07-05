@@ -50,7 +50,7 @@ class PurchasesController < ApplicationController
 	end
 
 	def edit
-		@purchase = current_brand.purchases.find params[:id]
+		@purchase = current_brand.purchases.friendly.find params[:id]
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq				
 	end
 
@@ -67,6 +67,7 @@ class PurchasesController < ApplicationController
 	end
 
 	def update	
+		@purchase.user_modified_by_id = current_user.id
 		if @purchase.update(purchase_params)
 			redirect_to purchases_path
 			flash[:notice] = "Purchase was successfully updated"
@@ -101,14 +102,14 @@ class PurchasesController < ApplicationController
 	end
 
 	def purchase_new_record
-		@purchase_order = PurchaseOrder.find_by_id params[:purchase_order_id]
+		@purchase_order = PurchaseOrder.friendly.find_by_id params[:purchase_order_id]
 		@purchase = @purchase_order.branch.purchases.new
 	end
 
 	def purchase_create
 		@branch = Branch.find params[:branch_id]
 		@purchase = @branch.purchases.build(purchase_params)
-		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+		@purchase_order = PurchaseOrder.friendly.find params[:purchase_order_id]
 		@purchase.saved_through_po = true
 		@purchase.user_created_by_id = current_user.id
 		if @purchase.save
@@ -120,15 +121,15 @@ class PurchasesController < ApplicationController
 	end
 
 	def add_purchase_item
-		@purchase = current_brand.purchases.find params[:purchase_id]
-		@purchase_order = PurchaseOrder.find params[:purchase_order_id]
+		@purchase = current_brand.purchases.friendly.find params[:purchase_id]
+		@purchase_order = PurchaseOrder.friendly.find params[:purchase_order_id]
 		@purchase_order_item = PurchaseOrderItem.find params[:purchase_order_item_id]
 		@purchase_item = @purchase.purchase_items.new
 	end
 
 	def create_purchase_items
-		@purchase = Purchase.find(params[:purchase])
-		@purchase_order = PurchaseOrder.find_by_id params[:purchase_order_id]
+		@purchase = Purchase.friendly.find(params[:purchase])
+		@purchase_order = PurchaseOrder.friendly.find_by_id params[:purchase_order_id]
 		@purchase_item = @purchase.purchase_items.new(purchase_item_params)
 		@purchase_item.date_of_purchase = @purchase.purchase_date
 		respond_to do |format|
@@ -188,7 +189,7 @@ class PurchasesController < ApplicationController
 		end
 
 		def restrict_actions
-			@purchase = current_brand.purchases.find(params[:id])
+			@purchase = current_brand.purchases.friendly.find(params[:id])
 			if branch_admin? && @purchase.unable_to_modify?
 				redirect_to purchases_path
 				flash[:alert] = "Unable to delete or edit. You can only do these actions within 12 hours after creation"
@@ -196,8 +197,8 @@ class PurchasesController < ApplicationController
 		end
 
 		def restrict_other_users
-			@purchase_order = current_brand.purchase_orders.find_by_id params[:purchase_order_id]
-			@purchase = Purchase.find_by_id params[:purchase]
+			@purchase_order = current_brand.purchase_orders.friendly.find_by_id params[:purchase_order_id]
+			@purchase = Purchase.friendly.find_by_id params[:purchase]
 			redirect_to purchases_path, alert: "No record found" unless @purchase_order && @purchase
 		end	
 end
