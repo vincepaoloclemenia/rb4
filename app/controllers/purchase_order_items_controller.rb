@@ -77,16 +77,6 @@ class PurchaseOrderItemsController < ApplicationController
 		#redirect_to purchase_order_purchase_order_items_path(purchase_order_id: purchase_order.id), notice: "Purchase Item successfully deleted"
 	end
 
-	def add_po_items
-		@purchase_order = PurchaseOrder.friendly.find params[:purchase_order_id]
-		@purchase_order.update(purchase_order_params)
-		if @purchase_order.save
-			redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "Purchase order successfully updated"
-		else
-			redirect_to purchase_order_purchase_order_items_path(@purchase_order), alert: @purchase_order.errors.full_messages.join(", ")
-		end
-	end
-
 	def send_email
 		@po = current_brand.purchase_orders.friendly.find(params[:purchase_order_id])
 		@email = current_brand.email.nil? ? '' : current_brand.email
@@ -114,19 +104,4 @@ class PurchaseOrderItemsController < ApplicationController
 		params.require(:purchase_order_item).permit(:item_brand, :item_id, :unit_id, :quantity, :purchase_order_id, :price_selected, :remarks, :total_amount, :packaging)
 	end
 
-	def purchase_order_params
-		params.require(:purchase_order).permit(
-			purchase_order_items_attributes: [
-				:unit_id,
-				:unit_name,
-				:quantity,
-				:price_selected,
-				:item_id,
-				:item_brand,
-				:purchase_order_id,
-				:total_amount,
-				:packaging
-			]
-		)
-	end
 end

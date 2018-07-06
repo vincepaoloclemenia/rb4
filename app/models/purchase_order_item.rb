@@ -6,7 +6,7 @@ class PurchaseOrderItem < ActiveRecord::Base
 	belongs_to :brand
 	belongs_to :branch
 
-	validates :unit_id, :item_id, :quantity, presence: true
+	#validates :unit_id, :item_id, :quantity, presence: true
 	validates_uniqueness_of :item_id, scope: :purchase_order
 	after_create :update_purchase_order
 	after_update :update_purchase_order

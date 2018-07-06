@@ -263,6 +263,18 @@ class PurchaseOrdersController < ApplicationController
 		@po = PurchaseOrder.friendly.find params[:purchase_order_id]
 	end
 
+	def save_po_items
+		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
+		#poi = params[:purchase_order][:purchase_order_items_attributes]
+		#poi_params = params[:purchase_order][:purchase_order_items_attributes].reject { |x, pur| poi[x.to_s][:quantity].blank? || poi[x.to_s][:quantity].blank? }
+		@purchase_order.update(purchase_order_params_for_po_items)
+		if @purchase_order.save
+			redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "Purchase order items successfully saved."
+		else
+			redirect_to purchase_order_purchase_order_items_path(@purchase_order), alert: @purchase_order.errors.full_messages.join(", ")
+		end
+	end
+
 	def send_bulk_purchase_orders
 		@contact_person = @supplier.contact_person
 		@contact_title = @supplier.contact_title
@@ -275,6 +287,27 @@ class PurchaseOrdersController < ApplicationController
 
 		def purchase_order_params
 			params.require(:purchase_order).permit(:client_id, :brand_id, :branch_id, :po_date, :pr_date, :pr_number, :po_number, :remarks, :terms, :status, :supplier_id, :po_reference, :delivery_time, :delivery_date, :delivery_address, :delivery_time_to)						
+		end
+
+		def purchase_order_params_for_po_items
+			poi = params[:purchase_order][:purchase_order_items_attributes]
+			params.require(:purchase_order).permit(
+				purchase_order_items_attributes: [
+					:brand_id,
+					:branch_id,
+					:id,
+					:unit_id,
+					:unit_name,
+					:quantity,
+					:price_selected,
+					:item_id,
+					:item_brand,
+					:purchase_order_id,
+					:total_amount,
+					:packaging,
+					:_destroy,
+				]#.reject { |x, pur| poi[x.to_s][:quantity].blank? || poi[x.to_s][:quantity].blank? }
+			)
 		end
 
 		def set_ids_and_supplier

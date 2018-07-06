@@ -19,7 +19,7 @@ class PurchaseOrder < ActiveRecord::Base
   scope :sent_purchase_orders, -> { where sent: true, status: 'Approved' }
   scope :unsent_pos, -> { includes(:purchase_order_items).where(sent: false, status: ["Approved", "Pending"]).where.not( purchase_order_items: { purchase_order_id: nil } ) }
 
-  accepts_nested_attributes_for :purchase_order_items,  :reject_if => :all_blank, :allow_destroy => :true
+  accepts_nested_attributes_for :purchase_order_items, :allow_destroy => :true, reject_if: proc { |poi| (poi["quantity"].present? && poi["quantity"].to_i < 1 ) || poi["quantity"].blank? || poi["total_amount"].blank? }
   validates_associated :purchase_order_items
   #validates :delivery_address, :delivery_time, :delivery_time_to, presence: true
   before_save :check_if_restricted?, if: :branch_user?

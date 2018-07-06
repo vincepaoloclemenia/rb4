@@ -1,32 +1,30 @@
-.col-lg-3	
-	.panel
-		.panel-heading.border.pb45
-			.pull-left.mt7 Purchase Order <span class='gap'></span>
-			
+.panel
+	.panel-heading.border.pb45
+		.pull-left.mt7 Purchase Order <span class='gap'></span>
+		
 
-			.pull-right.mr5
-				- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
-					= link_to "<i class='fa blue icon-glyph-6 f14' ></i>".html_safe, purchase_order_generator_index_path, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Back" }
-				- else
-					= link_to "<i class='fa blue icon-glyph-6 f14' ></i>".html_safe, purchase_orders_path, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Back" }
-			.pull-right.mr5	
-				- if @purchase_order.approved?
-					= link_to "<i class='fa blue icon-glyph-162 f14'></i>".html_safe, purchase_order_purchase_order_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"
-				- elsif current_user.role.role_level != 'branch' && @purchase_order.status == 'Pending'
-					= link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
-			.pull-right.mr5
-				- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
-					= link_to "<i class='fa blue icon-glyph-11 f14'></i>".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
-		.panel-body#purchase_order_details	
-			= render "purchase_order_profile", purchase_order: @purchase_order
-.col-lg-9
-	.panel
-		.panel-heading.border Purchase Order Items
-		.panel-body	
-			#purchase-order-items-list style='margin-left: 20px;margin-right:20px'	
-				= render partial: "purchase_order_item", locals: { purchase_order: @purchase_order, supplier: @supplier }
+		.pull-right.mr5
+			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
+				= link_to "<i class='fa blue icon-glyph-6 f14' ></i>".html_safe, purchase_order_generator_index_path, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Back" }
+			- else
+				= link_to "<i class='fa blue icon-glyph-6 f14' ></i>".html_safe, purchase_orders_path, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Back" }
+		.pull-right.mr5	
+			- if @purchase_order.approved?
+				= link_to "<i class='fa blue icon-glyph-162 f14'></i>".html_safe, purchase_order_purchase_order_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"
+			- elsif current_user.role.role_level != 'branch' && @purchase_order.status == 'Pending'
+				= link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
+		.pull-right.mr5
+			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
+				= link_to "<i class='fa blue icon-glyph-11 f14'></i>".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
+	.panel-body#purchase_order_details	
+		= render "purchase_order_profile", purchase_order: @purchase_order
+
+.panel
+	.panel-heading.border Purchase Order Items
+	.panel-body	
+		= render "purchase_order_item_form", purchase_order: @purchase_order, supplier: @supplier
 														
 = render "partials/modal"
-
-javascript:
+       
+    
 	
