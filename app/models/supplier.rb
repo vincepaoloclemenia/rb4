@@ -34,4 +34,8 @@ class Supplier < ActiveRecord::Base
     all.includes(:prices).where.not( supplier_item_prices: { supplier_id: nil } )
   end
 
+  def arranged_item_prices
+    prices.includes(:item).order("items.name ASC")
+  end
+
 end
