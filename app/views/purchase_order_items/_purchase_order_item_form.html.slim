@@ -5,7 +5,8 @@
             .col-xs-4
                 input.form-control id='poi-search' placeholder='Search items' onkeyup='filterItems()'
             .col-xs-offset-7.col-xs-1
-                = po.submit "Save", class: "btn btn-primary"
+                - if !@purchase_order.approved? || client_admin?
+                    = po.submit "Save", class: "btn btn-primary"
         table.table.table-bordered.table-striped.mb0#poi-items
             thead
                 tr.bg-thead
@@ -27,7 +28,7 @@
                                 = poi.hidden_field :unit_id, value: price.unit.id
                                 = poi.hidden_field :packaging, value: price.packaging
                                 = poi.hidden_field :item_brand, value: price.brand_name
-                                = poi.hidden_field :price_selected, value: price.supplier_amount, id: "#{price.id}"
+                                = poi.hidden_field :price_selected, value: price.supplier_amount
                                 = poi.hidden_field :brand_id, value: @purchase_order.brand.id
                                 = poi.hidden_field :branch_id, value: @purchase_order.branch_id
                                 tr style='background-color: #C6EEFF'
@@ -35,11 +36,16 @@
                                     td = price.brand_name
                                     td = price.packaging
                                     td.text-centered = price.unit.name
-                                    td.align-right = to_peso(price.supplier_amount.round(2))	
-                                    td = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center"
-                                    td = poi.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true, style: "text-align: right"
-                                    td = poi.check_box :_destroy, checked: false, data: {off: "Remove", offstyle: "default", on: "Add", onstyle: "success", style:"android", toggle: "toggle"}
-
+                                    td.align-right = to_peso(price.supplier_amount.round(2))
+                                    td = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center", step: ".01"	
+                                    td.align-right 
+                                        label for="#{price.id}" #{to_peso(pur_ord_item.total_amount.round(2))}
+                                        = poi.hidden_field :total_amount, id: "#{price.id}"
+                                    td
+                                        - if client_admin? || !@purchase_order.approved? 
+                                            = poi.check_box :_destroy, checked: false, data: {off: "Remove", offstyle: "default", on: "Add", onstyle: "success", style:"android", toggle: "toggle"}
+                                        - else
+                                            = "<i><span class='red'>No action allowed</span></i>".html_safe
                         - else
                             = po.fields_for :purchase_order_items, @purchase_order_item do |poi|
                                 tr
@@ -47,7 +53,7 @@
                                     = poi.hidden_field :unit_id, value: price.unit.id
                                     = poi.hidden_field :packaging, value: price.packaging
                                     = poi.hidden_field :item_brand, value: price.brand_name
-                                    = poi.hidden_field :price_selected, value: price.supplier_amount, id: "#{price.id}"
+                                    = poi.hidden_field :price_selected, value: price.supplier_amount
                                     = poi.hidden_field :brand_id, value: @purchase_order.brand.id
                                     = poi.hidden_field :branch_id, value: @purchase_order.branch_id
                                     td = price.item.name
@@ -55,8 +61,10 @@
                                     td = price.packaging
                                     td.text-centered = price.unit.name
                                     td.align-right = to_peso(price.supplier_amount.round(2))	
-                                    td = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center"
-                                    td = poi.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true, style: "text-align: right"
+                                    td = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center", step: ".01"
+                                    td.align-right 
+                                        label for="#{price.id}" #{to_peso(0.00)}
+                                        = poi.hidden_field :total_amount, id: "#{price.id}"
                                     td = "<i><span class='red'>Not yet added</span></i>".html_safe
                     - else
                         tr
@@ -65,7 +73,7 @@
                                 = poi.hidden_field :unit_id, value: price.unit.id
                                 = poi.hidden_field :packaging, value: price.packaging
                                 = poi.hidden_field :item_brand, value: price.brand_name
-                                = poi.hidden_field :price_selected, value: price.supplier_amount, id: "#{price.id}"
+                                = poi.hidden_field :price_selected, value: price.supplier_amount
                                 = poi.hidden_field :brand_id, value: @purchase_order.brand.id
                                 = poi.hidden_field :branch_id, value: @purchase_order.branch_id
                                 td = price.item.name
@@ -73,8 +81,10 @@
                                 td = price.packaging
                                 td.text-centered = price.unit.name
                                 td.align-right = to_peso(price.supplier_amount.round(2))	
-                                td = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center"
-                                td = poi.number_field :total_amount, class: "form-control", placeholder: "0.00", id: 'total_amount', readonly: true, style: "text-align: right"
+                                td = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center", step: ".01"
+                                td.align-right 
+                                    label for="#{price.id}" #{to_peso(0.00)}
+                                    = poi.hidden_field :total_amount, id: "#{price.id}"
                                 td = "<i><span class='red'>Not yet added</span></i>".html_safe 
                 tr.bg-total
                     th.text-left.label-total colspan='7' Total Amount
@@ -87,7 +97,9 @@ javascript:
             var supplierAmountName = $(this).attr("name").replace("[quantity]", "[price_selected]")
             var totalAmountElem = $("[name='"+totalAmountName+"']")
             var supplierAmountElem = $("[name='"+supplierAmountName+"']")
-            totalAmountElem.val(supplierAmountElem.val() * $(this).val())
+            totalAmountElem.val((supplierAmountElem.val() * $(this).val()).toFixed(2))
+            var label = $("label[for='"+totalAmountElem.attr("id")+"']")
+            label.text("₱ "+totalAmountElem.val())
         })
     })
 
