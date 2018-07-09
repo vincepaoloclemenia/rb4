@@ -96,6 +96,7 @@ Rails.application.routes.draw do
     get :send_bulk_purchase_orders, on: :collection
     get :group_of_purchase_orders, on: :collection
     get :hold_po, on: :collection
+    patch :reject_selected_purchase_orders, on: :collection
     post :mail_bulk_of_purchase_orders, on: :collection
     post 'send_email_notification' => 'purchase_orders#send_email_notification'
     patch 'approve' => 'purchase_orders#approve'
@@ -104,7 +105,7 @@ Rails.application.routes.draw do
     get 'purchase_order' => 'purchase_orders#purchase_order'
     get 'edit_delivery_details' => 'purchase_orders#edit_delivery_details'
     put 'update_delivery_details' => 'purchase_orders#update_delivery_details'
-    patch 'save_po_items' => 'purchase_orders#save_po_items' 
+    patch 'save_po_items' => 'purchase_orders#save_po_items'   
   end
   
   resource :wizard, only: [:show] do

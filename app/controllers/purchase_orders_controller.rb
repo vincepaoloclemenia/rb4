@@ -283,6 +283,16 @@ class PurchaseOrdersController < ApplicationController
 		@pos_without_date = current_brand.purchase_orders.where( branch_id: @supplier.id ).no_delivery_date
 	end
 
+	def reject_selected_purchase_orders
+		if params[:pos][:ids]
+			ids = params[:pos][:ids].split(",")
+			current_brand.purchase_orders.where(id: ids).update_all(status: "Rejected")
+			redirect_to purchase_orders_path, notice: "#{ids}"
+		else
+			redirect_to purchase_orders_path, alert: "Action cannot be completed."
+		end
+	end
+
 	private
 
 		def purchase_order_params

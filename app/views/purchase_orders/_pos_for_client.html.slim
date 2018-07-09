@@ -21,104 +21,134 @@
         
         .no-more-tables#purchase_order-list
             - purchase_orders = purchase_orders || @purchase_orders
-            table.table.table-bordered.table-striped.mb0 data-sortable="true"
-                thead
-                    tr.bg-thead
-                        th width="150" Supplier
-                        th width="130" Branch
-                        th width='120' Created by
-                        th width="130" data-sortable="false" PR No.
-                        th width="120" PR Date
-                        th width="160" Status
-                        th width="120" data-sortable="false" Action
-                tbody style="font-size:13px"
-                    - if purchase_orders.empty?
-                        tr
-                            td colspan="8"
-                                p.text-center.mt5 No Records Found
+            = form_for :pos, url: reject_selected_purchase_orders_purchase_orders_path, method: :patch do |f|
+                = f.hidden_field :ids
+                table.table.table-bordered.table-striped.mb0 data-sortable="true"
+                    thead
+                        tr.bg-thead
+                            th width="150" Supplier
+                            th width="130" Branch
+                            th width='120' Created by
+                            th width='120' Date created
+                            th width="130" data-sortable="false" PR No.
+                            th width="120" PR Date
+                            th width="160" Status
+                            th width="120" data-sortable="false" Action
+                            th width="100" Reject POS
+                    tbody style="font-size:13px"
+                        - if purchase_orders.empty?
+                            tr
+                                td colspan="8"
+                                    p.text-center.mt5 No Records Found
 
-                    - purchase_orders.keys.each do |supplier_id|
-                        - supplier = Supplier.find(supplier_id)
-                        tr
-                            td colspan='6' data-title="Supplier" = supplier.name
-                            td data-title='Action'
-                                = link_to "<i class='fa blue fa-envelope f14'></i>".html_safe, send_bulk_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Send to #{supplier.name}" }
-                                /= link_to "<i class='fa green icon-glyph-162 f14'></i>".html_safe, group_of_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF format" }, remote: true    
-                        - purchase_orders[supplier_id].map do |purchase_order|
-                            
-                            tr  
-                                td                            
-                                td data-title="Branch" = purchase_order.branch.name
-                                td data-title="Created by" = purchase_order.user.full_name
-                                td data-title="PO No." = purchase_order.pr_number
-                                td data-title="PO Date" = purchase_order.pr_date.nil? ? "---" : purchase_order.pr_date.strftime("%b %d %Y")
-                                td.action data-title="Status" = purchase_order.status
-                                td.action data-title="Action"
-                                    /= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, view_po_remotely_purchase_orders_path(purchase_order_id: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Order Items" }, remote: true
-                                    - if purchase_order.approved?
-                                        = link_to "<i class='fa blue icon-glyph-201 f14'></i>".html_safe, send_email_purchase_order_purchase_order_items_path(purchase_order), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Send Only This PO" }, remote: true
-                                    - else    
-                                        = link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(purchase_order), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
-                                    = link_to "<i class='fa blue icon-glyph-28 f14'></i>".html_safe, hold_po_purchase_orders_path(purchase_order_id: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Hold Purchase Order" }, remote: true
-                                    = link_to "<i class='icon-glyph-27 f14'></i>".html_safe, purchase_order_reject_path(purchase_order.id), method: :patch, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Reject" }
+                        - purchase_orders.keys.each do |supplier_id|
+                            - supplier = Supplier.find(supplier_id)
+                            tr
+                                td colspan='7' data-title="Supplier" = supplier.name
+                                td data-title='Action'
+                                    = link_to "<i class='fa blue fa-envelope f14'></i>".html_safe, send_bulk_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Send to #{supplier.name}" }
+                                    /= link_to "<i class='fa green icon-glyph-162 f14'></i>".html_safe, group_of_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF format" }, remote: true    
+                            - purchase_orders[supplier_id].map do |purchase_order|
+                                
+                                tr  
+                                    td                            
+                                    td data-title="Branch" = purchase_order.branch.name
+                                    td data-title="Created by" = purchase_order.user.full_name
+                                    td data-title="Date created" = purchase_order.created_at.strftime("%b %d, %Y")
+                                    td data-title="PO No." = purchase_order.pr_number
+                                    td data-title="PO Date" = purchase_order.pr_date.nil? ? "---" : purchase_order.pr_date.strftime("%b %d %Y")
+                                    td.action data-title="Status" = purchase_order.status
+                                    td.action data-title="Action"
+                                        /= link_to "<i class='icon-glyph-41 f14'></i>".html_safe, view_po_remotely_purchase_orders_path(purchase_order_id: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "View Purchase Order Items" }, remote: true
+                                        - if purchase_order.approved?
+                                            = link_to "<i class='fa blue icon-glyph-201 f14'></i>".html_safe, send_email_purchase_order_purchase_order_items_path(purchase_order), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Send Only This PO" }, remote: true
+                                        - else    
+                                            = link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(purchase_order), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
+                                        = link_to "<i class='fa blue icon-glyph-28 f14'></i>".html_safe, hold_po_purchase_orders_path(purchase_order_id: purchase_order.id), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Hold Purchase Order" }, remote: true
+                                        = link_to "<i class='icon-glyph-27 f14'></i>".html_safe, purchase_order_reject_path(purchase_order.id), method: :patch, class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Reject" }
 
-                            
-                            
-                            div class="modal edit_purchase_order_#{purchase_order.id}" tabindex="-1" role="dialog" aria-hidden="true"
-                                .modal-dialog
-                                    .modal-content
-                                        .modal-header
-                                            button.close type="button" data-dismiss="modal" aria-hidden="true"
-                                                i.icon-maxicons1-exit
-                                            h4.modal-title Edit Purchase
-                                        .modal-body
-                                            = form_for purchase_order, remote: true do |f|
-                                                .row.mb10
-                                                    .col-xs-6
-                                                        / - @po_number = po_number_format
-                                                        = f.label :pr_number
-                                                            | Purchase Requisition No.
-                                                            small.field-req  *
-                                                        = f.text_field :pr_number, value: @po_number, class: "form-control", readonly: true
-                                                    .col-xs-6
-                                                        = f.label :pr_date
-                                                            | Purchase Requisition Date
-                                                            small.field-req  *
-                                                        / = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
-                                                        = f.text_field :pr_date, value: Date.today, class: "form-control", readonly: true
-                                                        = f.hidden_field :status, value: 'Pending'
-                                                .row.mb10
-                                                    .col-xs-12
-                                                        = f.label :supplier_id, "Supplier"
-                                                            | Supplier
-                                                            small.field-req  *
-                                                        = f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+                                    td.action data-title="Check to reject"
+                                        = f.check_box :remove, id: "#{purchase_order.id}", checked: false
+                                
+                                div class="modal edit_purchase_order_#{purchase_order.id}" tabindex="-1" role="dialog" aria-hidden="true"
+                                    .modal-dialog
+                                        .modal-content
+                                            .modal-header
+                                                button.close type="button" data-dismiss="modal" aria-hidden="true"
+                                                    i.icon-maxicons1-exit
+                                                h4.modal-title Edit Purchase
+                                            .modal-body
+                                                = form_for purchase_order, remote: true do |f|
+                                                    .row.mb10
+                                                        .col-xs-6
+                                                            / - @po_number = po_number_format
+                                                            = f.label :pr_number
+                                                                | Purchase Requisition No.
+                                                                small.field-req  *
+                                                            = f.text_field :pr_number, value: @po_number, class: "form-control", readonly: true
+                                                        .col-xs-6
+                                                            = f.label :pr_date
+                                                                | Purchase Requisition Date
+                                                                small.field-req  *
+                                                            / = f.text_field :pr_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: to_datepicker_format(Date.today)
+                                                            = f.text_field :pr_date, value: Date.today, class: "form-control", readonly: true
+                                                            = f.hidden_field :status, value: 'Pending'
+                                                    .row.mb10
+                                                        .col-xs-12
+                                                            = f.label :supplier_id, "Supplier"
+                                                                | Supplier
+                                                                small.field-req  *
+                                                            = f.select :supplier_id, @suppliers, { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 
-                                                        - if @suppliers.nil?
+                                                            - if @suppliers.nil?
 
-                                                            .alert.alert-info.mt5 role="alert"
-                                                                .row
-                                                                    .col-xs-1.text-right
-                                                                        i.icon-glyph-73.f25
-                                                                    .col-xs-11
-                                                                        | You currently have no list of suppliers.<br> Go to:&nbsp;
-                                                                        b Setup > Purchase Setup > Suppliers >&nbsp;
-                                                                        = link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
-                                                .row.mb10
-                                                    .col-xs-12.mt20
-                                                        | (
-                                                        small.field-req   *
-                                                        |  )
-                                                        i  indicates field is required
-                                                .modal-footer.no-border
-                                                    span.inline.float-right
-                                                        = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
-                                                        |
-                                                        = f.submit "Update", class: "btn btn-primary", data: { "disable-wth" => "Updating.." }
+                                                                .alert.alert-info.mt5 role="alert"
+                                                                    .row
+                                                                        .col-xs-1.text-right
+                                                                            i.icon-glyph-73.f25
+                                                                        .col-xs-11
+                                                                            | You currently have no list of suppliers.<br> Go to:&nbsp;
+                                                                            b Setup > Purchase Setup > Suppliers >&nbsp;
+                                                                            = link_to '<b>Add Supplier</b>'.html_safe, suppliers_path, class:'helper-link'
+                                                    .row.mb10
+                                                        .col-xs-12.mt20
+                                                            | (
+                                                            small.field-req   *
+                                                            |  )
+                                                            i  indicates field is required
+                                                    .modal-footer.no-border
+                                                        span.inline.float-right
+                                                            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                                                            |
+                                                            = f.submit "Update", class: "btn btn-primary", data: { "disable-wth" => "Updating.." }
+
+                .row.pt10.mb10
+                    center
+                        = f.submit "Reject Selected", class: 'btn btn-primary', id: "btn-submit", style: "display:none"
 
 = render "large_modal"
-/- if purchase_orders.any?
-/	.align-center
-/		p
-/			= page_entries_info purchase_orders, renderer: BootstrapPagination::Rails
-/		= will_paginate purchase_orders, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
+
+javascript:
+    $(document).ready(function(){
+        var ids = [], pos = $("input[name='pos[ids]']"), btn = $("#btn-submit")
+        
+        $("input[name='pos[remove]']").not("input[name='pos[ids]']").on("change", function(){   
+            
+            if($(this).is(":checked")){
+                ids.push($(this).attr("id"))
+                pos.val(ids)
+                console.log(pos.val())
+            }else{
+                ids.splice($.inArray($(this).attr("id"), ids), 1)
+                pos.val(ids)
+                console.log(pos.val())
+            }
+            if (ids.length > 0){
+                btn.show();
+            }else{
+                btn.hide();
+            }
+        })
+    })
+
+    
