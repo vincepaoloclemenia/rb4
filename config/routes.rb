@@ -140,6 +140,18 @@ Rails.application.routes.draw do
   get 'validate_time' => "pages#validate_time"
   
 
+  namespace :admin do
+    get 'dashboard' => 'dashboard#index'
+    get 'login' => 'sessions#new'
+    post 'login' => 'sessions#create'
+    delete 'logout' => 'sessions#destroy', as: :logout
+    resources :clients, only: :index do
+      get :all_non_subscribers, on: :collection
+      get :subscribers, on: :collection
+      get :new_clients, on: :collection
+    end
+  end
+
   namespace :api do
     resources :sales, only: :index do
       get :get_sales_averages, on: :collection

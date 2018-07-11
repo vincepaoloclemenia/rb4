@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   #protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
   
 	before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :find_wizard_flag
+  before_action :find_wizard_flag, :getback_to_users
   #before_action :access_control, if: :wizard_done?
   #before_action :restrict_users
 
@@ -90,6 +90,16 @@ class ApplicationController < ActionController::Base
   # end
 
   private
+
+    def getback_to_users
+      if admin_signed_in?
+        redirect_to admin_dashboard_path
+      end
+    end    
+
+    def admin_signed_in?
+      session[:signed_in] && Admin.find(session[:admin_id])
+    end
 
     def after_in
       if current_user.flag >= 1 && current_user.flag < 6

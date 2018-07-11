@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html class="js no-touch csstransforms csstransforms3d svg">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title><%= content_for?(:title) ? yield(:title) : 'Restobot (Admin)' %></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="/img/favicon.png">
+
+  	<script src="https://unpkg.com/react@15.6.1/dist/react.js"></script>
+	<script src="https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"></script>
+	<script src="https://unpkg.com/prop-types@15.5.10/prop-types.js"></script>
+	<script src="https://unpkg.com/classnames@2.2.5/index.js"></script>
+	<script src="https://unpkg.com/react-input-autosize@2.0.0/dist/react-input-autosize.js"></script>
+	<script src="https://unpkg.com/react-select/dist/react-select.js"></script>
+
+	<link rel="stylesheet" href="https://unpkg.com/react-select/dist/react-select.css">
+
+	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+		<%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+		<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	<%= csrf_meta_tags %>
+</head>
+<body cz-shortcut-listen="true" >
+	<%= render "partials/flash" if flash %>
+	<% if admin_signed_in? %>
+		<div class="app layout-fixed-header">
+			<div class="main-panel" style="margin-left: 0%">
+                <%= render "layouts/admin" if admin_signed_in? %>
+				<div class="container admin-container" style='margin-top: 80px'>
+					<%= yield %>
+				</div>
+			</div>
+		</div>
+	<% else %>
+		<%= yield %>
+	<% end %>
+
+	<%= javascript_include_tag 'restobot_js', 'data-turbolinks-track' => true %>
+
+	<script>
+		// $(document).ready(function(){
+		// 	$('tbody').each(function(){
+		// 		recordLength = $(this).children().length;
+		// 		if(recordLength == 0){
+		// 			$(this).parent().replaceWith("<h5>No records found</h5>");
+		// 		}
+		// 	});
+		// });
+	</script>
+</body>
+</html>

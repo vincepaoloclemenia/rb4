@@ -13,5 +13,6 @@ json.rejected_pos do |json|
         json.terms po.terms
         json.status po.status
         json.supplier po.supplier.name
+        json.slug po.slug
     end
 end

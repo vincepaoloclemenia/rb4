@@ -28,9 +28,9 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def create
-		if branch_admin?
+		if branch_admin? || brand_admin?
 			@date = params[:purchase_order][:delivery_date].present? ? Date.strptime(params[:purchase_order][:delivery_date], '%m/%d/%Y') : nil			
-			@purchase_order = current_user.branch.purchase_orders.build(purchase_order_params)
+			@purchase_order = current_brand.purchase_orders.build(purchase_order_params)
 			@purchase_order.delivery_date = @date
 			@purchase_order.brand_id = current_user.brand.id
 			@purchase_order.client_id = current_user.client.id
@@ -287,7 +287,7 @@ class PurchaseOrdersController < ApplicationController
 		if params[:pos][:ids]
 			ids = params[:pos][:ids].split(",")
 			current_brand.purchase_orders.where(id: ids).update_all(status: "Rejected")
-			redirect_to purchase_orders_path, notice: "#{ids}"
+			redirect_to purchase_orders_path, notice: "You rejected purchase orders"
 		else
 			redirect_to purchase_orders_path, alert: "Action cannot be completed."
 		end

@@ -30,6 +30,7 @@ gem 'groupdate', '~> 3.2'
 gem 'pg_search'
 gem 'axlsx_styler'
 gem 'friendly_id', '~> 5.1.0'
+gem 'pry'
 
 group :development, :test do
   gem 'byebug'

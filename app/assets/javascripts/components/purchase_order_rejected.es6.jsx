@@ -90,7 +90,7 @@ class PurchaseOrderRejected extends React.Component{
                         <td className='action' data-title='Action'>
                             <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="View purchase_order Items" href={`/purchase_orders/${po.id}/purchase_order_items`}><i className="icon-glyph-41 f14"></i></a>
                             <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Approve" data-remote='true' href={`/purchase_orders/${po.id}/purchase_order_items/approve_purchase_order`}><i className="fa green icon-glyph-26 f14"></i></a>
-                            <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Hold" data-remote="true" data-method="patch" href={`/purchase_orders/hold_po?purchase_order_id=${po.id}`} aria-describedby="tooltip63628"><i className="fa blue icon-glyph-28 f14"></i></a>
+                            <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Hold" data-remote="true" href={`/purchase_orders/hold_po?purchase_order_id=${po.slug}`} aria-describedby="tooltip63628"><i className="fa blue icon-glyph-28 f14"></i></a>
                             <a onClick={() => this.fetchData() } className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="Delete" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href={`/purchase_orders/${po.id}`}><i className="icon-glyph-76 f14"></i></a>
                         </td>
                     </tr>

@@ -1,0 +1,22 @@
+.row.pt25
+    .col-xs-offset-4.col-xs-4
+        .panel
+            .panel-heading.border.pt25 Admin Login
+        
+            .panel-body              
+                = form_for :signin, url: admin_login_path, method: :post do |f|
+                    .row.mb10
+                        .col-xs-offset-1.col-xs-10
+                            = f.label "Email / Username"
+                            = f.text_field :login, autofocus: true, class:"form-control input-lg", placeholder:"Email or Username", value: "#{params[:email]}"
+
+                    .row.mb20
+                        .col-xs-offset-1.col-xs-10
+                            = f.label "Password"
+                            = f.password_field :password, autocomplete: "off", class:"form-control input-lg", placeholder:"Password"
+
+                    .row.mb10
+                        .col-xs-offset-1.col-xs-10
+                            = f.submit "Login", class: "btn btn-primary btn-block btn-lg mb15"
+            
+            

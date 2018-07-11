@@ -16,9 +16,9 @@
 					= f.label :entry_date
 					small.field-req  *
 					- if params[:inventory].present? && params[:inventory][:entry_date].present?
-						= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: Date.strptime(params[:inventory][:entry_date]).strftime("%m/%d/%Y")
+						= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", id: 'entry-date'
 					- else
-						= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }
+						= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", id: 'entry-date'
 			.row.mb10
 				.col-xs-12
 					- if current_brand.categories.main.empty?
@@ -94,3 +94,9 @@
 					/ .align-center.mt5
 					/ 	p Filter: Show all
 					= f.submit "Create", class: "btn btn-lg btn-primary btn-outline pull-right w180"
+
+javascript:
+	$("#entry-date").datepicker({
+		autoclose: true,
+        minDate: new Date()
+	})

@@ -1,0 +1,66 @@
+/* Navbar/navigation styles */
+
+.navbar {
+//	height: 75px;
+	width: 100%;
+	font-family: 'Ubuntu', sans-serif;
+	//text-transform: uppercase;
+	position: fixed;
+	top: 0;
+	z-index: 999;
+}
+
+.navbar-collapse {
+	background-color: $main-color;
+}
+
+.navbar-default {
+	background-color: $main-color;
+	padding-bottom: 5px;
+	padding-top: 5px;
+
+	.navbar-toggle {
+		background-color: $main-color;
+	}
+
+	.navbar-nav > li > a {
+		color: $white;
+		&:hover {
+			color: lighten($main-color, 35%);
+			background-color: transparent;
+			transition: 0.5s;
+		}
+	}
+	
+	.navbar-header {
+
+		.navbar-brand {
+			vertical-align: middle;
+			color: $white;
+			letter-spacing: 1.4px;
+			font-weight: 500;
+		}
+
+	}
+
+	.dropdown-menu > li:hover {
+		background-color: lighten($main-color, 35%);
+		color: $main-color;
+	}
+
+	.dropdown-menu{
+		background-color: lighten($main-color, 35%);
+		color: $white;
+		border: none;
+		li a:hover{
+			background-color: lighten($main-color, 25%);
+			color: $white;
+		}
+	}
+
+	.navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
+		background-color: lighten($main-color, 35%);
+		color: $text-color;	
+	}
+
+}
