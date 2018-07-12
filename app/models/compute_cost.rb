@@ -19,7 +19,7 @@ class ComputeCost
         quantity = purchase_items(specified_range).map(&:quantity).sum.round(2)
         amount = purchase_items(specified_range).map(&:item_total_net).sum.round(2)
         unit_cost = quantity <= 0 || amount <= 0 ? 0 : (amount / quantity).round(2)
-        percentage = amount <= 0 ? 0 : amount / sales.map(&:net_total_sales).sum.round(2)
+        percentage = amount <= 0 || total_sales < 0 ? 0 : amount / sales.map(&:net_total_sales).sum.round(2)
         return { quantity: quantity % 1 == 0 ? quantity.to_i : quantity, unit_cost: unit_cost, amount: amount, percentage: percentage.round(2) }
     end
 
