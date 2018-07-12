@@ -23,6 +23,7 @@ class Brand < ActiveRecord::Base
   has_many :purchase_order_items, through: :purchase_orders
   has_many :order_lists, through: :all_branches, dependent: :destroy
   has_one :brand_setting, dependent: :destroy
+  has_many :inventory_items, through: :inventories
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 

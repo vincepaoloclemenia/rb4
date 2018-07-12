@@ -1,0 +1,78 @@
+- date = date || @date
+- branch = branch || @branch
+- choice = choice || @choice
+table.table.table-bordered.table-striped.mb0#item-costs
+    thead
+        tr.big-thead
+            th colspan="2" = date
+            - from = choice == "week" ? date.split(" - ")[0].to_date.last_week.beginning_of_week.strftime("%b %d, %Y") : date.split(" - ")[0].to_date.last_month.beginning_of_month.strftime("%b %d, %Y")
+            - to = choice == "week" ? date.split(" - ")[0].to_date.last_week.end_of_week.strftime("%b %d, %Y") : date.split(" - ")[0].to_date.last_month.end_of_month.strftime("%b %d, %Y")                 
+            th.ica-primary-thead colspan="3"           
+                | Beginning Inventory <br><span style="font-size: 10px">#{from} - #{to}</span></br>
+            th.ica-primary-thead colspan="4" Total Purchases
+            th.ica-primary-thead colspan="3" 
+                | Ending Inventory <br><span style="font-size: 10px">#{date}</span></br>
+            th.ica-primary-thead colspan="4" Cost of Goods Sold
+        tr.big-thead
+            th width='100' Name
+            th width='80' Unit
+            th width='80' Qty
+            th width='100' Cost
+            th width='100' Total
+            th width='80' Qty
+            th width='100' Cost
+            th width='100' Amount
+            th width='80' %
+            th width='80' Qty
+            th width='100' Cost
+            th width='100' Total
+            th width='80' Qty
+            th width='100'Cost
+            th width='100'Amount
+            th width='80'%
+    tbody
+        - @items.keys.each do |category|
+            tr
+                td.category colspan='16' 
+                    center 
+                        = category
+            - sub_items = @items[category].group_by { |i| i.category.name }
+            - sub_items.keys.each do |subcat|
+                tr
+                    td.subcategory colspan='16'
+                        center
+                            = subcat
+                - sub_items[subcat].each do |item|
+                    - cc = ComputeCost.new(branch, item.id, date, choice)
+                    tr  
+                        - biq = cc.beginning_inventory[:quantity]
+                        - biuc = cc.beginning_inventory[:unit_cost]
+                        - bia = cc.beginning_inventory[:amount]
+                        - tpq = cc.total_purchases[:quantity]
+                        - tpuc = cc.total_purchases[:unit_cost]
+                        - tpa = cc.total_purchases[:amount]
+                        - eiq = cc.ending_inventory[:quantity]
+                        - bg_tp_amount = bia + tpa
+                        - bg_tp_q = biq + tpq
+                        - eiuc = bg_tp_q <= 0 || bg_tp_amount <= 0 ? 0 : bg_tp_amount / bg_tp_q
+                        td = item.name
+                        td.text-centered = item.unit.name
+                        td.text-centered= biq
+                        td.align-right = to_peso(biuc)
+                        td.align-right = to_peso(bia)
+                        td.text-centered= tpq
+                        td.text-centered = to_peso(tpuc)
+                        td.text-centered = to_peso(tpa)
+                        td.align-right = "#{cc.total_purchases[:percentage]} %"
+                        td.text-centered = eiq
+                        td.align-right = to_peso(eiuc)
+                        - eia = eiq <= 0 || eiuc <= 0 ? 0 : eiq / eiuc
+                        td.align-right = to_peso(eia)
+                        - cq = biq + tpq - eiq
+                        - ca = bia + tpa - eia
+                        - cuc = ca <= 0 || cq <= 0 ? 0 : ca / cq
+                        - cp = ca <= 0 || cc.total_sales <= 0 ? 0 : ca / cc.total_sales
+                        td.text-centered = cq
+                        td.text-centered = to_peso(cuc)
+                        td.text-centered = to_peso(ca)
+                        td.align-right = "#{cp.round(2)} %"

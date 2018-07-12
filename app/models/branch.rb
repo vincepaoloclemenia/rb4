@@ -4,6 +4,7 @@ class Branch < ActiveRecord::Base
   has_many :sales
   has_many :employees
   has_many :inventories, dependent: :restrict_with_error
+  has_many :inventory_items, through: :inventories
   has_many :purchases
   has_many :purchase_items, through: :purchases
   has_one :branch_subscription

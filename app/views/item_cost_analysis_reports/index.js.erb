@@ -1,0 +1,4 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+$('#item-costs').addClass("blurry");
+$('#reports').html("<%= j render partial: 'reports', date: @date, branch: @branch, choice: @choice %>");

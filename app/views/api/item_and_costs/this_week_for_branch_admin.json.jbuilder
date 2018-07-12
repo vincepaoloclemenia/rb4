@@ -1,27 +1,29 @@
-json.last_week_total to_peso(@purchase_items_last_week.keys.map { |x| @purchase_items_last_week[x].map(&:item_total_net).sum.to_f }.sum)
 json.last_week_range @range_lw
 json.this_month_range @range_tm
 
-json.purchase_items_last_week do |json|
-    json.array! @purchase_items_last_week.keys do |key|
+json.items do |json|
+    json.array! @items.keys do |key|
         json.parent_category key
-        pis = @purchase_items_last_week[key].group_by { |x| x.item.category.name }
-        json.purchases pis.keys do |pi_key|    
-            purs_items = pis[pi_key].group_by { |pur| pur.item_id }
+        pis = @items[key].group_by { |x| x.category.name }
+        json.sub_cats pis.keys do |pi_key|    
             json.subcategory pi_key       
-            json.purchase_items purs_items.keys do |pi|
-                item = Item.find pi
-                quantity = purs_items[pi].map { |pur_item| pur_item.quantity }.sum.round(2)
-                item_total_net = purs_items[pi].map { |pur_item| pur_item.item_total_net }.sum.round(2)
-                purchase_item_amount = (item_total_net / quantity).round(2)
-                json.unit item.unit.name
-                json.item_name item.name
-                json.quantity quantity
-                json.purchase_item_amount to_peso(purchase_item_amount)
-                json.item_total_net to_peso(item_total_net)
+            json.br_items pis[pi_key].map do |item|
+                cc = ComputeCost.new(@branch, item.id, @range_tm, "month")
+                json.beg_quantity cc.beginning_inventory[:quantity]
+                json.beg_unit_cost to_peso(cc.beginning_inventory[:unit_cost])
+                json.beg_amount to_peso(cc.beginning_inventory[:amount])
+                json.purchases_quantity cc.total_purchases[:quantity]
+                json.purchases_unit_cost to_peso(cc.total_purchases[:unit_cost])
+                json.purchases_amount to_peso(cc.total_purchases[:amount])
+                json.purchases_percentage "#{cc.total_purchases[:percentage]} %"
+                json.ending_quantity cc.ending_inventory[:quantity]
+                json.ending_unit_cost to_peso(cc.ending_inventory[:unit_cost])
+                json.ending_amount to_peso(cc.ending_inventory[:amount])
+                json.cogs_qty cc.cogs[:quantity]
+                json.cogs_unit_cost to_peso(cc.cogs[:unit_cost])
+                json.cogs_amount to_peso(cc.cogs[:amount])
+                json.cogs_percentage "#{cc.cogs[:percentage]} %"
             end
-            json.total_amount_per_category to_peso(pis[pi_key].map(&:item_total_net).sum.round(2))
         end
-        json.total_amount_within_month to_peso(@purchase_items_last_week[key].map(&:item_total_net).sum)
     end
 end

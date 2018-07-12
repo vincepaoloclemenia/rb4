@@ -47,8 +47,9 @@ class InventoriesController < ApplicationController
 	end
 
 	def new
-		@inventory = current_brand.inventories.new()
-		@inventory.inventory_items.build
+		@inventory = current_brand.inventories.new
+		@inventory_item = @inventory.inventory_items.build
+		@items = current_brand.items.for_inventory.group_by { |i| i.category.parent.name }
 	end
 
 	def create
@@ -57,12 +58,14 @@ class InventoriesController < ApplicationController
 			redirect_to inventories_path, notice: "Inventory successfully created"
 		else
 			flash[:alert] = @inventory.errors.full_messages.join(", ")
-			render 'new'
+			redirect_to new_inventory_path, alert: @inventory.errors.full_messages.join(", ")
 			# redirect_to new_inventory_path, alert: @inventory.errors.full_messages.join(", ")
 		end
 	end
 
 	def edit
+		@inventory_item = @inventory.inventory_items.build
+		@items = current_brand.items.for_inventory.group_by { |i| i.category.parent.name }		
 	end
 
 	def update

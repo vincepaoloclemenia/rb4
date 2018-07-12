@@ -19,9 +19,10 @@ class Api::ItemAndCostsController < ApplicationController
     end
 
     def this_week_for_branch_admin
-        @range_lw = "#{Date.today.beginning_of_week.strftime("%b %d, %Y")} -#{Date.today.end_of_week.strftime("%b, %d, %Y")}"
+        @range_lw = "#{Date.today.beginning_of_week.strftime("%b %d, %Y")} - #{Date.today.end_of_week.strftime("%b, %d, %Y")}"
         @range_tm = "#{Date.today.beginning_of_month.strftime("%b %d, %Y")} - #{Date.today.end_of_month.strftime("%b, %d, %Y")}" 
-        @purchase_items_last_week = current_user.branch.purchase_items.joins(:purchase).where( purchases: { purchase_date: Date.today.beginning_of_week..Date.today.end_of_week } ).group_by { |pi| pi.item.category.parent.name }        
+        @items = current_brand.items.for_inventory.group_by { |i| i.category.parent.name }    
+        @branch = current_user.branch    
     end
 
     def filtered_records_for_brand

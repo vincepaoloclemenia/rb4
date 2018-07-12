@@ -4,57 +4,83 @@
 		= form_for @inventory do |f|
 			= f.hidden_field :user_id, value: current_user.id
 			.row.mb30
-				- if brand_admin? || client_admin?
+				- if branch_admin?
+					= f.hidden_field :branch_id, value: current_user.branch.id		
+				- else
 					.col-xs-6.mb5
 						= f.label :branch_id
 						small.field-req  *
 						= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-				- elsif branch_admin?
-					= f.hidden_field :branch_id, current_user.branch.id
 					
+
 				.col-xs-6.mb5
 					= f.label :entry_date
 					small.field-req  *
-					= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, value: "#{f.object.entry_date.strftime("%m/%d/%Y")}"
+					= f.text_field :entry_date, class: "form-control", placeholder: "mm/dd/yyyy", id: 'entry-date', value: "#{@inventory.entry_date.strftime('%m/%d/%Y')}"
+		
 			.row.mb10
 				.col-xs-12
-					- if current_brand.categories.main.empty?
-						| No categories yet. Please create one
-						= link_to "here", categories_path
+					- if current_brand.items.for_inventory.empty?
+						.alert.alert-info.mt5 role="alert"
+							.row
+								.col-sm-1.text-right
+									i.icon-glyph-73.mr10.f25
+								.col-sm-11
+									| Oops! You need to have a list of
+									b  items.
+									|  To add an item:<br> Go to
+									b  Setup > Purchase Setup > Items >&nbsp;
+									= link_to '<b>Add Item</b>'.html_safe, items_path, class:'helper-link'
 					- else
 						.cf.nestable-lists
 							.dd#nestable
 								ol.dd-list
-									- current_brand.categories.main.each do |category|
-										- unless category.subcategories.empty?
-											li.dd-item
-												.dd-new-handle = category.name
-												ol.dd-list
-													- category.subcategories.each do |subcategory|
-														- unless subcategory.items.for_inventory.empty?
-															li.dd-item
-																.dd-new-handle = subcategory.name
-																ol.dd-list
-																	.row
-																		.col-xs-12
-																			.no-more-tables
-																				table.table.table-bordered.table-striped.mb0 data-sortable="true"
-																					thead
-																						tr.bg-thead
-																							th width="400" Item Name
-																							th width="400" Unit
-																							th.numeric width="200" Stock Count
-																					tbody
-																						- subcategory.items.for_inventory.each do |item|
-																							tr
-																								td data-title="Item Name" = item.name
-																								td data-title="Unit" = item.unit.name
-																								td data-title="Stock Count"
-																									= f.fields_for :inventory_items do |ii|
-																										- if item.id == ii.object.item_id
-																											= ii.hidden_field :item_id, value: item.id
-																											= ii.number_field :stock_count, class: "form-control", placeholder: "0"
+									- @items.keys.each do |category|
+										li.dd-item
+											.dd-new-handle = category
+											ol.dd-list
+												- items_per_sub_categories = @items[category].group_by { |item| item.category.name }
+												- items_per_sub_categories.keys.each do |subcategory|
+													li.dd-item
+														.dd-new-handle = subcategory
+														ol.dd-list
+															.row
+																.col-xs-12
+																	.no-more-tables
+																		table.table.table-bordered.table-striped.mb0 data-sortable="true"
+																			thead
+																				tr.bg-thead
+																					th width="400" Item Name
+																					th width="400" Unit
+																					th.numeric width="200" Stock Count
+																			tbody
+																				- items_per_sub_categories[subcategory].each do |item|
+																					tr
+																						td data-title="Item Name" = item.name
+																						td data-title="Unit" = item.unit.name
+																						td data-title="Stock Count"
+																							- ii = @inventory.inventory_items.find_by_item_id(item.id)
+																							- if ii.present?
+																								= f.fields_for :inventory_items, ii do |ii|	
+																									= ii.hidden_field :item_id, value: item.id
+																									= ii.number_field :stock_count, class: "form-control", placeholder: "0", step: ".01"
+																							- else
+																								= f.fields_for :inventory_items, @inventory_item do |ii|	
+																									= ii.hidden_field :item_id, value: item.id
+																									= ii.number_field :stock_count, class: "form-control", placeholder: "0", step: ".01"
+
+
+																		
+																			
 			.row
 				.col-xs-12.mt20
-					= f.submit "Save Changes", class: "btn btn-lg btn-primary btn-outline pull-right w180"
+					/ .align-center.mt5
+					/ 	p Filter: Show all
+					= f.submit "Save", class: "btn btn-lg btn-primary btn-outline pull-right w180"
 					= link_to "Undo Changes", edit_inventory_path(@inventory), class: "btn btn-lg btn-danger btn-outline pull-left w180"
+
+javascript:
+	$("#entry-date").datepicker({
+		autoclose: true,
+        minDate: new Date()
+	})

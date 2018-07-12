@@ -1,9 +1,11 @@
 class Item < ActiveRecord::Base
   include PgSearch
   belongs_to :brand
+  has_many :purchase_items, through: :brand
+  has_many :sales, through: :brand
   belongs_to :unit
   belongs_to :category
-  has_many :inventory_items
+  has_many :inventory_items, through: :brand
   has_many :supplier_item_prices, dependent: :destroy
   has_and_belongs_to_many :suppliers
   default_scope -> { order(name: :asc) }
