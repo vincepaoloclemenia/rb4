@@ -1,67 +1,65 @@
 class ComputeCost
-    attr_reader :branch, :item_id, :selected_range, :from, :to
-    def initialize( branch, item_id, date_range, selected_range )
+    attr_reader :branch, :item, :selected_range, :from, :to, :total_sales, :purchase_items_for_beg_inv, :inventories_for_beg_inv, :purchase_items, :inventory_items
+    def initialize( branch, item, date_range, selected_range )
         @branch = branch
-        @item_id = item_id
+        @item = item
         @selected_range = selected_range
         @from = date_range.split(" - ")[0].to_date
         @to = date_range.split(" - ")[1].to_date
+        @total_sales = branch.sales.where(sale_date: from..to).map(&:net_total_sales).sum.round(2)
+        @item = item
+        @purchase_items_for_beg_inv = branch.purchase_items.includes(:purchase).where( item_id: item, purchases: { purchase_date: range } )
+        @inventories_for_beg_inv = branch.inventory_items.includes(:inventory).where( item_id: item, inventories: { entry_date: range } )
+        @purchase_items = branch.purchase_items.includes(:purchase).where( item_id: item, purchases: { purchase_date: from..to } )
+        @inventory_items = branch.inventory_items.includes(:inventory).where( item_id: item, inventories: { entry_date: from..to } )
     end
 
-    def beginning_inventory
-        quantity = inventory_items(range).map(&:stock_count).sum.round(2)
-        amount = purchase_items(range).map(&:item_total_net).sum.round(2)
-        unit_cost = quantity <= 0 || amount <= 0 ? 0 : (amount / quantity).round(2)
-        return { quantity: quantity % 1 == 0 ? quantity.to_i : quantity, unit_cost: unit_cost, amount: amount }
-    end
+    def compute_cost
+        #beginning_inventory variables
+        bi_quantity = inventories_for_beg_inv.map(&:stock_count).sum.round(2)
+        purchase_quantity = purchase_items_for_beg_inv.map(&:quantity).sum.round(2)
+        purchased_items_amount = purchase_items_for_beg_inv.map(&:item_total_net).sum.round(2)
+        bi_unit_cost = purchased_items_amount <= 0 || purchase_quantity <= 0 ? 0 : (purchased_items_amount / purchase_quantity).round(2)
+        bi_amount = bi_unit_cost * bi_quantity
+        
+        #total_purchases variables
+        tp_quantity = purchase_items.map(&:quantity).sum.round(2)
+        tp_amount = purchase_items.map(&:item_total_net).sum.round(2)
+        tp_unit_cost = tp_quantity <= 0 || tp_amount <= 0 ? 0 : (tp_amount / tp_quantity).round(2)
+        tp_percentage = tp_amount <= 0 || total_sales <= 0 ? 0 : ( tp_amount / total_sales ).round(2)
 
-    def total_purchases
-        quantity = purchase_items(specified_range).map(&:quantity).sum.round(2)
-        amount = purchase_items(specified_range).map(&:item_total_net).sum.round(2)
-        unit_cost = quantity <= 0 || amount <= 0 ? 0 : (amount / quantity).round(2)
-        percentage = amount <= 0 || total_sales < 0 ? 0 : amount / sales.map(&:net_total_sales).sum.round(2)
-        return { quantity: quantity % 1 == 0 ? quantity.to_i : quantity, unit_cost: unit_cost, amount: amount, percentage: percentage.round(2) }
-    end
+        #ending_inventory variables
+        ei_quantity = inventory_items.map(&:stock_count).sum.round(2)
+            bg_and_tp_amount = bi_amount + tp_amount
+            bg_and_tp_quantity = bi_quantity + tp_quantity
+        ei_unit_cost = bg_and_tp_amount <= 0 || bg_and_tp_quantity <= 0 ? 0 : (bg_and_tp_amount / bg_and_tp_quantity).round(2)
+        ei_amount = (ei_quantity * ei_unit_cost).round(2)
 
-    def ending_inventory
-        quantity = inventory_items(specified_range).map(&:stock_count).sum.round(2)
-        beg_and_total_amount = (beginning_inventory[:amount] + total_purchases[:amount])
-        beg_and_total_quantity = (beginning_inventory[:quantity] + total_purchases[:quantity])
-        unit_cost = if beg_and_total_amount <= 0 || beg_and_total_quantity <= 0
-                        0
-                    else
-                        beg_and_total_amount / beg_and_total_quantity
-                    end
-        amount = quantity * unit_cost
-        return { quantity: quantity % 1 == 0 ? quantity.to_i : quantity, unit_cost: unit_cost, amount: amount }        
-    end
-
-    def cogs
-        quantity = beginning_inventory[:quantity] + total_purchases[:quantity] - ending_inventory[:quantity]
-        amount = beginning_inventory[:amount] + total_purchases[:amount] - ending_inventory[:amount]
-        unit_cost = amount <= 0 || quantity <= 0 ? 0 : amount / quantity
-        percentage = quantity <= 0 ? 0 : quantity / sales.map(&:net_total_sales).sum.round(2)
-        return { quantity: quantity % 1 == 0 ? quantity.to_i : quantity, unit_cost: unit_cost, amount: amount, percentage: percentage.round(2) }        
+        #cogs variables
+        cogs_quantity = bi_quantity + tp_quantity - ei_quantity
+        cogs_amount = bi_amount + tp_amount - ei_amount
+        cogs_unit_cost = cogs_amount <= 0 || cogs_quantity <= 0 ? 0 : (cogs_amount / cogs_quantity).round(2)
+        cogs_percentage = cogs_amount <= 0 || total_sales <= 0 ? 0 : (cogs_amount / total_sales).round(2)
+        return { 
+            bi_quantity: bi_quantity % 1 == 0 ? bi_quantity.to_i : bi_quantity, 
+            bi_unit_cost: bi_unit_cost, 
+            bi_amount: bi_amount, 
+            tp_quantity: tp_quantity % 1 == 0 ? tp_quantity.to_i : tp_quantity,
+            tp_amount: tp_amount,
+            tp_unit_cost: tp_unit_cost,
+            tp_percentage: tp_percentage,
+            ei_amount: ei_amount,
+            ei_quantity: ei_quantity % 1 == 0 ? ei_quantity.to_i : ei_quantity,
+            ei_unit_cost: ei_unit_cost,
+            cogs_quantity: cogs_quantity % 1 == 0 ? cogs_quantity.to_i : cogs_quantity,
+            cogs_amount: cogs_amount,
+            cogs_unit_cost: cogs_unit_cost,
+            cogs_percentage: cogs_percentage.round(2)
+        }
     end
 
     def range
         selected_range == "week" ? last_week_range : last_month_range
-    end
-
-    def purchase_items(d_range)
-        branch.purchase_items.includes(:purchase).where( item_id: item_id, purchases: { purchase_date: d_range })        
-    end
-
-    def inventory_items(d_range)
-       branch.inventory_items.includes(:inventory).where(item_id: item_id, inventories: { entry_date: d_range } )        
-    end
-
-    def sales
-        branch.sales.where(sale_date: specified_range)
-    end
-
-    def total_sales
-        sales.map(&:net_total_sales).sum.round(2)
     end
 
     def specified_range

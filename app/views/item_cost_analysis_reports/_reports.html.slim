@@ -44,91 +44,39 @@ table.table.table-bordered.table-striped.mb0#item-costs
                             = subcat
                 - sub_items[subcat].each do |item|
                     - cc = ComputeCost.new(branch, item.id, date, choice)
-                    tr  
-                        - biq = cc.beginning_inventory[:quantity]
-                        - biuc = cc.beginning_inventory[:unit_cost]
-                        - bia = cc.beginning_inventory[:amount]
-                        - tpq = cc.total_purchases[:quantity]
-                        - tpuc = cc.total_purchases[:unit_cost]
-                        - tpa = cc.total_purchases[:amount]
-                        - eiq = cc.ending_inventory[:quantity]
-                        - bg_tp_amount = bia + tpa
-                        - bg_tp_q = biq + tpq
-                        - eiuc = bg_tp_q <= 0 || bg_tp_amount <= 0 ? 0 : bg_tp_amount / bg_tp_q
-                        - total_sales = cc.total_sales
+                    tr 
                         td = item.name
-                        td.text-centered = item.unit.name
-                        td.text-centered= biq
-                        td.align-right = to_peso(biuc)
-                        td.align-right = to_peso(bia)
-                        td.text-centered= tpq
-                        td.text-centered = to_peso(tpuc)
-                        td.text-centered = to_peso(tpa)
-                        - tpp = tpa <= 0 || total_sales == 0 ? 0 : tpa / total_sales
-                        td.align-right = "#{tpp} %"
-                        td.text-centered = eiq
-                        td.align-right = to_peso(eiuc)
-                        - eia = eiq <= 0 || eiuc <= 0 ? 0 : eiq / eiuc
-                        td.align-right = to_peso(eia)
-                        - cq = biq + tpq - eiq
-                        - ca = bia + tpa - eia
-                        - cuc = ca <= 0 || cq <= 0 ? 0 : ca / cq
-                        - cp = ca <= 0 || total_sales <= 0 ? 0 : ca / total_sales
-                        td.text-centered = cq
-                        td.text-centered = to_peso(cuc)
-                        td.text-centered = to_peso(ca)
-                        td.align-right = "#{cp.round(2)} %"
-                tr
+                        td.text-centered width='150' = item.unit.name
+                        td.text-centered= cc.compute_cost[:bi_quantity]
+                        td.align-right = to_peso(cc.compute_cost[:bi_unit_cost])
+                        td.align-right = to_peso(cc.compute_cost[:bi_amount])
+                        td.text-centered= cc.compute_cost[:tp_quantity]
+                        td.align-right = to_peso(cc.compute_cost[:tp_unit_cost])
+                        td.align-right = to_peso(cc.compute_cost[:tp_amount])
+                        td.align-right = "#{cc.compute_cost[:tp_percentage]} %"
+                        td.text-centered = cc.compute_cost[:ei_quantity]
+                        td.align-right = to_peso(cc.compute_cost[:ei_unit_cost])               
+                        td.align-right = to_peso(cc.compute_cost[:ei_amount])
+                        td.text-centered = cc.compute_cost[:cogs_quantity]
+                        td.align-right = to_peso(cc.compute_cost[:cogs_unit_cost])
+                        td.align-right = to_peso(cc.compute_cost[:cogs_amount])
+                        td.align-right = "#{cc.compute_cost[:cogs_percentage]} %"
+                tr.bg-total  
+                    - items = sub_items[subcat]
+                    - total_beg =  items.map{ |item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:bi_amount] }
                     td colspan='4' Total for Beginning Inventory (#{subcat})
-                    - total_beg = sub_items[subcat].map {|item| ComputeCost.new(branch, item.id, date, choice).beginning_inventory[:amount] }.sum  
-                    td.label-total-num.text-pull-right = to_peso(total_beg)
+                    td.label-total-num.align-right = to_peso(total_beg.sum.round(2))
                     td colspan='2' Total for Purchases
-                    - total_pur_amount = sub_items[subcat].map {|item| ComputeCost.new(branch, item.id, date, choice).total_purchases[:amount] }.sum  
-                    td.label-total-num.text-pull-right = to_peso(total_pur_amount)
-                    - total_pur_per = sub_items[subcat].map do |item| 
-                        - cc = ComputeCost.new(branch, item.id, date, choice) 
-                        - tpa = cc.total_purchases[:amount]
-                        - tpp = tpa <= 0 || cc.total_sales <= 0 ? 0 : tpa / cc.total_sales
-                    td.label-total-num.text-pull-right = "#{total_pur_per.sum.round(2)} %"
+                    - total_pur_amount = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:tp_amount] }  
+                    td.label-total-num.align-right = to_peso(total_pur_amount.sum.round(2))
+                    - total_pur_per = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:tp_percentage] } 
+                    td.label-total-num.align-right = "#{total_pur_per.sum.round(2)} %"
                     td colspan='2' Total for Ending Inventory
-                    - total_amount_ending = sub_items[subcat].map do |item| 
-                        - cc = ComputeCost.new(branch, item.id, date, choice) 
-                        - eiq = cc.ending_inventory[:quantity]
-                        - bia = cc.beginning_inventory[:amount]
-                        - biq = cc.beginning_inventory[:quantity]
-                        - tpa = cc.total_purchases[:amount]
-                        - tpq = cc.total_purchases[:quantity]
-                        - bg_tp_amount = bia + tpa
-                        - bg_tp_q = biq + tpq
-                        - eiuc = bg_tp_q <= 0 || bg_tp_amount <= 0 ? 0 : bg_tp_amount / bg_tp_q
-                        - eia = eiq <= 0 || eiuc <= 0 ? 0 : eiq / eiuc
-                    td.label-total-num.text-pull-right = to_peso(total_amount_ending.sum.round(2))
+                    - total_amount_ending = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:ei_amount] } 
+                    td.label-total-num.align-right = to_peso(total_amount_ending.sum.round(2))
                     td colspan='2' Total for COGS
-                    - total_amount_for_cogs = sub_items[subcat].map do |item|
-                        - cc = ComputeCost.new(branch, item.id, date, choice) 
-                        - eiq = cc.ending_inventory[:quantity]
-                        - bia = cc.beginning_inventory[:amount]
-                        - biq = cc.beginning_inventory[:quantity]
-                        - tpa = cc.total_purchases[:amount]
-                        - tpq = cc.total_purchases[:quantity]
-                        - bg_tp_amount = bia + tpa
-                        - bg_tp_q = biq + tpq
-                        - eiuc = bg_tp_q <= 0 || bg_tp_amount <= 0 ? 0 : bg_tp_amount / bg_tp_q
-                        - eia = eiq <= 0 || eiuc <= 0 ? 0 : eiq / eiuc
-                        - bia + tpa - eia
-                    td.label-total-num.text-pull-right = to_peso(total_amount_for_cogs.sum.round(2))
-                    - total_percentage_for_cogs = sub_items[subcat].map do |item|
-                        - cc = ComputeCost.new(branch, item.id, date, choice) 
-                        - eiq = cc.ending_inventory[:quantity]
-                        - bia = cc.beginning_inventory[:amount]
-                        - biq = cc.beginning_inventory[:quantity]
-                        - tpa = cc.total_purchases[:amount]
-                        - tpq = cc.total_purchases[:quantity]
-                        - bg_tp_amount = bia + tpa
-                        - bg_tp_q = biq + tpq
-                        - eiuc = bg_tp_q <= 0 || bg_tp_amount <= 0 ? 0 : bg_tp_amount / bg_tp_q
-                        - eia = eiq <= 0 || eiuc <= 0 ? 0 : eiq / eiuc
-                        - ca = bia + tpa - eia
-                        - ca <= 0 || cc.total_sales <= 0 ? 0 : ca / cc.total_sales
-                    td.label-total-num.text-pull-right = "#{total_percentage_for_cogs.sum.round(2)} %"
+                    - total_amount_for_cogs = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:cogs_amount] } 
+                    td.label-total-num.align-right = to_peso(total_amount_for_cogs.sum.round(2))
+                    - total_percentage_for_cogs = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:cogs_percentage] } 
+                    td.label-total-num.align-right = "#{total_percentage_for_cogs.sum.round(2)} %"
 
