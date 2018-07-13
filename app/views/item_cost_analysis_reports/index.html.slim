@@ -24,11 +24,8 @@
 			.pull-right
 				= f.submit "Search", class: 'btn btn-link'
 	.panel-body
-		.no-more-tables#reports
-			- if branch_admin?
-				= render "reports", date: @date, branch: @branch, choice: @choice
-			- else
-				= render "reports_for_admins"
+		.no-more-tables#reports	
+			= render "reports_for_admins"
 			/	tbody
 			/		- if @inventory_items.empty?
 			/			tr
