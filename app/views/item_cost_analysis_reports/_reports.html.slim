@@ -49,34 +49,76 @@ table.table.table-bordered.table-striped.mb0#item-costs
                         td.text-centered width='150' = item.unit.name
                         td.text-centered= cc.compute_cost[:bi_quantity]
                         td.align-right = to_peso(cc.compute_cost[:bi_unit_cost])
-                        td.align-right = to_peso(cc.compute_cost[:bi_amount])
+                        td.align-right name="#{subcat.gsub(/ /, '_').downcase}_bi_amount" = to_peso(cc.compute_cost[:bi_amount])
                         td.text-centered= cc.compute_cost[:tp_quantity]
                         td.align-right = to_peso(cc.compute_cost[:tp_unit_cost])
-                        td.align-right = to_peso(cc.compute_cost[:tp_amount])
-                        td.align-right = "#{cc.compute_cost[:tp_percentage]} %"
+                        td.align-right name="#{subcat.gsub(/ /, '_').downcase}_tp_amount" = to_peso(cc.compute_cost[:tp_amount])
+                        td.align-right name="#{subcat.gsub(/ /, '_').downcase}_tp_percentage" = "#{cc.compute_cost[:tp_percentage]} %"
                         td.text-centered = cc.compute_cost[:ei_quantity]
                         td.align-right = to_peso(cc.compute_cost[:ei_unit_cost])               
-                        td.align-right = to_peso(cc.compute_cost[:ei_amount])
+                        td.align-right name="#{subcat.gsub(/ /, '_').downcase}_ei_amount" = to_peso(cc.compute_cost[:ei_amount])
                         td.text-centered = cc.compute_cost[:cogs_quantity]
                         td.align-right = to_peso(cc.compute_cost[:cogs_unit_cost])
-                        td.align-right = to_peso(cc.compute_cost[:cogs_amount])
-                        td.align-right = "#{cc.compute_cost[:cogs_percentage]} %"
-                tr.bg-total  
-                    - items = sub_items[subcat]
-                    - total_beg =  items.map{ |item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:bi_amount] }
+                        td.align-right name="#{subcat.gsub(/ /, '_').downcase}_cogs_amount" = to_peso(cc.compute_cost[:cogs_amount])
+                        td.align-right name="#{subcat.gsub(/ /, '_').downcase}_cogs_percentage" = "#{cc.compute_cost[:cogs_percentage]} %"
+                tr.bg-total id="#{subcat.gsub(/ /, '_').downcase}"
                     td colspan='4' Total for Beginning Inventory (#{subcat})
-                    td.label-total-num.align-right = to_peso(total_beg.sum.round(2))
+                    td.label-total-num.align-right.bi_amount  = to_peso(0)
                     td colspan='2' Total for Purchases
-                    - total_pur_amount = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:tp_amount] }  
-                    td.label-total-num.align-right = to_peso(total_pur_amount.sum.round(2))
-                    - total_pur_per = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:tp_percentage] } 
-                    td.label-total-num.align-right = "#{total_pur_per.sum.round(2)} %"
+                    td.label-total-num.align-right.tp_amount  = to_peso(0)
+                    td.label-total-num.align-right.tp_percentage  = "0 %"
                     td colspan='2' Total for Ending Inventory
-                    - total_amount_ending = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:ei_amount] } 
-                    td.label-total-num.align-right = to_peso(total_amount_ending.sum.round(2))
+                    td.label-total-num.align-right.ei_amount = to_peso(0)
                     td colspan='2' Total for COGS
-                    - total_amount_for_cogs = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:cogs_amount] } 
-                    td.label-total-num.align-right = to_peso(total_amount_for_cogs.sum.round(2))
-                    - total_percentage_for_cogs = items.map {|item| ComputeCost.new(branch, item.id, date, choice).compute_cost[:cogs_percentage] } 
-                    td.label-total-num.align-right = "#{total_percentage_for_cogs.sum.round(2)} %"
+                    td.label-total-num.align-right.cogs_amount = to_peso(0)
+                    td.label-total-num.align-right.cogs_percentage = "0 %"
+
+javascript:
+    $(document).ready(function(){
+        var trs = $("#item-costs tr.bg-total")
+        
+        trs.each(function(){
+            var biAmount = $("#item-costs td[name='"+$(this).attr("id")+"_bi_amount']")
+            var tpAmount = $("#item-costs td[name='"+$(this).attr("id")+"_tp_amount']")
+            var tpPercentage = $("#item-costs td[name='"+$(this).attr("id")+"_tp_percentage']")
+            var eiAmount = $("#item-costs td[name='"+$(this).attr("id")+"_ei_amount']")
+            var cogsAmount = $("#item-costs td[name='"+$(this).attr("id")+"_cogs_amount']")
+            var cogsPercentage = $("#item-costs td[name='"+$(this).attr("id")+"_cogs_percentage']")
+
+            var biAmountSum = 0.0;
+            var tpAmountSum = 0.0;
+            var tpPercentageSum = 0.0;
+            var eiAmountSum = 0.0;
+            var cogsAmountSum = 0.0;
+            var cogsPercentageSum = 0.0;
+
+            biAmount.each(function(){
+                biAmountSum += parseFloat($(this).text().replace("₱ ", '').replace(/,/g, ''))         
+            })
+            tpAmount.each(function(){
+                tpAmountSum += parseFloat($(this).text().replace("₱ ", '').replace(/,/g, ''))         
+            })
+            eiAmount.each(function(){
+                eiAmountSum += parseFloat($(this).text().replace("₱ ", '').replace(/,/g, ''))         
+            })
+            cogsAmount.each(function(){
+                cogsAmountSum += parseFloat($(this).text().replace("₱ ", '').replace(/,/g, ''))         
+            })
+
+            cogsPercentage.each(function(){
+                cogsPercentageSum += parseFloat($(this).text().replace(" %", ''))         
+            })
+            tpPercentage.each(function(){
+                tpPercentageSum += parseFloat($(this).text().replace(" %", ''))         
+            })
+
+            $(this).find("td.bi_amount").text("₱ "+biAmountSum.toFixed(2))
+            $(this).find("td.tp_amount").text("₱ "+tpAmountSum.toFixed(2))
+            $(this).find("td.ei_amount").text("₱ "+eiAmountSum.toFixed(2))
+            $(this).find("td.cogs_amount").text("₱ "+cogsAmountSum.toFixed(2))
+            $(this).find("td.cogs_percentage").text(cogsPercentageSum.toFixed(2)+" %")
+            $(this).find("td.tp_percentage").text(tpPercentageSum.toFixed(2)+" %")
+        })
+    })
+        
 
