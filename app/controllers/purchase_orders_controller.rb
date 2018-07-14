@@ -28,7 +28,7 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def create
-		if branch_admin? || brand_admin?
+		if client_admin? || brand_admin?
 			@date = params[:purchase_order][:delivery_date].present? ? Date.strptime(params[:purchase_order][:delivery_date], '%m/%d/%Y') : nil			
 			@purchase_order = current_brand.purchase_orders.build(purchase_order_params)
 			@purchase_order.delivery_date = @date

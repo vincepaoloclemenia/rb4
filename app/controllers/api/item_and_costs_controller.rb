@@ -1,6 +1,12 @@
 class Api::ItemAndCostsController < ApplicationController
     before_action :authenticate_user!
 
+    def index
+        @items = current_brand.items.for_inventory.group_by { |i| i.category.parent.name }
+        @branch = Branch.find 14
+        @dr = "Jul 1, 2018 - Jul 31, 2018"
+    end
+
     def this_month_for_brand_admin
         @purchase_items_within_month = current_brand.purchase_items.joins(:purchase).where( purchases: { purchase_date: Date.today.beginning_of_month..Date.today.end_of_month } ).group_by { |pi| pi.item.category.parent.name }
     end

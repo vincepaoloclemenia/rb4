@@ -183,7 +183,7 @@ Rails.application.routes.draw do
       get :get_pos_for_purchasing, on: :collection
     end
 
-    resources :item_and_costs, only: [] do
+    resources :item_and_costs, only: :index do
       get :filtered_records, on: :collection
       get :this_month_for_brand_admin, on: :collection
       get :this_week_for_brand_admin, on: :collection
