@@ -13,7 +13,10 @@
 					.hidden-xs.col-sm-1.text-right
 						i.icon-glyph-93.f35
 					.col-xs-11.mt5
-						| Your Free Trial has already Expired. To continue using Restobot, please subscribe now.
+						- if branch_admin?
+							| Your free trial for this branch has already expired. Please contact your admin for your subscription to continue using restobot.
+						- else
+							| Your Free Trial has already Expired. To continue using Restobot, please subscribe now.
 						/- if subtitle
 						/	br = subtitle.html_safe
 		- elsif current_client.has_paid_subscription?
