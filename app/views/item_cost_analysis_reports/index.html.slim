@@ -1,6 +1,3 @@
-/.panel
-
-
 .panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 
@@ -26,55 +23,6 @@
 	.panel-body
 		.no-more-tables#reports	
 			= render "reports_for_admins"
-			/	tbody
-			/		- if @inventory_items.empty?
-			/			tr
-			/				td colspan="16"
-			/					p.text-center.mt5 No Records Found
-			/		- else
-			/			- @categories.each do |category|
-			/				tr
-			/					td.danger colspan="21"
-			/						strong
-			/							= category.name
-			/				- get_subcategory_and_item_ids(category, @inventory_items).each do |subcategory|
-			/					tr
-			/						td.info colspan="21"
-			/							strong
-			/								= subcategory[:subcategory].name
-			/					- item_ids = subcategory[:item_ids]
-			/					- get_subcat_items(item_ids).each do |subcategory_item|
-			/						- item = get_items(subcategory_item[:item_info].id)
-			/						tr
-			/							td = item.name
-			/							td = item.unit.name
-			/							td = subcategory_item[:quantity]
-			/							td = to_peso(subcategory_item[:unit_cost])
-			/							td = to_peso(subcategory_item[:total])
-			/							- purchases = all_purchases(item_ids)
-			/							- purchase = get_information(purchases, item.id)
-			/							td = purchase[:quantity]
-			/							td = to_peso(purchase[:unit_cost])
-			/							td = to_peso(purchase[:total])
-			/							td = to_percentage(purchase[:total], purchases.last)
-			/							- ending_inventories = get_ending_inventories(item_ids, @ending_inventory_items, purchases)
-			/							- ending_inventory = get_information(ending_inventories, item.id)
-			/							td = ending_inventory[:quantity]
-			/							td = to_peso(ending_inventory[:unit_cost])
-			/							td = to_peso(ending_inventory[:total])
-			/							- cost_of_goods = get_cost_of_total_goods(purchases, ending_inventories, item_ids)
-			/							- cog = get_information(cost_of_goods, item.id)
-			/							td = cog[:quantity]
-			/							td = to_peso(cog[:unit_cost])
-			/							td = to_peso(cog[:total])
-			/							td = to_percentage(@total_cog = cost_of_goods.last, cog[:total])
-			/					tr
-			/						td Total
-			/						td colspan="6"
-			/						td colspan="7	" = to_peso(a = all_purchases(item_ids).last)
-			/						td = to_peso(@total_cog)
-
-/= react_component 'CostAnalysis', branchUser: current_user.role.role_level == 'branch'
 
 javascript:
 	//$('.drp').daterangepicker({ });
