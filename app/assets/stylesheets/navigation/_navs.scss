@@ -11,7 +11,7 @@
 .sidebar-panel>nav li.active>a,
 .sidebar-panel>nav li.open>a {
     color: $white;
-    background-color: $twitter-blue;
+    background-color: lighten($main-theme, 8%);
     /*border-left: 3px solid #71B75E;*/
 }
 
@@ -19,7 +19,7 @@
 .sidebar-panel>nav .open>a:focus,
 .sidebar-panel>nav .open>a:hover {
     color: $white;
-    background-color: $twitter-blue;
+    background-color: lighten($main-theme, 8%);
     /*border-left: 3px solid #71B75E;*/
 }
 
@@ -28,19 +28,19 @@
 .main-panel>.header .nav .open>a:hover,
 .main-panel>.header .nav>li>a:focus,
 .main-panel>.header .nav>li>a:hover {
-    background-color: $twitter-blue;
+    background-color: lighten($main-theme, 8%);
     color: $white
 }
 
 
 .sidebar-panel>nav>ul>li>ul {
     color: $main-theme;
-    background-color: $twitter-blue;
+    background-color: lighten($main-theme, 8%);
 
 }
 
 .sidebar-panel>nav>ul>li.open>a:active {
-    color: $twitter-blue;
+    color: lighten($main-theme, 8%);
 }
 
 .sidebar-panel>nav>ul>li.open>a,
@@ -48,13 +48,13 @@
 .sidebar-panel>nav>ul>li.open>a:hover,
 .sidebar-panel>nav>ul>li>a:hover {
     color: $white;
-    background-color: $twitter-blue;
+    background-color: lighten($main-theme, 8%);
     /*border-left: 3px solid #71B75E;*/
 }
 
 .sidebar-panel>nav li.active>a{
   color: $white;
-  background-color: $twitter-blue;
+  background-color: lighten($main-theme, 8%);
   /*border-left: 3px solid #71B75E;*/
   font-weight: 600 !important;
 }
@@ -73,7 +73,7 @@
 .sidebar-panel>nav a:focus,
 .sidebar-panel>nav a:hover {
     color: $white;
-    background-color: $twitter-blue;
+    background-color: lighten($main-theme, 8%);
     /*border-left: 3px solid #71B75E;*/
 }
 
@@ -83,7 +83,7 @@
 }
 
 .header.navbar{
-    background-color: $white opacity(0.5%);
+    background-color: $white opacity(0.8%);
     transition: 0.3s transform;
     &.is-inView {
         transform: translateY(0);
@@ -104,11 +104,17 @@
 
             a {
                 color: $white;
-                &:hover { color: $main-theme }
+                &:hover { 
+                    color: $main-theme;
+                    background-color: lighten($main-theme, 35%);
+                }
             }
 
             &.active-link{
-                a { color: $white }
+                a { 
+                    color: $white; 
+                    background-color: lighten($main-theme, 35%);
+                }
                 a:hover{ color: $main-theme }
             }
         }
@@ -117,7 +123,7 @@
     li.user-menu{
         color: $white;
         background-color: transparent;
-        &:hover { background-color: $twitter-blue }
+        &:hover { background-color: lighten($main-theme, 8%) }
         li.dropdown-submenu {
             &:hover{
                 background-color: $main-theme;
@@ -133,7 +139,7 @@
         color: $main-theme;
         &.open{
             li {
-                animation: navEffect 1s;
+                animation: navEffect .3s;
             }
         }    
     }   
@@ -151,7 +157,7 @@
             display: inline-block; 
         }
         a { text-align: center }
-        &.branch-user{ width: 45% !important }
+        &.branch-user{ width: 48% !important }
     }
     li.width10{
         width: 10% !important;

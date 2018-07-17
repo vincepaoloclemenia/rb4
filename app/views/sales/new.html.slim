@@ -12,40 +12,61 @@
 	.panel
 		.panel-heading.border Statistics
 		.panel-body
-			.row
-				.col-xs-12.col-lg-3.mb5
+			.row.mb10
+				.col-xs-12.col-lg-6
 					= f.label :customer_count
 					= f.number_field :customer_count, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-3.mb5
+				.col-xs-12.col-lg-6
 					= f.label :transaction_count
 					= f.number_field :transaction_count, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-3.mb5
+			.row.mb10	
+				.col-xs-12.col-lg-6
 					= f.label :delivery_transaction_count
 					= f.number_field :delivery_transaction_count, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-3.mb5
+				.col-xs-12.col-lg-6
 					= f.label :credit_card_transaction_count
 					= f.number_field :credit_card_transaction_count, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-3.mb5
+			.row.mb10	
+				.col-xs-12.col-lg-6
 					= f.label :first_time_guest
 					= f.number_field :first_time_guest, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-3.mb5
+				.col-xs-12.col-lg-6
 					= f.label :repeat_guest
 					= f.number_field :repeat_guest, class: "form-control", placeholder: "0"
 
-	.panel
-		.panel-heading.border None Sales Miscellaneous
-		.panel-body
-			.row
-				.col-xs-12.col-lg-3.mb5
-					= f.label :vat, "VAT <small class='field-req'>*</small>".html_safe
-					.input-group
-						= f.number_field :vat, class: "form-control", placeholder: "0", step: '.01'
-						span.input-group-addon %
-				.col-xs-12.col-lg-3.mb5
-					= f.label :service_charge, "Service Charge <small class='field-req'>*</small>".html_safe
-					.input-group
-						span.input-group-addon PHP
-						= f.number_field :service_charge, class: "form-control", placeholder: "0.00", step: '.01'
+	.row
+		.col-md-6	
+			.panel
+				.panel-heading.border None Sales Miscellaneous
+				.panel-body
+					.row
+						.col-xs-12.col-lg-6.mb5
+							= f.label :vat, "VAT <small class='field-req'>*</small>".html_safe
+							.input-group
+								span.input-group-addon PHP
+								= f.number_field :vat, class: "form-control", placeholder: "0", step: '.01'
+								
+						.col-xs-12.col-lg-6.mb5
+							= f.label :service_charge, "Service Charge <small class='field-req'>*</small>".html_safe
+							.input-group
+								span.input-group-addon PHP
+								= f.number_field :service_charge, class: "form-control", placeholder: "0.00", step: '.01'
+
+		.col-md-6
+			.panel
+				.panel-heading.border Cash for Deposit
+				.panel-body
+					.row
+						.col-xs-12.col-lg-6.mb5
+							= f.label :gc_sales, "GC Sales <small class='field-req'>*</small>".html_safe
+							.input-group
+								span.input-group-addon PHP
+								= f.number_field :gc_sales, class: "form-control", placeholder: "0.00", step: '.01'
+						.col-xs-12.col-lg-6.mb5
+							= f.label :other_income
+							.input-group
+								span.input-group-addon PHP
+								= f.number_field :other_income, class: "form-control", placeholder: "0.00", step: '.01'
 
 	.panel
 		.panel-heading.border Sale By Settlements
@@ -81,26 +102,13 @@
 								span.input-group-addon PHP
 								= sbse.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
 
-	.panel
-		.panel-heading.border Cash for Deposit
-		.panel-body
-			.row
-				.col-xs-12.col-lg-3.mb5
-					= f.label :gc_sales, "GC Sales <small class='field-req'>*</small>".html_safe
-					.input-group
-						span.input-group-addon PHP
-						= f.number_field :gc_sales, class: "form-control", placeholder: "0.00", step: '.01'
-				.col-xs-12.col-lg-3.mb5
-					= f.label :other_income
-					.input-group
-						span.input-group-addon PHP
-						= f.number_field :other_income, class: "form-control", placeholder: "0.00", step: '.01'
+	
 
 	- if @categories.any? 
 		.panel
 			.panel-heading.border Sales by Category
 			.panel-body
-				.row
+				.row.mb10
 					- @categories.each do |category| 
 						= f.fields_for :sale_by_category_entries do |sbce|
 							= sbce.hidden_field :category_id, value: category.id
@@ -109,6 +117,10 @@
 								.input-group
 									span.input-group-addon PHP
 									= sbce.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
+				.row.pt10
+					.col-xs-offset-4.col-xs-4
+						center
+							= f.submit "Add Sales", class: "btn btn-primary btn-block btn-lg mb15"
 	- else
 		.panel
 			.panel-body
@@ -124,6 +136,7 @@
 									u  =link_to 'here', categories_path 
 								|  to create sale category.
 		
-	.row
-		.col-xs-12
-			= f.submit "Add Sales", class: "btn btn-lg btn-primary btn-outline pull-right w180"
+				.row.pt10
+					.col-xs-12
+						center
+							= f.submit "Add Sales", class: "btn btn-primary btn-block btn-lg mb15"

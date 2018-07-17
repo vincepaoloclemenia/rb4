@@ -139,26 +139,26 @@ class PurchaseOrdersListing extends React.Component{
                     this.state.purchaseOrders.map((poi, index) => 
                         [
                             <tr className='total-amount' key={index}>
-                                <td style={{ textAlign: 'center' }} className='subcategory' colSpan='10' >{poi.supplier}</td>        
+                                <td data-title='Supplier name' style={{ textAlign: 'center' }} className='subcategory' colSpan='10' >{poi.supplier}</td>        
                             </tr>,
                             
                             poi.purchase_order_items.map((item, i) =>
                                 <tr key={i}>
-                                    <td>{item.po_number}</td>
-                                    <td>{item.po_date}</td>
-                                    <td>{item.remarks}</td>
-                                    <td>{item.item}</td>
-                                    <td>{item.po_number}</td>
-                                    <td style={{ textAlign: 'center' }}>{item.packaging}</td>
-                                    <td style={{ textAlign: 'center' }}>{item.quantity}</td>
-                                    <td style={{ textAlign: 'center' }}>{item.unit}</td>
-                                    <td className='text-pull-right'>{item.unit_price}</td>
-                                    <td className='text-pull-right'>{item.total}</td>
+                                    <td data-title='Purhcase Order Number'>{item.po_number}</td>
+                                    <td data-title='Purchase Order Date'>{item.po_date}</td>
+                                    <td data-title='Remarks'>{item.remarks}</td>
+                                    <td data-title='Item Name'>{item.item}</td>
+                                    <td data-title='Item Brand'>{item.item_brand}</td>
+                                    <td data-title='Packaging' style={{ textAlign: 'center' }}>{item.packaging}</td>
+                                    <td data-title='Quantity' style={{ textAlign: 'center' }}>{item.quantity}</td>
+                                    <td data-title='Unit' style={{ textAlign: 'center' }}>{item.unit}</td>
+                                    <td data-title='Price' className='text-pull-right'>{item.unit_price}</td>
+                                    <td data-title='Total' className='text-pull-right'>{item.total}</td>
                                 </tr>
                             ),
                             <tr key={index+1}className='total-amount bg-total'>
-                                <td style={{ textAlign: 'right' }} colSpan='9' data-title='Total Amount'>Total amount ordered from {poi.supplier}</td>
-                                <td className='label-total-num text-pull-right' data-title='Total Amount'>{poi.over_all}</td>
+                                <td data-title={`Total Amount Ordered from ${poi.supplier}`} style={{ textAlign: 'right' }} colSpan='9'>Total amount ordered from {poi.supplier}</td>
+                                <td data-title='Overall Total' className='label-total-num text-pull-right'>{poi.over_all}</td>
                             </tr>         
                         ]
                     )
