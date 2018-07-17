@@ -32,7 +32,7 @@ class PurchaseOrdersController < ApplicationController
 			@date = params[:purchase_order][:delivery_date].present? ? Date.strptime(params[:purchase_order][:delivery_date], '%m/%d/%Y') : nil			
 			@purchase_order = current_brand.purchase_orders.build(purchase_order_params)
 			@purchase_order.delivery_date = @date
-			@purchase_order.brand_id = current_user.brand.id
+			@purchase_order.brand_id = current_brand.id
 			@purchase_order.client_id = current_user.client.id
 			@purchase_order.status = 'Pending'
 			@purchase_order.user_id = current_user.id
@@ -256,6 +256,13 @@ class PurchaseOrdersController < ApplicationController
 		end
 	end
 
+	def purchase_orders_per_supplier
+		@purchase_orders = current_brand.purchase_orders.where(id: params[:purchase_order_ids])
+		respond_to do |format|
+			format.pdf {render template: 'purchase_orders/purchase_orders', pdf: 'Purchase Orders'}
+		end
+	end
+
 	def group_of_purchase_orders
 		@purchase_orders = current_brand.purchase_orders.friendly.find(params[:purchases])
 		@supplier = Supplier.find params[:supplier]
@@ -286,10 +293,16 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def reject_selected_purchase_orders
-		if params[:pos][:ids]
-			ids = params[:pos][:ids].split(",")
-			current_brand.purchase_orders.where(id: ids).update_all(status: "Rejected")
-			redirect_to purchase_orders_path, notice: "You rejected purchase orders"
+		if params[:pos].present?
+			if params[:pos][:ids].present?
+				ids = params[:pos][:ids].split(",")
+				current_brand.purchase_orders.where(id: ids).update_all(status: "Rejected")
+			end
+			if params[:pos][:ids_for_sent].present?
+				ids = params[:pos][:ids_for_sent].split(",")
+				current_brand.purchase_orders.where(id: ids).update_all(status: "Approved", sent: true, date_sent: DateTime.now )
+			end
+			redirect_to purchase_orders_path, notice: "Changes saved"
 		else
 			redirect_to purchase_orders_path, alert: "Action cannot be completed."
 		end

@@ -83,4 +83,65 @@
             background-color: lighten($light-blue, 10%);
         }
     }
+    .speech-bubble {
+        border: $main-theme 1px solid;
+        padding: 10px;
+        @include border-radius(3px);
+        width: 170px;
+        margin: 0 auto;
+        color: $blue;
+    }
+  
+    .speech-arrow-top {
+        width: 0;
+        height: 0;
+        border-left: 11px solid transparent;
+        border-right: 11px solid transparent;
+        z-index: 20;
+        border-top: 10px solid #fff;
+        position: absolute;
+        right: 46.7%;
+        top: 36.5%;
+    }
+  
+    .speech-arrow-bottom {
+        width: 0;
+        height: 0;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        z-index: 10;
+        border-top: 11px solid $main-theme;
+        position: absolute;
+        right: 46.3%;
+        top: none;
+    }
+  
+    .ringer {
+        margin: 0 auto;
+        width: 50px;
+        margin-top: 20px;
+    }
+    .bell-jar,.mouth,.eye{opacity:0.2;fill:#000000;}
+    
+    .blink, {
+        animation: blink 3s step-start 0s infinite;
+    }
+    
+    @keyframes blink {
+        53% {
+          opacity: 0.2;
+        }
+        55% {
+          opacity: 0.0;
+        }
+        57% {
+          opacity: 0.2;
+        }
+        59% {
+          opacity: 0.0;
+        }
+        61% {
+          opacity: 0.2;
+        }
+    }
 }

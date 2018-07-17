@@ -95,6 +95,7 @@ Rails.application.routes.draw do
     get :view_po_remotely, on: :collection
     get :send_bulk_purchase_orders, on: :collection
     get :group_of_purchase_orders, on: :collection
+    get :purchase_orders_per_supplier, on: :collection
     get :hold_po, on: :collection
     patch :reject_selected_purchase_orders, on: :collection
     post :mail_bulk_of_purchase_orders, on: :collection
