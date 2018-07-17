@@ -7,109 +7,116 @@
         <meta charset='utf-8'>
     </head>
     <body id='pdf-body'>
-        <% @purchase_orders.map do |purchase_order| %>
-            <div class='pdf-container' style='page-break-before: always;'>           
-                <div class='panel-heading'>
-                    <center>
-                        <%= pdf_image_tag (purchase_order.brand.avatar.url(:medium)), class: 'brand-avatar' %>
-                    </center>
-                </div>
-                <div class='row'>
-                    <div class='col-xs-12'>
-                        <div class='pull-left'>
-                            <h5 class='po-labels'>PO NUMBER: <span><%= purchase_order.po_number %></span></h5>
-                        </div>
-                        <div class='pull-right'>
-                            <h5 class='po-labels'>PO DATE: <span><%= purchase_order.po_date.strftime('%B %d, %Y') %></span></h5>
+        <% if @purchase_orders.present? %>
+            <% @purchase_orders.map do |purchase_order| %>
+                <div class='pdf-container' style='page-break-before: always;'>           
+                    <div class='panel-heading'>
+                        <center>
+                            <%= pdf_image_tag (purchase_order.brand.avatar.url(:medium)), class: 'brand-avatar' %>
+                        </center>
+                    </div>
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <div class='pull-left'>
+                                <h5 class='po-labels'>PO NUMBER: <span><%= purchase_order.po_number %></span></h5>
+                            </div>
+                            <div class='pull-right'>
+                                <h5 class='po-labels'>PO DATE: <span><%= purchase_order.po_date.strftime('%B %d, %Y') %></span></h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class='row mb10'>
-                    <table id='po-details'>
+                    <div class='row mb10'>
+                        <table id='po-details'>
+                            <thead>
+                                <tr>
+                                    <th>Branch</th>
+                                    <td><%= purchase_order.branch.name %></td>
+                                    <th>Delivery Address</th>
+                                    <td><%= purchase_order.delivery_address.present? ? purchase_order.delivery_address : "<b><i>Left blank</i></b>".html_safe %></td>
+                                </tr>
+                                <tr>
+                                    <th>Company Name</th>
+                                    <td><%= purchase_order.branch.company_registered_name %></td>
+                                    <th>Delivery date and time</th>
+                                    <td><%= purchase_order.delivery_date.present? ? purchase_order.delivery_date.strftime('%B %d, %Y') : "<b><i>Left blank</i></b>".html_safe %>, 
+                                        <%= purchase_order.delivery_time.present? && purchase_order.delivery_time_to.present? ? "#{purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" : "<b><i>Left blank</i></b>".html_safe %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Tin Number</th>
+                                    <td><%= purchase_order.branch.tin_number %></td>  
+                                    <th>Supplier</th>
+                                    <td><%= purchase_order.supplier.name %></td>        
+                                </tr>
+                                <tr>
+                                    <th>Remarks</th>
+                                    <td><%= purchase_order.remarks %></td>  
+                                    <th>Contact Person</th>
+                                    <td><%= purchase_order.supplier.contact_person %></td>        
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <br>
+                    <table style="margin-left:-25px" width="900" cellpadding="0" cellspacing="0" bgcolor="e4e4e4">
                         <thead>
                             <tr>
-                                <th>Branch</th>
-                                <td><%= purchase_order.branch.name %></td>
-                                <th>Delivery Address</th>
-                                <td><%= purchase_order.delivery_address.present? ? purchase_order.delivery_address : "<b><i>Left blank</i></b>".html_safe %></td>
-                            </tr>
-                            <tr>
-                                <th>Company Name</th>
-                                <td><%= purchase_order.branch.company_registered_name %></td>
-                                <th>Delivery date and time</th>
-                                <td><%= purchase_order.delivery_date.present? ? purchase_order.delivery_date.strftime('%B %d, %Y') : "<b><i>Left blank</i></b>".html_safe %>, 
-                                    <%= purchase_order.delivery_time.present? && purchase_order.delivery_time_to.present? ? "#{purchase_order.delivery_time.to_time.strftime('%l:%M %P')} - #{purchase_order.delivery_time_to.to_time.strftime('%l:%M %P')}" : "<b><i>Left blank</i></b>".html_safe %>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Tin Number</th>
-                                <td><%= purchase_order.branch.tin_number %></td>  
-                                <th>Supplier</th>
-                                <td><%= purchase_order.supplier.name %></td>        
-                            </tr>
-                            <tr>
-                                <th>Remarks</th>
-                                <td><%= purchase_order.remarks %></td>  
-                                <th>Contact Person</th>
-                                <td><%= purchase_order.supplier.contact_person %></td>        
+                                <th width="90">Item Name</th>
+                                <th width="90">Item Brand</th>
+                                <th width="90">Packaging</th>
+                                <th width="100">Remarks</th>
+                                <th width="80">Quantity</th>
+                                <th width="80">Unit</th>
+                                <th width="95">Price</th>
+                                <th width="95">Total Amount</th>
                             </tr>
                         </thead>
-                    </table>
-                </div>
-                <br>
-                <table style="margin-left:-25px" width="900" cellpadding="0" cellspacing="0" bgcolor="e4e4e4">
-                    <thead>
-                        <tr>
-                            <th width="90">Item Name</th>
-                            <th width="90">Item Brand</th>
-                            <th width="90">Packaging</th>
-                            <th width="100">Remarks</th>
-                            <th width="80">Quantity</th>
-                            <th width="80">Unit</th>
-                            <th width="95">Price</th>
-                            <th width="95">Total Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% purchase_order.purchase_order_items.each do |pi| %>
-                            <tr>
-                                <td>
-                                    <%= pi.item.name %>
-                                </td>
-                                <td>
-                                    <%= pi.item_brand? ? pi.item_brand : "---" %>
-                                </td>
-                                <td class='po-item'>
-                                    <%= pi.packaging %>
-                                </td>
-                                <td class='po-item'>
-                                    <%= pi.remarks %>
-                                </td>
-                                <td style="text-align:center" class='po-item'>
-                                    <%= pi.quantity.to_i %>
-                                </td>
-                                <td style="text-align:center" class='po-item'>
-                                    <%= pi.unit.name%>
-                                </td>
-                                <td style="text-align:right" class='po-item'>
-                                    <%= to_peso(pi.price_selected) %>
-                                </td>
-                                <td style="text-align:right" class='po-item'>
-                                    <%= to_peso(pi.total_amount) %>
-                                </td>
+                        <tbody>
+                            <% purchase_order.purchase_order_items.each do |pi| %>
+                                <tr>
+                                    <td>
+                                        <%= pi.item.name %>
+                                    </td>
+                                    <td>
+                                        <%= pi.item_brand? ? pi.item_brand : "---" %>
+                                    </td>
+                                    <td class='po-item'>
+                                        <%= pi.packaging %>
+                                    </td>
+                                    <td class='po-item'>
+                                        <%= pi.remarks %>
+                                    </td>
+                                    <td style="text-align:center" class='po-item'>
+                                        <%= pi.quantity.to_i %>
+                                    </td>
+                                    <td style="text-align:center" class='po-item'>
+                                        <%= pi.unit.name%>
+                                    </td>
+                                    <td style="text-align:right" class='po-item'>
+                                        <%= to_peso(pi.price_selected) %>
+                                    </td>
+                                    <td style="text-align:right" class='po-item'>
+                                        <%= to_peso(pi.total_amount) %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                            <tr class='highlighted'>
+                                <td colspan='7'>Subtotal</td>
+                                <td style="text-align:right" class='bold' colspan='1'><%= to_peso(purchase_order.sub_total) %></td>
                             </tr>
-                        <% end %>
-                        <tr class='highlighted'>
-                            <td colspan='7'>Subtotal</td>
-                            <td style="text-align:right" class='bold' colspan='1'><%= to_peso(purchase_order.sub_total) %></td>
-                        </tr>
-                        
-                        <tr class='highlighted'>
-                            <td colspan='7'>Total</td>
-                            <td style="text-align:right" class='bold' colspan='1'><%= to_peso(purchase_order.total_amount) %></td>
-                        </tr>
-                    </tbody>
-                </table>         
+                            
+                            <tr class='highlighted'>
+                                <td colspan='7'>Total</td>
+                                <td style="text-align:right" class='bold' colspan='1'><%= to_peso(purchase_order.total_amount) %></td>
+                            </tr>
+                        </tbody>
+                    </table>         
+                </div>
+            <% end %>
+        <% else %>
+            <div class='pdf-container'>
+                <h4><center>No Purchase Orders Available for Printing</center></h4>
+                <p><center><i>Please make sure that the purchase orders you intended to print were already approved.</i></center></p>
             </div>
         <% end %>
     </body>

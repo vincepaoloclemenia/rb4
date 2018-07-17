@@ -37,6 +37,10 @@ class PurchaseOrder < ActiveRecord::Base
     status == 'Approved'
   end
 
+  def self.approved_all?
+    all.map(&:approved?).exclude? false
+  end
+
   def branch_user?
     self.user.role.role_level == 'branch'
   end
@@ -133,6 +137,10 @@ class PurchaseOrder < ActiveRecord::Base
       errors.add("Something went wrong.", " Email cannot be submitted due to incomplete information. Please check recipients and subject before sending.")
       false
     end
+  end
+
+  def update_po_number
+    update(po_number: pr_number.gsub('PR', 'PO'), po_date: Date.today)
   end
 
 end

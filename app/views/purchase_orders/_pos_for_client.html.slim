@@ -35,7 +35,8 @@
                                         .pull-left
                                             = link_to "<i class='fa blue icon-glyph-11 f14 mr5'></i>Send to #{supplier.name}".html_safe, send_bulk_purchase_orders_purchase_orders_path(purchases: purchase_orders[supplier_id].map(&:id), supplier_id: supplier_id), class: "btn btn-link", data: { tt: "tooltip", placement: "top", "original-title" => "Send to #{supplier.name}" }
                                         .pull-right.mb10
-                                            = link_to "<i class='fa blue icon-glyph-162 f14 mr5'></i>Download PDF".html_safe, purchase_orders_per_supplier_purchase_orders_path(purchase_order_ids: purchase_orders_per_supplier.map(&:id),format: :pdf, q: request.params[:q]), class: "btn btn-link", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"  
+                                            - if current_brand.purchase_orders.where(id: purchase_orders_per_supplier.map(&:id)).approved_all?
+                                                = link_to "<i class='fa blue icon-glyph-162 f14 mr5'></i>Download PDF".html_safe, purchase_orders_per_supplier_purchase_orders_path(purchase_order_ids: purchase_orders_per_supplier.map(&:id),format: :pdf, q: request.params[:q]), class: "btn btn-link", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"  
                                     .no-more-tables#purchase_order-list
                                         
                                         table.table.table-bordered.table-striped.mb0 data-sortable="true"
@@ -49,7 +50,7 @@
                                                     th width="160" Status
                                                     th width="120" data-sortable="false" Action
                                                     th width="100" Reject POS
-                                                    th width='100' Mark as Approved & Sent
+                                                    th width='100' Mark as Sent
 
                                             tbody style="font-size:13px"
                                                 - purchase_orders_per_supplier.map do |purchase_order|
@@ -71,8 +72,13 @@
 
                                                         td.action.text-centered data-title="Check to reject"
                                                             = f.check_box :remove, data: { remove: "#{purchase_order.id}" }, checked: false
-                                                        td.action.text-centered data-title="Mark as Approved & Sent"
-                                                            = f.check_box :mark, data:{ mark: "#{purchase_order.id}" }, checked: false
+                                                        td.action.text-centered data-title="Mark as Sent"
+                                                            - if purchase_order.approved?
+                                                                = f.check_box :mark, data:{ mark: "#{purchase_order.id}" }, checked: false
+                                                            - else
+                                                                center
+                                                                    i 
+                                                                        span.red Unapproved yet
                                 
             .row.pt10.mb10
                 center

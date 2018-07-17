@@ -257,7 +257,7 @@ class PurchaseOrdersController < ApplicationController
 	end
 
 	def purchase_orders_per_supplier
-		@purchase_orders = current_brand.purchase_orders.where(id: params[:purchase_order_ids])
+		@purchase_orders = current_brand.purchase_orders.approved_pos.where(id: params[:purchase_order_ids])
 		respond_to do |format|
 			format.pdf {render template: 'purchase_orders/purchase_orders', pdf: 'Purchase Orders'}
 		end
@@ -274,8 +274,6 @@ class PurchaseOrdersController < ApplicationController
 
 	def save_po_items
 		@purchase_order = PurchaseOrder.friendly.find(params[:purchase_order_id])
-		#poi = params[:purchase_order][:purchase_order_items_attributes]
-		#poi_params = params[:purchase_order][:purchase_order_items_attributes].reject { |x, pur| poi[x.to_s][:quantity].blank? || poi[x.to_s][:quantity].blank? }
 		@purchase_order.update(purchase_order_params_for_po_items)
 		if @purchase_order.save
 			redirect_to purchase_order_purchase_order_items_path(@purchase_order), notice: "Purchase order items successfully saved."
@@ -300,7 +298,7 @@ class PurchaseOrdersController < ApplicationController
 			end
 			if params[:pos][:ids_for_sent].present?
 				ids = params[:pos][:ids_for_sent].split(",")
-				current_brand.purchase_orders.where(id: ids).update_all(status: "Approved", sent: true, date_sent: DateTime.now )
+				current_brand.purchase_orders.approved_pos.where(id: ids).update_all( sent: true, date_sent: DateTime.now )
 			end
 			redirect_to purchase_orders_path, notice: "Changes saved"
 		else
@@ -315,7 +313,6 @@ class PurchaseOrdersController < ApplicationController
 		end
 
 		def purchase_order_params_for_po_items
-			poi = params[:purchase_order][:purchase_order_items_attributes]
 			params.require(:purchase_order).permit(
 				purchase_order_items_attributes: [
 					:brand_id,
@@ -331,7 +328,7 @@ class PurchaseOrdersController < ApplicationController
 					:total_amount,
 					:packaging,
 					:_destroy,
-				]#.reject { |x, pur| poi[x.to_s][:quantity].blank? || poi[x.to_s][:quantity].blank? }
+				]
 			)
 		end
 
