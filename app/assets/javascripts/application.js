@@ -26,6 +26,15 @@
 //= require react-select.js
 //= require moment.js
 //= require moment-with-locales.js
+//= require fusioncharts.js
+//= require fusioncharts.charts.js
+//= require fusioncharts.maps.js
+//= require fusioncharts.powercharts.js
+//= require fusioncharts.ssgrid.js
+//= require fusioncharts.treemap.js
+//= require fusioncharts.widgets.js
+//= require fusioncharts.zoomscatter.js
+//= require react-fusioncharts.min.js
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
