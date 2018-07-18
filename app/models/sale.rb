@@ -90,4 +90,17 @@ class Sale < ActiveRecord::Base
 	def self.invalid_sales?
 		all.where(sale_date: nil).size > 0 || all.empty?
 	end
+
+	def self.display_this_weeks_sales_per_day
+		array = []
+		Date.today.all_week.map do |date|
+			sale_record = find_by_sale_date(date)
+			if sale_record.present?
+				array << { value: sale_record.net_total_sales }
+			else
+				array << { value: 0 }
+			end
+		end
+		return array
+	end
 end

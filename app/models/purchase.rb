@@ -110,4 +110,17 @@ class Purchase < ActiveRecord::Base
 		eval(keywords)
 	end
 
+	def self.get_all_by_week
+		arr = []
+		Date.today.all_week.map do |date|
+			purchase = find_by_purchase_date(date)
+			if purchase
+				arr << { value: purchase.purchase_items.map(&:item_total_net).sum.round(2) }
+			else
+				arr << { value: 0.0 }
+			end
+		end
+		return arr
+	end
+
 end

@@ -165,6 +165,10 @@ Rails.application.routes.draw do
       get :users_per_brand, on: :collection
     end
 
+    resources :dashboards, only: :index do
+      get :this_week_sales_vs_expense, on: :collection
+    end
+
     resources :purchase_order_summary, only: :index do
       get :get_purchase_orders, on: :collection
       get :get_on_hold_pos, on: :collection
