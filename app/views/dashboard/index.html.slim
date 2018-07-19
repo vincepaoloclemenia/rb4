@@ -19,8 +19,7 @@
           = react_component "ThisweekSalesVsExpense"
           
         .tabcontent id="month"
-          h5 From #{Date.today.in_time_zone.beginning_of_year.strftime('%B %d, %Y')} - #{Date.today.in_time_zone.strftime("%B %d, %Y")}
-          = area_chart yearly_sales_charts_path, id: 'yearly-sales', min: 100000, max: 5000000, label: "Sales", colors: ['#10374D']
+          = react_component "ThisYearsSalesExpense"
 
   .col-xs-12.col-md-12.col-lg-4
     / .widget.bg-danger-light

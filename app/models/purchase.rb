@@ -123,4 +123,13 @@ class Purchase < ActiveRecord::Base
 		return arr
 	end
 
+	def self.get_all_by_month
+		arr = []
+		Date::MONTHNAMES.reject { |m| m.nil? }.map do |month|
+			this_month_purchases = all.where(purchase_date: month.to_date.all_month)
+			{ value: this_month_purchases.includes(:purchase_items).map { |p| p.purchase_items.map(&:item_total_net).sum.round(2) }.sum }
+		end
+	end
+	
+
 end

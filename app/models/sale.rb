@@ -103,4 +103,11 @@ class Sale < ActiveRecord::Base
 		end
 		return array
 	end
+
+	def self.get_all_by_month
+		Date::MONTHNAMES.reject { |m| m.nil? }.map do |month|
+			this_month_sales = all.where(sale_date: month.to_date.all_month)			
+			{ value: this_month_sales.map(&:net_total_sales).sum.round(2) }		
+		end
+	end
 end

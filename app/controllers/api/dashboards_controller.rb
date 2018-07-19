@@ -1,4 +1,5 @@
 class Api::DashboardsController < ApplicationController
+    before_action :authenticate_user!
 
     def index
         @sales = if branch_admin?
@@ -26,5 +27,10 @@ class Api::DashboardsController < ApplicationController
                 else                    
                     current_brand.purchases.get_all_by_week                      
                 end
+    end
+
+    def this_years_sales_expense
+        @sales = branch_admin? ? current_user.branch.sales.get_all_by_month : current_brand.sales.get_all_by_month
+        @expenses = branch_admin? ? current_user.branch.puchases.get_all_by_month : current_brand.purchases.get_all_by_month
     end
 end
