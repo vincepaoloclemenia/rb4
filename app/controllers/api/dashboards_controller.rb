@@ -3,27 +3,29 @@ class Api::DashboardsController < ApplicationController
 
     def index
         @sales = if branch_admin?
-                    current_user.branch.sales.where(sale_date: Date.today).map(&:net_total_sales).sum.round(2).to_s      
+                    sale = current_user.branch.sales.find_by_sale_date(Date.today)
+                    sale.present? ? sale.net_total_sales : 0.0
                 else   
-                    current_brand.sales.where(sale_date: Date.today).map(&:net_total_sales).sum.round(2).to_s
+                    current_brand.sales.where(sale_date: Date.today).map(&:net_total_sales).sum.round(2)
                 end
 
         @expenses = if branch_admin?                       
-                        current_user.branch.purchase_items.includes(:purchase).where( purchases: { purchase_date: Date.today } ).map(&:item_total_net).sum.round(2).to_s
+                        purchase = current_user.branch.purchases.includes(:purchase_items).find_by_purchase_date(Date.today)
+                        purchase.present? ? purchase.purchase_items.map(&:item_total_net).sum.round(2) : 0.0
                     else                    
-                        current_brand.purchase_items.includes(:purchase).where( purchases: { purchase_date: Date.today } ).map(&:item_total_net).sum.round(2).to_s                        
+                        current_brand.purchase_items.includes(:purchase).where( purchases: { purchase_date: Date.today } ).map(&:item_total_net).sum.round(2)                        
                     end
     end
 
     def this_week_sales_vs_expense
         @sales = if branch_admin?
-                    current_user.branch.sales.display_this_weeks_sales_per_day   
+                    current_user.branch.sales.get_all_by_week_for_branch   
                 else   
-                    current_brand.sales.display_this_weeks_sales_per_day
+                    current_brand.sales.get_all_by_week
                 end
 
         @expenses = if branch_admin?                       
-                    current_user.branch.purchases.get_all_by_week
+                    current_user.branch.purchases.get_all_by_week_for_branch
                 else                    
                     current_brand.purchases.get_all_by_week                      
                 end
@@ -31,6 +33,6 @@ class Api::DashboardsController < ApplicationController
 
     def this_years_sales_expense
         @sales = branch_admin? ? current_user.branch.sales.get_all_by_month : current_brand.sales.get_all_by_month
-        @expenses = branch_admin? ? current_user.branch.puchases.get_all_by_month : current_brand.purchases.get_all_by_month
+        @expenses = branch_admin? ? current_user.branch.purchases.get_all_by_month : current_brand.purchases.get_all_by_month
     end
 end

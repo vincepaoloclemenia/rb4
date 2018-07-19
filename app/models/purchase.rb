@@ -110,7 +110,7 @@ class Purchase < ActiveRecord::Base
 		eval(keywords)
 	end
 
-	def self.get_all_by_week
+	def self.get_all_by_week_for_branch
 		arr = []
 		Date.today.all_week.map do |date|
 			purchase = find_by_purchase_date(date)
@@ -121,6 +121,13 @@ class Purchase < ActiveRecord::Base
 			end
 		end
 		return arr
+	end
+
+	def self.get_all_by_week
+		Date.today.all_week.map do |date|
+			all_purchases = all.includes(:purchase_items).where(purchase_date: date)
+			{ value: all_purchases.map { |pur| pur.purchase_items.map(&:item_total_net).sum.round(2) }.sum }
+		end
 	end
 
 	def self.get_all_by_month

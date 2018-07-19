@@ -15,6 +15,6 @@ json.chart do |chart|
 end
 expense = { label: "Expense", value: @expenses }
 sales = { label: "Sales", value: @sales }
-data = [expense,sales]
+data = [sales, expense]
 json.data data
 

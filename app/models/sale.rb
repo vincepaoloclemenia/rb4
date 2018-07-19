@@ -91,7 +91,7 @@ class Sale < ActiveRecord::Base
 		all.where(sale_date: nil).size > 0 || all.empty?
 	end
 
-	def self.display_this_weeks_sales_per_day
+	def self.get_all_by_week_for_branch
 		array = []
 		Date.today.all_week.map do |date|
 			sale_record = find_by_sale_date(date)
@@ -103,6 +103,14 @@ class Sale < ActiveRecord::Base
 		end
 		return array
 	end
+
+	def self.get_all_by_week
+		Date.today.all_week.map do |date|
+			all_sales = all.where(sale_date: date)
+			{ value: all_sales.map(&:net_total_sales).sum.round(2) }
+		end
+	end
+
 
 	def self.get_all_by_month
 		Date::MONTHNAMES.reject { |m| m.nil? }.map do |month|
