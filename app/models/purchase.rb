@@ -137,6 +137,63 @@ class Purchase < ActiveRecord::Base
 			{ value: this_month_purchases.includes(:purchase_items).map { |p| p.purchase_items.map(&:item_total_net).sum.round(2) }.sum }
 		end
 	end
+
+	def self.get_price_movement(date, id)
+		last_purchase = find_by_purchase_date(date)
+		purchase_item = last_purchase.purchase_items.find_by_item_id(id) if last_purchase.present?
+		current_amount = purchase_item.nil? ? nil : purchase_item.item_total_net / purchase_item.quantity
+		last_week_purchases = all.where(purchase_date: date.last_week.all_week).includes(:purchase_items)
+		last_month_purchases = all.where(purchase_date: date.last_month.all_month).includes(:purchase_items)		
+		
+		#Get last week's average amount
+		last_week_amount = if last_week_purchases.present?
+								total = last_week_purchases.map { |pur| pur.purchase_items.where(item_id: id).map(&:item_total_net).sum }.sum
+								quantity = last_week_purchases.map { |pur| pur.purchase_items.where(item_id: id).map(&:quantity).sum }.sum
+								if total > 0 && quantity > 0 
+									total / quantity
+								else 
+									0.0
+								end
+							else
+								0.0
+							end
+		#Get last month's average amount
+		last_month_amount = if last_month_purchases.present?
+								total = last_month_purchases.map { |pur| pur.purchase_items.where(item_id: id).map(&:item_total_net).sum }.sum 
+								quantity = last_month_purchases.map { |pur| pur.purchase_items.where(item_id: id).map(&:quantity).sum }.sum
+								if total > 0 && quantity > 0
+									total / quantity
+								else 
+									0.0
+								end
+							else
+								0.0
+							end
+		#compute difference current amount against last week's/month's amount
+		last_week_difference = current_amount.nil? || last_week_amount == 0 ? 0.0 : current_amount - last_week_amount
+		last_month_difference = current_amount.nil? || last_month_amount == 0 ? 0.0 : current_amount - last_month_amount 	
+
+		#Compute Percentage for Last Week and Last Month
+		if current_amount
+			last_week_percentage = last_week_difference.present? && last_week_amount > 0 ? ( last_week_difference / last_week_amount).round(2) : 0.0
+			last_month_percentage = last_month_difference.present? && last_month_amount > 0 ? ( last_month_difference / last_month_amount).round(2) : 0.0
+		else
+			last_week_percentage = 0.0
+			last_month_percentage = 0.0
+		end
+		
+		return {
+			current_amount: current_amount,
+			last_week_amount: last_week_amount,
+			last_week_difference: last_week_difference,
+			last_month_difference: last_month_difference,
+			last_month_amount: last_month_amount,
+			last_week_percentage: (last_week_percentage * 100).round(2),
+			last_month_percentage: (last_month_percentage * 100).round(2),
+			last_week_comparison: last_week_difference > 0 || last_week_percentage > 0,
+			last_month_comparison: last_month_difference > 0 || last_month_percentage > 0
+		}
+	end
 	
 
 end

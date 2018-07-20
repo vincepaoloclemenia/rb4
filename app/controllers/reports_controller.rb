@@ -88,14 +88,7 @@ class ReportsController < ApplicationController
 
 	#PRICE MOVEMENT REPORT
 	def price_movement_report
-		@date_range = drp_strip_date(params[:date_range])
-		@categories = Category.where(brand_id: current_brand)
-		@purchase_ids = Purchase.select(:id).where(purchase_date: @date_range, brand_id: current_brand, branch_id: params[:branch_id])
-		if params[:item_id].present?
-			@purchase_items = PurchaseItem.where(item_id: params[:item_id], purchase_id: @purchase_ids)
-		else
-			@purchase_items = PurchaseItem.where(purchase_id: @purchase_id)
-		end
+
 	end	
 
 	def update_item
