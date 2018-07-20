@@ -5,7 +5,7 @@ json.items do |json|
         json.id item.id
         json.name item.name
         json.unit item.unit.name
-        price_movement = @user.purchases.get_price_movement(@date, item.id)      
+        price_movement = @user.purchase_items.get_price_movement(@date, item.id)      
         last_week_found = price_movement[:last_week_amount] == 0
         last_month_found = price_movement[:last_month_amount] == 0
         last_week_difference = price_movement[:last_week_difference]
