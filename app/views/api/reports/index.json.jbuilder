@@ -35,13 +35,13 @@ json.today @date.strftime("%b %d, %Y")
 
 json.total_cost_for_week do 
     json.value to_peso(total_cost_for_week)
-    json.status total_cost_for_week < 0 
+    json.status total_cost_for_week > 0 
 end
 json.total_cost_for_month do
     json.value to_peso(total_cost_for_month)
-    json.status total_cost_for_month < 0 
+    json.status total_cost_for_month > 0 
 end
 json.overall do
     json.value to_peso(total_cost_for_week + total_cost_for_month)
-    json.status (total_cost_for_week + total_cost_for_month) < 0 
+    json.status (total_cost_for_week + total_cost_for_month) > 0 
 end 

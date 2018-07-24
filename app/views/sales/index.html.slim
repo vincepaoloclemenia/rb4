@@ -1,76 +1,32 @@
 - content_for :title, "Restobot | Sales"
-.collapse#show-search class="#{ 'in' if params[:q].present? }"
-  .panel
-    .panel-body
-      = search_form_for @q do |f|
-        .row
-          .col-xs-12.col-lg-6
-            = f.label :branch_id_eq, "Branch"
-            = f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: "Select Branch" }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
-          .col-xs-12.col-lg-6
-            = f.label :sale_date_eq, "Sale Date"
-            - if params[:q] && params[:q][:sale_date_eq]
-              = f.text_field :sale_date_eq, class: "form-control", placeholder: "Select date", data: { provide: "datepicker" }, value: params[:q][:sale_date_eq].to_date.strftime("%m/%d/%Y")
-            - else
-              = f.text_field :sale_date_eq, class: "form-control", placeholder: "Select date", data: { provide: "datepicker" }
-        .row.mt10
-          .col-xs-12
-            -if @q
-              .pull-left
-                = link_to 'Back', sales_path, class: 'btn btn-back'
-            .pull-right
-              button.btn.btn-primary data-tt="tooltip" data-placement="top" data-original-title="Search"
-                | Search
-.panel
+/.panel
     .panel-heading.border Daily Sales Report
     .panel-body
         .pull-right
 
-            = react_component 'FormSearch', props: { userType: current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('client') }
+            /= react_component 'FormSearch', props: { userType: current_user.role.role_level.eql?('brand') || current_user.role.role_level.eql?('client') }
 
-        h4 #{ current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client') ? 'Sales per Branch' : current_user.branch.name }
-        h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
-        h4 id='average-sales'
+        /h4 #{ current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client') ? 'Sales per Branch' : current_user.branch.name }
+        /h5 id="sales-label" Sales for current week: ( #{Date.today.at_beginning_of_week(start_day = :sunday).strftime("%a, %b %d") } - #{Date.today.at_end_of_week(end_day = :sunday).strftime("%a, %b %d") } )
+        /h4 id='average-sales'
         
-        = line_chart daily_sales_charts_path, id: 'sales-chart', colors: @colours, min: 100, max: 100000, height: "300px"         
+        /= line_chart daily_sales_charts_path, id: 'sales-chart', colors: @colours, min: 100, max: 100000, height: "300px"         
         
-        br
-        .gap-top15
+        /br
+        /.gap-top15
             - if current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client')
                 = render partial: 'branches_table', locals: { branches: @branches }        
                 br
 
-- if current_user.role.role_level.eql?('brand') ||  current_user.role.role_level.eql?('client')       
-    = render partial: 'branches_sales', locals: { branches: @branches }
+- if branch_admin?
+    = render partial: "branch_sales_index"
 - else
-    = render partial: 'current_branch_sales'
+    = render partial: "client_brand_sales"
+
 
 = render "partials/modal"
 
-javascript:
-    if('branch' !== '#{current_user.role.role_level}'){
-      var tablinks = document.getElementsByClassName("tablinks");
-      tablinks[0].click();
-      $.ajax({
-          url: '/charts/get_average',
-          method: 'GET',
-          success: (data) => {
-              $.each(data.branches, function(i, branch){
-                  $('td#'+branch.reverse).text(branch.average)
-                      if(branch.status === "Good"){
-                          $('td#'+branch.reverse).addClass("fine")
-                          $('td#'+branch.reverse).removeClass("fail");
-                      }else if(branch.status === "Unwell"){
-                          $('td#'+branch.reverse).addClass("fail");
-                          $('td#'+branch.reverse).removeClass("fine");
-                      }else{
-                          $('td#'+branch.reverse).removeClass("fine");
-                          $('td#'+branch.reverse).removeClass("fail");
-                      }
-              })
-          }
-      })
-    } 
+
   
     
 

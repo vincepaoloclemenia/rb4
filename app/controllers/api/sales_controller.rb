@@ -1,9 +1,68 @@
 class Api::SalesController < ApplicationController
     before_action :authenticate_user!
     
-    def index        
-        @sales = Branch.find(params[:branch_id]).sales.order(sale_date: :desc).paginate(page: params[:page], per_page: 5)
-        #@sales = current_brand.sales.paginate(page: params[:page], per_page: 1)
+    def index   
+        if branch_admin?
+            @sales = if params[:date].present?
+                        from = Date.strptime(params[:date].split(" - ")[0], "%m/%d/%Y")
+                        to = Date.strptime(params[:date].split(" - ")[1], "%m/%d/%Y")
+                        current_user.branch.sales.where(sale_date: from..to).paginate(page: params[:page], per_page: 10)
+                    else
+                        current_user.branch.sales.paginate(page: params[:page], per_page: 10)                        
+                    end
+        else
+            if params[:branch_id].present?
+                branch = Branch.find_by_id(params[:branch_id])
+                @sales = if params[:date].present?
+                            branch.sales.where(sale_date: from..to).paginate(page: params[:page], per_page: 10)
+                        else
+                            branch.sales.paginate(page: params[:page], per_page: 10)
+                        end
+            end
+            @branches = current_brand.branches.map { |branch| { value: branch.id, label: branch.name } }
+        end
+    end
+
+    def get_sales_per_week
+        @sales_this_week = if branch_admin?
+                                current_user.branch.sales.get_all_by_week
+                            else
+                                if params[:branch_id].present?
+                                    branch = Branch.find params[:branch_id]
+                                    branch.sales.get_all_by_week if branch.present?
+                                end
+                            end
+
+        @sales_last_week = if branch_admin?
+                            Date.today.last_week.all_week.map do |date|
+                                all_sales = current_user.branch.sales.where(sale_date: date)
+                                { value: all_sales.map(&:net_total_sales).sum.round(2) }
+                            end
+                        else
+                            if params[:branch_id].present?
+                                branch = Branch.find params[:branch_id]
+                                if branch
+                                    Date.today.last_week.all_week.map do |date|
+                                        all_sales = branch.sales.where(sale_date: date)
+                                        { value: all_sales.map(&:net_total_sales).sum.round(2) }
+                                    end
+                                end
+                            end
+                        end
+    end
+
+    def get_sales_per_month
+        @sales_this_year = if branch_admin?
+                    current_user.branch.sales.get_all_by_month
+                else
+                end
+        @sales_last_year = if branch_admin?
+                            Date::MONTHNAMES.reject { |m| m.nil? || m.to_date > Date.today }.map do |month|
+                                this_month_sales = current_user.branch.sales.where(sale_date: month.to_date.last_year.all_month)			
+                                { value: this_month_sales.map(&:net_total_sales).sum.round(2) }		
+                            end
+                        else
+                        end
     end
 
     def get_sales_averages

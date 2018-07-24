@@ -1,4 +1,4 @@
-json.next_page @sales.next_page
+json.next_page @sales.next_page if @sales.present?
 json.sales do |json|
     json.array! @sales do |sale|
         json.id sale.id
@@ -9,4 +9,8 @@ json.sales do |json|
         json.settlement to_peso(sale.total_settlement_sales)
         json.deposits to_peso(sale.cash_in_drawer)
     end 
+end
+
+unless branch_admin?
+    json.branches @branches
 end

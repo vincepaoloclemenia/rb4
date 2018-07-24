@@ -1,22 +1,24 @@
 class Sale < ActiveRecord::Base
 
-  belongs_to :branch
+  	belongs_to :branch
 
-  has_many :sale_by_category_entries, :dependent => :destroy
-  accepts_nested_attributes_for :sale_by_category_entries, :reject_if => :all_blank, :allow_destroy=> true
+	has_many :sale_by_category_entries, :dependent => :destroy
+	accepts_nested_attributes_for :sale_by_category_entries, :reject_if => :all_blank, :allow_destroy=> true
 
-  has_many :sale_by_settlement_entries, :dependent => :destroy
-  accepts_nested_attributes_for :sale_by_settlement_entries, :reject_if => :all_blank, :allow_destroy=> true
+	has_many :sale_by_settlement_entries, :dependent => :destroy
+	accepts_nested_attributes_for :sale_by_settlement_entries, :reject_if => :all_blank, :allow_destroy=> true
 
-  #has_many :sale_by_manifold_entries, :dependent => :destroy
-  #accepts_nested_attributes_for :sale_by_manifold_entries, :reject_if => :all_blank, :allow_destroy=> true
+	#has_many :sale_by_manifold_entries, :dependent => :destroy
+	#accepts_nested_attributes_for :sale_by_manifold_entries, :reject_if => :all_blank, :allow_destroy=> true
 
-  has_attached_file :daily_sales_record
-  validates_attachment :daily_sales_record,
-	  :content_type => { content_type: /^application\/(pdf)/, message: "Only accepts pdf" }
+	default_scope -> { order( sale_date: :desc )} 
+ 
+	has_attached_file :daily_sales_record
+	validates_attachment :daily_sales_record,
+		:content_type => { content_type: /^application\/(pdf)/, message: "Only accepts pdf" }
 
-  validates :sale_date, :branch, :vat, :service_charge, :gc_sales, presence: true
-  validates_uniqueness_of :sale_date, scope: :branch
+	validates :sale_date, :branch, :vat, :service_charge, :gc_sales, presence: true
+	validates_uniqueness_of :sale_date, scope: :branch
 
 
 	def net_sales
@@ -113,7 +115,7 @@ class Sale < ActiveRecord::Base
 
 
 	def self.get_all_by_month
-		Date::MONTHNAMES.reject { |m| m.nil? }.map do |month|
+		Date::MONTHNAMES.reject { |m| m.nil? || m.to_date > Date.today }.map do |month|
 			this_month_sales = all.where(sale_date: month.to_date.all_month)			
 			{ value: this_month_sales.map(&:net_total_sales).sum.round(2) }		
 		end

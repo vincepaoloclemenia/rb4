@@ -158,6 +158,8 @@ Rails.application.routes.draw do
       get :get_sales_averages, on: :collection
       get :get_customer_count, on: :collection
       get :get_average_revenues, on: :collection
+      get :get_sales_per_week, on: :collection
+      get :get_sales_per_month, on: :collection
     end
 
     resources :users, only: :index do

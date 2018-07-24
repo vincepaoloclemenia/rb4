@@ -8,7 +8,7 @@ json.chart do |chart|
 end
 
 month_category = [
-    Date::MONTHNAMES.reject { |m| m.nil? }.map { |m| { "label": m.to_date.strftime("%b") } }
+    Date::MONTHNAMES.reject { |m| m.nil? || m.to_date > Date.today }.map { |m| { "label": m.to_date.strftime("%b") } }
 ]
 
 sales= {
