@@ -46,7 +46,7 @@ json.piechart do |chart|
     json.showpercentvalues "1"
     json.showpercentintooltip "0"
     json.plottooltext "$label: ₱ $datavalue"
-    json.theme "ocean"
+    json.theme "fint"
 end
 this_week = { label: "This week's sales percentage", value: total_this_week }
 last_week = { label: "Last week's sales percentage", value: total_last_week }

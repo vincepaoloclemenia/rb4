@@ -13,11 +13,17 @@ class Api::SalesController < ApplicationController
         else
             if params[:branch_id].present?
                 branch = Branch.find_by_id(params[:branch_id])
-                @sales = if params[:date].present?
-                            branch.sales.where(sale_date: from..to).paginate(page: params[:page], per_page: 10)
-                        else
-                            branch.sales.paginate(page: params[:page], per_page: 10)
-                        end
+                if params[:date].present?
+                    @from = Date.strptime(params[:date].split(" - ")[0], "%m/%d/%Y")
+                    @to = Date.strptime(params[:date].split(" - ")[1], "%m/%d/%Y")
+                    @date_range = @from..@to
+                    sales = branch.sales.where(sale_date: @date_range)                 
+                    @sales = sales.paginate(page: params[:page], per_page: 1)
+                    @sales_with_data = sales.map { |s| { value: s.net_total_sales } }
+                    @sales_last_year = branch.sales.where(sale_date: @from.last_year..@to.last_year).map { |s| { value: s.net_total_sales } }
+                else
+                    @sales = branch.sales.paginate(page: params[:page], per_page: 1)
+                end
             end
             @branches = current_brand.branches.map { |branch| { value: branch.id, label: branch.name } }
         end

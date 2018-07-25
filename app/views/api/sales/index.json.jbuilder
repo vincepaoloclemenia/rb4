@@ -13,4 +13,34 @@ end
 
 unless branch_admin?
     json.branches @branches
+    if @date_range.present?
+        json.chart do |chart|
+            json.caption "Sales of this year's (#{Date.today.year}) and last year's (#{Date.today.last_year.year}) "
+            json.subcaption "Sales Comparison"
+            json.xaxisname "#{@from.strftime('%b %d')} - #{@to.strftime('%b %d')}"
+            json.yaxisname "Net total sales per day"
+            json.numberprefix "₱ "
+            json.theme "fint"
+        end
+        
+        day_category = [
+            @date_range.map { |day| { label: day.strftime("%b %d")}}
+        ]
+        this_years_sales = {
+            "seriesname": "This year's sales",
+            "data": @sales_with_data
+        }
+        last_year_sales = {
+            "seriesname": "Last year's sales",
+            "renderas": "area",
+            "showvalues": "0",
+            "data": @sales_last_year
+        }
+
+        categories = [ category: day_category ]
+        data = [this_years_sales, last_year_sales] 
+
+        json.categories categories
+        json.dataset data
+    end
 end

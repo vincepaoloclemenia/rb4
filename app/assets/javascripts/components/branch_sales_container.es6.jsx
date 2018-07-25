@@ -88,9 +88,7 @@ class BranchSalesContainer extends React.Component{
                 <i className="fa fa-spinner fa-spin fa-lg fa-fw"></i>      
             )         
         }
-        if (this.state.nextPage === null) {
-            return;
-        }else{
+        if (this.state.nextPage) {
             return (
                 <a className="view-more" onClick={() => this.handleLoadMore()}>See More </a>             
             );

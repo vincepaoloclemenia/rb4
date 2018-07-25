@@ -46,8 +46,8 @@ class SalesBarChartContainer extends React.Component{
             <div className='panel'>
                 <div className='panel-heading border pt15'>Sales Data Representation</div>
                 <div className='panel-body'>
-                    <div className='pull-right mr5'><button type='button' onClick={this.showMonthly.bind(this)} className={this.state.weekly ? 'btn btn-link' : 'btn btn-primary'}>Monthly</button></div>
-                    <div className='pull-right'><button type='button' onClick={this.showWeekly.bind(this)} className={this.state.weekly ? 'btn btn-primary' : 'btn btn-link'}>Weekly</button></div>
+                    <div className='pull-right mr5'><button type='button' onClick={this.showMonthly.bind(this)} className={this.state.weekly ? 'btn btn-link' : 'btn btn-grey'}>Monthly</button></div>
+                    <div className='pull-right'><button type='button' onClick={this.showWeekly.bind(this)} className={this.state.weekly ? 'btn btn-grey' : 'btn btn-link'}>Weekly</button></div>
                 </div>
                 {this.renderPanelBody()}
             </div>
