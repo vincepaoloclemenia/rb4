@@ -16,12 +16,10 @@ class Api::SalesController < ApplicationController
                 if params[:date].present?
                     @from = Date.strptime(params[:date].split(" - ")[0], "%m/%d/%Y")
                     @to = Date.strptime(params[:date].split(" - ")[1], "%m/%d/%Y")
-                    @date_range = @from..@to
-                    sales = branch.sales.where(sale_date: @date_range)                 
-                    @sales = sales.paginate(page: params[:page], per_page: 1)
-                    @sales_with_data = sales.map { |s| { value: s.net_total_sales } }
-                    @sales_last_year = branch.sales.where(sale_date: @from.last_year..@to.last_year).map { |s| { value: s.net_total_sales } }
-                else
+                    @date_range = @from..@to           
+                    @sales = branch.sales.where(sale_date: @date_range).paginate(page: params[:page], per_page: 1)
+                    @sales_with_data = branch.sales.get_sales_by_range(@date_range)
+                    @sales_last_year = branch.sales.get_sales_by_range(@from.last_year..@to.last_year)
                     @sales = branch.sales.paginate(page: params[:page], per_page: 1)
                 end
             end

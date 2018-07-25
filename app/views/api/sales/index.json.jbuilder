@@ -27,11 +27,11 @@ unless branch_admin?
             @date_range.map { |day| { label: day.strftime("%b %d")}}
         ]
         this_years_sales = {
-            "seriesname": "This year's sales",
+            "seriesname": "#{@from.year}'s sales",
             "data": @sales_with_data
         }
         last_year_sales = {
-            "seriesname": "Last year's sales",
+            "seriesname": "#{@from.last_year.year}'s sales",
             "renderas": "area",
             "showvalues": "0",
             "data": @sales_last_year

@@ -120,4 +120,11 @@ class Sale < ActiveRecord::Base
 			{ value: this_month_sales.map(&:net_total_sales).sum.round(2) }		
 		end
 	end
+
+	def self.get_sales_by_range(date)
+		date.map do |day|
+			sale = find_by_sale_date day
+			sale.present? ? { value: sale.net_total_sales } : { value: 0.0 }
+		end
+	end
 end
