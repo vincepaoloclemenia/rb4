@@ -3,9 +3,7 @@ class AdminsContainer extends React.Component{
         super(props)
         this.state = {
             fetching: false,
-            companyAdmins: [],
-            branchAdmins: [],
-            brandAdmins: []
+            companyUsers: []
         }
     }
 
@@ -15,18 +13,18 @@ class AdminsContainer extends React.Component{
 
     render(){
         return(
-            <div className="admins-container">
-
-                {this.renderCompanyAdmins()}
-                <br/>
-                
-                {this.renderBrandAdmins()}            
-                <br/>
-                                
-                {this.renderBranchAdmins()}
-                <br/>
-
-            </div>
+            this.state.companyUsers.map((user, index) => 
+                <div key={index} className='panel'>
+                    <div className='panel-heading border pb15'>{user.role_name}</div>
+                    <div className='panel-body'>
+                        <div className='row'>
+                            <div className='col-md-12'>
+                                <AdminsPerRole status={this.state.fetching} users={user.users} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )           
         )
     }
 
@@ -65,13 +63,10 @@ class AdminsContainer extends React.Component{
         $.ajax({
             url: '/api/users.json',
             method: 'GET',
-            dataType: 'JSON',
             success: (data) => {
                 this.setState({
                    fetching: false,
-                   companyAdmins: data.company_admins,
-                   branchAdmins: data.branch_admins,
-                   brandAdmins: data.brand_admins 
+                   companyUsers: data.company_users
                 })
             }
         })

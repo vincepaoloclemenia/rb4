@@ -5,9 +5,7 @@ class Api::UsersController < ApplicationController
     before_action :set_brand, only: :users_per_brand
 
     def index
-      @company_admins = current_client.users.users_by_roles('client')
-      @branch_admins = current_client.users.users_by_roles('branch')
-      @brand_admins = current_client.users.users_by_roles('brand')
+      @roles = current_client.users.includes(:branch, :role).group_by { |user| user.role.name == "Company Administrator" ? "1Company Administrator" : user.role.name == "Brand Administrator" ? "2Brand Administrator" : user.role.name == "Branch Administrator" ? "3Branch Administrator" : "4#{user.role.name}" } 
     end
 
     def users_per_branch

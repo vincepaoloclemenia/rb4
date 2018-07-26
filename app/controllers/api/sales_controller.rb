@@ -17,10 +17,12 @@ class Api::SalesController < ApplicationController
                     @from = Date.strptime(params[:date].split(" - ")[0], "%m/%d/%Y")
                     @to = Date.strptime(params[:date].split(" - ")[1], "%m/%d/%Y")
                     @date_range = @from..@to           
-                    @sales = branch.sales.where(sale_date: @date_range).paginate(page: params[:page], per_page: 1)
+                    @sales = branch.sales.where(sale_date: @date_range).paginate(page: params[:page], per_page: 10)
                     @sales_with_data = branch.sales.get_sales_by_range(@date_range)
                     @sales_last_year = branch.sales.get_sales_by_range(@from.last_year..@to.last_year)
-                    @sales = branch.sales.paginate(page: params[:page], per_page: 1)
+                    
+                else
+                    @sales = branch.sales.paginate(page: params[:page], per_page: 10)
                 end
             end
             @branches = current_brand.branches.map { |branch| { value: branch.id, label: branch.name } }
