@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Purchase Order</title>
+        <title>Purchase List Report</title>
             <%= wicked_pdf_stylesheet_link_tag 'style' %>
             <%= wicked_pdf_stylesheet_link_tag 'pdf' %>
         <meta charset='utf-8'>
     </head>
     <body id='pdf-body'>
         <div class='pdf-container'>    
-			<h2>Purchase List Reports</h2>       
+			<h2>Purchase List Report <span style="float:right; font-size:14px"><%= "( #{Date.today.at_beginning_of_month.strftime('%B %d, %Y')} - #{Date.today.end_of_month.strftime('%B %d, %Y')} )" %></h2>       
 			<table class="table table-bordered table-striped mb0">
 				<thead>
 					<tr class="big-head">
@@ -72,6 +72,17 @@
 					</tr>
 				</tbody>
 			</table>
+			<div class='centered-container'>
+				<div class='md-4'>
+					<center><b>Prepared by: </b></center>
+				</div>
+				<div class='md-4'>
+					<center><b>Reviewed by: </b></center>
+				</div>
+				<div class='md-4'>
+					<center><b>Approved by: </b></center>
+				</div>
+			</div>
 		</div>
     </body>
 </html>

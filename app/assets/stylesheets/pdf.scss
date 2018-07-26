@@ -35,3 +35,16 @@ tfoot { display: table-row-group }
 tr { page-break-inside: avoid }
 td { font-size: 20px; color: lighten(black, 15%) }
 td.label-total-num{ font-size: 13px; background: lighten(grey, 35%) }
+div.centered-container{
+    margin-left: 55px;
+    div.md-4 { 
+        border-top: 2px solid black;
+        margin-right: 3%;
+        margin-top: 100px;
+        width: 30%; 
+        display: inline-block;
+        color: black;
+        padding-top: 10px;
+        font-size: 18px;
+    }
+}
