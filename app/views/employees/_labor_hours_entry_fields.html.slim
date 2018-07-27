@@ -1,5 +1,5 @@
 tr.nested-fields
-  td data-title="Working Date" = f.text_field :working_date, class: "form-control", data: {provide: "datepicker"}
+  td data-title="Working Date" = f.text_field :working_date, class: "form-control work-date"
   td data-title="Regular" = f.number_field :regular, class: "form-control"
   td data-title="Overtime" = f.text_field :overtime, class: "form-control"
   td data-title="Night Differential" = f.text_field :night_differential, class: "form-control"
@@ -10,3 +10,6 @@ tr.nested-fields
   td data-title="Rest Day" = f.text_field :rest_day, class: "form-control"
   td.action data-title="Action"
     = link_to_remove_association "<i class='icon-maxicons1-exit'></i>".html_safe, f, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+
+javascript:
+  $(".work-date").datepicker({ autoclose: true })

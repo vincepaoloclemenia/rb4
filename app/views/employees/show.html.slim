@@ -96,7 +96,7 @@
 						.col-xs-4
 							label
 								| Date of Birth
-							= f.text_field :birthdate, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+							= f.text_field :birthdate, class: "form-control", placeholder: "mm/dd/yyyy", id: "date-birth"
 						.col-xs-4
 							label
 								| Age
@@ -123,11 +123,11 @@
 						.col-xs-3
 							label
 								| Date Employed
-							= f.text_field :date_employed, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+							= f.text_field :date_employed, class: "form-control", placeholder: "mm/dd/yyyy", id: "date-employed"
 						.col-xs-3
 							label
 								| End Date
-							= f.text_field :end_date, class: "form-control", placeholder: "mm/dd/yyyy", data: {provide:"datepicker"}
+							= f.text_field :end_date, class: "form-control", placeholder: "mm/dd/yyyy", id: "end-date"
 					.row.mb10
 						.col-xs-3
 							label
@@ -154,3 +154,9 @@
 					.modal-footer.no-border
 						button.btn.btn-default data-dismiss="modal" type="button" Close
 						button.btn.btn-primary type="submit" Save Changes
+
+javascript: 
+	$("#date-birth").datepicker({ autoclose: true })
+	$("#date-employed").datepicker({ autoclose: true })
+	$("#end-date").datepicker({ autoclose: true })
+	

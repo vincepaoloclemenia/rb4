@@ -28,7 +28,7 @@
 						- @labor_work = LaborHoursEntry.where(labor_hour_id: labor_hour.id)
 						- @labor_work.each do |lw|
 							tr
-								td data-title="Working Date" = lw.working_date
+								td data-title="Working Date" = lw.working_date.strftime("%b %d, %Y")
 								td data-title="Regular" = lw.regular.to_i
 								td data-title="Overtime" = lw.overtime.to_i
 								td data-title="Night Differential" = lw.night_differential.to_i
