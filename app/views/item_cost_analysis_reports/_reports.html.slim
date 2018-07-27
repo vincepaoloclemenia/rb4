@@ -63,33 +63,33 @@ table.table.table-bordered.table-striped.mb0#item-costs
                         - cogs_total_amount += cogs_amount
                         - cogs_percentage = cc[:cogs_percentage]
                         - cogs_total_percentage += cogs_percentage
-                        td = item.name
-                        td.text-centered width='150' = item.unit.name
-                        td.text-centered= cc[:bi_quantity]
-                        td.align-right = to_peso(cc[:bi_unit_cost])
-                        td.align-right  = to_peso(bi_amount)
-                        td.text-centered= cc[:tp_quantity]
-                        td.align-right = to_peso(cc[:tp_unit_cost])
-                        td.align-right = to_peso(tp_amount)
-                        td.align-right = "#{tp_percentage} %"
-                        td.text-centered = cc[:ei_quantity]
-                        td.align-right = to_peso(cc[:ei_unit_cost])               
-                        td.align-right = to_peso(ei_amount)
-                        td.text-centered = cc[:cogs_quantity]
-                        td.align-right = to_peso(cc[:cogs_unit_cost])
-                        td.align-right = to_peso(cogs_amount)
-                        td.align-right = "#{cogs_percentage} %"
+                        td  data-title='Item name' = item.name
+                        td.text-centered data-title='Unit' width='150' = item.unit.name
+                        td.text-centered  data-title='Quantity (BI)' = cc[:bi_quantity]
+                        td.align-right data-title='Cost (BI)' = to_peso(cc[:bi_unit_cost])
+                        td.align-right  data-title='Amount (BI)'  = to_peso(bi_amount)
+                        td.text-centered data-title='Quantity (TP)' = cc[:tp_quantity]
+                        td.align-right data-title='Cost (TP)' = to_peso(cc[:tp_unit_cost])
+                        td.align-right data-title='Amount (TP)' = to_peso(tp_amount)
+                        td.align-right data-title='Percentage (TP)' = "#{tp_percentage} %"
+                        td.text-centered data-title='Quantity (EI)' = cc[:ei_quantity]
+                        td.align-right data-title='Cost (EI)' = to_peso(cc[:ei_unit_cost])               
+                        td.align-right data-title='Amount (EI)' = to_peso(ei_amount)
+                        td.text-centered data-title='Quantity (COGS)' = cc[:cogs_quantity]
+                        td.align-right data-title='Cost (COGS)' = to_peso(cc[:cogs_unit_cost])
+                        td.align-right data-title='Amount (COGS)' = to_peso(cogs_amount)
+                        td.align-right data-title='Percentage (COGS)' = "#{cogs_percentage} %"
                 tr.bg-total 
-                    td colspan='4' Total for Beginning Inventory (#{subcat})
-                    td.label-total-num.align-right.bi_amount  = to_peso(bi_total_amount)
-                    td colspan='2' Total for Purchases
-                    td.label-total-num.align-right.tp_amount  = to_peso(tp_total_amount)
-                    td.label-total-num.align-right.tp_percentage  = "#{tp_total_percentage} %"
-                    td colspan='2' Total for Ending Inventory
-                    td.label-total-num.align-right.ei_amount = to_peso(ei_total_amount)
-                    td colspan='2' Total for COGS
-                    td.label-total-num.align-right.cogs_amount = to_peso(cogs_total_amount)
-                    td.label-total-num.align-right.cogs_percentage = "#{cogs_total_percentage} %"
+                    td colspan='2' Total
+                    td.label-total-num.align-right.bi_amount colspan='3' data-title='Total Amount (BI)' = to_peso(bi_total_amount)
+                    
+                    td.label-total-num.align-right.tp_amount colspan='3' data-title='Total Amount (TP)' = to_peso(tp_total_amount)
+                    td.label-total-num.align-right.tp_percentage data-title='Total Percentage (TP)' = "#{tp_total_percentage} %"
+                    
+                    td.label-total-num.align-right.ei_amount colspan='3' data-title='Total Amount (EI)' = to_peso(ei_total_amount)
+                    
+                    td.label-total-num.align-right.cogs_amount colspan='3' data-title='Total Amount (COGS)' = to_peso(cogs_total_amount)
+                    td.label-total-num.align-right.cogs_percentage data-title='Total Percentage (COGS)' = "#{cogs_total_percentage} %"
 
 
         

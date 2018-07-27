@@ -58,8 +58,8 @@ class PurchaseItem < ActiveRecord::Base
 		last_month_difference = current_amount == 0 || last_month_amount == 0 ? 0.0 : current_amount - last_month_amount 	
 
 		if current_amount > 0
-			last_week_percentage = last_week_difference != 0 && last_week_amount != 0 ? ( last_week_difference / last_week_amount).round(2) : 0.0
-			last_month_percentage = last_month_difference != 0 && last_month_amount != 0 ? ( last_month_difference / last_month_amount).round(2) : 0.0
+			last_week_percentage = last_week_difference != 0 && last_week_amount != 0 ? ( last_week_difference / last_week_amount) : 0.0
+			last_month_percentage = last_month_difference != 0 && last_month_amount != 0 ? ( last_month_difference / last_month_amount) : 0.0
 		else
 			last_week_percentage = 0.0
 			last_month_percentage = 0.0

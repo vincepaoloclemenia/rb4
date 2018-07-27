@@ -10,7 +10,7 @@ class AdminsPerRole extends React.Component{
         }
         return(
             this.props.users.map((user, index)  => 
-                <div style={{ borderLeft: `3px solid ${user.color}`, backgroundColor: "#F1EEEE", borderRight: "15px solid white" }} key={index} className='col-xs-6 col-lg-4'>
+                <div style={{ borderLeft: `3px solid ${user.color}`, backgroundColor: "#F1EEEE", borderRight: "15px solid white" }} key={index} className='col-xs-6 col-lg-4 mb10'>
                     <div className='col-lg-3' style={{ marginTop: "20px" }}>
                         <div className='row'>
                             <span dangerouslySetInnerHTML={{ __html: user.avatar}} /> 

@@ -128,13 +128,13 @@ class PriceMovementContainer extends React.Component{
     renderLastWeek(item){
         if(item.last_week_found){
             return(
-                <td colSpan='2' data-title='Price Movement & Percentage (Last Week)'><center><i>No purchased items found from last week</i></center></td>             
+                <td colSpan='2' data-title='Last Week'><center><i>No purchased items found from last week</i></center></td>             
             )
         }else{  
             return(
                 [
-                    <td data-title='Price Movement (Last Week)'>{`${item.last_week_amount} `}<span style={{ float: 'right'}} className={ item.last_week_comparison ? 'red': 'green'}>({item.last_week_difference})</span></td>,
-                    <td className='text-centered' data-title='Percentage Movement (Last Week)'><span className={ item.last_week_comparison ? 'red': 'green'}>{item.last_week_percentage}</span></td>
+                    <td data-title="Last Week (Price)">{`${item.last_week_amount} `}<span style={{ float: 'right'}} className={ item.last_week_comparison ? 'red': 'green'}>({item.last_week_difference})</span></td>,
+                    <td className='text-centered' data-title='Last Week (%)'><span className={ item.last_week_comparison ? 'red': 'green'}>{item.last_week_percentage}</span></td>
                 ]
             )
         }
@@ -143,13 +143,13 @@ class PriceMovementContainer extends React.Component{
     renderLastMonth(item){
         if(item.last_week_found){
             return(
-                <td colSpan='2' data-title='Price Movement & Percentage (Last Month)'><center><i>No purchased items found from last month</i></center></td>             
+                <td colSpan='2' data-title='Last Month'><center><i>No purchased items found from last month</i></center></td>             
             )
         }else{  
             return(
                 [
-                    <td data-title='Price Movement (Last Month)'>{`${item.last_month_amount} `}<span style={{ float: 'right'}} className={ item.last_month_comparison ? 'red': 'green'}>({item.last_month_difference})</span></td>,
-                    <td className='text-centered' data-title='Percentage Movement (Last Month)'><span className={ item.last_month_comparison ? 'red': 'green'}>{item.last_month_percentage}</span></td>
+                    <td data-title='Last Month (Price)'>{`${item.last_month_amount} `}<span style={{ float: 'right'}} className={ item.last_month_comparison ? 'red': 'green'}>({item.last_month_difference})</span></td>,
+                    <td className='text-centered' data-title='Last Month (%)'><span className={ item.last_month_comparison ? 'red': 'green'}>{item.last_month_percentage}</span></td>
                 ]
             )
         }

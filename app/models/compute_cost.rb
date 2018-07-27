@@ -26,7 +26,7 @@ class ComputeCost
         tp_quantity = purchase_items.map(&:quantity).sum.round(2)
         tp_amount = purchase_items.map(&:item_total_net).sum.round(2)
         tp_unit_cost = tp_quantity <= 0 || tp_amount <= 0 ? 0 : (tp_amount / tp_quantity).round(2)
-        tp_percentage = tp_amount <= 0 || total_sales <= 0 ? 0 : ( tp_amount / total_sales ).round(2) * 100
+        tp_percentage = tp_amount <= 0 || total_sales <= 0 ? 0 : ( tp_amount / total_sales ) * 100
 
         #ending_inventory variables
         ei_quantity = inventory_items.map(&:stock_count).sum.round(2)
@@ -39,7 +39,7 @@ class ComputeCost
         cogs_quantity = bi_quantity + tp_quantity - ei_quantity
         cogs_amount = bi_amount + tp_amount - ei_amount
         cogs_unit_cost = cogs_amount <= 0 || cogs_quantity <= 0 ? 0 : (cogs_amount / cogs_quantity).round(2)
-        cogs_percentage = cogs_amount <= 0 || total_sales <= 0 ? 0 : (cogs_amount / total_sales).round(2) * 100
+        cogs_percentage = cogs_amount <= 0 || total_sales <= 0 ? 0 : (cogs_amount / total_sales) * 100
         return { 
             bi_quantity: bi_quantity % 1 == 0 ? bi_quantity.to_i : bi_quantity, 
             bi_unit_cost: bi_unit_cost, 
@@ -47,7 +47,7 @@ class ComputeCost
             tp_quantity: tp_quantity % 1 == 0 ? tp_quantity.to_i : tp_quantity,
             tp_amount: tp_amount,
             tp_unit_cost: tp_unit_cost,
-            tp_percentage: tp_percentage,
+            tp_percentage: tp_percentage.round(2),
             ei_amount: ei_amount,
             ei_quantity: ei_quantity % 1 == 0 ? ei_quantity.to_i : ei_quantity,
             ei_unit_cost: ei_unit_cost,
