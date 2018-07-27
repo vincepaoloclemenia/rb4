@@ -91,6 +91,21 @@ class ReportsController < ApplicationController
 
 	end	
 
+	def get_purchased_items_per_item
+		if params[:item_id] && params[:date]
+			@item = Item.find params[:item_id]
+			@from = params[:date].split(" - ")[0].to_date
+			@to = params[:date].split(" - ")[1].to_date
+			if @item.present?
+				@purchase_items = if branch_admin?
+														current_user.branch.purchase_items.includes(:purchase, :branch).where( item_id: @item.id, purchases: { purchase_date: @from..@to } )
+												else
+														current_brand.purchase_items.includes(:purchase, :branch).where( item_id: @item.id, purchases: { purchase_date: @from..@to } )
+												end
+			end
+		end
+	end
+
 	def update_item
 		@items = Item.where(category_id: params[:category_id])
 	end

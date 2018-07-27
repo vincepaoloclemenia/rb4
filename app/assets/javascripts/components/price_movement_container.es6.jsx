@@ -133,7 +133,7 @@ class PriceMovementContainer extends React.Component{
         }else{  
             return(
                 [
-                    <td data-title="Last Week (Price)">{`${item.last_week_amount} `}<span style={{ float: 'right'}} className={ item.last_week_comparison ? 'red': 'green'}>({item.last_week_difference})</span></td>,
+                    <td data-title="Last Week (Price)"><a href={`/reports/get_purchased_items_per_item?item_id=${item.id}&date=${this.state.lastWeekRange}`} data-remote='true'>{`${item.last_week_amount} `}<span style={{ float: 'right'}} className={ item.last_week_comparison ? 'red': 'green'}>({item.last_week_difference})</span></a></td>,
                     <td className='text-centered' data-title='Last Week (%)'><span className={ item.last_week_comparison ? 'red': 'green'}>{item.last_week_percentage}</span></td>
                 ]
             )
@@ -148,7 +148,7 @@ class PriceMovementContainer extends React.Component{
         }else{  
             return(
                 [
-                    <td data-title='Last Month (Price)'>{`${item.last_month_amount} `}<span style={{ float: 'right'}} className={ item.last_month_comparison ? 'red': 'green'}>({item.last_month_difference})</span></td>,
+                    <td data-title='Last Month (Price)'><a href={`/reports/get_purchased_items_per_item?item_id=${item.id}&date=${this.state.lastMonthRange}`} data-remote='true'>{`${item.last_month_amount} `}<span style={{ float: 'right'}} className={ item.last_month_comparison ? 'red': 'green'}>({item.last_month_difference})</span></a></td>,
                     <td className='text-centered' data-title='Last Month (%)'><span className={ item.last_month_comparison ? 'red': 'green'}>{item.last_month_percentage}</span></td>
                 ]
             )

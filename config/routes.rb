@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   get 'invoice_entry_report' => 'reports#invoice_entry_report'
   get 'update_item' => 'reports#update_item'
   get 'man_hours' => 'reports#man_hours'
+  resources :reports, only: [] do
+    get :get_purchased_items_per_item, on: :collection
+  end
   get 'profit_and_losses' => 'profit_and_losses#index'
   get 'settings' => 'settings#index'
   patch 'update_settings' => 'settings#update_settings'

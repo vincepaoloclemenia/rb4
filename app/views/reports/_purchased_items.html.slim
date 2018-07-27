@@ -1,0 +1,39 @@
+.no-more-tables
+    table.table.table-bordered.table-striped.mb0 data-sortable="true"
+        thead
+            tr.bg-thead
+                th width="120" data-sortable="false" Invoice no.
+                th width="120" Purchase Date
+                th width="130" Created by
+                - unless branch_admin?     
+                    th width="130" Branch
+                th width="160" Supplier
+                th width="110" Quantity
+                th width="110" Item Price
+                th width="120" Total Net Price
+        
+        tbody
+            - total_quantity = @purchase_items.map(&:quantity).sum
+            - total_amount =  @purchase_items.map(&:item_total_net).sum
+            - item_cost = (total_amount / total_quantity).round(2)
+            - @purchase_items.map do |pi|
+                tr
+                    td data-title="Invoice No." = pi.purchase.invoice_number
+                    td data-title="Date" = pi.purchase.purchase_date.strftime("%b %d %Y")
+                    td data-title='Created by' = pi.purchase.created_by.full_name
+                    - unless branch_admin?    
+                        td data-title="Branch" = pi.branch.name                        
+                    td data-title="Supplier" = pi.purchase.supplier.name
+                    td.text-centered data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.round(2)
+                    td.align-right data-title="Price" = to_peso(pi.purchase_item_amount)
+                    td.align-right data-title="Total Price" = to_peso(pi.item_total_net)
+            - colspan = branch_admin? ? '5' : '6'
+            tr.bg-total
+                td colspan='#{colspan}' Total Quantity
+                td.label-total-num.align-right colspan='2' = total_quantity % 1 == 0 ? total_quantity.to_i : total_quantity.round(2)
+            tr.bg-total
+                td colspan='#{colspan}' Total Net Amount
+                td.label-total-num.align-right colspan='2' = to_peso(total_amount)
+            tr.bg-total
+                td colspan='#{colspan}' Average Cost
+                td.label-total-num.align-right colspan='2' = to_peso(item_cost)

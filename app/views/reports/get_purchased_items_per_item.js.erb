@@ -1,0 +1,12 @@
+$('#modal h4').html("<%= "Purchase Items for #{@item.name} ( #{@from.strftime('%b %d, %Y')} - #{@to.strftime('%b %d, %Y')} )" %>");
+
+$('.modal-body').html('<%= j render("purchased_items") %>');
+
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
