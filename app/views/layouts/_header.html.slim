@@ -6,13 +6,13 @@ header.header.navbar data-behavior="animated-navbar"
 				i.icon-menu.menu-icon
 
 		- if wizard_done?
-			li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
+			li class="user-menu#{ branch_admin? || brand_admin? ? ' branch-user' : ''}"
 				a
 					i.fa.fa-envelope aria-hidden="true"	
 
 				 
 		- if wizard_done?
-			- if (current_user.role.role_level == 'brand' || current_user.role.role_level == 'client')
+			- if (client_admin?)
 				li.user-menu
 					a href="javascript:;" data-toggle="dropdown"
 						= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"
@@ -25,9 +25,9 @@ header.header.navbar data-behavior="animated-navbar"
 									- else
 										= link_to brand.name, change_brand_path(brand_id: brand.id), method: :put						
 		- if wizard_done?
-			li class="user-menu#{ current_user.role.role_level == 'branch' ? ' branch-user' : ''}"
+			li class="user-menu#{ branch_admin? || brand_admin? ? ' branch-user' : ''}"
 				a href="javascript:;" data-toggle="dropdown" 
-					= current_user.username 
+					span.hide-when-mobile = current_user.username 
 					/img.header-avatar.img-circle src="/img/avatar-mummy.png"
 					= image_tag current_user.avatar.url(:thumb), class: "header-avatar img-circle with-gap"
 				ul.dropdown-menu

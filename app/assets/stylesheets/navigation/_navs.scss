@@ -156,9 +156,13 @@
         img { 
             display: inline-block; 
         }
-        a { text-align: center }
-        &.branch-user{ width: 48% !important }
+        a { 
+            text-align: center; 
+            span.hide-when-mobile { display: none }
+        }
+        &.branch-user{ width: 45% !important }
     }
+    
     li.width10{
         width: 10% !important;
     }
