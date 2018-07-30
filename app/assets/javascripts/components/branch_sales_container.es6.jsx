@@ -55,18 +55,19 @@ class BranchSalesContainer extends React.Component{
     render(){
         return(
             <div className='panel'>
-                <div className='panel-heading border pb15'>Sales Record </div>
-                <div className='row mb10 mt10'>
-                    <div className='col-xs-offset-9 col-xs-3'>
-                        <div className='input-group'>  
-                            <input className='form-control drp' id="q_date_range" name='date' type='text' placeholder='Search sales by date range' />
+                <div className='panel-heading'>Sales Record 
+                    <div className='pull-right' style={ {width: '200px'} }>
                         
-                            <span className='input-group-btn'>
-                                <i onClick={this.searchPurchases.bind(this)} id='search' className='fa fa-search fa-sm' aria-hidden='true'></i>                 
-                            </span>
-                        </div>  
+                        <input style={{ textAlign: 'right' }} className='form-control drp' id="q_date_range" name='date' type='text' placeholder='Search sales by date range' />
+                        
+                    </div>
+                    <div className='pull-right'>
+                        <i onClick={this.searchPurchases.bind(this)} id='search' className='fa fa-search fa-sm' aria-hidden='true'></i>                 
                     </div>
                 </div>
+               
+                 
+                   
                 <div className='panel-body'>  
                     <div className="no-more-tables">
                         <BranchSalesTable sales={this.state.sales} />
