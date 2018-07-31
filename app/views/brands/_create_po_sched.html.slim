@@ -5,105 +5,202 @@
             .col-xs-1.text-right
                 i.icon-glyph-73.f116
             .col-xs-11 id="information_board"
-                
+    - if @setting.present?
+        .row.mb25    
+            .col-md-offset-5.col-md-4
+                = f.check_box :send_pos, checked: @setting.send_pos, data: {off: "Daily", offstyle: "default", on: "Customized", onstyle: "success", style:"android", toggle: "toggle"}, id: "schedule"
 
-    .row.mb25    
-        .col-md-offset-5.col-md-4
-            = f.check_box :send_pos, checked: false, data: {off: "Daily", offstyle: "default", on: "Customized", onstyle: "success", style:"android", toggle: "toggle"}, id: "schedule"
-   
-    .panel-body id='schedule_panel'
-        .row.pb25.ml25
-            .col-md-1
-                = f.check_box :allow_monday, checked: false
-            .col-md-2
-                label Monday
-            div#1
-                .col-md-4
-                    input.form-control type='time' name='purchase_order_setting[monday_from]' id='monday_from'
+        .panel-body id='schedule_panel'
+            - purchase_order_schedule = @setting.purchase_order_schedule || [] 
+            .row.pb25.ml25
                 .col-md-1
-                    label →            
-                .col-md-4  
-                    input.form-control type='time' name='purchase_order_setting[monday_to]' id='monday_to'
+                    = f.check_box :allow_monday, checked: purchase_order_schedule.present? ? eval(purchase_order_schedule[1]["allowed"]) : false
+                .col-md-2
+                    label Monday
+                div#1
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[monday_from]' id='monday_from' value="#{purchase_order_schedule.present? ? purchase_order_schedule[1]['from'] : ''}"
+                    .col-md-1
+                        label →            
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[monday_to]' id='monday_to' value="#{purchase_order_schedule.present? ? purchase_order_schedule[1]['to'] : ''}"
+            
+            .row.pb25.ml25
+                .col-md-1
+                    = f.check_box :allow_tuesday, checked: purchase_order_schedule.present? ? eval(purchase_order_schedule[2]["allowed"]) : false
+                .col-md-2
+                    label Tuesday
+                div#2
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[tuesday_from]' id='tuesday_from' value="#{purchase_order_schedule.present? ? purchase_order_schedule[2]['from'] : ''}"
+                    .col-md-1
+                        label →                 
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[tuesday_to]' id='tuesday_to' value="#{purchase_order_schedule.present? ? purchase_order_schedule[2]['to'] : ''}"
+            
+            
+            .row.pb25.ml25
+                .col-md-1
+                    = f.check_box :allow_wednesday, checked: purchase_order_schedule.present? ? eval(purchase_order_schedule[3]["allowed"]) : false
+                .col-md-2
+                    label Wednesday
+                div#3
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[wednesday_from]' id='wednesday_from' value="#{purchase_order_schedule.present? ? purchase_order_schedule[3]['from'] : ''}"                
+                    .col-md-1    
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[wednesday_to]' id='wednesday_to' value="#{purchase_order_schedule.present? ? purchase_order_schedule[3]['to'] : ''}"
 
-        
-        .row.pb25.ml25
-            .col-md-1
-                = f.check_box :allow_tuesday, checked: false
-            .col-md-2
-                label Tuesday
-            div#2
-                .col-md-4
-                    input.form-control type='time' name='purchase_order_setting[tuesday_from]' id='tuesday_from'
+            .row.pb25.ml25
                 .col-md-1
-                    label →                 
-                .col-md-4  
-                    input.form-control type='time' name='purchase_order_setting[tuesday_to]' id='tuesday_to'
-        
-        
-        .row.pb25.ml25
-            .col-md-1
-                = f.check_box :allow_wednesday, checked: false
-            .col-md-2
-                label Wednesday
-            div#3
-                .col-md-4
-                    input.form-control type='time' name='purchase_order_setting[wednesday_from]' id='wednesday_from'         
+                    = f.check_box :allow_thursday, checked: purchase_order_schedule.present? ? eval(purchase_order_schedule[4]["allowed"]) : false
+                .col-md-2
+                    label Thursday
+                div#4
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[thursday_from]' id='thursday_from' value="#{purchase_order_schedule.present? ? purchase_order_schedule[4]['from'] : ''}"                
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[thursday_to]' id='thursday_to' value="#{purchase_order_schedule.present? ? purchase_order_schedule[4]['to'] : ''}"
+            
+            .row.pb25.ml25 
                 .col-md-1
-                    label →   
-                .col-md-4  
-                    input.form-control type='time' name='purchase_order_setting[wednesday_to]' id='wednesday_to'
+                    = f.check_box :allow_friday, checked: purchase_order_schedule.present? ? eval(purchase_order_schedule[5]["allowed"]) : false
+                .col-md-2
+                    label Friday
+                div#5
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[friday_from]' id='friday_from' value="#{purchase_order_schedule.present? ? purchase_order_schedule[5]['from'] : ''}"
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[friday_to]' id='friday_to' value="#{purchase_order_schedule.present? ? purchase_order_schedule[5]['to'] : ''}"
+            
+            .row.pb25.ml25
+                .col-md-1
+                    = f.check_box :allow_saturday, checked: purchase_order_schedule.present? ? eval(purchase_order_schedule[6]["allowed"]) : false
+                .col-md-2
+                    label Saturday
+                div#6
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[saturday_from]' id='saturday_from' value="#{purchase_order_schedule.present? ? purchase_order_schedule[6]['from'] : ''}"
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[saturday_to]' id='saturday_to' value="#{purchase_order_schedule.present? ? purchase_order_schedule[6]['to'] : ''}"
+            
+            .row.pb25.ml25
+                .col-md-1
+                    = f.check_box :allow_sunday, checked: purchase_order_schedule.present? ? eval(purchase_order_schedule[0]["allowed"]) : false
+                .col-md-2
+                    label Sunday
+                div#0
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[sunday_from]' id='sunday_from' value="#{purchase_order_schedule.present? ? purchase_order_schedule[0]['from'] : ''}"
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[sunday_to]' id='sunday_to' value="#{purchase_order_schedule.present? ? purchase_order_schedule[0]['to'] : ''}"
+    - else                
+        .row.mb25    
+            .col-md-offset-5.col-md-4
+                = f.check_box :send_pos, checked: false, data: {off: "Daily", offstyle: "default", on: "Customized", onstyle: "success", style:"android", toggle: "toggle"}, id: "schedule"
+    
+        .panel-body id='schedule_panel'
+            .row.pb25.ml25
+                .col-md-1
+                    = f.check_box :allow_monday, checked: false
+                .col-md-2
+                    label Monday
+                div#1
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[monday_from]' id='monday_from'
+                    .col-md-1
+                        label →            
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[monday_to]' id='monday_to'
 
-        .row.pb25.ml25
-            .col-md-1
-                = f.check_box :allow_thursday, checked: false
-            .col-md-2
-                label Thursday
-            div#4
-                .col-md-4
-                    input.form-control type='time' name='purchase_order_setting[thursday_from]' id='thursday_from'         
+            
+            .row.pb25.ml25
                 .col-md-1
-                    label →   
-                .col-md-4  
-                    input.form-control type='time' name='purchase_order_setting[thursday_to]' id='thursday_to'         
-        
-        .row.pb25.ml25 
-            .col-md-1
-                = f.check_box :allow_friday, checked: false
-            .col-md-2
-                label Friday
-            div#5
-                .col-md-4
-                    input.form-control type='time' name='purchase_order_setting[friday_from]' id='friday_from'         
+                    = f.check_box :allow_tuesday, checked: false
+                .col-md-2
+                    label Tuesday
+                div#2
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[tuesday_from]' id='tuesday_from'
+                    .col-md-1
+                        label →                 
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[tuesday_to]' id='tuesday_to'
+            
+            
+            .row.pb25.ml25
                 .col-md-1
-                    label →   
-                .col-md-4  
-                    input.form-control type='time' name='purchase_order_setting[friday_to]' id='friday_to'         
-        
-        .row.pb25.ml25
-            .col-md-1
-                = f.check_box :allow_saturday, checked: false
-            .col-md-2
-                label Saturday
-            div#6
-                .col-md-4
-                    input.form-control type='time' name='purchase_order_setting[saturday_from]' id='saturday_from'         
+                    = f.check_box :allow_wednesday, checked: false
+                .col-md-2
+                    label Wednesday
+                div#3
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[wednesday_from]' id='wednesday_from'         
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[wednesday_to]' id='wednesday_to'
+
+            .row.pb25.ml25
                 .col-md-1
-                    label →   
-                .col-md-4  
-                    input.form-control type='time' name='purchase_order_setting[saturday_to]' id='saturday_to'         
-        
-        .row.pb25.ml25
-            .col-md-1
-                = f.check_box :allow_sunday, checked: false
-            .col-md-2
-                label Sunday
-            div#0
-                .col-md-4
-                    input.form-control type='time' name='purchase_order_setting[sunday_from]' id='sunday_from'         
+                    = f.check_box :allow_thursday, checked: false
+                .col-md-2
+                    label Thursday
+                div#4
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[thursday_from]' id='thursday_from'         
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[thursday_to]' id='thursday_to'         
+            
+            .row.pb25.ml25 
                 .col-md-1
-                    label →   
-                .col-md-4  
-                    input.form-control type='time' name='purchase_order_setting[sunday_to]' id='sunday_to'         
+                    = f.check_box :allow_friday, checked: false
+                .col-md-2
+                    label Friday
+                div#5
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[friday_from]' id='friday_from'         
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[friday_to]' id='friday_to'         
+            
+            .row.pb25.ml25
+                .col-md-1
+                    = f.check_box :allow_saturday, checked: false
+                .col-md-2
+                    label Saturday
+                div#6
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[saturday_from]' id='saturday_from'         
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[saturday_to]' id='saturday_to'         
+            
+            .row.pb25.ml25
+                .col-md-1
+                    = f.check_box :allow_sunday, checked: false
+                .col-md-2
+                    label Sunday
+                div#0
+                    .col-md-4
+                        input.form-control type='time' name='purchase_order_setting[sunday_from]' id='sunday_from'         
+                    .col-md-1
+                        label →   
+                    .col-md-4  
+                        input.form-control type='time' name='purchase_order_setting[sunday_to]' id='sunday_to'         
 
     .modal-footer.no-border
 		span.inline.float-right
@@ -122,14 +219,20 @@ javascript:
             $("#schedule_panel").slideUp()
         }
     })
-
-    if($('#schedule').val() === true ){
-        $("#information_board").html("<b><b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><br/><b>NOTE:</b> Days that are left unchecked automatically ignore the Purchase Order submissions from Branch Admins. If there is a day checked and neither the 'from' and 'to' field is filled up, that would be understood as 'whole day'.")
-		$("#schedule_panel").slideDown();
-	}else{
+    
+    if($("#schedule").is(":checked")){
+        $("#schedule_panel").slideDown();
+        $("#information_board").html("<b>Customized Schedule</b> lets you choose what specific day and time you would like Branch Admins send their Purchase Orders. Just check the boxes beside you prefer.<br/><br/><b>NOTE:</b> Days that are <i>left unchecked</i> automatically ignore the Purchase Order submissions from Branch Admins. If there is a day and neither the 'from' and 'to' field is filled up, that would be understood as 'whole day'.")	    
+    }else{
         $("#information_board").html("<b>By Default</b>, Branch Admins can send their Purchase Orders 24/7")
-		$("#schedule_panel").slideUp()
-	}
+        $("#schedule_panel").slideUp()
+    }
+
+    $(".form-control").each(function(i, obj){
+        $(obj).on('change', function(evt){
+            console.log(evt.target.value, i)
+        })
+    })
     
 
 

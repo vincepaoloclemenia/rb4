@@ -2,6 +2,7 @@ class BrandsController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
 	before_action :set_brand, only: [:show, :edit, :update, :destroy]
+	before_action :restrict_except_admins, only: [:update_branch_po_setup, :update_po_privilege, :create_branch_po_setup]
 
 	def index
 		@brands = current_client.brands
@@ -64,10 +65,11 @@ class BrandsController < ApplicationController
 	end
 
 	def set_purchase_order_restriction
+		@setting = current_brand.brand_setting	
 	end
 
 	def update_po_schedule
-		@setting = current_brand.brand_setting	
+		@setting = current_brand.brand_setting 
 	end
 
 	def setup_branch_po_setup
@@ -110,10 +112,17 @@ class BrandsController < ApplicationController
 			friday = po[:allow_friday] == '1' ? { day: "friday", allowed: true, from: po[:friday_from], to: po[:friday_to] } : { day: "friday", allowed: false, from: '', to: '' }
 			saturday = po[:allow_saturday] == '1' ? { day: "saturday", allowed: true, from: po[:saturday_from], to: po[:saturday_to] } : { day: "saturday", allowed: false, from: '', to: '' }
 			sunday = po[:allow_sunday] == '1' ? { day: "sunday", allowed: true, from: po[:sunday_from], to: po[:sunday_to] } : { day: "sunday", allowed: false, from: '', to: '' }
-			current_brand.create_brand_setting(
-				send_pos: po[:send_pos],
-				purchase_order_schedule: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]			
-			)	
+			if current_brand.brand_setting.present?
+				current_brand.brand_setting.update(
+					send_pos: po[:send_pos],
+					purchase_order_schedule: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]			
+				)	
+			else	
+				current_brand.create_brand_setting(
+					send_pos: po[:send_pos],
+					purchase_order_schedule: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]			
+				)	
+			end
 			flash[:notice] = po[:send_pos] ? "You have successully adjusted Purchase Order schedule." : "You have set Purchase Schedule to 'Daily'"		
 			redirect_to purchase_order_generator_index_path
 		end
@@ -138,7 +147,49 @@ class BrandsController < ApplicationController
 		end
 	end
 
+	def admins_privileges
+		@admins = current_brand.admins.collect { |u| [ "#{u.full_name} ( #{u.username} )", u.id ] }
+		if current_brand.brand_setting.present?
+			if current_brand.brand_setting.purchase_order_privilege.present?
+				@approvers = current_brand.brand_setting.purchase_order_privilege["approvers"]
+				@holders = current_brand.brand_setting.purchase_order_privilege["holders"]
+			 	@rejectors = current_brand.brand_setting.purchase_order_privilege["rejectors"]
+				@senders = current_brand.brand_setting.purchase_order_privilege["senders"]
+			end
+		else
+			@approvers = []
+			@holders = []
+			@rejectors = []
+			@senders = []
+		end
+	end
+
+	def update_po_privilege
+		if params[:admins_privileges].present?
+			admin_attribs = params[:admins_privileges]
+			approvers = admin_attribs[:approvers].reject{ |u| u == '' }.map { |u| u.to_i }
+			holders = admin_attribs[:holders].reject{ |u| u == '' }.map { |u| u.to_i }
+			rejectors = admin_attribs[:rejectors].reject{ |u| u == '' }.map { |u| u.to_i }
+			senders = admin_attribs[:senders].reject{ |u| u == '' }.map { |u| u.to_i }
+			pop = { approvers: approvers, holders: holders, rejectors: rejectors, senders: senders }
+			if current_brand.brand_setting.present?
+				current_brand.brand_setting.update( purchase_order_privilege: { :approvers => approvers, :holders => holders, :rejectors => rejectors, :senders => senders } )
+			else
+				current_brand.create_brand_setting( purchase_order_privilege: { :approvers => approvers, :holders => holders, :rejectors => rejectors, :senders => senders } )
+			end
+			redirect_to purchase_orders_path, notice: "Privileges successfully updated."
+		else
+			redirect_to purchase_orders_path, alert: "Action cannot be completed"
+		end
+	end
+
 	private
+
+		def restrict_except_admins
+			unless client_admin?
+				redirect_to purchase_orders_path, alert: "You are not allowed to change settings for Purchase Orders"
+			end
+		end
 
 		def po_setup_params
 			params.require(:branch_purchase_order_setup).permit(:delivery_address, :delivery_from, :delivery_to)

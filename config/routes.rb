@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     post :create_branch_po_setup, on: :collection
     put :update_branch_po_setup, on: :collection
     get :update_po_schedule, on: :collection
+    get :admins_privileges, on: :collection
+    post :update_po_privilege, on: :collection
     post :create_purchase_order_setting, on: :collection
     put :update_purchase_order_setting, on: :collection
   end

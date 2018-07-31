@@ -12,7 +12,7 @@ header.header.navbar data-behavior="animated-navbar"
 
 				 
 		- if wizard_done?
-			- if (client_admin?)
+			- if client_admin?
 				li.user-menu
 					a href="javascript:;" data-toggle="dropdown"
 						= image_tag current_brand.avatar.url(:thumb), class: "header-avatar img-circle"

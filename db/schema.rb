@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710025910) do
+ActiveRecord::Schema.define(version: 20180730082848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "citext"
 
   create_table "activities", force: :cascade do |t|
     t.datetime "created_at",      null: false
@@ -110,13 +111,15 @@ ActiveRecord::Schema.define(version: 20180710025910) do
 
   create_table "brand_settings", force: :cascade do |t|
     t.integer  "brand_id"
-    t.boolean  "send_pos",                default: false
+    t.boolean  "send_pos",                 default: false
     t.string   "send_pos_from"
     t.string   "send_pos_to"
-    t.integer  "selected_branches",       default: [],                 array: true
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.hstore   "purchase_order_schedule", default: [],                 array: true
+    t.integer  "selected_branches",        default: [],                 array: true
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.string   "purchase_setup_allowance"
+    t.hstore   "purchase_order_schedule",  default: [],                 array: true
+    t.jsonb    "purchase_order_privilege", default: {},    null: false
   end
 
   add_index "brand_settings", ["brand_id"], name: "index_brand_settings_on_brand_id", using: :btree

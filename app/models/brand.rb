@@ -124,4 +124,12 @@ class Brand < ActiveRecord::Base
     return average_revenues
   end
 
+  def admins
+    self.client.users.includes(:role).where( roles: { role_level: 'brand' } )
+  end
+
+  def admin_has_privilege?(action, user_id)
+    brand_setting.purchase_order_privilege[action].include? user_id
+  end
+
 end

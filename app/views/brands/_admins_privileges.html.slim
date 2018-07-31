@@ -1,0 +1,26 @@
+= form_for :admins_privileges, url: update_po_privilege_brands_path do |f|
+    .row.mb25
+        .col-xs-12
+            = f.label "For Approving Purchase Orders"
+            = f.select :approvers, options_for_select(@admins, selected: @approvers), {}, class: "chosen", data: { placeholder: "Select Admins" }, style: "width: 100%; display: none;", multiple: true
+
+    .row.mb25
+        .col-xs-12
+            = f.label "For Holding Purchase Orders"
+            = f.select :holders, options_for_select(@admins, selected: @holders ), {}, class: "chosen", data: { placeholder: "Select Admins" }, style: "width: 100%; display: none;", multiple: true
+
+    .row.mb25
+        .col-xs-12
+            = f.label "For Rejecting Purchase Orders"
+            = f.select :rejectors, options_for_select(@admins, selected: @rejectors ), {}, class: "chosen", data: { placeholder: "Select Admins" }, style: "width: 100%; display: none;", multiple: true
+
+    .row.mb25
+        .col-xs-12
+            = f.label "For Sending Purchase Orders through email"
+            = f.select :senders,  options_for_select(@admins, selected: @senders ), {}, class: "chosen", data: { placeholder: "Select Admins" }, style: "width: 100%; display: none;", multiple: true
+    
+    .modal-footer.no-border
+			span.inline.float-right
+				= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+				|
+				= f.submit "Save", class: "btn btn-primary", data: { "disable-with" => "Saving.." }

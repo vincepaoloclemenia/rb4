@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   def current_brand
     unless session[:current_brand_id]
-      if current_user.role.role_level.eql?("client")
+      if client_admin?
         session[:current_brand_id] = current_client.brands.first.id
       else
         session[:current_brand_id] = current_user.brand.id

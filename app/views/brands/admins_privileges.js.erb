@@ -1,0 +1,11 @@
+$('#modal h4').html('Admins privileges for purchase orders (<%= current_brand.name %> )');
+
+$('.modal-body').html('<%= j render("admins_privileges") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

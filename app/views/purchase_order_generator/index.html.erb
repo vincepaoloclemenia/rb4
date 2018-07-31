@@ -1,7 +1,9 @@
 <div class='panel'>
-    <div class='panel-heading border pb45'>
+    <div class='panel-heading'>
         <div class='pull-right mt7'>
-            <%= link_to "<i class='fa icon-glyph-90 f20'></i>".html_safe, current_brand.brand_setting.present? ? update_po_schedule_brands_path : set_purchase_order_restriction_brands_path, class: "btn btn-setting", data: { tt: "tooltip", placement: "top", "original-title": 'Purchase Order Setting' }, remote: true %>
+            <% if client_admin? %>
+                <%= link_to "<i class='fa icon-glyph-90 f20'></i>".html_safe, set_purchase_order_restriction_brands_path, class: "btn btn-setting", data: { tt: "tooltip", placement: "top", "original-title": 'Purchase Order Setting' }, remote: true %>
+            <% end %>
         </div>
         <div class="pull-left mt7">Purchase Orders</div>
         <span class='space'></span>
