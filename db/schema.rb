@@ -117,7 +117,6 @@ ActiveRecord::Schema.define(version: 20180730082848) do
     t.integer  "selected_branches",        default: [],                 array: true
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
-    t.string   "purchase_setup_allowance"
     t.hstore   "purchase_order_schedule",  default: [],                 array: true
     t.jsonb    "purchase_order_privilege", default: {},    null: false
   end
@@ -224,22 +223,6 @@ ActiveRecord::Schema.define(version: 20180730082848) do
   add_index "dashboards", ["branch_id"], name: "index_dashboards_on_branch_id", using: :btree
   add_index "dashboards", ["brand_id"], name: "index_dashboards_on_brand_id", using: :btree
   add_index "dashboards", ["client_id"], name: "index_dashboards_on_client_id", using: :btree
-
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "employee_types", force: :cascade do |t|
     t.string   "name"
