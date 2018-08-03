@@ -9,7 +9,7 @@ class BrandsController < ApplicationController
 	end
 
 	def show
-		@branches = @brand.branches
+		@branches = current_client.on_free_trial? ? @brand.branches : @brand.subscribed_branches
 	end
 
 	def new
@@ -55,8 +55,9 @@ class BrandsController < ApplicationController
 				redirect_to brands_path, notice: "Brand successfully deleted"
 			end
 		rescue ActiveRecord::InvalidForeignKey => e
+			@branches = current_client.on_free_trial? ? @brand.branches : @brand.subscribed_branches
 			errors = []
-			errors << "#{'Branch'.pluralize(@brand.branches.count)}(#{@brand.branches.pluck(:name).join(', ')}) belongs to this brand" if @brand.branches.present?
+			errors << "#{'Branch'.pluralize(@branches.count)}(#{@branches.pluck(:name).join(', ')}) belongs to this brand" if @brand.branches.present?
 			errors << "#{'Role'.pluralize(@brand.roles.count)}(#{@brand.roles.pluck(:name).join(', ')}) manages this brand" if @brand.roles.present?
 			errors << "An unkonwn reason ( please kindly report to the developers for immediate fixing )" if errors.empty?
 			puts e if errors.empty?

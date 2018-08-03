@@ -1,4 +1,5 @@
 - content_for :title, "Restobot | Labor Hours Listing"
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Labor Hours
@@ -87,7 +88,7 @@
 								/ = text_field :date_employed, '', value:'To', id: 'to_date_employed', disabled: true
 						.col-xs-6
 							= label_tag :branch_id, "Branch"
-							= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id)), class: 'form-control'
+							= select_tag :branch_id, options_for_select(branches.pluck(:name,:id)), class: 'form-control'
 					.modal-footer.no-border
 							= link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
 							button.btn.btn-primary type="submit" Export

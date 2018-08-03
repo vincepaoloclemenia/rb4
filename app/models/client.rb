@@ -2,10 +2,10 @@ class Client < ActiveRecord::Base
 	has_many :client_user_accesses
 	has_many :users, through: :client_user_accesses
 	has_many :brands
-	has_many :all_branches, through: :brands, class_name: 'Branch', source: :all_branches
+	has_many :branches, through: :brands, source: :branches
 	has_many :roles
 	has_many :settlements
-	has_many :employees, through: :all_branches
+	has_many :employees, through: :branches
 	has_many :suppliers
 	has_many :purchases
 	has_many :purchase_items, through: :purchases
@@ -31,16 +31,16 @@ class Client < ActiveRecord::Base
 		trial.present? 
 	end
 
-	def branches
-		if on_free_trial?
-			all_branches
-		else
-			all_branches.includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil })
-		end
-	end
+	#def branches
+	#	if on_free_trial?
+	#		branches
+	#	else
+	#		branches.includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil })
+	#	end
+	#end
 
 	def unsubscribed_branches
-		all_branches.includes(:branch_subscription).where( branch_subscriptions: { branch_id: nil })
+		branches.includes(:branch_subscription).where( branch_subscriptions: { branch_id: nil })
 	end
 
 	def on_free_trial?

@@ -1,6 +1,7 @@
 var select = $("<%= @brand_field_id %>").parent().parent().find(".branch_field_div select");
 select.empty();
-<% @brand.branches.each do |b| %>
+<% branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches %>
+<% branches.each do |b| %>
 	<% if b.id == params[:selected_brand_branch_id].to_i %>
 		select.append("<option value='<%= b.id %>' selected='selected'><%= b.name %></option>");
 	<% else %>

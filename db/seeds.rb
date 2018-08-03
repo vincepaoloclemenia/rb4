@@ -31,6 +31,8 @@ Section.find_or_create_by name: "labor_hours", page: "Labor Hours"
 Section.find_or_create_by name: "settings", page: "Settings"
 Section.find_or_create_by name: "subscriptions", page: "Subscriptions"
 Section.find_or_create_by name: "bills", page: "Bills"
+Section.find_or_create_by name: "purchase_orders", page: "Purchase Orders"
+Section.find_or_create_by name: "branch_purchase_order_setups", page: "Branch Purchase Order Setup"
 puts "Done!"
 
 puts "Loading plans.."

@@ -1,5 +1,6 @@
 class Branch < ActiveRecord::Base
   belongs_to :brand
+  has_one :client, through: :brand
   belongs_to :subscription
   has_many :sales
   has_many :employees

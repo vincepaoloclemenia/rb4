@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
   has_many :items
 
   validates :brand_id, :name, presence: true
-  validates :name,           length: { maximum: 50 }, :uniqueness => {scope: :brand_id}
+  validates :name,           length: { maximum: 50 }, :uniqueness => {scope: :parent_id}
   validates :description,    length: { maximum: 250 }
 
   scope :main, -> { where(parent_id: nil) }

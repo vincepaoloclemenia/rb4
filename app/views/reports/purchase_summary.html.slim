@@ -1,4 +1,5 @@
 - content_for :title, "Restobot | Purchase Listing"
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .collapse#show-search class="#{ 'in' if params[:q].present? }"
 	.panel
 		.panel-body
@@ -21,7 +22,7 @@
 						
 						.col-xs-6
 							= f.label :branch_id_eq, "Branch"
-							= f.select :branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
+							= f.select :branch_id_in, branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", multiple: true
 
 				.row.mt10
 					.col-xs-12

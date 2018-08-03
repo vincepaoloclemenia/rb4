@@ -37,7 +37,7 @@
 							  img.brand-avatar.img-circle src="#{brand.avatar.url}"
 								= link_to brand.name, brand_path(brand), class: "view-link", data: {tt:"tooltip", placement:"top", "original-title" => "View Information"}
 							//td data-title="Website" = brand.website
-							td data-title="No. of Branch" = brand.branches.size
+							td data-title="No. of Branch" = current_client.on_free_trial? ? brand.branches.size : brand.subscribed_branches.size
 
 = render "brand_modal"
 

@@ -1,3 +1,4 @@
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .panel
 	.panel-heading.border Edit Inventory
 	.panel-body
@@ -10,7 +11,7 @@
 					.col-xs-6.mb5
 						= f.label :branch_id
 						small.field-req  *
-						= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+						= f.select :branch_id, branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 					
 
 				.col-xs-6.mb5

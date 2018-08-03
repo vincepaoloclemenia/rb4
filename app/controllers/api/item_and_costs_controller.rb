@@ -1,5 +1,6 @@
 class Api::ItemAndCostsController < ApplicationController
     before_action :authenticate_user!
+    before_action :set_branches, only: :this_week_for_brand_admin
 
     def index
         @items = current_brand.items.for_inventory.group_by { |i| i.category.parent.name }
@@ -15,7 +16,6 @@ class Api::ItemAndCostsController < ApplicationController
         @range_lw = "#{Date.today.beginning_of_week.strftime("%b %d, %Y")} -#{Date.today.end_of_week.strftime("%b, %d, %Y")}"
         @range_tm = "#{Date.today.beginning_of_month.strftime("%b %d, %Y")} - #{Date.today.end_of_month.strftime("%b, %d, %Y")}" 
         @categories = current_brand.categories.main
-        @branches = current_brand.branches.map { |x| { label: x.name, value: x.id } }.to_a
         @subcategories = current_brand.subcategories
         @purchase_items_last_week = current_brand.purchase_items.joins(:purchase).where( purchases: { purchase_date: Date.today.beginning_of_week..Date.today.end_of_week } ).group_by { |pi| pi.item.category.parent.name }
     end        
@@ -54,5 +54,11 @@ class Api::ItemAndCostsController < ApplicationController
             @purchases = current_user.branch.purchase_items.includes(:purchase).where( purchases: { purchase_date: @from..@to } ).group_by { |pi| pi.item.category.parent.name }            
         end
     end
+
+    private
+
+        def set_branches
+           @branches = current_client.on_free_trial? ? current_brand.branches.map { |x| { label: x.name, value: x.id } }.to_a : current_brand.subscribed_branches.map { |x| { label: x.name, value: x.id } }.to_a
+        end
 
 end

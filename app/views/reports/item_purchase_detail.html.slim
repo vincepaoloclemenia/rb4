@@ -1,4 +1,5 @@
 - content_for :title, "Restobot | Purchased Items Details"
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .collapse#show-search class="#{ 'in' if params[:q].present? }"
 	.panel
 		.panel-body
@@ -15,7 +16,7 @@
 							= f.text_field :purchase_purchase_date_cont, class: "form-control drp", placeholder: "Search"
 					.col-xs-6.col-xs-3
 						= f.label :purchase_branch_id_in, "Branch"
-						= f.select :purchase_branch_id_in, current_brand.branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
+						= f.select :purchase_branch_id_in, branches.pluck(:name,:id), {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true
 					.col-xs-6.col-xs-3
 						= f.label :purchase_supplier_id_in, "Supplier"
 						= f.select :purchase_supplier_id_in, @suppliers, {}, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;", multiple: true

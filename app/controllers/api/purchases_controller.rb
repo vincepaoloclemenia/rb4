@@ -1,6 +1,7 @@
 class Api::PurchasesController < ApplicationController
     before_action :get_user_privilege, only: [:index, :searched_purchases, :default_excel, :purchased_items]
     before_action :authenticate_user!
+    before_action :set_branches, only: [:index, :purchase_items]
 
     def index
         @suppliers = current_brand.suppliers.select(:name, :id)
@@ -8,8 +9,7 @@ class Api::PurchasesController < ApplicationController
                     current_brand.items.search_category(params[:category]).select(:name, :id)
                 else
                     current_brand.items.select(:name, :id)
-                end
-        @branches = current_brand.branches.select(:name, :id)
+                end   
         @categories = current_brand.categories.where.not(parent_id: nil).select(:name, :id)
         @purchases = @user.purchases.where(purchase_date: Date.today.at_beginning_of_month..Date.today.end_of_month).with_purchase_items.paginate(page: params[:page], per_page: 15)        
     end
@@ -50,7 +50,6 @@ class Api::PurchasesController < ApplicationController
     end
 
     def purchased_items
-        @branches = current_brand.branches.select(:name, :id)
         @suppliers = current_brand.suppliers.select(:name, :id)
         @purchases = if params[:search].present?
             search = params[:search]              
@@ -80,6 +79,10 @@ class Api::PurchasesController < ApplicationController
         
         def get_user_privilege
             @user = branch_admin? ? current_user.branch : current_brand
+        end
+
+        def set_branches
+            @branches = current_client.on_free_trial? ? current_brand.branches.select(:name, :id) : current_brand.subscribed_branches.select(:name, :id)
         end
 
 end

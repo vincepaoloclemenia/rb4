@@ -2,6 +2,7 @@ class Api::PurchaseOrderSummaryController < ApplicationController
     before_action :authenticate_user!
     before_action :restrict_users_for_index, only: [ :index, :get_on_hold_pos, :get_rejected_pos ]
     before_action :restrict_users_for_get_purchase_orders, only: :get_purchase_orders
+    before_action :set_branches, only: :index
     def index
         @approved_purchase_orders = if params[:search].present? 
                                         q = params[:search]
@@ -15,7 +16,7 @@ class Api::PurchaseOrderSummaryController < ApplicationController
                                     else
                                         current_brand.purchase_orders.approved_pos.paginate(page: params[:page], per_page: 20)
                                     end
-        @branches = current_brand.branches.select :name, :id
+        
         @suppliers = current_brand.suppliers.select :name, :id
     end
 
@@ -45,5 +46,9 @@ class Api::PurchaseOrderSummaryController < ApplicationController
                 redirect_to root_path
                 flash[:alert] = 'Unauthorized user'
             end
+        end
+
+        def set_branches
+            @branches = current_client.on_free_trial? ? current_brand.branches.select(:name, :id) : current_brand.subscribed_branches.select(:name, :id)
         end
 end

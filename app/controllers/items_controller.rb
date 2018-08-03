@@ -15,12 +15,14 @@ class ItemsController < ApplicationController
 		@item = current_brand.items.new
 		@item_types = [['Inventory', 'Inventory'], ['Non-Inventory', 'Non-Inventory'], ['Prepared', 'Prepared']]	
 		@suppliers = current_client.suppliers.pluck(:name, :id).uniq
+		@units = current_brand.units.not_deleted.pluck(:name, :id)
 	end
 
 	def edit
 		@item = current_brand.items.find(params[:id])
 		@item_types = [['Inventory', 'Inventory'], ['Non-Inventory', 'Non-Inventory'], ['Prepared', 'Prepared']]
 		@suppliers = current_client.suppliers.pluck(:name, :id).uniq
+		@units = current_brand.units.not_deleted.pluck(:name, :id)
 	end
 
 	def create

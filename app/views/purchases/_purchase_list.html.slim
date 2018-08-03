@@ -1,5 +1,5 @@
 - purchases = purchases || @purchases
-
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 table.table.table-bordered.table-striped.mb0 data-sortable="true"
 	thead
 		tr.bg-thead
@@ -48,7 +48,7 @@ table.table.table-bordered.table-striped.mb0 data-sortable="true"
 										= f.label :branch_id
 											| Branch
 											small.field-req *
-										= f.select :branch_id, current_brand.branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+										= f.select :branch_id, branches.pluck(:name,:id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 								.row.mb10
 									.col-xs-6
 										= f.label :invoice_number

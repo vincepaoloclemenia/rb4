@@ -1,3 +1,4 @@
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 
@@ -13,7 +14,7 @@
 						= f.select :chosen, [["Week", "week"],["Month", "month"]], { include_blank: true }, class: "chosen", data: { placeholder: "Display by week or month" }, id: "branches", style: "width: 100%; display: none;"
 				- else
 					.col-md-4
-						= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select Branch" }, id: "branches", style: "width: 100%; display: none;"
+						= f.select :branch_id, branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select Branch" }, id: "branches", style: "width: 100%; display: none;"
 					.col-md-4
 						= f.text_field :date_range, class: 'form-control drp', placeholder: "Enter Date Range"
 					.col-md-4

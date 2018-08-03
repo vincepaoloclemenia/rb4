@@ -1,7 +1,8 @@
 class Api::PurchaseOrdersController < ApplicationController
     before_action :authenticate_user!
+    before_action :set_branches, only: :index
+    
     def index
-        @branches = current_brand.branches.map { |x| { label: x.name, value: x.id } }.to_a
         @suppliers = current_brand.suppliers.map { |x| { label: x.name, value: x.id } }.to_a
         @purchase_orders = current_brand.purchase_orders.includes(:purchase_order_items).where.not( purchase_order_items: { purchase_order_id: nil } ).where( po_date: Date.today.beginning_of_week..Date.today.end_of_week )
         @items = current_brand.items.all.map { |x| { label: x.name, value: x.id } }.to_a
@@ -69,4 +70,9 @@ class Api::PurchaseOrdersController < ApplicationController
                             }
         end  
     end
+
+    private
+        def set_branches
+            @branches = current_client.on_free_trial? ? current_brand.branches.map { |x| { label: x.name, value: x.id } }.to_a : current_brand.subscribed_branches.map { |x| { label: x.name, value: x.id } }.to_a
+        end
 end

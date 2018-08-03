@@ -1,5 +1,6 @@
 class Api::SalesController < ApplicationController
     before_action :authenticate_user!
+    before_action :set_branches, only: :index
     
     def index   
         if branch_admin?
@@ -25,7 +26,6 @@ class Api::SalesController < ApplicationController
                     @sales = branch.sales.paginate(page: params[:page], per_page: 10)
                 end
             end
-            @branches = current_brand.branches.map { |branch| { value: branch.id, label: branch.name } }
         end
     end
 
@@ -92,5 +92,12 @@ class Api::SalesController < ApplicationController
         @last_week_revenues = current_user.role.role_level.eql?('branch') ? current_user.branch.average_revenues("last_week") : current_brand.average_revenues("last_week")
         @average_revenues = current_user.role.role_level.eql?('branch') ? current_user.branch.average_revenues("daily") : current_brand.average_revenues("daily")
     end
+
+    private
+
+        def set_branches
+            @branches = current_client.on_free_trial? ? current_brand.branches.map { |branch| { value: branch.id, label: branch.name } } : current_brand.subscribed_branches.map { |branch| { value: branch.id, label: branch.name } }
+            
+        end
 
 end

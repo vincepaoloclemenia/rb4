@@ -1,4 +1,5 @@
 - content_for :title, "Restobot | Invoice Entry Report"
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .collapse#show-search class="#{ 'in' if params[:q].present? }"
 	.panel
 		.panel-body
@@ -6,7 +7,7 @@
 				.row
 					.col-xs-12.col-lg-6
 						label Branch
-						= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control'
+						= select_tag :branch_id,  options_from_collection_for_select(branches, "id", "name", params[:branch_id]), class: 'form-control'
 					.col-xs-12.col-lg-6
 						label Date
 						= text_field_tag :date_range, params[:date_range], class: 'form-control drp',  placeholder: "mm/dd/yyyy"

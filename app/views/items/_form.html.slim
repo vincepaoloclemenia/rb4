@@ -36,10 +36,22 @@
 			= f.label :unit_id
 				| Inventory Unit
 				small.field-req  *
-			- if @item.new_record?
-				= f.select :unit_id, options_for_select(current_brand.units.not_deleted.pluck(:name, :id), current_brand.units.first ),  { include_blank: true }, class: "chosen", data: { placeholder: current_brand.units.find_by_name('Kilogram').name }, style: "width: 100%; display: none;"
+			- if @units.present?
+				- if @item.new_record?
+					= f.select :unit_id, options_for_select(@units, @units.first ),  { include_blank: true }, class: "chosen", data: { placeholder: current_brand.units.find_by_name('Kilogram').name }, style: "width: 100%; display: none;"
+				- else
+					= f.select :unit_id, options_for_select(@units, [ @item.unit.name, @item.unit.id ] ), { }, class: "chosen", data: { placeholder: 'Select unit' }, style: "width: 100%; display: none;"
 			- else
-				= f.select :unit_id, options_for_select(current_brand.units.not_deleted.pluck(:name, :id), [ @item.unit.name, @item.unit.id ] ), { }, class: "chosen", data: { placeholder: 'Select unit' }, style: "width: 100%; display: none;"
+				.alert.alert-danger.mt5 role="alert"
+					i.icon-glyph-93.f14.mr10
+					| You currently have not set
+					b  Units 
+					| yet
+				.alert.alert-info role="alert"
+					i.icon-glyph-73.mr10.f20
+					| To add Units: Go to
+					b
+					|  Units > Add Unit
 
 		.col-xs-6
 			= f.label :item_type

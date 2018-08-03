@@ -1,6 +1,7 @@
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .col-xs-12.col-lg-4.mb5							
     = f.label :branch_id, "Branch <small class='field-req'>*</small>".html_safe					
-	= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+	= f.select :branch_id, branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
 					
 .col-xs-12.col-lg-4.mb5
 	= f.label :sale_date, "Date <small class='field-req'>*</small>".html_safe

@@ -30,7 +30,7 @@ class InventoriesController < ApplicationController
 		respond_to do |format|
 			format.html
 			format.pdf do
-				@branch = current_brand.branches.find(params[:branch_id])
+				@branch = current_client.on_free_trial? ? current_brand.branches.find(params[:branch_id]) :  current_brand.subscribed_branches.find(params[:branch_id])
 				@categories = current_brand.categories.main
 				@subcategories = current_brand.categories.where.not(parent_id: nil)
 				if params[:subcategory_id].nil? || params[:subcategory_id].empty?

@@ -1,11 +1,11 @@
 = form_for @purchase_order do |f|
-
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 	.row.mb10
 		.col-xs-12
 			= f.label :branch_id, "Branch"
 				| Branch
 				small.field-req  *
-			= f.select :branch_id, current_brand.branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", id: 'br'
+			= f.select :branch_id, branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;", id: 'br'
 	
 	.row.mb10
 		.col-xs-6

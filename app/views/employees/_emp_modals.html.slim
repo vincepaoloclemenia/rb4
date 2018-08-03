@@ -6,13 +6,14 @@
 					i.icon-maxicons1-exit
         h4.modal-title Add Employee
       .modal-body
+	  			- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 				= form_for @employee do |f|
 					.row.mb10
 						.col-xs-12
 							label
 								| Branch
 								small.field-req  *
-							= f.select :branch_id, current_brand.branches.order(:name).pluck(:name, :id), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
+							= f.select :branch_id, branches.order(:name).pluck(:name, :id), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
 					.row.mb10
 						.col-xs-6
 							label

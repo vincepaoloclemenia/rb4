@@ -1,10 +1,11 @@
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .panel
 	.panel-body
 		= form_for item_cost_analysis_report_path, method: 'get' do |f|
 			.row
 				.col-xs-12.col-lg-6
 					label Branch
-					= select_tag :branch_id,  options_from_collection_for_select(current_brand.branches, "id", "name", params[:branch_id]), class: 'form-control', readonly: true, autocomplete: :off
+					= select_tag :branch_id,  options_from_collection_for_select(branches, "id", "name", params[:branch_id]), class: 'form-control', readonly: true, autocomplete: :off
 				.col-xs-12.col-lg-6
 					label Date
 					= text_field_tag :date_entry, params[:date_entry], class: 'form-control',  placeholder: "mm/dd/yyyy", data: { provide: "datepicker" }, readonly: true, autocomplete: :off

@@ -1,3 +1,4 @@
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .panel
   .panel-heading.border Employee Information
   .panel-body
@@ -80,7 +81,7 @@
 							label
 								| Branch
 								small.field-req  *
-							= f.select :branch_id, current_brand.branches.order(:name).pluck(:name, :id), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
+							= f.select :branch_id, branches.order(:name).pluck(:name, :id), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
 					.row.mb10
 						.col-xs-6
 							label

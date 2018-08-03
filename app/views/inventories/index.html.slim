@@ -1,4 +1,5 @@
 - content_for :title, "Restobot | Inventories"
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .collapse#show-search class="#{ 'in' if params[:q].present? }"
 	.panel
 		.panel-body
@@ -6,7 +7,7 @@
 				.row
 					.col-xs-6.col-lg-6
 						= f.label :branch_id_eq, "Branch"
-						= f.select :branch_id_eq, current_brand.branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
+						= f.select :branch_id_eq, branches.pluck(:name,:id), { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
 					.col-xs-6.col-lg-6
 						= f.label :user_id_eq, "Created By"
 						= f.select :user_id_eq, @users, { include_blank: 'Select' }, class: "chosen", data: { placeholder: "Search" }, style: "width: 100%; display: none;"
@@ -84,7 +85,7 @@
 							= label_tag :brand_id
 								| Brand
 								small.field-req  *
-							= select_tag :branch_id, options_for_select(current_brand.branches.pluck(:name,:id)), class: "form-control"
+							= select_tag :branch_id, options_for_select(branches.pluck(:name,:id)), class: "form-control"
 						.col-xs-12
 							= label_tag :subcategory_id
 								| Category

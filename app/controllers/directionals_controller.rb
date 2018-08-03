@@ -4,7 +4,7 @@ class DirectionalsController < ApplicationController
 	def index
 		@category = current_brand.categories.saleable
 		@settlements = Settlement.find_by_client_id(current_brand.client_id)
-
+		@branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 		if params[:date_entry].present?
       @branch = params[:branch_id]
       @ending_date = Date.strptime(params[:date_entry], "%m/%d/%Y")

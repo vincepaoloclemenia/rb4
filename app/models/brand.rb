@@ -2,17 +2,17 @@ class Brand < ActiveRecord::Base
   extend FriendlyId
   friendly_id :name, use: :slugged
   belongs_to :client
-  has_many :all_branches, dependent: :destroy, class_name: 'Branch'
+  has_many :branches, dependent: :destroy
   has_many :client_user_accesses, dependent: :destroy										# => for rescue purposes, associated roles and branches
   has_many :roles, through: :client_user_accesses		# => for rescue purposes, associated roles and branches
   has_many :categories, dependent: :destroy
   has_many :subcategories, -> { where.not(parent_id: nil) }, class_name: 'Category', dependent: :destroy
   has_many :shifts, dependent: :destroy
-  has_many :sales, through: :all_branches
+  has_many :sales, through: :branches
   #has_many :employees, dependent: :destroy
   has_many :units, dependent: :destroy
   has_many :items, dependent: :destroy
-  has_many :inventories, through: :all_branches, dependent: :restrict_with_error
+  has_many :inventories, through: :branches, dependent: :restrict_with_error
   has_many :conversions, dependent: :destroy
   has_many :purchases, dependent: :destroy
   has_many :purchase_items, through: :purchases
@@ -21,9 +21,10 @@ class Brand < ActiveRecord::Base
   has_many :activities, dependent: :destroy
   has_many :purchase_orders, dependent: :destroy
   has_many :purchase_order_items, through: :purchase_orders
-  has_many :order_lists, through: :all_branches, dependent: :destroy
+  has_many :order_lists, through: :branches, dependent: :destroy
   has_one :brand_setting, dependent: :destroy
   has_many :inventory_items, through: :inventories
+  has_many :subscribed_branches, -> { includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil }) }, dependent: :destroy, class_name: "Branch"
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 
@@ -37,7 +38,7 @@ class Brand < ActiveRecord::Base
 						},
             uniqueness: { scope: :client_id, message: "already exist", case_sensitive: false }
 
-  accepts_nested_attributes_for :all_branches, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :branches, reject_if: :all_blank, allow_destroy: true
 
   def get_sales_average
     total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
@@ -58,13 +59,13 @@ class Brand < ActiveRecord::Base
     return last_week_sales_average
   end
 
-  def branches
-    if client.on_free_trial?
-			all_branches
-		else
-			all_branches.includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil })
-		end
-  end
+  #def branches
+   # if client.on_free_trial?
+		#	branches
+		#else
+		#	branches.includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil })
+		#end
+  #end
 
   def customer_count_average
     total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
