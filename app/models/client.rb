@@ -1,4 +1,6 @@
 class Client < ActiveRecord::Base
+	extend FriendlyId
+	friendly_id :name, use: :slugged
 	has_many :client_user_accesses
 	has_many :users, through: :client_user_accesses
 	has_many :brands
@@ -15,6 +17,11 @@ class Client < ActiveRecord::Base
 	has_many :purchase_orders, dependent: :destroy
 	has_many :order_lists, through: :brands, dependent: :destroy
 
+	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand.png"
+	validates_attachment :avatar, 
+						 :content_type => { :content_type => /^image\/(png|gif|jpeg|jpg)/, message: "must be in the format png|gif|jpg" },
+						 :size => { :in => 0..1000.kilobytes, message: "must be less than 1MB" }
+
 	validates :name,
 						presence: true,
 						length: {
@@ -29,6 +36,10 @@ class Client < ActiveRecord::Base
 
 	def free_trial? 
 		trial.present? 
+	end
+
+	def subscribed_branches
+		branches.includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil })
 	end
 
 	#def branches
@@ -61,6 +72,14 @@ class Client < ActiveRecord::Base
 
 	def not_subscribed_yet?
 		!has_subscribed?
+	end
+
+	def self.subscribers
+		all.includes(:subscriptions).where.not( subscriptions: { plan_id: 1, client_id: nil })
+	end
+
+	def self.free_trials
+		all.includes(:subscriptions).where( subscriptions: { plan_id: 1 })
 	end
 
 	private

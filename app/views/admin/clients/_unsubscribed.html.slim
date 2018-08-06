@@ -1,0 +1,23 @@
+.no-more-tables    
+    table.table.table-bordered.table-striped.mb0
+        thead
+            tr.bg-thead
+                th width="145" Client Name
+                th width="110" data-sortable="false" No. of Brands
+                th width="110" Total no. of Branches
+                th width="115" Start date of free trial
+                th width="115" End of Free Trial
+                th width="110" Remaining Period
+        tbody
+            - @unsubscribed_clients.map do |client|
+                - subscription = client.subscriptions.find_by_plan_id 1
+                tr 
+                    td data-title='Client' 
+                        = client_avatar(client, size: 30) 
+                        span.gap 
+                        = link_to "#{client.name}", admin_client_path(client.slug)
+                    td.text-centered data-title='No. of Brands' = client.brands.size
+                    td.text-centered data-title='Total no. of branches' = client.branches.size
+                    td.text-centered data-title='Start of subscription' = subscription.start_date.strftime('%B %d, %Y')
+                    td.text-centered data-title='End of subscription' = subscription.end_date.strftime('%B %d, %Y')
+                    td data-title='Remaining Period' = distance_of_time_in_words_to_now(subscription.end_date)

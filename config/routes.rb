@@ -151,10 +151,11 @@ Rails.application.routes.draw do
     get 'login' => 'sessions#new'
     post 'login' => 'sessions#create'
     delete 'logout' => 'sessions#destroy', as: :logout
-    resources :clients, only: :index do
+    resources :clients do
       get :all_non_subscribers, on: :collection
       get :subscribers, on: :collection
       get :new_clients, on: :collection
+      post :subscribe_branches, on: :collection
     end
   end
 

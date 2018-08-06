@@ -26,4 +26,18 @@ module UsersHelper
             image_tag brand.avatar.url, width: size, height: size, alt: 'avatar image', class: 'brand-avatar', style: style
         end
     end
+
+    def client_avatar(client, options = { size: 40 })
+        size = options[:size]
+        style = options[:style]
+        if client.avatar?
+            if size <= 40
+                image_tag client.avatar.url(:thumb), width: size, height: size, alt: client.name, class: 'avatar-image', style: style
+            else
+                image_tag client.avatar.url, width: size, height: size, alt: client.name, class: 'avatar-image', style: style
+            end
+        else
+            image_tag client.avatar.url, width: size, height: size, alt: 'avatar image', class: 'avatar-image', style: style
+        end
+    end
 end

@@ -1,3 +1,16 @@
 .panel
     .panel-heading Clients
-    
+   
+    .panel-body
+        .tab
+            button.tablinks onclick="openTab(event, 'subscribers')" Clients with paid subscriptions
+            button.tablinks onclick="openTab(event, 'unsubscribers')" Unsubscribed clients
+    .panel-body.tab-content
+        .tabcontent id='subscribers'
+            = render 'subscribed'
+        .tabcontent id='unsubscribers'
+            = render 'unsubscribed'
+
+javascript:
+  var tablinks = document.getElementsByClassName("tablinks");
+  tablinks[0].click();
