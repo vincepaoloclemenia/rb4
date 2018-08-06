@@ -28,22 +28,22 @@
 							td data-title="Sales by Category" = sbce.category.name
 							td data-title="Amount" = to_peso(sbce.amount)
 							td data-title="Percentage" = number_to_percentage(@sale.percentage_per_category(sbce), precision: 2)
-					tr
-						td data-title="Sales by Category" Net Sales
-						td data-title="Amount" = to_peso(@sale.net_sales)
-						td data-title="Percentage" 100%
-					tr
-						td data-title="Sales by Category" VAT
-						td data-title="Amount" = to_peso(@sale.vat)
-						td data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("vat"), precision: 2)
-					tr
-						td data-title="Sales by Category" Service Charge
-						td data-title="Amount" = to_peso(@sale.service_charge)
-						td data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("service_charge"), precision: 2)
 					tr.bg-total
-						td.label-total Total Revenues
-						td.label-total-num data-title="Amount" = to_peso((@sale.net_sales + @sale.vat + @sale.service_charge))
-						td.label-total-num data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("revenues"), precision: 2)
+						td colspan='2' data-title="Sales by Category" Net Sales
+						td.align-right data-title="Amount" = to_peso(@sale.net_sales)
+						/td data-title="Percentage" 100%
+					tr
+						td colspan='2'  data-title="Sales by Category" VAT
+						td.align-right data-title="Amount" = to_peso(@sale.vat)
+						/td data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("vat"), precision: 2)
+					tr
+						td colspan='2'  data-title="Sales by Category" Service Charge
+						td.align-right data-title="Amount" = to_peso(@sale.service_charge)
+						/td data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("service_charge"), precision: 2)
+					tr.bg-total
+						td.label-total colspan='2' Gross Sales
+						td.label-total-num.align-right data-title="Amount" = to_peso((@sale.net_sales + @sale.vat + @sale.service_charge))
+						/td.label-total-num data-title="Percentage" = number_to_percentage(@sale.category_percentage_as_per("revenues"), precision: 2)
 
 - if @sale.sale_by_settlement_entries.any?
 .panel

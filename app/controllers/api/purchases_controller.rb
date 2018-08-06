@@ -1,7 +1,7 @@
 class Api::PurchasesController < ApplicationController
     before_action :get_user_privilege, only: [:index, :searched_purchases, :default_excel, :purchased_items]
     before_action :authenticate_user!
-    before_action :set_branches, only: [:index, :purchase_items]
+    before_action :set_branches, only: [:index, :purchased_items]
 
     def index
         @suppliers = current_brand.suppliers.select(:name, :id)

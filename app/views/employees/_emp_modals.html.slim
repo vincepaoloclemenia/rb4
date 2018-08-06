@@ -1,3 +1,4 @@
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .modal.add-employee-modal aria-hidden="true" role="dialog" tabindex="-1"
   .modal-dialog
     .modal-content
@@ -6,7 +7,6 @@
 					i.icon-maxicons1-exit
         h4.modal-title Add Employee
       .modal-body
-	  			- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 				= form_for @employee do |f|
 					.row.mb10
 						.col-xs-12

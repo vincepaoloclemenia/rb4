@@ -1,5 +1,5 @@
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 .small-4
-	- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
 	= form_for @employee do |f|
 		p Branch
 		= f.select :branch_id, branches.order(:name).pluck(:name, :id), {include_blank: true}

@@ -1,5 +1,5 @@
-= form_for @purchase do |f|
 - branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
+= form_for @purchase do |f|
 	= f.hidden_field :client_id, value: current_client.id
 	.row.mb10
 		.col-xs-12
