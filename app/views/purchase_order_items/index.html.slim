@@ -1,7 +1,6 @@
 .panel
 	.panel-heading.border.pb45
 		.pull-left.mt7 Purchase Order <span class='gap'></span>
-		
 
 		.pull-right.mr5
 			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
@@ -12,10 +11,12 @@
 			- if @purchase_order.approved?
 				= link_to "<i class='fa blue icon-glyph-162 f14'></i>".html_safe, purchase_order_purchase_order_path(format: :pdf, q: request.params[:q]), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"
 			- elsif current_user.role.role_level != 'branch' && @purchase_order.status == 'Pending'
-				= link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
+				- if client_admin? || current_brand.allowed_admin?("approvers", current_user.id)
+					= link_to "<i class='fa green icon-glyph-26 f14'></i>".html_safe, approve_purchase_order_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Approve" }, remote: true
 		.pull-right.mr5
 			- if current_user.role.role_level != 'branch' && @purchase_order.status == 'Approved'
-				= link_to "<i class='fa blue icon-glyph-11 f14'></i>".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
+				- if client_admin? || current_brand.allowed_admin?("senders", current_user.id)
+					= link_to "<i class='fa blue icon-glyph-11 f14'></i>".html_safe, send_email_purchase_order_purchase_order_items_path(@purchase_order), class: "btn btn-default btn-xs mb10", data: { tt: "tooltip", placement: "top", "original-title" => "Send Email" }, remote: true
 	.panel-body#purchase_order_details	
 		= render "purchase_order_profile", purchase_order: @purchase_order
 

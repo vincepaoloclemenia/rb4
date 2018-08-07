@@ -8,24 +8,24 @@
     </head>
     <body id='pdf-body'>
         <div class='pdf-container'>    
-			<h2>Purchase List Report <span style="float:right; font-size:14px"><%= "( #{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')} )" %></span></h2>       
-			<table class="table table-bordered table-striped mb0">
+			<h2>Purchase List Report <span style="float:right; font-size:14px"><%= "( #{@date} )" %></span></h2>       
+			<table id='purchase-list' class="table table-bordered table-striped mb0">
 				<thead>
 					<tr class="big-head">
-						<th>INVOICE NUMBER</th>
-						<th>TRANSACTION DATE</th>
-						<th>BRANCH</th>
-						<th>SUPPLIER</th>
-						<th>ITEM NAME</th>
-						<th>VAT TYPE</th>
-						<th>CATEGORY</th>
-						<th>QUANTITY</th>
-						<th>UNIT</th>
-						<th>REMARKS</th>
-						<th>UNIT PRICE</th>
-						<th>VAT AMOUNT</th>
-						<th>NET AMOUNT</th>
-						<th>TOTAL AMOUNT</th>
+						<th width='145'>INVOICE NUMBER</th>
+						<th width='145'>TRANSACTION DATE</th>
+						<th width='145'>BRANCH</th>
+						<th width='145'>SUPPLIER</th>
+						<th width='145'>ITEM NAME</th>
+						<th width="145">VAT TYPE</th>
+						<th width='145'>CATEGORY</th>
+						<th width='145'>QUANTITY</th>
+						<th width='145'>UNIT</th>
+						<th >REMARKS</th>
+						<th width='145'>UNIT PRICE</th>
+						<th width='145'>VAT AMOUNT</th>
+						<th width='145'>NET AMOUNT</th>
+						<th width='145'>TOTAL AMOUNT</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -36,7 +36,6 @@
 						<% purchase_total_amount = 0 %>
 						<% purchase_items = @items.present? ? purchase.purchase_items.search_item(@items) : purchase.purchase_items %>
 						<% purchase_items.each do |pi| %>
-							<% nvt = net_vat_total_computation([pi]) %>
 							<tr>
 								<td><%= purchase.invoice_number %></td>
 								<td><%= purchase.purchase_date.strftime("%b %d, %Y") %></td>
@@ -48,28 +47,29 @@
 								<td><%= pi.quantity %></td>
 								<td><%= pi.unit_name %></td>
 								<td><%= pi.remarks %></td>
-								<td><%= pi.purchase_item_amount %></td>
-								<td><%= number_to_currency(nvt[:vat], unit: "₱") %></td>
-								<td><%= number_to_currency(nvt[:net], unit: "₱") %></td>
-								<td><%= number_to_currency(nvt[:total], unit: "₱") %></td>
-								<% purchase_net_amount += nvt[:net] %>
-								<% purchase_total_amount += nvt[:total] %>
+								<td class='align-right'><%= to_peso(pi.purchase_item_amount) %></td>
+								<td class='align-right'><%= to_peso(pi.item_total_vat) %></td>
+								<td class='align-right'><%= to_peso(pi.item_total_net) %></td>
+								<td class='align-right'><%= to_peso(pi.item_total_amount) %></td>
+								<% purchase_net_amount += pi.item_total_net %>
+								<% purchase_total_amount += pi.item_total_amount %>
 							</tr>
 						<% end %>
 						<%  unless purchase.purchase_items.empty? || @items.present? %>
 							<tr class="bg-total">
-								<td colspan="12"></td>
-								<td class="label-total-num"> <%= number_to_currency(purchase_net_amount, unit: "₱") %></td>
-								<td class="label-total-num"><%= number_to_currency(purchase_total_amount, unit: "₱") %></td>
-								<% total_purchases_net_amount += purchase_net_amount %>
-								<% total_purchases_total_amount += purchase_total_amount %>
+								<td colspan="12">Total:</td>
+								<td class="label-total-num align-right"> <%= to_peso(purchase_net_amount) %></td>
+								<td class="label-total-num align-right"><%= to_peso(purchase_total_amount) %></td>
+								
 							</tr>
 						<% end %>
+						<% total_purchases_net_amount += purchase_net_amount %>
+						<% total_purchases_total_amount += purchase_total_amount %>
 					<% end %>
 					<tr class="bg-total">
 						<td class="text-right" colspan="12">Total:</td>
-						<td class="label-total-num"><%= @items.present? ? number_to_currency(@purchases.map { |pur| pur.purchase_items.search_item(@items).map(&:item_total_net).sum }.sum.round(2), unit: "₱") : number_to_currency(total_purchases_net_amount, unit: "₱") %></td>
-						<td class="label-total-num"><%= @items.present? ? number_to_currency(@purchases.map { |pur| pur.purchase_items.search_item(@items).map(&:item_total_amount).sum }.sum.round(2), unit: "₱") : number_to_currency(total_purchases_total_amount, unit: "₱") %></td>
+						<td class="label-total-num align-right"><%= to_peso(total_purchases_net_amount) %></td>
+						<td class="label-total-num align-right"><%= to_peso(total_purchases_total_amount)  %></td>
 					</tr>
 				</tbody>
 			</table>

@@ -3,6 +3,7 @@ class PurchasesController < ApplicationController
 	before_action :access_control
 	before_action :restrict_actions, only: [:update, :destroy]
 	before_action :restrict_other_users, only: :purchase_order_lookup
+	before_action :restrict_branch_admins, only: [:limit_edit, :edit_purcahse_limit]
 
 	def index
 		get_total_purchases_per_branch
@@ -159,6 +160,24 @@ class PurchasesController < ApplicationController
 		end
 	end
 
+	def edit_purcahse_limit
+		
+	end
+
+	def limit_edit
+		if params[:purchase_setup]
+			par = params[:purchase_setup]
+			if current_brand.brand_setting.present?
+				current_brand.brand_setting.update(purchase_edit_limit: par[:allowance].to_s)
+			else
+				current_brand.create_brand_setting(purchase_edit_limit: par[:allowance].to_s)				
+			end
+			redirect_to purchases_path, notice: "Purchase Setup successfully updated"
+		else
+			redirect_to purchases_path, alert: "Action cannot be completed."
+		end
+	end
+
 	private
 
 		def purchase_params
@@ -186,6 +205,12 @@ class PurchasesController < ApplicationController
 				:date_of_purchase, 
 				:packaging
 			)
+		end
+
+		def restrict_branch_admins
+			if branch_admin?
+				redirect_to purchases_path, alert: "Action cannot be completed"
+			end
 		end
 
 		def restrict_actions

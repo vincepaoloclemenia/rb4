@@ -27,11 +27,14 @@ class Api::PurchasesController < ApplicationController
     end
 
     def searched_purchases
-        @purchases = if params[:date].nil?
-                        @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number])                                 
-                    else
-                        @from = Date.strptime(params[:date][0], "%m/%d/%Y")
-                        @to = Date.strptime(params[:date][1], "%m/%d/%Y")        
+        purchases = @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number])                                 
+        date = params[:date]
+        @from = date.present? ? Date.strptime(date[0], "%m/%d/%Y") : purchases.last.purchase_date
+        @to = date.present? ? Date.strptime(date[1], "%m/%d/%Y") : purchases.first.purchase_date
+        @date = date.present? || purchases.size > 1 ? "#{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')}" : purchases.first.purchase_date.strftime("%B %d, %Y") 
+        @purchases = if @from.nil? || @to.nil?
+                        purchases
+                    else    
                         if @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: @from..@to).exists?
                             @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: @from..@to)
                         else

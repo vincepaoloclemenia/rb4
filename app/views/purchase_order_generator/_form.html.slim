@@ -1,5 +1,5 @@
-= form_for @purchase_order do |f|
 - branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
+= form_for @purchase_order do |f|
 	.row.mb10
 		.col-xs-12
 			= f.label :branch_id, "Branch"

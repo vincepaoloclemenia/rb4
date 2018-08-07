@@ -41,6 +41,12 @@ class Brand < ActiveRecord::Base
 
   accepts_nested_attributes_for :branches, reject_if: :all_blank, allow_destroy: true
 
+  after_create :brand_setting_setup
+
+  def brand_setting_setup
+    create_brand_setting
+  end
+
   def get_sales_average
     total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
     average_sales = if sales.any? && !nil?       
@@ -49,6 +55,10 @@ class Brand < ActiveRecord::Base
       0
     end
     return average_sales
+  end
+
+  def allowed_admin?(action, id)
+    brand_setting.purchase_order_privilege[action].include?(id)
   end
 
   def last_week_sales

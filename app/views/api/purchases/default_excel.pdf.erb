@@ -9,7 +9,7 @@
     <body id='pdf-body'>
         <div class='pdf-container'>    
 			<h2>Purchase List Report <span style="float:right; font-size:14px"><%= "( #{Date.today.at_beginning_of_month.strftime('%B %d, %Y')} - #{Date.today.end_of_month.strftime('%B %d, %Y')} )" %></h2>       
-			<table class="table table-bordered table-striped mb0">
+			<table id='purchase-list' class="table table-bordered table-striped mb0">
 				<thead>
 					<tr class="big-head">
 						<th>INVOICE NUMBER</th>
@@ -35,7 +35,6 @@
 						<% purchase_net_amount = 0 %>
 						<% purchase_total_amount = 0 %>
 						<% purchase.purchase_items.each do |pi| %>
-							<% nvt = net_vat_total_computation([pi]) %>
 							<tr>
 								<td><%= purchase.invoice_number %></td>
 								<td><%= purchase.purchase_date.strftime("%b %d, %Y") %></td>
@@ -47,28 +46,28 @@
 								<td><%= pi.quantity %></td>
 								<td><%= pi.unit_name %></td>
 								<td><%= pi.remarks %></td>
-								<td><%= pi.purchase_item_amount %></td>
-								<td><%= number_to_currency(nvt[:vat], unit: "₱") %></td>
-								<td><%= number_to_currency(nvt[:net], unit: "₱") %></td>
-								<td><%= number_to_currency(nvt[:total], unit: "₱") %></td>
-								<% purchase_net_amount += nvt[:net] %>
-								<% purchase_total_amount += nvt[:total] %>
+								<td class='align-right'><%= to_peso(pi.purchase_item_amount) %></td>
+								<td class='align-right'><%= to_peso(pi.item_total_vat) %></td>
+								<td class='align-right'><%= to_peso(pi.item_total_net) %></td>
+								<td class='align-right'><%= to_peso(pi.item_total_amount) %></td>
+								<% purchase_net_amount += pi.item_total_net %>
+								<% purchase_total_amount += pi.item_total_amount %>
 							</tr>
 						<% end %>
 						<% unless purchase.purchase_items.empty? %>
 							<tr class="bg-total">
 								<td colspan="12"></td>
-								<td class="label-total-num"> <%= number_to_currency(purchase_net_amount, unit: "₱") %></td>
-								<td class="label-total-num"><%= number_to_currency(purchase_total_amount, unit: "₱") %></td>
-								<% total_purchases_net_amount += purchase_net_amount %>
-								<% total_purchases_total_amount += purchase_total_amount %>
+								<td class="label-total-num align-right"> <%= to_peso(purchase_net_amount) %></td>
+								<td class="label-total-num align-right"><%= to_peso(purchase_total_amount) %></td>
 							</tr>
 						<% end %>
+						<% total_purchases_net_amount += purchase_net_amount %>
+						<% total_purchases_total_amount += purchase_total_amount %>
 					<% end %>
 					<tr class="bg-total">
 						<td class="text-right" colspan="12">Total:</td>
-						<td class="label-total-num"><%= number_to_currency(total_purchases_net_amount, unit: "₱") %></td>
-						<td class="label-total-num"><%= number_to_currency(total_purchases_total_amount, unit: "₱") %></td>
+						<td class="label-total-num align-right"><%= to_peso(total_purchases_net_amount) %></td>
+						<td class="label-total-num align-right"><%= to_peso(total_purchases_total_amount) %></td>
 					</tr>
 				</tbody>
 			</table>

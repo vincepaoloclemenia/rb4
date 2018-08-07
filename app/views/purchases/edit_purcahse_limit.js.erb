@@ -1,0 +1,11 @@
+$('#modal h4').html('Purchase Setup for Brand <%= current_brand.name %>');
+
+$('.modal-body').html('<%= j render("purchase_setup") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

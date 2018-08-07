@@ -4,7 +4,13 @@ div.half-container { display: inline; position: relative; width: 50% }
 table tr th { text-align: center }
 table td { border: 1px solid grey; padding: 10px 5px; font-family: 'Ubuntu Sans', sans-serif; font-size: 14px; }
 table tr th { padding: 10px; font-family: 'Noto Sans', sans-serif; background-color: #1D75A1; color: white }
-.pdf-container{ margin: 30px; background-color: #fff }
+.pdf-container{ 
+    margin: 30px; background-color: #fff;
+    
+    table#purchase-list{
+        td.align-right { padding-right: 0px; padding-left: 0px  }
+    }
+}
 table { padding: 5px }
 tr.highlighted { background-color: #C0EBFD }
 td.bold { font-weight: 700 }

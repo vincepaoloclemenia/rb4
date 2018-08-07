@@ -47,7 +47,12 @@ class Purchase < ActiveRecord::Base
 	end
 
 	def allowed_to_modify?
-		created_at + 12.hours > DateTime.now
+		if brand.brand_setting.present?
+			hrs = brand.brand_setting.purchase_edit_limit.to_i
+			created_at + hrs.hours > DateTime.now
+		else
+			true
+		end
 	end
 	
 	def item_added_already?(id)

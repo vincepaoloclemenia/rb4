@@ -140,11 +140,13 @@ class Purchases extends React.Component{
 
     render(){
         return(
-            <div>
-                <div className='panel'>
+            [
+                <div key='search' className='panel'>
                     <div className='panel-heading border pb45'>
                         <div className='pull-left mt7'>Search Filter</div>
+                        
                     </div>
+                    {this.renderPurchaseSetup()}
                     <div className='panel-body ml15 mr15'>
                         <div className='row pb10'>
                             <div className='col-md-6'>                              
@@ -183,7 +185,8 @@ class Purchases extends React.Component{
                         </div>
                     </div>
                 </div>
-                <div className='panel'>
+                ,
+                <div key='table' className='panel'>
                     <div className='panel-heading border pb45'>
                         <div className='pull-left mt7'>Purchases</div>
                         <div className='pull-right'>
@@ -192,6 +195,7 @@ class Purchases extends React.Component{
                             </a>
                         </div>
                     </div>
+                    
                     <div className='panel-body'>
                         <div className='no-more-tables'>
                             <table className='table table-bordered table-striped mb0'>
@@ -208,7 +212,7 @@ class Purchases extends React.Component{
                         </div>   
                     </div>
                 </div>
-            </div>
+            ]
         )
     }
 
@@ -216,6 +220,18 @@ class Purchases extends React.Component{
         if(this.state.searching){
             return(
                 <button onClick={this.resetEverything.bind(this)} className='btn btn-default'>Reset</button>            
+            )
+        }
+    }
+
+    renderPurchaseSetup(){
+        if(this.props.clientOrBrandAdmin){
+            return(
+                <div className='pull-right'>
+                    <a className="btn btn-setting" data-tt="tooltip" data-placement="top" data-original-title="Purchases Setting" data-remote="true" href="/purchases/edit_purcahse_limit">
+                        <i className="fa icon-glyph-90 f20 mr5"></i> Purchase Setup
+                    </a>
+                </div>
             )
         }
     }
