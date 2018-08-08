@@ -115,6 +115,10 @@ Rails.application.routes.draw do
     put 'update_delivery_details' => 'purchase_orders#update_delivery_details'
     patch 'save_po_items' => 'purchase_orders#save_po_items'   
   end
+
+  resources :revenues_setup, as: :revenues
+  resources :statistics_setup, as: :statistics
+  resources :non_miscellaneous_setup, as: :non_misces
   
   resource :wizard, only: [:show] do
     get 'user_setup' => 'wizards#user_setup'

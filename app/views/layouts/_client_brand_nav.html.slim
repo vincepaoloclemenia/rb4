@@ -105,18 +105,18 @@
 						li.menu-accordion class="#{is_menu_open?('sales_setup')}"
 							= link_to '<i class="toggle-accordion"></i> <span>Sales Setup</span>'.html_safe, 'javascript:;'
 							ul.sub-menu
-								li
-									= link_to "Non Sales Misc", 'javascript:;'
-								li
-									= link_to "Sales Statistics", 'javascript:;'
-								li
-									= link_to "Revenues", 'javascript:;'
+								li class = '#{what_controller?('non_miscellaneous_setup', 'index')}'
+									= link_to "Non Sales Misc", non_misces_path
+								li class = '#{what_controller?('statistics_setup', 'index')}'
+									= link_to "Sales Statistics", statistics_path
+								li class = '#{what_controller?('revenues_setup', 'index')}'
+									= link_to "Revenues", revenues_path
 								- if view_access_control('settlements','show')
 									li class = '#{what_controller?('settlements', 'index')}'
 										= link_to "Settlements", settlements_path
-								- if view_access_control('shifts','show')
-									li class = '#{what_controller?('shifts', 'index')}'
-										= link_to "Shift", shifts_path
+								/- if view_access_control('shifts','show')
+									/li class = '#{what_controller?('shifts', 'index')}'
+									/	= link_to "Shift", shifts_path
 						li.menu-accordion class="#{is_menu_open?('purchase_setup')}"
 							= link_to '<i class="toggle-accordion"></i> <span>Purchase Setup</span>'.html_safe, 'javascript:;'
 							ul.sub-menu
