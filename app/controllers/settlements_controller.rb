@@ -8,6 +8,10 @@ class SettlementsController < ApplicationController
 		@settlement = Settlement.new
 	end
 
+	def new
+		@settlement = current_client.settlements.new
+	end
+
 	def create
 		@settlement = current_client.settlements.new(settlement_params)
 		if @settlement.save
@@ -17,6 +21,10 @@ class SettlementsController < ApplicationController
 			# render 'new'
 		end
 		redirect_to settlements_path
+	end
+
+	def edit
+		@settlement = current_client.settlements.find params[:id]
 	end
 
 	def update

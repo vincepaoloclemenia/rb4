@@ -9,6 +9,11 @@ class PurchaseOrdersController < ApplicationController
 		@purchase_orders = current_brand.purchase_orders.unsent_pos.group_by { |po| po.supplier_id }
 		@purchase_order = PurchaseOrder.new
 		@suppliers = current_brand.suppliers.with_prices.pluck(:name, :id).uniq
+		@allow_to_approve = client_admin? || current_brand.allowed_admin?("approvers", current_user.id)
+		@allow_to_send = client_admin? || current_brand.allowed_admin?("senders", current_user.id)
+		@allow_to_hold = client_admin? || current_brand.allowed_admin?("holders", current_user.id)
+		@allow_to_reject = client_admin? || current_brand.allowed_admin?("rejectors", current_user.id)
+		
 	end
 
 	def new
