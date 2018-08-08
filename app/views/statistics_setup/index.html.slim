@@ -1,0 +1,46 @@
+- content_for :title, 'Restobot | Statistics Setup'
+.panel
+	.panel-heading.border.pb45
+		.pull-left.mt7 Statistics Setup
+		.pull-right
+			/- if view_access_control('statistics_setup','create')
+			= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Statistic Category".html_safe, new_statistic_path, class: "btn btn-success btn-round btn-outline", remote: true
+	.panel-body
+		- empty_warning = current_client.statistics.empty? ? "block" : "none"
+		- table_area = current_client.statistics.empty? ? "none" : "block"
+		.empty-warning style="display: #{empty_warning}"
+			.row
+				.col-xs-12
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| No statistics has been setup yet
+		div#statistics style="display: #{table_area}"
+			= render @statistics
+							
+									
+		/.no-more-tables
+			/table.table.table-bordered.table-striped.mb0 data-sortable="true"
+			/	thead
+			/		tr.bg-thead
+			/			th width="260" Name
+			/			th width="250" data-sortable="false" Description
+			/			th width="200" Complimentary
+			/			th width="200" Status
+			/			th width="90" data-sortable="false" Action
+			/	tbody
+					/- @statistics.each do |statistic|
+						/tr
+						/	td data-title="Name" = statistic.name
+						/	td data-title="Description" = statistic.description
+						/	td data-title="Complimentary" = statistic.is_complimentary ? "Yes" : "No"
+						/	td data-title="Status" = statistic.is_active ? "<span class='label label-success ml2'>Active</span>".html_safe : "<span class='label label-default ml2'>Deactivated</span>".html_safe
+						/	td.action data-title="Action"
+						/		- if view_access_control('statistics','update')
+						/			= link_to "<i class='icon-glyph f14'></i>".html_safe, edit_statistic_path(statistic), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit", toggle: "modal", target: ".edit-statistic-#{statistic.id}" }, remote: true
+						/		- if view_access_control('statistics','destroy')
+						/			= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, statistic_path(statistic), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }
+		
+= render "partials/modal"

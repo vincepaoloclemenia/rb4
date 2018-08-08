@@ -16,6 +16,9 @@ class Client < ActiveRecord::Base
 	has_one :setting, dependent: :destroy
 	has_many :purchase_orders, dependent: :destroy
 	has_many :order_lists, through: :brands, dependent: :destroy
+	has_many :revenues, dependent: :destroy
+	has_many :statistics, dependent: :destroy
+	has_many :non_misces, dependent: :destroy
 
 	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand.png"
 	validates_attachment :avatar, 

@@ -5,7 +5,6 @@ class SettlementsController < ApplicationController
 
 	def index
 		@settlements = current_client.settlements
-		@settlement = Settlement.new
 	end
 
 	def new

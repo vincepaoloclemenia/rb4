@@ -1,0 +1,12 @@
+$('#modal h4').html('New Statistic Category');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

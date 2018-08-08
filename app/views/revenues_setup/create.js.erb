@@ -1,0 +1,11 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+
+$('#revenues').append('<%= j render @revenue %>');
+
+$('.empty-warning').css("display","none");
+$('.table-area').css("display","block");

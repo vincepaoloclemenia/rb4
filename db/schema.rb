@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180808045155) do
+ActiveRecord::Schema.define(version: 20180808064628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -342,7 +342,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
 
   add_index "manifolds", ["client_id"], name: "index_manifolds_on_client_id", using: :btree
 
-  create_table "non_miscelaneous", force: :cascade do |t|
+  create_table "non_misces", force: :cascade do |t|
     t.integer  "client_id"
     t.string   "name"
     t.text     "description"
@@ -351,7 +351,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "non_miscelaneous", ["client_id"], name: "index_non_miscelaneous_on_client_id", using: :btree
+  add_index "non_misces", ["client_id"], name: "index_non_misces_on_client_id", using: :btree
 
   create_table "order_lists", force: :cascade do |t|
     t.datetime "po_date"
@@ -532,7 +532,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
   add_index "purchases", ["purchase_order_id"], name: "index_purchases_on_purchase_order_id", using: :btree
   add_index "purchases", ["supplier_id"], name: "index_purchases_on_supplier_id", using: :btree
 
-  create_table "revenue", force: :cascade do |t|
+  create_table "revenues", force: :cascade do |t|
     t.integer  "client_id"
     t.string   "name"
     t.text     "description"
@@ -541,7 +541,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "revenue", ["client_id"], name: "index_revenue_on_client_id", using: :btree
+  add_index "revenues", ["client_id"], name: "index_revenues_on_client_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.integer  "client_id"
@@ -631,7 +631,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
 
   add_index "sales", ["branch_id"], name: "index_sales_on_branch_id", using: :btree
 
-  create_table "sales_non_misce", force: :cascade do |t|
+  create_table "sales_non_misces", force: :cascade do |t|
     t.integer  "sale_id"
     t.integer  "non_miscelaneous_id"
     t.integer  "branch_id"
@@ -640,11 +640,10 @@ ActiveRecord::Schema.define(version: 20180808045155) do
     t.datetime "updated_at",          null: false
   end
 
-  add_index "sales_non_misce", ["branch_id"], name: "index_sales_non_misce_on_branch_id", using: :btree
-  add_index "sales_non_misce", ["non_miscelaneous_id"], name: "index_sales_non_misce_on_non_miscelaneous_id", using: :btree
-  add_index "sales_non_misce", ["sale_id"], name: "index_sales_non_misce_on_sale_id", using: :btree
+  add_index "sales_non_misces", ["branch_id"], name: "index_sales_non_misces_on_branch_id", using: :btree
+  add_index "sales_non_misces", ["sale_id"], name: "index_sales_non_misces_on_sale_id", using: :btree
 
-  create_table "sales_revenue", force: :cascade do |t|
+  create_table "sales_revenues", force: :cascade do |t|
     t.integer  "sale_id"
     t.integer  "revenue_id"
     t.integer  "branch_id"
@@ -653,11 +652,11 @@ ActiveRecord::Schema.define(version: 20180808045155) do
     t.datetime "updated_at",                                        null: false
   end
 
-  add_index "sales_revenue", ["branch_id"], name: "index_sales_revenue_on_branch_id", using: :btree
-  add_index "sales_revenue", ["revenue_id"], name: "index_sales_revenue_on_revenue_id", using: :btree
-  add_index "sales_revenue", ["sale_id"], name: "index_sales_revenue_on_sale_id", using: :btree
+  add_index "sales_revenues", ["branch_id"], name: "index_sales_revenues_on_branch_id", using: :btree
+  add_index "sales_revenues", ["revenue_id"], name: "index_sales_revenues_on_revenue_id", using: :btree
+  add_index "sales_revenues", ["sale_id"], name: "index_sales_revenues_on_sale_id", using: :btree
 
-  create_table "sales_stat", force: :cascade do |t|
+  create_table "sales_stats", force: :cascade do |t|
     t.integer  "sale_id"
     t.integer  "statistic_id"
     t.integer  "branch_id"
@@ -666,9 +665,9 @@ ActiveRecord::Schema.define(version: 20180808045155) do
     t.datetime "updated_at",   null: false
   end
 
-  add_index "sales_stat", ["branch_id"], name: "index_sales_stat_on_branch_id", using: :btree
-  add_index "sales_stat", ["sale_id"], name: "index_sales_stat_on_sale_id", using: :btree
-  add_index "sales_stat", ["statistic_id"], name: "index_sales_stat_on_statistic_id", using: :btree
+  add_index "sales_stats", ["branch_id"], name: "index_sales_stats_on_branch_id", using: :btree
+  add_index "sales_stats", ["sale_id"], name: "index_sales_stats_on_sale_id", using: :btree
+  add_index "sales_stats", ["statistic_id"], name: "index_sales_stats_on_statistic_id", using: :btree
 
   create_table "sections", force: :cascade do |t|
     t.string   "page"
@@ -710,7 +709,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
 
   add_index "shifts", ["brand_id"], name: "index_shifts_on_brand_id", using: :btree
 
-  create_table "statistic", force: :cascade do |t|
+  create_table "statistics", force: :cascade do |t|
     t.integer  "client_id"
     t.string   "name"
     t.text     "description"
@@ -719,7 +718,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "statistic", ["client_id"], name: "index_statistic_on_client_id", using: :btree
+  add_index "statistics", ["client_id"], name: "index_statistics_on_client_id", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "client_id"
@@ -873,7 +872,7 @@ ActiveRecord::Schema.define(version: 20180808045155) do
   add_foreign_key "purchases", "brands"
   add_foreign_key "purchases", "clients"
   add_foreign_key "purchases", "suppliers"
-  add_foreign_key "revenue", "clients"
+  add_foreign_key "revenues", "clients"
   add_foreign_key "roles", "clients"
   add_foreign_key "sale_by_category_entries", "categories"
   add_foreign_key "sale_by_category_entries", "sales"
