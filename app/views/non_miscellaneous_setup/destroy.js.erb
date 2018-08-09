@@ -1,0 +1,14 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+
+$('#misc_<%= @non_misce.id %>').fadeOut();
+
+
+<% if current_client.non_misces.empty? %>
+	$('.empty-warning').css("display","block");
+	$('#non_misces').css("display","none");
+<% else %>
+	$('.empty-warning').css("display","none");
+	$('#non_misces').css("display","block");
+<% end %>

@@ -1,0 +1,8 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+
+$('#misc_<%= @non_misce.id %>').replaceWith('<%= j render @non_misce %>').fadeIn();

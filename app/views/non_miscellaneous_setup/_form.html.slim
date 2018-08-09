@@ -1,0 +1,27 @@
+= form_for @non_misce, remote: true do |f|
+    .row.mb10
+        .col-xs-12
+            = f.label :name, class: "control-label"
+                | Non-Miscellaneous name
+                small.field-req  *
+            = f.text_field :name, class: "form-control validate_name"
+    .row.mb10
+        .col-xs-12
+            = f.label :description
+            = f.text_area :description, class: "form-control", rows: "2"
+    .row.mb10
+        .col-xs-4
+            = f.label :is_active, "Status"
+        .col-xs-8
+            = f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
+    .row.mb10
+        .col-xs-12.mt20
+            | (
+            small.field-req  *
+            |  )
+            i  indicates field is required
+    .modal-footer.no-border
+        span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            |
+            button.btn.btn-primary type="submit" = @non_misce.new_record? ? "Add Statistic Category" : "Update Statistic Category"

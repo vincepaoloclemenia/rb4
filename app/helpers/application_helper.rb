@@ -65,7 +65,7 @@ module ApplicationHelper
 			"open" if current_pages?(company_users_path, roles_path) ||
 								(controller.eql?('roles') && action.eql?('manage_permissions'))
 		when "setup"
-			"open" if current_pages?(non_misces_path, statistics_path, revenues_path, client_path, brands_path, employees_path, employee_types_path, settlements_path,
+			"open" if current_pages?(non_misces_path, statistics_path, client_path, brands_path, employees_path, employee_types_path, settlements_path,
 															shifts_path, units_path, categories_path, items_path, conversions_path, suppliers_path) ||
 															(controller.eql?('brands') && action.eql?('show'))
 		when "company_setup"
@@ -75,7 +75,7 @@ module ApplicationHelper
 		when "labor_setup"
 			"open" if current_pages?(employees_path, employee_types_path)
 		when "sales_setup"
-			"open" if current_pages?(non_misces_path, statistics_path, revenues_path, settlements_path, shifts_path)
+			"open" if current_pages?(non_misces_path, statistics_path, settlements_path, shifts_path)
 		when "purchase_setup"
 			"open" if current_pages?(units_path, categories_path, items_path, conversions_path, suppliers_path)
 		when "subscriptions"

@@ -1,0 +1,7 @@
+$('#modal h4').html('Edit <%= @non_misce.name %>');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+$('#modal').modal("show");
+
+$("[data-toggle='toggle']").bootstrapToggle();
