@@ -1,5 +1,4 @@
 - content_for :title, "Restobot | Add Sales"
-- value = Random.new
 = form_for @sale, remote: true do |f|
 	.panel
 		.panel-heading.border Details
@@ -22,7 +21,7 @@
 								= sbce.label :amount, "#{category.name}"
 								.input-group
 									span.input-group-addon PHP
-									= sbce.number_field :amount, value: value.rand(30000..55000), class: "form-control", placeholder: "0.00", step: '.01'
+									= sbce.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
 	- else
 		.panel
 			.panel-body
@@ -50,7 +49,7 @@
 								= sbse.label :amount, "#{settlement.name}"
 								.input-group
 									span.input-group-addon PHP
-									= sbse.number_field :amount, value: value.rand(10000..23000), class: "form-control", placeholder: "0.00", step: '.01'
+									= sbse.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
 	- else
 		.panel
 			.panel-body
@@ -79,7 +78,7 @@
 								= stat.label :count, "#{statistic.name}"
 								|  
 								small.field-req *	
-								= stat.number_field :count, value: value.rand(150..1450), class: "form-control", placeholder: "0.00", step: '.01'
+								= stat.number_field :count, class: "form-control", placeholder: "0.00", step: '.01'
 	- else
 		.panel
 			.panel-body
@@ -108,7 +107,7 @@
 								= snm.label :count, "#{non_misce.name}", class: 'control-label'
 								|  
 								small.field-req *	
-								= snm.number_field :count, value: value.rand(150..1100), class: "form-control validate_count", placeholder: "0.00", step: '.01'
+								= snm.number_field :count, class: "form-control validate_count", placeholder: "0.00", step: '.01'
 	- else
 		.panel
 			.panel-body
