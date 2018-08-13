@@ -10,10 +10,13 @@
             = f.label :description
             = f.text_area :description, class: "form-control", rows: "2"
     .row.mb10
-        .col-xs-4
+        .col-xs-6
             = f.label :is_active, "Status"
-        .col-xs-8
             = f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
+        .col-xs-6
+            = f.label :is_active, "A Transaction? <span class='gap'><small class='field-req'>*</small></span>".html_safe
+            = f.check_box :non_transac, value: false, data: {off: "No", offstyle: "default", on: "Yes", onstyle: "success", style:"android", toggle: "toggle"}
+
     .row.mb10
         .col-xs-12.mt20
             | (

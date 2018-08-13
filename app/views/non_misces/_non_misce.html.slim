@@ -10,5 +10,7 @@
             span style='font-size: 11px; margin-left: 20px;' class="#{non_misce.is_active ? 'green' : 'red'}" 
                 = non_misce.is_active ? "(Active)" : "(Deactivated)"
         
-        .col-xs-12
+        .col-xs-6
             p style='font-size: 10px' = non_misce.description.present? ? non_misce.description : "<i>No descripion</i>".html_safe
+        .col-xs-6
+            p style='font-size: 11px' = non_misce.percentage_scope ? "<span class='green'>Set for customer count percentage</span>".html_safe : "<span class='red'>Not included for customer count</span>".html_safe

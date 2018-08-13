@@ -50,7 +50,7 @@ class StatisticsSetupController < ApplicationController
     private
 
         def stats_params
-            params.require(:statistic).permit(:description, :name, :is_active)
+            params.require(:statistic).permit(:description, :name, :is_active, :non_transac)
         end
 
         def set_stat

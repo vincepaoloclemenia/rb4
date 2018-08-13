@@ -8,26 +8,34 @@
 	.panel-body
 		.row
 			.col-xs-12
-				- @settlements.map do |settlement|
-					.col-lg-4.col-md-6.col-sm-12.col-xs-12 style='padding: 10px'
-						.row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'
-							.pull-right
-								= link_to "<i class='fa icon-glyph-76'></i>".html_safe, settlement_path(settlement), method: :delete, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }	
-							.pull-right
-								= link_to "<i class='fa icon-glyph'></i>".html_safe, edit_settlement_path(settlement), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
-			
-							h4 
-								= settlement.name
-								span style='font-size: 11px; margin-left: 20px;' class="#{settlement.is_active ? 'green' : 'red'}" 
-									= settlement.is_active ? "(Active)" : "(Deactivated)"
-							
-							.col-xs-6
-								p style='font-size: 10px' = settlement.description.present? ? settlement.description : "<i>No descripion</i>".html_safe
+				- if @settlements.empty?
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| No settlements has been setup yet
+				- else
+					- @settlements.map do |settlement|
+						.col-lg-4.col-md-6.col-sm-12.col-xs-12 style='padding: 10px'
+							.row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'
+								.pull-right
+									= link_to "<i class='fa icon-glyph-76'></i>".html_safe, settlement_path(settlement), method: :delete, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }	
+								.pull-right
+									= link_to "<i class='fa icon-glyph'></i>".html_safe, edit_settlement_path(settlement), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
+				
+								h4 
+									= settlement.name
+									span style='font-size: 11px; margin-left: 20px;' class="#{settlement.is_active ? 'green' : 'red'}" 
+										= settlement.is_active ? "(Active)" : "(Deactivated)"
 								
-							.col-xs-6
-								center
-									p
-										= settlement.is_complimentary ? "<span class='label label-success p5'>Complimentary</span>".html_safe : "<span class='label label-default ml2'>Non-complimentary</span>".html_safe
+								.col-xs-6
+									p style='font-size: 10px' = settlement.description.present? ? settlement.description : "<i>No descripion</i>".html_safe
+									
+								.col-xs-6
+									center
+										p
+											= settlement.is_complimentary ? "<span class='label label-success p5'>Complimentary</span>".html_safe : "<span class='label label-default ml2'>Non-complimentary</span>".html_safe
 							/.col-xs-6
 							/	.pull-left
 							/		= link_to "<i class='fa icon-glyph mr5'></i>Edit".html_safe, edit_settlement_path(settlement), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true

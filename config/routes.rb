@@ -52,7 +52,9 @@ Rails.application.routes.draw do
   end
   resources :item_cost_analysis_reports
   resources :shifts, only: [:index,:create,:update,:destroy]
-  resources :sales
+  resources :sales do
+    get :confirm, on: :collection
+  end
   resources :units
   resources :items
   resources :inventories

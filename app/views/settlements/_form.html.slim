@@ -28,4 +28,7 @@
         span.inline.float-right
             = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
             |
-            button.btn.btn-primary type="submit" Add Settlement
+            - if @settlement.new_record?
+                button.btn.btn-primary type="submit" Add Settlement
+            - else
+                button.btn.btn-primary type="submit" Update Settlement

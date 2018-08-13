@@ -1,5 +1,6 @@
 - content_for :title, "Restobot | Add Sales"
-= form_for @sale do |f|
+- value = Random.new
+= form_for @sale, remote: true do |f|
 	.panel
 		.panel-heading.border Details
 		.panel-body
@@ -8,119 +9,20 @@
 				= render partial: 'branch_user', locals: { f: f }
 			- else
 				= render partial: 'client_brand_user', locals: { f: f }
-	
-	.panel
-		.panel-heading.border Statistics
-		.panel-body
-			.row.mb10
-				.col-xs-12.col-lg-6
-					= f.label :customer_count
-					= f.number_field :customer_count, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-6
-					= f.label :transaction_count
-					= f.number_field :transaction_count, class: "form-control", placeholder: "0"
-			.row.mb10	
-				.col-xs-12.col-lg-6
-					= f.label :delivery_transaction_count
-					= f.number_field :delivery_transaction_count, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-6
-					= f.label :credit_card_transaction_count
-					= f.number_field :credit_card_transaction_count, class: "form-control", placeholder: "0"
-			.row.mb10	
-				.col-xs-12.col-lg-6
-					= f.label :first_time_guest
-					= f.number_field :first_time_guest, class: "form-control", placeholder: "0"
-				.col-xs-12.col-lg-6
-					= f.label :repeat_guest
-					= f.number_field :repeat_guest, class: "form-control", placeholder: "0"
-
-	.row
-		.col-md-6	
-			.panel
-				.panel-heading.border None Sales Miscellaneous
-				.panel-body
-					.row
-						.col-xs-12.col-lg-6.mb5
-							= f.label :vat, "VAT <small class='field-req'>*</small>".html_safe
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :vat, class: "form-control", placeholder: "0", step: '.01'
-								
-						.col-xs-12.col-lg-6.mb5
-							= f.label :service_charge, "Service Charge <small class='field-req'>*</small>".html_safe
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :service_charge, class: "form-control", placeholder: "0.00", step: '.01'
-
-		.col-md-6
-			.panel
-				.panel-heading.border Cash for Deposit
-				.panel-body
-					.row
-						.col-xs-12.col-lg-6.mb5
-							= f.label :gc_sales, "GC Sales <small class='field-req'>*</small>".html_safe
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :gc_sales, class: "form-control", placeholder: "0.00", step: '.01'
-						.col-xs-12.col-lg-6.mb5
-							= f.label :other_income
-							.input-group
-								span.input-group-addon PHP
-								= f.number_field :other_income, class: "form-control", placeholder: "0.00", step: '.01'
-
-	.panel
-		.panel-heading.border Sale By Settlements
-		.panel-body
-			.row
-				.col-xs-12.col-lg-3.mb5
-					= f.label :credit_card_sales
-					.input-group
-						span.input-group-addon PHP
-						= f.number_field :credit_card_sales, class: "form-control", placeholder: "0.00", step: '.01'
-				.col-xs-12.col-lg-3.mb5
-					= f.label :cash_in_drawer
-					.input-group
-						span.input-group-addon PHP
-						= f.number_field :cash_in_drawer, class: "form-control", placeholder: "0.00", step: '.01'
-				.col-xs-12.col-lg-3.mb5
-					= f.label :gc_redeemed, "GC Redeemed"
-					.input-group
-						span.input-group-addon PHP
-						= f.number_field :gc_redeemed, class: "form-control", placeholder: "0.00", step: '.01'
-				.col-xs-12.col-lg-3.mb5
-					= f.label :delivery_sales
-					.input-group
-						span.input-group-addon PHP
-						= f.number_field :delivery_sales, class: "form-control", placeholder: "0.00", step: '.01'
-			.row
-				- @settlements.each do |settlement|
-					= f.fields_for :sale_by_settlement_entries do |sbse|
-						= sbse.hidden_field :settlement_id, value: settlement.id
-						.col-xs-12.col-lg-2.mb5
-							= sbse.label :amount, "#{settlement.name}"
-							.input-group
-								span.input-group-addon PHP
-								= sbse.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
-
-	
 
 	- if @categories.any? 
 		.panel
 			.panel-heading.border Sales by Category
 			.panel-body
-				.row.mb10
+				.row.mb15
 					- @categories.each do |category| 
 						= f.fields_for :sale_by_category_entries do |sbce|
 							= sbce.hidden_field :category_id, value: category.id
-							.col-xs-12.col-lg-3.mb5
+							.col-xs-12.col-lg-4.col-md-6.mb15
 								= sbce.label :amount, "#{category.name}"
 								.input-group
 									span.input-group-addon PHP
-									= sbce.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
-				.row.pt10
-					.col-xs-offset-4.col-xs-4
-						center
-							= f.submit "Add Sales", class: "btn btn-primary btn-block btn-lg mb15"
+									= sbce.number_field :amount, value: value.rand(30000..55000), class: "form-control", placeholder: "0.00", step: '.01'
 	- else
 		.panel
 			.panel-body
@@ -133,10 +35,193 @@
 							.col-xs-11
 								| Oops! You currently have no categories.<br> Click 
 								b
-									u  =link_to 'here', categories_path 
-								|  to create sale category.
+									u  = link_to 'here', categories_path 
+								|  to create sale category.		
+
+	- if @settlements.present? 
+		.panel
+			.panel-heading.border Sales by Settlements
+			.panel-body
+				.row.mb15
+					- @settlements.each do |settlement| 
+						= f.fields_for :sale_by_settlement_entries do |sbse|
+							= sbse.hidden_field :settlement_id, value: settlement.id
+							.col-xs-12.col-lg-4.col-md-6.mb15
+								= sbse.label :amount, "#{settlement.name}"
+								.input-group
+									span.input-group-addon PHP
+									= sbse.number_field :amount, value: value.rand(10000..23000), class: "form-control", placeholder: "0.00", step: '.01'
+	- else
+		.panel
+			.panel-body
+				- empty_warning = @settlements.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have no settlements.<br> Click 
+								b
+									u  = link_to 'here', settlements_path 
+								|  to create sale settlements category.	
+
+	- if @statistics.present? 
+		.panel
+			.panel-heading.border Statistics
+			.panel-body
+				.row.mb15
+					- @statistics.each do |statistic| 
+						= f.fields_for :sales_stats do |stat|
+							= stat.hidden_field :statistic_id, value: statistic.id
+							= stat.hidden_field :non_transac, value: statistic.non_transac || false
+							.col-xs-12.col-lg-4.col-md-6.mb15
+								= stat.label :count, "#{statistic.name}"
+								|  
+								small.field-req *	
+								= stat.number_field :count, value: value.rand(150..1450), class: "form-control", placeholder: "0.00", step: '.01'
+	- else
+		.panel
+			.panel-body
+				- empty_warning = @statistics.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have no categories.<br> Click 
+								b
+									u  = link_to 'here', statistics_path 
+								|  to create sale statistics category.	
+
+	- if @non_misces.present? 
+		.panel
+			.panel-heading.border Non Miscellaneous
+			.panel-body
+				.row.mb15
+					- @non_misces.each do |non_misce| 
+						= f.fields_for :sales_non_misces do |snm|
+							= snm.hidden_field :non_misce_id, value: non_misce.id
+							= snm.hidden_field :percentage_scope, value: non_misce.percentage_scope || false
+							.col-xs-12.col-lg-4.col-md-6.mb15
+								= snm.label :count, "#{non_misce.name}", class: 'control-label'
+								|  
+								small.field-req *	
+								= snm.number_field :count, value: value.rand(150..1100), class: "form-control validate_count", placeholder: "0.00", step: '.01'
+	- else
+		.panel
+			.panel-body
+				- empty_warning = @non_misces.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have not set non-miscellaneous categories yet.<br> Click 
+								b
+									u  = link_to 'here', non_misces_path 
+								|  to create sale non-miscellaneous category.	
 		
-				.row.pt10
-					.col-xs-12
-						center
-							= f.submit "Add Sales", class: "btn btn-primary btn-block btn-lg mb15"
+	.panel-body	
+		.row.pull-right
+			= f.submit "Save", class: 'btn btn-primary'
+			
+		
+
+= render "partials/modal"
+		
+	
+	/.panel
+	/	.panel-heading.border Statistics
+	/	.panel-body
+	/		.row.mb15
+	/			.col-xs-12.col-lg-6
+	/				= f.label :customer_count
+	/				= f.number_field :customer_count, class: "form-control", placeholder: "0"
+	/			.col-xs-12.col-lg-6
+	/				= f.label :transaction_count
+	/				= f.number_field :transaction_count, class: "form-control", placeholder: "0"
+	/		.row.mb15	
+	/			.col-xs-12.col-lg-6
+	/				= f.label :delivery_transaction_count
+	/				= f.number_field :delivery_transaction_count, class: "form-control", placeholder: "0"
+	/			.col-xs-12.col-lg-6
+	/				= f.label :credit_card_transaction_count
+	/				= f.number_field :credit_card_transaction_count, class: "form-control", placeholder: "0"
+	/		.row.mb15	
+	/			.col-xs-12.col-lg-6
+	/				= f.label :first_time_guest
+	/				= f.number_field :first_time_guest, class: "form-control", placeholder: "0"
+	/			.col-xs-12.col-lg-6
+	/				= f.label :repeat_guest
+	/				= f.number_field :repeat_guest, class: "form-control", placeholder: "0"
+
+/	.row
+/		.col-md-6	
+/			.panel
+/				.panel-heading.border None Sales Miscellaneous
+/				.panel-body
+/					.row
+/						.col-xs-12.col-lg-6.mb15
+/							= f.label :vat, "VAT <small class='field-req'>*</small>".html_safe
+/							.input-group
+/								span.input-group-addon PHP
+/								= f.number_field :vat, class: "form-control", placeholder: "0", step: '.01'
+/								
+/						.col-xs-12.col-lg-6.mb15
+/							= f.label :service_charge, "Service Charge <small class='field-req'>*</small>".html_safe
+/							.input-group
+/								span.input-group-addon PHP
+/								= f.number_field :service_charge, class: "form-control", placeholder: "0.00", step: '.01'
+/
+/		.col-md-6
+/			.panel
+/				.panel-heading.border Cash for Deposit
+/				.panel-body
+/					.row
+/						.col-xs-12.col-lg-6.mb15
+/							= f.label :gc_sales, "GC Sales <small class='field-req'>*</small>".html_safe
+/							.input-group
+/								span.input-group-addon PHP
+/								= f.number_field :gc_sales, class: "form-control", placeholder: "0.00", step: '.01'
+/						.col-xs-12.col-lg-6.mb15
+/							= f.label :other_income
+/							.input-group
+/								span.input-group-addon PHP
+/								= f.number_field :other_income, class: "form-control", placeholder: "0.00", step: '.01'
+
+/	.panel
+/		.panel-heading.border Sale By Settlements
+/		.panel-body
+/			.row
+/				.col-xs-12.col-lg-3.mb15
+/					= f.label :credit_card_sales
+/					.input-group
+/						span.input-group-addon PHP
+/						= f.number_field :credit_card_sales, class: "form-control", placeholder: "0.00", step: '.01'
+/				.col-xs-12.col-lg-3.mb15
+/					= f.label :cash_in_drawer
+/					.input-group
+/						span.input-group-addon PHP
+/						= f.number_field :cash_in_drawer, class: "form-control", placeholder: "0.00", step: '.01'
+/				.col-xs-12.col-lg-3.mb15
+/					= f.label :gc_redeemed, "GC Redeemed"
+/					.input-group
+/						span.input-group-addon PHP
+/						= f.number_field :gc_redeemed, class: "form-control", placeholder: "0.00", step: '.01'
+/				.col-xs-12.col-lg-3.mb15
+/					= f.label :delivery_sales
+/					.input-group
+/						span.input-group-addon PHP
+/						= f.number_field :delivery_sales, class: "form-control", placeholder: "0.00", step: '.01'
+/			.row
+/				- @settlements.each do |settlement|
+/					= f.fields_for :sale_by_settlement_entries do |sbse|
+/						= sbse.hidden_field :settlement_id, value: settlement.id
+/						.col-xs-12.col-lg-2.mb15
+/							= sbse.label :amount, "#{settlement.name}"
+/							.input-group
+/								span.input-group-addon PHP
+/								= sbse.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'

@@ -1,0 +1,88 @@
+= form_for @sale do |f|
+    .row.mb10
+        .panel-heading 
+            .pull-left = "#{@sale.branch.name} (#{@sale.branch.aka})"
+            .pull-right = @sale.sale_date.strftime("%B %d, %Y")
+
+    .panel-body
+    
+        p = @parameters
+        .row.mb10
+            h4 Sales by Categories
+        .row.mb10
+            .no-more-tables
+                table.table.table-bordered.table-striped.mb0
+                    thead
+                        tr.bg-thead
+                            th.text-center Category
+                            th.text-center Amount
+                            th.text-center %
+                    tbody
+                        - total = @sale.sale_by_category_entries.map(&:amount).sum
+                        - @sale.sale_by_category_entries.map do |sbce|
+                            
+                            tr
+                                td data-title='Category' = sbce.category.name
+                                td.align-right data-title='Amount' = to_peso(sbce.amount)
+                                td.align-right data-title='%' = to_percentage(sbce.amount, total)
+                        tr.bg-total
+                            td.label-total-num data-title='Total' Total
+                            td.label-total-num.align-right data-title='Amount' = to_peso(total)
+                            td.label-total-num.align-right data-title='Total %' = to_percentage(total, total)
+
+
+                                
+        .row.mb10
+            h4 Sales by Settlements
+        .row.mb10
+            .no-more-tables
+                table.table.table-bordered.table-striped.mb0
+                    thead
+                        tr.bg-thead
+                            th.text-center Settlement Name
+                            th.text-center Amount
+                    tbody
+                        - @sale.sale_by_settlement_entries.map do |sbse|
+                            tr
+                                td data-title='Settlement' = sbse.settlement.name
+                                td.align-right data-title='Amount' = to_peso(sbse.amount)
+        
+        .row.mb10
+            h4 Statistics
+        .row.mb10
+            .no-more-tables
+                table.table.table-bordered.table-striped.mb0
+                    thead
+                        tr.bg-thead
+                            th.text-center Statistic Name
+                            th.text-center Total
+                    tbody
+                        - @sale.sales_stats.map do |stat|
+                            tr
+                                td data-title='Statistic' = stat.statistic.name
+                                td.text-centered data-title='Total' = stat.count
+        
+        .row.mb10
+            h4 Non Miscellaneous
+        .row.mb10
+            .no-more-tables
+                table.table.table-bordered.table-striped.mb0
+                    thead
+                        tr.bg-thead
+                            th.text-center Non Miscellaneous Name
+                            th.text-center Total
+                    tbody
+                        - total_count = @sale.sales_non_misces.map { |nm| nm.percentage_scope ? nm.count : 0 }.sum
+                        - @sale.sales_non_misces.map do |nm|
+                            tr
+                                td data-title='Non Miscellaneous' = nm.non_misce.name
+                                td class='#{nm.percentage_scope ? '' : 'text-centered'}' data-title='Total' = "#{nm.count} <span style='#{nm.percentage_scope ? 'float:right;' : ''}'>#{nm.percentage_scope ? to_percentage(nm.count.to_d, total_count.to_d) : ''}</span>".html_safe
+                                
+
+        .modal-footer.no-border
+            span.inline.float-right
+                = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                |
+                = f.submit "Add", class: "btn btn-primary", id: 'add'
+            
+        

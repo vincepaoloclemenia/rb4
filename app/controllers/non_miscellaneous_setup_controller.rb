@@ -50,7 +50,7 @@ class NonMiscellaneousSetupController < ApplicationController
     private
 
         def non_misce_params
-            params.require(:non_misce).permit(:name, :description, :is_active)
+            params.require(:non_misce).permit(:name, :description, :is_active, :percentage_scope)
         end
         
         def set_misce

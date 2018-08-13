@@ -13,6 +13,10 @@ class Branch < ActiveRecord::Base
   has_many :purchase_orders, dependent: :destroy
   has_many :order_lists, dependent: :destroy
   has_one :branch_purchase_order_setup
+  has_many :sale_by_category_entries, through: :sales
+  has_many :sale_by_settlement_entries, through: :sales
+  has_many :sales_stats, through: :sales
+  has_many :sales_non_misces, through: :sales
 
   # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
   # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }

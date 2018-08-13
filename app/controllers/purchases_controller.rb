@@ -1,7 +1,7 @@
 class PurchasesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
-	before_action :restrict_actions, only: [:update, :destroy]
+	before_action :set_purchase, only: [:update, :destroy, :edit]
 	before_action :restrict_other_users, only: :purchase_order_lookup
 	before_action :restrict_branch_admins, only: [:limit_edit, :edit_purcahse_limit]
 
@@ -51,7 +51,6 @@ class PurchasesController < ApplicationController
 	end
 
 	def edit
-		@purchase = current_brand.purchases.friendly.find params[:id]
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq				
 	end
 
@@ -68,31 +67,34 @@ class PurchasesController < ApplicationController
 	end
 
 	def update	
-		@purchase.user_modified_by_id = current_user.id
-		if @purchase.update(purchase_params)
+		if branch_admin? && !@purchase.allowed_to_modify?
+			redirect_to purchases_path, alert: "You are no longer allowed to update nor delete the purchase record" 			
+		elsif @purchase.update(purchase_params)
+			@purchase.user_modified_by_id = current_user.id			
 			redirect_to purchases_path
 			flash[:notice] = "Purchase was successfully updated"
 		else
 			redirect_to purchases_path
 			flash[:alert] = @purchase.errors.full_messages.join(', ')
 		end
-		
-		#redirect_to purchases_path
 	end
 
 	def destroy	
-		if @purchase.purchase_order.present?
-			@purchase_order = @purchase.purchase_order
-			@purchase_order.update(saved_as_purchase: false)
-		end
 		respond_to do |format|
-			if @purchase.destroy
-				index
-				@success = true
-				flash[:notice] = "Purchase successfully deleted"
+			if client_admin? || @purchase.allowed_to_modify?
+				@purchase_order = @purchase.purchase_order
+				if @purchase.destroy
+					@purchase_order.update(saved_as_purchase: false)
+					index
+					@success = true
+					flash[:notice] = "Purchase successfully deleted"
+				else
+					@success = false
+					flash[:alert] = @purchase.errors.full_messages.join(", ")
+				end
 			else
 				@success = false
-				flash[:alert] = @purchase.errors.full_messages.join(", ")
+				flash[:alert] = "You are no longer allowed to update nor delete the purchase record"
 			end
 			format.js
 		end
@@ -180,6 +182,10 @@ class PurchasesController < ApplicationController
 
 	private
 
+		def set_purchase
+			@purchase = current_brand.purchases.friendly.find params[:id]
+		end			
+
 		def purchase_params
 			if params[:purchase][:purchase_date].present?
 				params[:purchase][:purchase_date] = Date.strptime(params[:purchase][:purchase_date], "%m/%d/%Y").to_s
@@ -210,14 +216,6 @@ class PurchasesController < ApplicationController
 		def restrict_branch_admins
 			if branch_admin?
 				redirect_to purchases_path, alert: "Action cannot be completed"
-			end
-		end
-
-		def restrict_actions
-			@purchase = current_brand.purchases.friendly.find(params[:id])
-			if branch_admin? && @purchase.unable_to_modify?
-				redirect_to purchases_path
-				flash[:alert] = "Unable to delete or edit. You can only do these actions within 12 hours after creation"
 			end
 		end
 

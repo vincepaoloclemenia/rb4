@@ -33,6 +33,7 @@ gem 'friendly_id', '~> 5.1.0'
 gem 'pry'
 
 group :development, :test do
+  gem 'puma'
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'

@@ -127,7 +127,7 @@ module ApplicationHelper
 	end
 
 	def to_percentage(first_value, second_value)
-		val = (((first_value/second_value) * 100).round(2)).abs
+		val = first_value == 0 || second_value == 0 ? 0 : (((first_value/second_value) * 100).round(2)).abs
 		val = check_value_if_nan(val)
 		return val.to_s + '%'
 	end

@@ -3,6 +3,10 @@ class Sale < ActiveRecord::Base
   	belongs_to :branch
 
 	has_many :sale_by_category_entries, :dependent => :destroy
+	has_many :sales_stats, dependent: :destroy
+	has_many :sales_non_misces, dependent: :destroy
+	accepts_nested_attributes_for :sales_stats, :reject_if => :all_blank, :allow_destroy=> true
+	accepts_nested_attributes_for :sales_non_misces, :reject_if => :all_blank, :allow_destroy=> true	
 	accepts_nested_attributes_for :sale_by_category_entries, :reject_if => :all_blank, :allow_destroy=> true
 
 	has_many :sale_by_settlement_entries, :dependent => :destroy
@@ -17,7 +21,7 @@ class Sale < ActiveRecord::Base
 	validates_attachment :daily_sales_record,
 		:content_type => { content_type: /^application\/(pdf)/, message: "Only accepts pdf" }
 
-	validates :sale_date, :branch, :vat, :service_charge, :gc_sales, presence: true
+	validates :sale_date, :branch, presence: true
 	validates_uniqueness_of :sale_date, scope: :branch
 
 

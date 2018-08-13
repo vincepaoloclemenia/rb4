@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180808064628) do
+ActiveRecord::Schema.define(version: 20180813035402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -347,8 +347,9 @@ ActiveRecord::Schema.define(version: 20180808064628) do
     t.string   "name"
     t.text     "description"
     t.boolean  "is_active"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.boolean  "percentage_scope"
   end
 
   add_index "non_misces", ["client_id"], name: "index_non_misces_on_client_id", using: :btree
@@ -633,14 +634,16 @@ ActiveRecord::Schema.define(version: 20180808064628) do
 
   create_table "sales_non_misces", force: :cascade do |t|
     t.integer  "sale_id"
-    t.integer  "non_miscelaneous_id"
     t.integer  "branch_id"
     t.integer  "count"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.boolean  "percentage_scope"
+    t.integer  "non_misce_id"
   end
 
   add_index "sales_non_misces", ["branch_id"], name: "index_sales_non_misces_on_branch_id", using: :btree
+  add_index "sales_non_misces", ["non_misce_id"], name: "index_sales_non_misces_on_non_misce_id", using: :btree
   add_index "sales_non_misces", ["sale_id"], name: "index_sales_non_misces_on_sale_id", using: :btree
 
   create_table "sales_revenues", force: :cascade do |t|
@@ -663,6 +666,7 @@ ActiveRecord::Schema.define(version: 20180808064628) do
     t.integer  "count"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.boolean  "non_transac"
   end
 
   add_index "sales_stats", ["branch_id"], name: "index_sales_stats_on_branch_id", using: :btree
@@ -716,6 +720,7 @@ ActiveRecord::Schema.define(version: 20180808064628) do
     t.boolean  "is_active"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.boolean  "non_transac"
   end
 
   add_index "statistics", ["client_id"], name: "index_statistics_on_client_id", using: :btree

@@ -10,5 +10,7 @@
             span style='font-size: 11px; margin-left: 20px;' class="#{statistic.is_active ? 'green' : 'red'}" 
                 = statistic.is_active ? "(Active)" : "(Deactivated)"
         
-        .col-xs-12
+        .col-xs-6
             p style='font-size: 10px' = statistic.description.present? ? statistic.description : "<i>No descripion</i>".html_safe
+        .col-xs-6
+            p style='font-size: 11px' = statistic.non_transac ? "<span class='green'>A Transaction</span>".html_safe : "<span class='red'>Non-transaction</span>".html_safe
