@@ -2,6 +2,7 @@ class SalesController < ApplicationController
 	before_action :authenticate_user!
 	before_action :access_control
 	before_action :destroy_activity, only: :destroy
+	before_action :get_off_non_branch_user, only: :show
 	after_action :get_total_sales, only: :create
 
 	def index
@@ -70,6 +71,12 @@ class SalesController < ApplicationController
 											sales_stats_attributes: [:id, :branch_id, :count, :statistic_id, :non_transac],
 											sales_non_misces_attributes: [:id, :branch_id, :count, :percentage_scope, :non_misce_id]
 										)
+		end
+
+		def get_off_non_branch_user
+			if branch_user? && current_user.branch.id != params[:id]
+				redirect_to sales_path, alert: "No record found"
+			end
 		end
 
 		def get_total_sales

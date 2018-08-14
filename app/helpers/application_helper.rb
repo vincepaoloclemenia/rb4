@@ -71,7 +71,7 @@ module ApplicationHelper
 		when "company_setup"
 			"open" if current_pages?(client_path, brands_path) || (controller.eql?('brands') && action.eql?('show'))
 		when "purchasing"
-			"open" if current_pages?(purchase_order_generator_index_path, purchase_orders_path, purchase_orders_summary_index_path) || (controller.eql?('purchase_order_generator') && action.eql?('index')) || (controller.eql?('purchase_orders_summary') && action.eql?('index')) || (controller.eql?('purchase_orders') && action.eql?('index'))
+			"open" if current_pages?(purchase_orders_listing_index_path, purchase_order_generator_index_path, purchase_orders_path, purchase_orders_summary_index_path) || (controller.eql?('purchase_order_generator') && action.eql?('index')) || (controller.eql?('purchase_orders_summary') && action.eql?('index')) || (controller.eql?('purchase_orders') && action.eql?('index'))
 		when "labor_setup"
 			"open" if current_pages?(employees_path, employee_types_path)
 		when "sales_setup"

@@ -144,9 +144,8 @@ class Purchases extends React.Component{
                 <div key='search' className='panel'>
                     <div className='panel-heading border pb45'>
                         <div className='pull-left mt7'>Search Filter</div>
-                        
+                        {this.renderPurchaseSetup()}
                     </div>
-                    {this.renderPurchaseSetup()}
                     <div className='panel-body ml15 mr15'>
                         <div className='row pb10'>
                             <div className='col-md-6'>                              
