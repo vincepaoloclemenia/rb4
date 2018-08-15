@@ -74,7 +74,7 @@ class SalesController < ApplicationController
 		end
 
 		def get_off_non_branch_user
-			if branch_user? && current_user.branch.id != params[:id]
+			if branch_admin? && current_user.branch.id != params[:id]
 				redirect_to sales_path, alert: "No record found"
 			end
 		end

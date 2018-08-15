@@ -17,12 +17,14 @@ class Branch < ActiveRecord::Base
   has_many :sale_by_settlement_entries, through: :sales
   has_many :sales_stats, through: :sales
   has_many :sales_non_misces, through: :sales
+  has_many :employee_types
 
   # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
   # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }
   
   validates :name, presence: true, length: { maximum: 50 }, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
-  validates :company_registered_name, :aka, presence: true, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }, if: :wizard_done?
+  validates :aka, presence: true, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }, if: :wizard_done?
+  validates :company_registered_name, presence: true
   validates :tin_number, presence: true, uniqueness: true, if: :wizard_done?
   validate :validate_alias, on: [:create, :update], if: :wizard_done?
   after_create :set_default_color

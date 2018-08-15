@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   patch 'account/:username/update_account' => 'users#update_account', as: 'update_account'
   patch 'account/:username/change_password' => 'users#change_password', as: 'change_password'
   resource :client, only: [:show, :edit, :update]
+  resources :timesheets
   resources :brands do
     resources :branches
     get :set_purchase_order_restriction, on: :collection

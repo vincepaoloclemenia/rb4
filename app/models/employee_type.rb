@@ -1,6 +1,8 @@
 class EmployeeType < ActiveRecord::Base
 	has_many :employees
-	belongs_to :dividend, class_name: 'Category', foreign_key: :dividend_id
+  #belongs_to :dividend, class_name: 'Category', foreign_key: :dividend_id
+  
+  validates :name, presence: true, uniqueness: true
 
 	#class methods
   def self.labor_hours_by_sale_category(date,branches,current_brand)

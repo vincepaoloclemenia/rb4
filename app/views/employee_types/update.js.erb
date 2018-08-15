@@ -1,0 +1,8 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+
+$('#employee_type_<%= @employee_type.id %>').replaceWith('<%= j render @employee_type %>').fadeIn();

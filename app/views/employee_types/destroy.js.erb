@@ -1,0 +1,14 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+
+$('#employee_type_<%= @employee_type.id %>').fadeOut();
+
+
+<% if current_brand.employee_types.empty? %>
+	$('.empty-warning').css("display","block");
+	$('#employee-types').css("display","none");
+<% else %>
+	$('.empty-warning').css("display","none");
+	$('#employee-types').css("display","block");
+<% end %>

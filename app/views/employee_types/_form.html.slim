@@ -1,24 +1,24 @@
-.modal-dialog
-	.modal-content
-		.modal-header
-			button.close type="button" data-dismiss="modal" aria-hidden="true"
-				i.icon-maxicons1-exit
-			h4.modal-title Add Employee Type
-		.modal-body
-			= form_for @employee_type do |f|
-				.row.mb10
-					.col-xs-6
-						= f.label :name
-							| Type
-							small.field-req  *
-						= f.text_field :name, class: 'form-control'
-					.col-xs-6
-						= f.label :dividend
-						= f.select :dividend_id, @category.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
-				.row.mb10
-					.col-xs-12
-						= f.label :description
-						= f.text_area :description, class: 'form-control', rows:"2"
-				.modal-footer.no-border
-					= link_to "Cancel", "#", class: "btn btn-default", data: {dismiss: "modal"}
-					button.btn.btn-primary type="submit" Add Type
+- branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
+= form_for @employee_type, remote: true do |f|
+	= f.hidden_field :brand_id, value: current_brand.id
+	.row.mb10
+		/.col-xs-6
+		/	= f.label :branch_id, class: "control-label"
+		/		| Branch
+		/		small.field-req
+		/	= f.select :branch_id, branches.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select Branch" }, style: "width: 100%; display: none;"
+		.col-xs-12
+			= f.label :name
+				| Type
+				small.field-req  *
+			= f.text_field :name, class: 'form-control validate_name'
+		/.col-xs-6
+		/	= f.label :dividend
+		/	= f.select :dividend_id, @category.pluck(:name, :id), { include_blank: true }, class: "chosen", data: { placeholder: "Select" }, style: "width: 100%; display: none;"
+	.row.mb10
+		.col-xs-12
+			= f.label :description
+			= f.text_area :description, class: 'form-control', rows:"2"
+	.modal-footer.no-border
+		= link_to "Cancel", "#", class: "btn btn-default", data: {dismiss: "modal"}
+		button.btn.btn-primary type="submit" Save Changes
