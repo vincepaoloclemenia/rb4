@@ -1,0 +1,19 @@
+.panel 
+    .panel-heading
+        .pull-left.mt7 Employee Benefits
+        .pull-right
+			= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Employee Benefit".html_safe, new_employee_benefit_path, class: "btn btn-success btn-round btn-outline", remote: true
+	.panel-body
+		.empty-warning style="display: #{@empty_warning}"
+			.row
+				.col-xs-12
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| No Employe Benefit has been setup yet
+		div#employee-benefits style="display: #{!@empty_warning}"
+			= render @employee_benefits
+
+= render partial: "partials/modal"

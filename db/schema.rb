@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180814035612) do
+ActiveRecord::Schema.define(version: 20180815090338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,19 @@ ActiveRecord::Schema.define(version: 20180814035612) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  create_table "benefits", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "employee_id"
+    t.string   "identification"
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+    t.integer  "employee_benefit_id"
+    t.decimal  "value",               precision: 16, scale: 2, default: 0.0
+  end
+
+  add_index "benefits", ["employee_benefit_id"], name: "index_benefits_on_employee_benefit_id", using: :btree
+  add_index "benefits", ["employee_id"], name: "index_benefits_on_employee_id", using: :btree
 
   create_table "bills", force: :cascade do |t|
     t.integer  "subscription_id"
@@ -225,6 +238,17 @@ ActiveRecord::Schema.define(version: 20180814035612) do
   add_index "dashboards", ["branch_id"], name: "index_dashboards_on_branch_id", using: :btree
   add_index "dashboards", ["brand_id"], name: "index_dashboards_on_brand_id", using: :btree
   add_index "dashboards", ["client_id"], name: "index_dashboards_on_client_id", using: :btree
+
+  create_table "employee_benefits", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.string   "name"
+    t.text     "description"
+    t.boolean  "active"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "employee_benefits", ["brand_id"], name: "index_employee_benefits_on_brand_id", using: :btree
 
   create_table "employee_types", force: :cascade do |t|
     t.string   "name"
@@ -844,6 +868,7 @@ ActiveRecord::Schema.define(version: 20180814035612) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  add_foreign_key "benefits", "employees"
   add_foreign_key "bills", "clients"
   add_foreign_key "bills", "subscriptions"
   add_foreign_key "branch_subscriptions", "branches"

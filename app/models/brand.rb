@@ -26,7 +26,9 @@ class Brand < ActiveRecord::Base
   has_many :inventory_items, through: :inventories
   has_many :subscribed_branches, -> { includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil }) }, dependent: :destroy, class_name: "Branch"
   has_many :unsubscribed_branches, -> { includes(:branch_subscription).where( branch_subscriptions: { branch_id: nil }) }, dependent: :destroy, class_name: "Branch"
-  has_many :employee_types, through: :branches
+  has_many :employee_types, dependent: :destroy
+  has_many :employee_benefits, dependent: :destroy
+
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 
                        :content_type => { :content_type => /^image\/(png|gif|jpeg|jpg)/, message: "must be in the format png|gif|jpg" },

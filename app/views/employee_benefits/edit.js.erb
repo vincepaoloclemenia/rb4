@@ -1,0 +1,12 @@
+$('#modal h4').html('Edit Employee Benefit <%= @employee_benefit.name %>');
+
+$('.modal-body').html('<%= j render("form") %>');
+
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

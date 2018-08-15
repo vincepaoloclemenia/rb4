@@ -1,0 +1,15 @@
+.col-lg-4.col-md-6.col-sm-12.col-xs-12 style='padding: 10px' id='employee_benefit_#{employee_benefit.id}'
+    .row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'
+        .pull-right
+            = link_to "<i class='fa icon-glyph-76'></i>".html_safe, employee_benefit_path(employee_benefit), method: :delete, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true	
+        .pull-right
+            = link_to "<i class='fa icon-glyph'></i>".html_safe, edit_employee_benefit_path(employee_benefit), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
+
+        h4 
+            = employee_benefit.name
+            span style='font-size: 11px; margin-left: 20px;' class="#{employee_benefit.active ? 'green' : 'red'}" 
+                = employee_benefit.active ? "(Active)" : "(Deactivated)"
+        
+        .col-xs-12
+            p style='font-size: 10px' = employee_benefit.description.present? ? employee_benefit.description : "<i>No descripion</i>".html_safe
+        
