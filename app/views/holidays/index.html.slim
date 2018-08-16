@@ -1,0 +1,21 @@
+- content_for :title, "Restobot | Holidays"
+.panel
+    .panel-heading
+        .pull-left.mt7 Holidays
+        .pull-right
+			= link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Holiday".html_safe, new_holiday_path, class: "btn btn-success btn-round btn-outline", remote: true
+    .panel-body
+        .empty-warning style="display: #{@empty_warning}"
+			.row
+				.col-xs-12
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| No Holiday schedule created yet
+		div#holidays style="display: #{!@empty_warning}"
+			= render @holidays
+
+
+= render partial: "partials/modal"

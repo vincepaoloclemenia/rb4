@@ -1,0 +1,33 @@
+= form_for @holiday, remote: true do |f|
+    .row.mb10
+        .col-xs-6
+            = f.label :name, class: "control-label"
+                | Name
+                small.field-req  *
+            = f.text_field :name, class: "form-control validate_name"
+        .col-xs-6
+            = f.label :date, class: 'control-label'
+                | Schedule
+            - if @holiday.new_record?
+                = f.text_field :date, class: "form-control validate_date", placeholder: "mm/dd/yyyy", id: "date"
+            - else
+                = f.text_field :date, class: "form-control validate_date", placeholder: "mm/dd/yyyy", id: "date", value: @holiday.date.strftime("%m/%d/%Y")
+    .row.mb10
+        .col-xs-12
+            = f.label :description
+            = f.text_area :description, class: "form-control", rows: "2"
+    
+    .row.mb10
+        .col-xs-12.mt20
+            | (
+            small.field-req  *
+            |  )
+            i  indicates field is required
+    .modal-footer.no-border
+        span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            |
+            - if @holiday.new_record?
+                button.btn.btn-primary type="submit" Add
+            - else
+                button.btn.btn-primary type="submit" Save

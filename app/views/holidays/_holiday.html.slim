@@ -1,0 +1,16 @@
+.col-lg-offset-2.col-lg-8.col-md-offset-1.col-md-10.col-xs-12 style='padding: 10px' id='holiday_#{holiday.id}'
+    .row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'
+        .pull-right
+            = link_to "<i class='fa icon-glyph-76'></i>".html_safe, holiday_path(holiday), method: :delete, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true	
+        .pull-right
+            = link_to "<i class='fa icon-glyph'></i>".html_safe, edit_holiday_path(holiday), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
+
+        h4 
+            = holiday.name
+        h6
+            span.red
+                = holiday.date.strftime('%B %d, %Y')
+        
+        .col-xs-12
+            p style='font-size: 12px' = holiday.description.present? ? holiday.description : "<i>No descripion</i>".html_safe
+        

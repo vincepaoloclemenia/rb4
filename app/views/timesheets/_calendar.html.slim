@@ -1,3 +1,16 @@
 
-= calendar @date do |date| 
+h2#month
+    .pull-left.mb10
+        = link_to "<", date: date.prev_month, remote: true
+    center
+        span
+            = date.strftime("%B %Y")
+        .pull-right
+            = link_to ">", date: date.next_month, remote: true
+
+= calendar date do |date| 
     = date.day
+    - if purchases[date]
+        - purchases[date].map do |purchase|
+            ul
+                li = link_to purchase.invoice_number, purchase_purchase_items_path(purchase)

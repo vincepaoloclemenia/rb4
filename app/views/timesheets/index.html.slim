@@ -4,16 +4,9 @@
     
     .panel-body
         #timesheets
-            h2#month
-                .pull-left.mb10
-                    = link_to "<", date: @date.prev_month
-                center
-                    span
-                        = @date.strftime("%B %Y")
-                    .pull-right
-                        = link_to ">", date: @date.next_month
-            #calendar
-                = render partial: "calendar", date: @date
+            = render partial: "calendar", locals: { date: @date, purchases: @purchases }
+            
+                
             
 
            

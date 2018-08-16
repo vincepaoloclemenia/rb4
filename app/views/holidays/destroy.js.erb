@@ -1,0 +1,14 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+
+$('#holiday_<%= @holiday.id %>').fadeOut();
+
+
+<% if current_brand.holidays.empty? %>
+	$('.empty-warning').css("display","block");
+	$('#employee-types').css("display","none");
+<% else %>
+	$('.empty-warning').css("display","none");
+	$('#employee-types').css("display","block");
+<% end %>

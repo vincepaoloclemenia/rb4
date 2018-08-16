@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   resource :client, only: [:show, :edit, :update]
   resources :timesheets
   resources :employee_benefits
+  resources :holidays
   resources :brands do
     resources :branches
     get :set_purchase_order_restriction, on: :collection

@@ -28,6 +28,7 @@ class Brand < ActiveRecord::Base
   has_many :unsubscribed_branches, -> { includes(:branch_subscription).where( branch_subscriptions: { branch_id: nil }) }, dependent: :destroy, class_name: "Branch"
   has_many :employee_types, dependent: :destroy
   has_many :employee_benefits, dependent: :destroy
+  has_many :holidays, dependent: :destroy
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 
