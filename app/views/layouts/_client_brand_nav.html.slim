@@ -36,6 +36,8 @@
 				li.menu-accordion class="#{is_menu_open?('labor_reports')}"
 					= link_to '<i class="fa icon-glyph-72"></i> <span>Labor Report</span>'.html_safe, 'javascript:;'
 					ul.sub-menu
+						li class = '#{what_controller?('employees', 'index')}' 
+							= link_to "Employees", employees_path
 						li class = '#{what_controller?('timesheets', 'index')}' 
 							= link_to "Employee Timesheets", timesheets_path
 						/li class = '#{what_controller?('reports', 'man_hours')}'

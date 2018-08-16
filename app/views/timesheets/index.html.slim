@@ -4,9 +4,10 @@
     
     .panel-body
         #timesheets
-            = render partial: "calendar", locals: { date: @date, purchases: @purchases }
+            = render partial: "calendar", locals: { date: @date, holidays: @holidays }
             
-                
+
+= render partial: "partials/modal"
             
 
            

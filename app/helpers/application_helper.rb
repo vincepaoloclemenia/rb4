@@ -55,7 +55,7 @@ module ApplicationHelper
 		when "purchase_reports"
 			"open" if current_pages?(purchase_listings_path, purchase_summary_path, item_purchase_detail_path)
 		when "labor_reports"
-			"open" if current_pages?(labor_hours_path, man_hours_path)
+			"open" if current_pages?(employees_path, timesheets_path)
 		when "sales_reports"
 			"open" if current_pages?(sales_path) ||
 								(controller.eql?('sales') && action.eql?('show'))

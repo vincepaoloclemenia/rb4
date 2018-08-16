@@ -9,8 +9,15 @@ h2#month
             = link_to ">", date: date.next_month, remote: true
 
 = calendar date do |date| 
-    = date.day
-    - if purchases[date]
-        - purchases[date].map do |purchase|
+    
+    - if holidays[date]
+        span style='color: #A32C17; float:left'
+            = date.day
+        - holidays[date].map do |holiday|
             ul
-                li = link_to purchase.invoice_number, purchase_purchase_items_path(purchase)
+                li 
+                    span style='color: #A32C17'
+                        = holiday.name
+    - else
+        = date.day
+        

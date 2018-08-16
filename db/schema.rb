@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180815091842) do
+ActiveRecord::Schema.define(version: 20180816032226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -291,12 +291,14 @@ ActiveRecord::Schema.define(version: 20180815091842) do
   create_table "holidays", force: :cascade do |t|
     t.string   "name"
     t.integer  "brand_id"
-    t.datetime "date"
+    t.date     "date"
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "branch_id"
   end
 
+  add_index "holidays", ["branch_id"], name: "index_holidays_on_branch_id", using: :btree
   add_index "holidays", ["brand_id"], name: "index_holidays_on_brand_id", using: :btree
 
   create_table "inventories", force: :cascade do |t|
