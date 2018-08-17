@@ -1,0 +1,11 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+
+$('#timesheet-fields').append('<%= j render @timesheet_field %>').fadeIn();
+
+$('.empty-warning').css("display","none");
+$('#timesheet-fields').css("display","block");

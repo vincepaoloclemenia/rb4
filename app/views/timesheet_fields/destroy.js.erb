@@ -1,0 +1,14 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+
+$('#timesheet_field_<%= @timesheet_field.id %>').fadeOut();
+
+
+<% if current_brand.timesheet_fields.empty? %>
+	$('.empty-warning').css("display","block");
+	$('#timesheet-fields').css("display","none");
+<% else %>
+	$('.empty-warning').css("display","none");
+	$('#timesheet-fields').css("display","block");
+<% end %>

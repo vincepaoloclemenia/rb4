@@ -1,0 +1,31 @@
+= form_for @timesheet_field, remote: true do |f|
+    .row.mb10
+        .col-xs-12
+            = f.label :name, class: "control-label"
+                | Name
+                small.field-req  *
+            = f.text_field :name, class: "form-control validate_name"
+    .row.mb10
+        .col-xs-12
+            = f.label :description
+            = f.text_area :description, class: "form-control", rows: "2"
+    .row.mb10
+        .col-xs-3
+            = f.label :is_active, "Status"
+        .col-xs-6
+            span.gap
+                = f.check_box :is_active, data: {off: "Deactivated", offstyle: "default", on: "Active", onstyle: "success", style:"android", toggle: "toggle"}
+    .row.mb10
+        .col-xs-12.mt20
+            | (
+            small.field-req  *
+            |  )
+            i  indicates field is required
+    .modal-footer.no-border
+        span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            |
+            - if @timesheet_field.new_record?
+                button.btn.btn-primary type="submit" Add
+            - else
+                button.btn.btn-primary type="submit" Save

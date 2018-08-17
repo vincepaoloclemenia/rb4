@@ -102,6 +102,8 @@
 						li.menu-accordion class="#{is_menu_open?('labor_setup')}"
 							= link_to '<i class="toggle-accordion"></i> <span>Labor Setup</span>'.html_safe, 'javascript:;'
 							ul.sub-menu
+								li class = '#{what_controller?('timesheet_fields', 'index')}'
+									= link_to "Timesheet Fields Setup", timesheet_fields_path
 								li class = '#{what_controller?('employee_benefits', 'index')}'
 									= link_to "Employee Benefits", employee_benefits_path
 								li class = '#{what_controller?('employee_types', 'index')}'

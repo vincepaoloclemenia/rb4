@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :timesheets
   resources :employee_benefits
   resources :holidays
+  resources :timesheet_fields
   resources :brands do
     resources :branches
     get :set_purchase_order_restriction, on: :collection

@@ -65,7 +65,7 @@ module ApplicationHelper
 			"open" if current_pages?(company_users_path, roles_path) ||
 								(controller.eql?('roles') && action.eql?('manage_permissions'))
 		when "setup"
-			"open" if current_pages?(non_misces_path, statistics_path, client_path, brands_path, employee_benefits_path, employee_types_path, settlements_path,
+			"open" if current_pages?(timesheet_fields_path, non_misces_path, statistics_path, client_path, brands_path, employee_benefits_path, employee_types_path, settlements_path,
 															shifts_path, units_path, categories_path, items_path, conversions_path, suppliers_path) ||
 															(controller.eql?('brands') && action.eql?('show'))
 		when "company_setup"
@@ -73,7 +73,7 @@ module ApplicationHelper
 		when "purchasing"
 			"open" if current_pages?(purchase_orders_listing_index_path, purchase_order_generator_index_path, purchase_orders_path, purchase_orders_summary_index_path) || (controller.eql?('purchase_order_generator') && action.eql?('index')) || (controller.eql?('purchase_orders_summary') && action.eql?('index')) || (controller.eql?('purchase_orders') && action.eql?('index'))
 		when "labor_setup"
-			"open" if current_pages?(employee_benefits_path, employee_types_path)
+			"open" if current_pages?(timesheet_fields_path, employee_benefits_path, employee_types_path)
 		when "sales_setup"
 			"open" if current_pages?(non_misces_path, statistics_path, settlements_path, shifts_path)
 		when "purchase_setup"
