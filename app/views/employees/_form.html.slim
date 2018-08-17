@@ -1,63 +1,127 @@
 - branches = current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches
-.small-4
-	= form_for @employee do |f|
-		p Branch
-		= f.select :branch_id, branches.order(:name).pluck(:name, :id), {include_blank: true}
-		
-		p First Name
-		= f.text_field :first_name
-		
-		p Last Name
-		= f.text_field :last_name
-		
-		p Address
-		= f.text_field :address
+= form_for @employee, remote: true do |f|
+	h5 Employee Details
+	- if client_admin? || brand_admin?
+		.row.mb10
+			.col-xs-12
+				label
+					| Branch
+					small.field-req  *
+				- if @branch && @employee.new_record?
+					= f.select :branch_id, options_for_select(branches.order(:name).pluck(:name, :id), [@branch.name, @branch.id] ), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
+				- else
+					= f.select :branch_id, branches.order(:name).pluck(:name, :id), {include_blank: true}, class: "chosen", data: {placeholder:"Select"}
+	.row.mb10
+		.col-xs-6
+			label
+				| First Name
+				small.field-req  *
+			= f.text_field :first_name, class: "form-control", placeholder: "e.g: Juan"
+		.col-xs-6
+			label
+				| Last Name
+				small.field-req  *
+			= f.text_field :last_name, class: "form-control", placeholder: "e.g: Dela Cruz"
+	.row.mb10
+		.col-xs-4
+			label
+				| Date of Birth
+			= f.text_field :birthdate, value: "#{@employee.birthdate.nil? ? '' : @employee.birthdate.strftime('%m/%d/%Y') }",class: "form-control", placeholder: "mm/dd/yyyy", id: "date-birth"
+		.col-xs-4
+			label
+				| Age
+			= f.number_field :age, class: "form-control"
+		.col-xs-4
+			label Contact No
+			= f.number_field :contact_no, class: "form-control"
+	.row.mb10
+		.col-xs-12
+			label Address
+			= f.text_area :address, class: "form-control", rows:"2"
+	.row.mb10
+		.col-xs-6
+			label Position Title
+			= f.text_field :position, class: "form-control", placeholder: "e.g: Chef"
+		.col-xs-6
+			label Employee Type
+			= f.select :employee_type_id, EmployeeType.pluck(:name, :id), {include_blank: true},  class: "chosen", data: {placeholder:"Select"}
+	.row.mb25
+		.col-xs-6
+			label
+				| Position Type
+			= f.select :position_type, ["Contractual", "Regular"], {include_blank: true}, id: "position_type", class: "chosen", data: {placeholder:"Select"}
+		.col-xs-6
+			label
+				| Date Employed
+			= f.text_field :date_employed, value: "#{@employee.date_employed.nil? ? '' : @employee.date_employed.strftime('%m/%d/%Y') }", class: "form-control", placeholder: "mm/dd/yyyy", id: "date-employed"
+		/.col-xs-3
+		/	label
+		/		| End Date
+		/	= f.text_field :end_date, class: "form-control", placeholder: "mm/dd/yyyy", id: "end-date"
+	
+	h5 Employee Benefits
 
-		p Date of Birth
-		= f.text_field :birthdate
+	.row.mb10
+		- if @employee_benefits.present?
+			- @employee_benefits.map do |emp_ben|
+				- if @employee.new_record? || @employee.benefits.empty?
+					= f.fields_for :benefits do |benefit|
+						= benefit.hidden_field :employee_benefit_id, value: emp_ben.id	
+						= benefit.hidden_field :name, value: emp_ben.name	
+						.col-xs-6.mb10
+							= benefit.label :identification, "#{emp_ben.name}"
+							= benefit.text_field :identification, class: "form-control", placeholder: "#{emp_ben.name} id number"
+						.col-xs-6.mb10
+							= benefit.label :value, "Amount"
+							.input-group
+								span.input-group-addon PHP
+								= benefit.number_field :value, class: "form-control", placeholder: "0.00", step: '.01'
+				- else
+					- benefit = @employee.benefits.find_by_employee_benefit_id emp_ben.id
+					- if benefit
+						= f.fields_for :benefits, benefit do |benefit|
+							= benefit.hidden_field :employee_benefit_id, value: emp_ben.id	
+							= benefit.hidden_field :name, value: emp_ben.name	
+							.col-xs-6.mb10
+								= benefit.label :identification, "#{emp_ben.name}"
+								= benefit.text_field :identification, class: "form-control", placeholder: "#{emp_ben.name} id number"
+							.col-xs-6.mb10
+								= benefit.label :value, "Amount"
+								.input-group
+									span.input-group-addon PHP
+									= benefit.number_field :value, class: "form-control", placeholder: "0.00", step: '.01'
+					- else
+						= f.fields_for :benefits, @benefit do |benefit|
+							= benefit.hidden_field :employee_benefit_id, value: emp_ben.id	
+							= benefit.hidden_field :name, value: emp_ben.name	
+							.col-xs-6.mb10
+								= benefit.label :identification, "#{emp_ben.name}"
+								= benefit.text_field :identification, class: "form-control", placeholder: "#{emp_ben.name} id number"
+							.col-xs-6.mb10
+								= benefit.label :value, "Amount"
+								.input-group
+									span.input-group-addon PHP
+									= benefit.number_field :value, class: "form-control", placeholder: "0.00", step: '.01'
 
-		p Age
-		= f.number_field :age
-		
-		p Contact No
-		= f.number_field :contact_no
+		- else	
+			.col-xs-12
+				.alert.alert-info role="alert"
+					.row
+						.col-xs-1.text-right
+							i.icon-glyph-73.f25
+						.col-xs-11
+							i No employee benefits
+	.modal-footer.no-border
+		span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            |
+            - if @employee.new_record?
+                = f.submit "Add", class: "btn btn-primary"
+            - else
+                = f.submit "Save", class: "btn btn-primary"
 
-		p Position
-		= f.text_field :position
-
-		p Employee Type
-		= f.select :employee_type_id, EmployeeType.pluck(:name, :id)
-
-		p Position Type
-		= f.select :position, ["Contractual", "Regular"], {include_blank: true}, id: "position_type"
-
-		p Date Employed
-		= f.text_field :date_employed
-
-		#end_date_field
-			p End Date
-			= f.text_field :end_date
-
-		p Tin
-		= f.text_field :tin
-
-		p SSS
-		= f.text_field :sss
-
-		p HDMF
-		= f.text_field :hdmf
-
-		p Philhealth
-		= f.text_field :philhealth
-
-		= f.submit "Save", class: 'button'
 
 javascript:
-	$(document).change(function(){
-     if($('#position_type').val() == "Regular"){
-        $("#end_date_field").hide();
-     }
-     else{
-        $("#end_date_field").show();
-     }
-  });
+	$("#date-birth").datepicker({ autoclose: true })
+	$("#date-employed").datepicker({ autoclose: true })
+	$("#end-date").datepicker({ autoclose: true })

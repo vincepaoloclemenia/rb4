@@ -9,7 +9,7 @@ class Brand < ActiveRecord::Base
   has_many :subcategories, -> { where.not(parent_id: nil) }, class_name: 'Category', dependent: :destroy
   has_many :shifts, dependent: :destroy
   has_many :sales, through: :branches
-  #has_many :employees, dependent: :destroy
+  has_many :employees, through: :branches, dependent: :destroy
   has_many :units, dependent: :destroy
   has_many :items, dependent: :destroy
   has_many :inventories, through: :branches, dependent: :restrict_with_error

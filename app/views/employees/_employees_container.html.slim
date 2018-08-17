@@ -1,0 +1,11 @@
+.empty-warning#warning style="display: #{empty_warning}"
+    .row
+        .col-xs-12
+            .alert.alert-info role="alert"
+                .row
+                    .col-xs-1.text-right
+                        i.icon-glyph-73.f25
+                    .col-xs-11
+                        = message
+div#employees style="display: #{!empty_warning}"
+    = render employees

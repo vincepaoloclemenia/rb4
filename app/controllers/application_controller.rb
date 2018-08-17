@@ -9,7 +9,14 @@ class ApplicationController < ActionController::Base
   #before_action :access_control, if: :wizard_done?
   #before_action :restrict_users
 
-  helper_method :client_admin?, :brand_admin?, :current_client, :current_brand, :view_access_control, :free_trial_subscription, :branch_admin?
+  helper_method :current_branches, 
+                :client_admin?, 
+                :brand_admin?, 
+                :current_client, 
+                :current_brand, 
+                :view_access_control, 
+                :free_trial_subscription, 
+                :branch_admin?
 
   def branch_admin?
     current_user.role.role_level == 'branch'
@@ -51,6 +58,10 @@ class ApplicationController < ActionController::Base
       end
     end
     @current_brand = Brand.find(session[:current_brand_id])
+  end
+
+  def current_branches
+    current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches  
   end
 
   def find_wizard_flag

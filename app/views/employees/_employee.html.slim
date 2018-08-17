@@ -1,0 +1,40 @@
+.col-md-6.col-sm-12.col-xs-12 style='padding: 10px;' id='employee_#{employee.id}'
+    .row.p10.mb10 style='border: 1px solid #D3D3D3; border-left: 5px solid #{employee.branch.color}; margin: 10px'
+        .pull-right
+            = link_to "<i class='fa icon-glyph-76'></i>".html_safe, employee_path(employee), method: :delete, class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true	
+        .pull-right
+            = link_to "<i class='fa icon-glyph'></i>".html_safe, edit_employee_path(employee), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
+        .row
+            .col-xs-12.ml15    
+                h4
+                    = employee.full_name     
+                p style='font-size:12px' 
+                    span.green = employee.employee_type.name
+                .col-xs-6
+                    h6 = employee.position
+                .col-xs-6
+                    span.label.label-success.p5 = employee.position_type
+        .row.mb10
+            .panel-heading Benefits
+            .panel-body
+                .no-more-tables
+                    table.table.table-bordered.table-striped.mb0
+                        thead
+                            tr.bg-thead
+                                th.text-center Type
+                                th.text-center Identification No.
+                                th.text-center Amount
+
+                        tbody
+                            - if employee.benefits.present?
+                                - employee.benefits.map do |ben|
+                                    tr
+                                        td data-title='Type' = ben.name
+                                        td data-title='ID No.' = ben.identification
+                                        td.align-right data-title='Amount' = to_peso(ben.value)
+                            - else
+                                tr 
+                                    td colspan='3'
+                                        center
+                                            i No Benefits
+       

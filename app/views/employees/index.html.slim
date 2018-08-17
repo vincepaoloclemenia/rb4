@@ -1,39 +1,25 @@
-- content_for :title, "Restobot | Employees"
-.panel
-  .panel-heading.border.pb45
-    .pull-left.mt7 Employee List
-    .pull-right
-      button.btn.btn-success.btn-round.btn-outline data-target=".add-employee-modal" data-toggle="modal"
-        | Add Employee
-  .panel-body
-    - if @employees.empty?
-      .alert.alert-info role="alert"
-				.row
-					.col-xs-1.text-right
-						i.icon-glyph-73.f25
-					.col-xs-11
-						| Oops! You curently have no items.<br> To start tracking your items click&nbsp;
-						b "Add Employee"
-						| &nbsp;button
-    - else
-	    = render "partials/filter"
-	    .no-more-tables
-	      table.table.table-bordered.table-striped.mb0 data-sortable=""
-	        thead
-	          tr.bg-thead
-	            th width="300" Name
-	            th width="240" Employee Type
-	            th width="230" Branch
-	            th width="230" Date Employeed
-	        tbody
-						- @employees.each do |employee|
-							tr
-								td data-title="Name"
-									= link_to employee.full_name, employee_path(employee), class: "view-link", data: {tt:"tooltip", placement:"top", "original-title" => "View Information"}
-								td data-title="Employee Type" = employee.employee_type.name
-								td data-title="Branch" = employee.branch.name
-								td data-title="Date Employeed" = employee.date_employed
-	    .align-center
-					= render "partials/pagination", collection: @employees
+- content_for :title, "Restobot | Employee Benefits Setup"
+.panel 
+    .panel-heading
+        .pull-left.mt7 Employees
+        .pull-right
+            = link_to "<i class='icon-glyph-164 f14 mr5'></i> Add Employee".html_safe, new_employee_path, class: "btn btn-success btn-round btn-outline", id: "new-link", remote: true
+	.panel-body
+		- unless branch_admin?
+			.row.mb10
+				.col-md-6.col-xs-12
+					= form_tag employees_path, method: :get, id: 'branch-form', remote: true, format: :js do 
+						= select_tag :branch_id, options_from_collection_for_select(@branches, "id", "name"), include_blank: true, class: "chosen", data: { placeholder: "Select Branch" }, id: "bran", style: "width: 100%; display: none;", onchange: "getBranch()"
+						= submit_tag "Try", class: 'btn btn-link', style: "display:none", id: "submit"
+		#employees-container
+			= render partial: "employees_container", locals: { employees: @employees, empty_warning: @empty_warning, message: @message }
 
-= render "emp_modals"
+= render partial: "partials/modal"
+
+javascript:
+	function getBranch(){
+		var bran = document.getElementById("bran");
+		document.getElementById('submit').click();
+		$("#new-link").prop("href", "/employees/new?branch_id="+bran.value);
+	}
+	

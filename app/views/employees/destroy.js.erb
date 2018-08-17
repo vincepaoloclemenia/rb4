@@ -1,0 +1,5 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+
+$('#employee_<%= @employee.id %>').fadeOut();
