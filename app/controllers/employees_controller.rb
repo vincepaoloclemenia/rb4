@@ -58,14 +58,20 @@ class EmployeesController < ApplicationController
     end
   end
 
-  def destroy
-    @employees = @employee.branch.employees
-    @empty_warning = @employees.empty? ? "block" : "none"      
+  def destroy   
     respond_to do |format|
       if @employee.destroy     
+        @branch = Branch.find params[:branch_id]
+        @employees = @branch.employees
+        @empty_warning = @employees.empty? ? "block" : "none"  
+        @message = @employees.empty? ? "No employees yet" : "" 
 				format.json { head :no_content }
 				format.js { flash[:notice] = "Employee has been deleted" }
-			else
+      else
+        @branch = Branch.find params[:branch_id]
+        @employees = @branch.employees
+        @empty_warning = @employees.empty? ? "block" : "none"  
+        @message = @employees.empty? ? "No employees yet" : "" 
 				format.json { render json: @employee.errors, status: :unprocessable_entity }
 			end
 		end

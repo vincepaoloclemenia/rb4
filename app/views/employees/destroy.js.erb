@@ -3,3 +3,4 @@ retriggerFlash();
 
 
 $('#employee_<%= @employee.id %>').fadeOut();
+$("#employees-container").html("<%= j render partial: "employees_container", locals: { employees: @employees, empty_warning: @empty_warning, message: @message } %>")
