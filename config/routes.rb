@@ -24,7 +24,11 @@ Rails.application.routes.draw do
   patch 'account/:username/update_account' => 'users#update_account', as: 'update_account'
   patch 'account/:username/change_password' => 'users#change_password', as: 'change_password'
   resource :client, only: [:show, :edit, :update]
-  resources :timesheets
+  resources :timesheets do
+    get :get_branch, on: :collection
+    get :get_branch_employees, on: :collection
+    post "update_timesheets" => "timesheets#update_timesheets"
+  end
   resources :employee_benefits
   resources :holidays
   resources :timesheet_fields

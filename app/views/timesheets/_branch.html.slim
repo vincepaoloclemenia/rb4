@@ -1,0 +1,9 @@
+= form_tag get_branch_employees_timesheets_path(date: @date), method: :get, remote: true, format: :js do 
+    .row.mb10
+        .col-xs-12
+            = select_tag :branch_id, options_from_collection_for_select(@branches, "id", "name"), include_blank: true, class: "chosen", data: { placeholder: "Select Branch" }, id: "bran", style: "width: 100%; display: none;"
+    .modal-footer.no-border
+		span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            |
+            = submit_tag "Submit", class: "btn btn-primary"

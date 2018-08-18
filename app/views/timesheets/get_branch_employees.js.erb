@@ -1,0 +1,11 @@
+$('#modal h4').html("<%= @branch.name %>'s Employees");
+
+$('.modal-body').html('<%= j render("employees") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

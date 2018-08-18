@@ -18,6 +18,12 @@ h2#month
                 li 
                     span style='color: #A32C17'
                         = holiday.name
+
+        = link_to "+", branch_admin? ? get_branch_employees_timesheets_path(date: date, branch_id: current_user.branch.id) : get_branch_timesheets_path(date: date), class: 'btn btn-link', remote: true
+
     - else
         = date.day
+        = link_to "+", branch_admin? ? get_branch_employees_timesheets_path(date: date, branch_id: current_user.branch.id) : get_branch_timesheets_path(date: date), class: 'btn btn-link', remote: true
+
+= render partial: "brands/brand_modal"
         

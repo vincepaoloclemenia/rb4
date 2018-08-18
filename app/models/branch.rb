@@ -18,7 +18,7 @@ class Branch < ActiveRecord::Base
   has_many :sales_stats, through: :sales
   has_many :sales_non_misces, through: :sales
   has_many :employee_types
-
+  accepts_nested_attributes_for :employees, :allow_destroy => :true
   # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
   # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }
   

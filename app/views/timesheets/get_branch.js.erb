@@ -1,0 +1,11 @@
+$('#modal h4').html('Choose Branch First');
+
+$('.modal-body').html('<%= j render("branch") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
