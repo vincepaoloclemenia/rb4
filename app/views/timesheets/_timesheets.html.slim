@@ -1,0 +1,22 @@
+.panel-body
+    = form_tag get_timesheets_timesheets_path, method: :get, remote: true, format: :js do 
+        .row.mb10
+            - if client_admin? || brand_admin?
+                .col-xs-6
+                    = label_tag :branch_id, "Branch"
+                    = select_tag :branch_id, options_from_collection_for_select(branches, "id", "name"), include_blank: true, class: "chosen", data: { placeholder: "Select Branch to add timesheet logs" }
+            .col-xs-6
+                = label_tag :date_range
+                = text_field_tag :date_range, nil, class: 'form-control drp', placeholder: "Enter Date Range"
+        .row.mb10
+            .col-xs-12
+                = submit_tag "Search Timesheets", class: 'btn btn-link'
+    
+
+    #employees
+       
+        = render partial: "employee_timesheets", locals: { timesheets: timesheets, from: from, to: to, branch: branch }
+        
+
+javascript: 
+    $('.drp').daterangepicker({});

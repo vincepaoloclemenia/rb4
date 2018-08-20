@@ -1,7 +1,9 @@
 .panel
     .panel-heading 
         .pull-left.mt7 Employees Timesheets
-    
+        .pull-right.mt7
+            = link_to "<i class='icon-glyph-54 mr5 f14'></i> Export as PDF".html_safe, get_timesheets_timesheets_path, class: "btn btn-success btn-round btn-outline", remote: true
+
     .panel-body
         - if client_admin? || brand_admin?
             .row.mb10

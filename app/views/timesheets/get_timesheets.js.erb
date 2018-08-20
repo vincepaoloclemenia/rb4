@@ -1,0 +1,16 @@
+$('#modal h4').html('Export Timesheets');
+<% if @timesheets.present? || @date_range.present? %>
+    $('#employees').html('<%= j render partial: "employee_timesheets", locals: { date: @date, from: @from, to: @to, branch: @branch, timesheets: @timesheets, branches: @branches, date_range: @date_range, branch: @branch } %>');
+<% else %>   
+    $('.modal-body').html('<%= j render partial: "timesheets", locals: { from: @from, to: @to, branch: @branch, timesheets: @timesheets, branches: @branches, date_range: @date_range, branch: @branch } %>');
+<% end %>
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
+
+

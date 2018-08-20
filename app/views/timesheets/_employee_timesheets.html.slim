@@ -1,0 +1,58 @@
+- if timesheets.present?
+    .row.pull-right
+            = link_to "<i class='fa blue icon-glyph-162 f14 mr5'></i>Download PDF".html_safe, get_timesheets_timesheets_path(branch_id: branch.id, date_range: date, format: :pdf, q: request.params[:q]), class: "btn btn-link", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"  
+    - timesheets.keys.sort.map do |employee|
+        - emp_timesheets = timesheets[employee]
+        .row
+            .col-xs-12
+                h4 = employee
+        
+
+        .row.mb30
+            .no-more-tables#record
+                table.table.table-bordered.table-striped.mb0
+                    thead
+                        tr.bg-thead
+                            th width="145" Date
+                            th width="110" 
+                                | Regular <br> Hours
+                            th width="110" Overtime
+                            th width="110" 
+                                | Night <br> Differential
+                            th width="110"  
+                                | Special <br> Holiday
+                            th width="110"  
+                                | Special <br> Holiday OT
+                            th width="110"  
+                                | Legal <br> Holiday
+                            th width="110"  
+                                | Legal <br> Holiday OT
+                            th width="110" Tardiness
+                    tbody
+                        - emp_timesheets.map do |ts|
+                            tr 
+                                td data-title='date' = ts.date.strftime("%b %d")
+                                td.align-right data-title='Regular Hours' = ts.regular_hours || 0.0
+                                td.align-right data-title='Overtime' = ts.overtime || 0.0
+                                td.align-right data-title='Night Differential' = ts.night_differential || 0.0
+                                td.align-right data-title='Special Holiday' = ts.special_holiday || 0.0
+                                td.align-right data-title='Special Holiday OT' = ts.special_holiday_ot || 0.0
+                                td.align-right data-title='Legal Holiday' = ts.legal_holiday || 0.0
+                                td.align-right data-title='Legal Holiday OT' = ts.legal_holiday_ot || 0.0
+                                td.align-right data-title='Tardiness' = ts.tardiness || 0.0
+                        tr.bg-total
+                            td data-title='Total' Total
+                            td.align-right data-title='Regular Hours' = emp_timesheets.map{|ts| ts.regular_hours || 0.0 }.sum
+                            td.align-right data-title='Overtime' = emp_timesheets.map{|ts| ts.overtime || 0.0 }.sum
+                            td.align-right data-title='Night Differential' = emp_timesheets.map{|ts| ts.night_differential || 0.0 }.sum
+                            td.align-right data-title='Special Holiday' = emp_timesheets.map{|ts| ts.special_holiday || 0.0 }.sum
+                            td.align-right data-title='Special Holiday OT' = emp_timesheets.map{|ts| ts.special_holiday_ot || 0.0 }.sum
+                            td.align-right data-title='Legal Holiday' = emp_timesheets.map{|ts| ts.legal_holiday || 0.0 }.sum
+                            td.align-right data-title='Legal Holiday OT' = emp_timesheets.map{|ts| ts.legal_holiday_ot || 0.0 }.sum
+                            td.align-right data-title='Tardiness' = emp_timesheets.map{|ts| ts.tardiness || 0.0 }.sum
+                    
+- elsif from.present? && to.present? 
+    h5
+        center
+            i = "No records found for #{branch.name}. Date: #{from.strftime('%b %d, %Y')} - #{to.strftime('%b %d, %Y')}."
+                

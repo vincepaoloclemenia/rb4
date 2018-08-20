@@ -28,7 +28,7 @@
                             = e.fields_for :timesheets, timesheet do |t|
                                 = t.hidden_field :date, value: date
                                 tr 
-                                    td data-title='' = date.strftime("%b %d")
+                                    td data-title='Date' = date.strftime("%b %d")
                                     td data-title='Regular Hours' = t.number_field :regular_hours, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
                                     td data-title='Overtime' = t.number_field :overtime, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
                                     td data-title='Night Differential' = t.number_field :night_differential, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'

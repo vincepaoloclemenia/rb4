@@ -36,6 +36,23 @@ class TimesheetsController < ApplicationController
         end
     end
 
+    def get_timesheets
+        respond_to do |format|
+            @branches = current_branches
+            @date = params[:date_range]
+            @branch = branch_admin? ? current_user.branch : Branch.find_by_id(params[:branch_id])
+            @from = Date.strptime(@date.split(" - ")[0], "%m/%d/%Y") if @date.present?
+            @to = Date.strptime(@date.split(" - ")[1], "%m/%d/%Y") if @date.present?
+            @date_range = @from..@to if @from.present? && @to.present?
+            if @branch.present? && @date.present?
+                @timesheets = @branch.timesheets.includes(:employee).where( date: @date_range ).group_by { |t| "#{t.employee.last_name}, #{t.employee.first_name}" }
+            end
+            format.html
+            format.js
+            format.pdf { render template: 'timesheets/get_timesheets', pdf: "Timesheets"}
+        end
+    end
+
     def show_holiday
         @holiday = Holiday.find_by_id params[:holiday]
     end
