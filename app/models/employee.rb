@@ -1,4 +1,6 @@
 class Employee < ActiveRecord::Base
+
+  default_scope -> { order last_name: :asc }
   belongs_to :branch
   belongs_to :employee_type
   delegate :brand, to: :branch

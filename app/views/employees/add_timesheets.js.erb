@@ -1,0 +1,12 @@
+$('#modal h4').html('<%= "#{@employee.first_name}'s" %> Timesheet');
+
+$('.modal-body').html('<%= j render partial: "timesheet", locals: { date_range: @date_range, date: @date , employee: @employee } %>');
+
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

@@ -1,0 +1,58 @@
+.panel-heading.pb10 = date_range.present? ? "#{date_range.first.strftime('%b %d, %Y')} - #{date_range.last.strftime('%b %d, %Y')}" : "Pick date of cut off first"
+.panel-body
+    - if date.present?
+        = form_for employee, url: employee_save_timesheets_path(employee_id: employee.id), method: :put, remote: true do |e|
+            .no-more-tables#record
+                table.table.table-bordered.table-striped.mb0
+                    thead
+                        tr.bg-thead
+                            th width="145" Employee Name
+                            th width="110" 
+                                | Regular <br> Hours
+                            th width="110" Overtime
+                            th width="110" 
+                                | Night <br> Differential
+                            th width="110"  
+                                | Special <br> Holiday
+                            th width="110"  
+                                | Special <br> Holiday OT
+                            th width="110"  
+                                | Legal <br> Holiday
+                            th width="110"  
+                                | Legal <br> Holiday OT
+                            th width="110" Tardiness
+                    tbody
+                          
+                        - date_range.map do |date|
+                            - timesheet = employee.timesheets.find_by_date(date) || employee.timesheets.build
+                            = e.fields_for :timesheets, timesheet do |t|
+                                = t.hidden_field :date, value: date
+                                tr 
+                                    td data-title='' = date.strftime("%b %d")
+                                    td data-title='Regular Hours' = t.number_field :regular_hours, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+                                    td data-title='Overtime' = t.number_field :overtime, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+                                    td data-title='Night Differential' = t.number_field :night_differential, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+                                    td data-title='Special Holiday' = t.number_field :special_holiday, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+                                    td data-title='Special Holiday OT' = t.number_field :special_holiday_ot, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+                                    td data-title='Legal Holiday' = t.number_field :legal_holiday, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+                                    td data-title='Legal Holiday OT' = t.number_field :legal_holiday_ot, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+                                    td data-title='Tardiness' = t.number_field :tardiness, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
+
+
+            .modal-footer.no-border
+                span.inline.float-right
+                    = link_to "Cancel", "#", class: "btn btn-default", data: { dismiss: "modal" }
+                    |
+                    = e.submit "Save", class: "btn btn-primary", id: 'save'
+    - else       
+        = form_tag employee_add_timesheets_path(employee_id: employee.id), method: :get, id: 'date-form', remote: true, format: :js do 
+            .row.mb10
+                .col-xs-12
+                    = text_field_tag :date_range, nil, class: 'form-control drp', placeholder: "Enter Date Range"
+            .modal-footer.no-border
+		        span.inline.float-right        
+                    = submit_tag "Next", class: 'btn btn-primary',  id: "submit"
+
+
+javascript: 
+    $('.drp').daterangepicker({  });

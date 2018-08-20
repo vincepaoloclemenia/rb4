@@ -3,7 +3,7 @@
         .pull-left.mt7 Employees Timesheets
     
     .panel-body
-        - if client_admin? || branch_admin?
+        - if client_admin? || brand_admin?
             .row.mb10
                     .col-lg-5.col-md-6.col-xs-12
                         = form_tag timesheets_path, method: :get, id: 'branch-form', remote: true, format: :js do 

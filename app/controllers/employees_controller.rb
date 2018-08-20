@@ -78,16 +78,14 @@ class EmployeesController < ApplicationController
   end
 
   def update
+    @employees = @employee.branch.employees
+    @empty_warning = @employees.empty? ? "block" : "none"  
     respond_to do |format|
       if @employee.update(employee_params)
-        @employees = @employee.branch.employees
-        @empty_warning = @employees.empty? ? "block" : "none"  
         @message = @branch.present? && @branch.employees.empty? ? "No Employees set for #{@branch.name} yet" : "Please select branch first"
         format.json { head :no_content }
         format.js { flash[:notice] = "Employee for #{@employee.branch.name} successfully updated" }
       else
-        @employees = @employee.branch.employees
-        @empty_warning = @employees.empty? ? "block" : "none"  
         @message = @employees.empty? ? "No employees yet" : ""
         format.json { render json: @employee.errors, status: :unprocessable_entity }
       end
@@ -99,9 +97,51 @@ class EmployeesController < ApplicationController
     @labor_hour.labor_hours_entries.build
   end
 
+  def add_timesheets
+    @employee = Employee.find params[:employee_id]
+    @date = params[:date_range]
+    if @date.present?
+      @from = Date.strptime(@date.split(" - ")[0], '%m/%d/%Y')
+      @to = Date.strptime(@date.split(" - ")[1], '%m/%d/%Y')
+      @date_range = @from..@to
+    end
+  end
+
+  def save_timesheets
+    @employee = Employee.find params[:employee_id]
+    @employees = @employee.branch.employees
+    @empty_warning = @employees.empty? ? "block" : "none"  
+    @message = @employees.empty? ? "No employees yet" : ""
+    respond_to do |format|    
+      if @employee.update(timesheet_params)
+        format.json { head :no_content }
+				format.js { flash[:notice] = "Timesheets for #{@employee.first_name} saved" }
+      else
+				format.json { render json: @employee.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     def set_employee
       @employee = Employee.find(params[:id])
+    end
+
+    def timesheet_params
+      params.require(:employee).permit(
+        :id, timesheets_attributes: [
+          :id, 
+          :date,
+          :regular_hours, 
+          :overtime,
+          :night_differential,
+          :special_holiday,
+          :special_holiday_ot,
+          :legal_holiday,
+          :legal_holiday_ot,
+          :tardiness
+        ]
+      )
     end
 
     def employee_params
