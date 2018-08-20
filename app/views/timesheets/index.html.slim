@@ -3,11 +3,23 @@
         .pull-left.mt7 Employees Timesheets
     
     .panel-body
+        - if client_admin? || branch_admin?
+            .row.mb10
+                    .col-lg-5.col-md-6.col-xs-12
+                        = form_tag timesheets_path, method: :get, id: 'branch-form', remote: true, format: :js do 
+                            = select_tag :branch_id, options_from_collection_for_select(@branches, "id", "name"), include_blank: true, class: "chosen", data: { placeholder: "Select Branch to add timesheet logs" }, id: "bran", style: "width: 100%; display: none;", onchange: "getBranch()"
+                            = submit_tag "Try", class: 'btn btn-link', style: "display:none", id: "submit"
         #timesheets
-            = render partial: "calendar", locals: { date: @date, holidays: @holidays }
+            = render partial: "calendar", locals: { date: @date, holidays: @holidays, branch: @branch }
             
 
 = render partial: "partials/modal"
+
+javascript:
+	function getBranch(){
+		var bran = document.getElementById("bran");
+		document.getElementById('submit').click();
+	}
             
 
            

@@ -1,0 +1,7 @@
+$('#modal h4').html('<%= @holiday.date.strftime("%B %d, %Y") %>');
+
+$('.modal-body').html('<%= j render("show_holiday") %>');
+
+$('#modal').modal("show");
+
+$("[data-toggle='toggle']").bootstrapToggle();

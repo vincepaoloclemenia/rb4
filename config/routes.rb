@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :timesheets do
     get :get_branch, on: :collection
     get :get_branch_employees, on: :collection
+    get :show_holiday, on: :collection
     post "update_timesheets" => "timesheets#update_timesheets"
   end
   resources :employee_benefits

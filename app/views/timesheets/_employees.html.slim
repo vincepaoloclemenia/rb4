@@ -2,7 +2,7 @@
     .pull-left
         = "<span class='gap'>Working date: </span> #{@date.strftime('%B %d, %Y')}".html_safe
 .panel-body
-    = form_for @branch, url: timesheet_update_timesheets_path(@branch.id), method: :post do |b|      
+    = form_for @branch, url: timesheet_update_timesheets_path(@branch.id, date: @date), method: :post, remote: true do |b|      
         .no-more-tables#record
             table.table.table-bordered.table-striped.mb0
                 thead
@@ -22,6 +22,8 @@
                         th width="110"  
                             | Legal <br> Holiday OT
                         th width="110" Tardiness
+                        - unless @branch.employees.empty?
+                            th width="90" Delete
                         
                 tbody
                     - if b.object.employees.empty?
@@ -45,11 +47,12 @@
                                     td data-title='Legal Holiday' = t.number_field :legal_holiday, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
                                     td data-title='Legal Holiday OT' = t.number_field :legal_holiday_ot, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
                                     td data-title='Tardiness' = t.number_field :tardiness, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
-
-
+                                    - unless timesheet.new_record?
+                                        td data-title='Remove'
+                                            = t.check_box :_destroy
 
         .modal-footer.no-border
             span.inline.float-right
-                = link_to "Back", branch_admin? ? '#' : get_branch_timesheets_path(date: @date, branch_id: @branch.id), class: "btn btn-default", remote: true, data: { dismiss: "modal" }
+                = link_to "Cancel", "#", class: "btn btn-default", data: { dismiss: "modal" }
                 |
                 = b.submit "Save", class: "btn btn-primary", id: 'add'

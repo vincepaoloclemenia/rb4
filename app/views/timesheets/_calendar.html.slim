@@ -1,29 +1,33 @@
 
 h2#month
     .pull-left.mb10
-        = link_to "<", date: date.prev_month, remote: true
+        - if branch.present?
+            = link_to "<", timesheets_path(date: date.prev_month, branch_id: branch.id), remote: true
+        - else
+            = link_to "<", date: date.next_month, remote: true
+
     center
         span
             = date.strftime("%B %Y")
         .pull-right
-            = link_to ">", date: date.next_month, remote: true
+            - if branch.present?
+                = link_to ">", timesheets_path(date: date.next_month, branch_id: branch.id), remote: true
+            - else
+                = link_to ">", date: date.next_month, remote: true
 
 = calendar date do |date| 
     
     - if holidays[date]
-        span style='color: #A32C17; float:left'
-            = date.day
         - holidays[date].map do |holiday|
-            ul
-                li 
-                    span style='color: #A32C17'
-                        = holiday.name
-
-        = link_to "+", branch_admin? ? get_branch_employees_timesheets_path(date: date, branch_id: current_user.branch.id) : get_branch_timesheets_path(date: date), class: 'btn btn-link', remote: true
+            span style='cursor:pointer;color:#A32C17;font-style-bold;font-weight:900'
+                = link_to date.day, show_holiday_timesheets_path(holiday: holiday.id), data: { tt: "tooltip", placement: "top", "original-title" => "#{holiday.name}" }, remote: true
+        - if branch.present?
+            = link_to "<i class='icon-glyph-58 f16'></i>".html_safe, get_branch_employees_timesheets_path(date: date, branch_id: branch.id), class: 'btn btn-link pull-right', remote: true
 
     - else
         = date.day
-        = link_to "+", branch_admin? ? get_branch_employees_timesheets_path(date: date, branch_id: current_user.branch.id) : get_branch_timesheets_path(date: date), class: 'btn btn-link', remote: true
+        - if branch.present?
+            = link_to "<i class='icon-glyph-58 f16'></i>".html_safe, get_branch_employees_timesheets_path(date: date, branch_id: branch.id), class: 'btn btn-link pull-right', remote: true
 
 = render partial: "brands/brand_modal"
         

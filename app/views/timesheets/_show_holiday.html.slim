@@ -1,0 +1,5 @@
+.panel-body
+    .row
+        .col-xs-12
+            h4 style='color:#A32C17' = @holiday.name
+            h6 = @holiday.description.present? ? @holiday.description : "<i>No description</i>".html_safe

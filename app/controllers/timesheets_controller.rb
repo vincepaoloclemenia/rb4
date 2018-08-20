@@ -2,8 +2,10 @@ class TimesheetsController < ApplicationController
     before_action :authenticate_user!
 
     def index
+        @branches = current_branches unless branch_admin?
         @holidays = current_brand.holidays.group_by(&:date)
         @date = params[:date] ? Date.parse(params[:date]) : Date.today
+        @branch = branch_admin? ? current_user.branch : Branch.find_by_id(params[:branch_id])
         respond_to do |format|        
             format.js               
             format.html       
@@ -22,11 +24,20 @@ class TimesheetsController < ApplicationController
 
     def update_timesheets
         @branch = branch_admin? ? current_user.branch : Branch.find(params[:timesheet_id])
-        if @branch.update(branch_params)
-            redirect_to timesheets_path, notice: "Timesheets successfully added"
-        else
-            redirect_to timesheets_path, alert: @branch.errors.full_messages.join(", ")
+        @date = params[:date] ? Date.parse(params[:date]) : Date.today
+        @holidays = current_brand.holidays.group_by(&:date)
+        respond_to do |format|
+            if @branch.update(branch_params)
+                format.json { head :no_content }
+                format.js { flash[:notice] = "Timesheets successfully saved" }
+            else
+                format.json { render json: @branch.errors, status: :unprocessable_entity }
+            end
         end
+    end
+
+    def show_holiday
+        @holiday = Holiday.find_by_id params[:holiday]
     end
 
     private
@@ -46,7 +57,8 @@ class TimesheetsController < ApplicationController
                         :special_holiday_ot,
                         :legal_holiday,
                         :legal_holiday_ot,
-                        :tardiness
+                        :tardiness,
+                        :_destroy
                     ]
                 ]
             )

@@ -1,0 +1,8 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$('#modal').modal('hide');
+$('body').removeClass('modal-open');
+$('.modal-backdrop').remove();
+
+$("#timesheets").html("<%= j render partial: 'calendar', locals: { date: @date, holidays: @holidays, branch: @branch } %>");
