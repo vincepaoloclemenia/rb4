@@ -11,8 +11,15 @@
             <% @timesheets.keys.map do |employee| %>
                 <% timesheets = @timesheets[employee] %>
                 <div class='pdf-container' style='page-break-before: always;'>
-                    <div class='panel-heading pb45'>Timesheets: <%= @from.strftime("%B %d, %Y") %> - <%= @to.strftime("%B %d, %Y") %></div>
-                       
+                    <div class='panel-heading pb45'>
+                        <div class='pull-left'>
+                            <h4>Timesheets: <%= @from.strftime("%B %d, %Y") %> - <%= @to.strftime("%B %d, %Y") %></h4>
+                        </div>
+                        <div class='pull-right'>
+                            <h4><%= @branch.name %> Branch</h4>
+                        </div>
+                    </div>
+                    
                     <table style='margin:0px;padding:0px;width: 1000px'>
                         <thead>
                             <tr class='bg-thead'>
@@ -43,7 +50,7 @@
                                 </tr>            
                             <% end %>
                             <tr class='highlighted'>
-                                <td > Total</td>
+                                <td style="text-align:center"> Total</td>
                                 <td style="text-align:center"> <%= timesheets.map{|ts| ts.regular_hours || 0.0 }.sum %></td>
                                 <td style="text-align:center"> <%= timesheets.map{|ts| ts.overtime || 0.0 }.sum %></td>
                                 <td style="text-align:center"> <%= timesheets.map{|ts| ts.night_differential || 0.0 }.sum %></td>
@@ -56,18 +63,19 @@
                         </tbody>
                     </table>
                     
-                    <div class='row mb30 mt30 '>
-                        <div class='col-xs-12 ml15'>
-                            <h3 style='color:black;font-weight:900;font-style:bold'>___________________________</h3>
-                            <h3 style='color:black;font-weight:900;font-style:bold'><%= employee %></h3>
+                    <div class='row mb10 mt30 '>
+                        <div class='col-xs-4 ml15 pull-left'>
+                            <center>
+                                <h3 style='color:black;font-weight:900;font-style:bold;'>___________________________</h3>
+                                <h3 style='color:black;font-weight:900;font-style:bold;'><%= employee %></h3>
+                            </center>
                         </div>
                     </div>
                 </div>                    
             <% end %> 
         <% else %>
             <div class='pdf-container'>
-                <h4><center>No Purchase Orders Available for Printing</center></h4>
-                <p><center><i>Please make sure that the purchase orders you intended to print were already approved.</i></center></p>
+                <h4><center>No Timesheets available for printing.</center></h4>
             </div>
         <% end %> 
     </body>

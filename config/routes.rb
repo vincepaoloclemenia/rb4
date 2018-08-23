@@ -177,6 +177,9 @@ Rails.application.routes.draw do
       get :subscribers, on: :collection
       get :new_clients, on: :collection
       post :subscribe_branches, on: :collection
+      get "get_total_amount" => "clients#get_total_amount"
+      get "get_plan_info" => "clients#get_plan_info"
+      post "create_subscription" => "clients#create_subscription"
     end
   end
 

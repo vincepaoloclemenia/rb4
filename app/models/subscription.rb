@@ -5,6 +5,7 @@ class Subscription < ActiveRecord::Base
   has_many :branch_subscriptions, dependent: :destroy
   has_many :branches, through: :branch_subscriptions
   has_many :payment_notifications
+  scope :paid_subscriptions, -> { where plan_id: 2 }
 
   def self.free_trial
     find_by_status_and_plan_id("Active", 1)

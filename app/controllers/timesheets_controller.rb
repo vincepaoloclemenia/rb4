@@ -49,7 +49,7 @@ class TimesheetsController < ApplicationController
             end
             format.html
             format.js
-            format.pdf { render template: 'timesheets/get_timesheets', pdf: "Timesheets"}
+            format.pdf { render template: 'timesheets/get_timesheets', pdf: "Timesheets for #{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')}, #{@branch.name} Branch"}
         end
     end
 

@@ -31,7 +31,7 @@
                     tbody
                         - emp_timesheets.map do |ts|
                             tr 
-                                td data-title='date' = ts.date.strftime("%b %d")
+                                td data-title='Date' = ts.date.strftime("%b %d")
                                 td.align-right data-title='Regular Hours' = ts.regular_hours || 0.0
                                 td.align-right data-title='Overtime' = ts.overtime || 0.0
                                 td.align-right data-title='Night Differential' = ts.night_differential || 0.0
