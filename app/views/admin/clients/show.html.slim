@@ -6,11 +6,29 @@ center
         = @client.name
 
 .panel
+    
     .panel-heading Subscriptions
     .panel-body.ml15.mr15
-        - if @client.subscriptions.paid_subscriptions.present?
+        - @client.subscriptions.where(plan_id: 2).map do |subs|
+            .col-lg-offset-2.col-lg-8.col-md-offset-1.col-md-10.col-xs-12 style='padding: 10px' 
+                .row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'
+                    .pull-right
+                        = link_to "<i class='fa icon-glyph'></i>".html_safe, show_branch_subscriptions_admin_clients_path(subscription_id: subs.id), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
 
-        - else
+                    h4 
+                        = subs.paypal_recurring_profile_token
+                    h6
+                        span class="#{subs.payment_provided? && subs.has_paid_on_time? ? 'green' : 'red'}"
+                            = "#{subs.start_date.strftime('%B %d, %Y')} - #{subs.end_date.strftime('%B %d, %Y')}"
+                    
+                    .col-xs-12
+                        p style='font-size: 13px' = "#{subs.plan.name} subscription of <b>#{pluralize(subs.branch_count, 'branch')}</b> with a total amount of #{to_peso(subs.amount)}".html_safe
+
+            
+- if @client.subscribed_branches.empty?
+    .panel
+        .panel-heading Unsubscribed branches
+        .panel-body.ml15.mr15
             - subscription = @client.subscriptions.find_by_plan_id 1
             .row.mb10
                 .col-xs-12
@@ -26,7 +44,7 @@ center
                 .col-xs-12
                     h3 
                         i.icon-glyph-137.f20.mr5 
-                        span.gap Branches
+                        span.gap Unsubscribed Branches
             = form_for @subscription, url: admin_client_create_subscription_path(client_id: @client.slug), method: :post do |f|
                 .row.mb10#no-branch-selected-error style="display:none;"
                     .col-xs-12
@@ -107,17 +125,21 @@ center
                 .row.mb10.mt20
                     h4 Subscription Details
                     .col-xs-6
-                        = f.label :start_date, "Start Date"
-                        = f.text_field :start_date, class: 'form-control dp', placeholder: 'mm/dd/yyyy'
+                        = f.label :paypal_recurring_profile_token
+                            | Profile Token 
+                            small.field-req *
+                        = f.text_field :paypal_recurring_profile_token, class: 'form-control', placeholder: "Manual payment token", value: "#{@client.slug}-manual-payment-#{@client.created_at.strftime('%m%d%y')}"
 
                     .col-xs-6
-                        = f.label :end_date, "End Date"
-                        = f.text_field :end_date, class: 'form-control dp', placeholder: 'mm/dd/yyyy'
+                        = f.label :start_date, "Subscription Start Date"
+                        = f.text_field :start_date, class: 'form-control dp', placeholder: 'mm/dd/yyyy'
                                         
                         hr
                 .modal-footer.no-border
                     span.inline.float-right
                         = f.submit "Create Subscription", class: "btn btn-primary"
+
+= render "partials/modal"
                            
 
 javascript:

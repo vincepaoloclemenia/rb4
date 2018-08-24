@@ -24,8 +24,9 @@ class Brand < ActiveRecord::Base
   has_many :order_lists, through: :branches, dependent: :destroy
   has_one :brand_setting, dependent: :destroy
   has_many :inventory_items, through: :inventories
-  has_many :subscribed_branches, -> { includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil }) }, dependent: :destroy, class_name: "Branch"
+  has_many :subscribed_branches, -> { includes(:branch_subscription).where.not( branch_subscriptions: { branch_id: nil }).where( branch_subscriptions: { active: true }) }, dependent: :destroy, class_name: "Branch"
   has_many :unsubscribed_branches, -> { includes(:branch_subscription).where( branch_subscriptions: { branch_id: nil }) }, dependent: :destroy, class_name: "Branch"
+  has_many :cancelled_branches, -> { includes(:branch_subscription).where( branch_subscriptions: { active: false }) }, dependent: :destroy, class_name: "Branch"  
   has_many :employee_types, dependent: :destroy
   has_many :employee_benefits, dependent: :destroy
   has_many :holidays, dependent: :destroy

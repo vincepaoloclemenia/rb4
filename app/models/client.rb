@@ -38,7 +38,7 @@ class Client < ActiveRecord::Base
 	end
 
 	def free_trial? 
-		trial.present? 
+		trial.free_trial
 	end
 
 	def subscribed_branches
@@ -57,6 +57,10 @@ class Client < ActiveRecord::Base
 		branches.includes(:branch_subscription).where( branch_subscriptions: { branch_id: nil })
 	end
 
+	def cancelled_branches
+		branches.includes(:branch_subscription).where( branch_subscriptions: { active: false })  		
+	end
+
 	def on_free_trial?
 		free_trial? && trial.end_date >= Date.today
 	end
@@ -65,9 +69,21 @@ class Client < ActiveRecord::Base
 		free_trial? && trial.end_date <= Date.today
 	end
 
+	def manual_payment_token(date)
+		for_subs = date || Date.today
+		id = Subscription.maximum(:id) || 1
+		token = "%03d" % id
+		date_of_subs = for_subs.strftime("%m%d%y")
+		return "#{slug.upcase}#{token}#{date_of_subs}"
+	end
+
 	def has_paid_subscription?
 		subscriptions.find_by_plan_id(2).present? && ( subscriptions.where( plan_id: 2 ).map{ |subs| subs.payment_provided? } ).include?(true)
 	end 
+
+	def has_unpaid_subscriptions?
+		subscriptions.where(plan_id: 2).map { |subs| subs.end_date >= Date.today }.exclude? true
+	end
 
 	def has_subscribed? 
 		subscriptions.find_by_plan_id(2).present?

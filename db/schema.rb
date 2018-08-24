@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180818041755) do
+ActiveRecord::Schema.define(version: 20180823070516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,8 +87,13 @@ ActiveRecord::Schema.define(version: 20180818041755) do
   create_table "branch_subscriptions", force: :cascade do |t|
     t.integer  "branch_id"
     t.integer  "subscription_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.date     "date_subscribed"
+    t.date     "subs_start"
+    t.date     "subs_end"
+    t.boolean  "active",          default: true
+    t.boolean  "manual_payment",  default: false
   end
 
   add_index "branch_subscriptions", ["branch_id"], name: "index_branch_subscriptions_on_branch_id", using: :btree
@@ -783,9 +788,10 @@ ActiveRecord::Schema.define(version: 20180818041755) do
     t.string   "period"
     t.decimal  "amount",                         precision: 15, scale: 2
     t.decimal  "outstanding_balance",            precision: 15, scale: 2
-    t.datetime "created_at",                                                             null: false
-    t.datetime "updated_at",                                                             null: false
+    t.datetime "created_at",                                                              null: false
+    t.datetime "updated_at",                                                              null: false
     t.boolean  "free_trial",                                              default: true
+    t.boolean  "manual_payment",                                          default: false
   end
 
   add_index "subscriptions", ["client_id"], name: "index_subscriptions_on_client_id", using: :btree

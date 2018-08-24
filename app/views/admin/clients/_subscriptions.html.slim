@@ -1,0 +1,55 @@
+- if subscription.branch_subscriptions.active_subscriptions.present?    
+    .panel-heading Subscribed Branches
+    .panel-body.pb25    
+        = form_for subscription, url: remove_selected_branches_admin_clients_path(subscription_id: subscription.id), method: :post do |f|
+            .row.mb10#no-branch-selected-error style="display:none;"
+                .col-xs-12
+                    p.bg-danger Please select at least one branch
+            .row.mb10.mt10
+                .col-xs-12
+                    .no-more-tables
+                        table.table.table-bordered.mb0
+                            thead
+                                tr
+                                    th style="text-align: center" width="15%" Unsubscribe
+                                    
+                                    th Branches
+                            tbody
+                                = f.collection_check_boxes :branches, subscription.branch_subscriptions.active_subscriptions, :id, :branch_id, class: 'checkbox' do |b|
+                                    tr
+                                        = b.label do
+                                            td style="text-align: center" = b.check_box
+                                            td = b.object.branch.name
+            .modal-footer.no-border
+                span.inline.float-right
+                    = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                    |
+                    = f.submit "Subscribe Selected", class: "btn btn-primary", id: 'add'
+
+- if subscription.branch_subscriptions.inactive_subscriptions.present?
+    .panel-heading Cancelled Subscription
+    .panel-body
+        = form_for subscription, url: resubscribe_branches_admin_clients_path(subscription_id: subscription.id), method: :post do |f|
+            .row.mb10#no-branch-selected-error style="display:none;"
+                .col-xs-12
+                    p.bg-danger Please select at least one branch
+            .row.mb10.mt10
+                .col-xs-12
+                    .no-more-tables
+                        table.table.table-bordered.mb0
+                            thead
+                                tr
+                                    th style="text-align: center" width="15%" Subscribe
+                                    
+                                    th Branches
+                            tbody
+                                = f.collection_check_boxes :branches, subscription.branch_subscriptions.inactive_subscriptions, :id, :branch_id, class: 'checkbox' do |b|
+                                    tr
+                                        = b.label do
+                                            td style="text-align: center" = b.check_box
+                                            td = b.object.branch.name
+            .modal-footer.no-border
+                span.inline.float-right
+                    = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                    |
+                    = f.submit "Resubsribe Selected", class: "btn btn-primary", id: 'add'

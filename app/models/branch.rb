@@ -35,7 +35,11 @@ class Branch < ActiveRecord::Base
   end
 
   def subscribed?
-    branch_subscription.present?
+    if branch_subscription.present?
+      branch_subscription.subs_end >= Date.today && branch_subscription.active == true
+    else
+      false
+    end
   end
 
   def validate_alias

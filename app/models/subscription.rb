@@ -23,6 +23,10 @@ class Subscription < ActiveRecord::Base
     paypal_payment_token.present?
   end
 
+  def has_paid_on_time?
+    end_date >= Date.today
+  end
+
   def save_with_payment
     if valid?
       if payment_provided?
