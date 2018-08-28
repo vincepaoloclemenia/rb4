@@ -1,0 +1,32 @@
+= form_for @tax_type, remote: true do |f|
+    .row.mb10
+        .col-xs-6
+            = f.label :name, class: "control-label"
+                | Name
+                small.field-req  *
+            = f.text_field :name, class: "form-control validate_name"
+        .col-xs-6
+            = f.label :percentage, class: 'control-label'
+                | Percentage Value
+            .input-group
+                = f.number_field :percentage, class: "form-control validate_date", placeholder: "Percentage Value"
+                span.input-group-addon %
+    .row.mb10
+        .col-xs-12
+            = f.label :description
+            = f.text_area :description, class: "form-control", rows: "2"
+    
+    .row.mb10
+        .col-xs-12.mt20
+            | (
+            small.field-req  *
+            |  )
+            i  indicates field is required
+    .modal-footer.no-border
+        span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            |
+            - if @tax_type.new_record?
+                button.btn.btn-primary type="submit" Add
+            - else
+                button.btn.btn-primary type="submit" Save

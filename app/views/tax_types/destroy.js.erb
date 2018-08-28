@@ -1,0 +1,14 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+
+$('#tax_type_<%= @tax_type.id %>').fadeOut();
+
+
+<% if current_brand.tax_types.empty? %>
+	$('.empty-warning').css("display","block");
+	$('#tax_types').css("display","none");
+<% else %>
+	$('.empty-warning').css("display","none");
+	$('#tax_types').css("display","block");
+<% end %>

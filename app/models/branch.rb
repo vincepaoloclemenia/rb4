@@ -20,6 +20,11 @@ class Branch < ActiveRecord::Base
   has_many :employee_types
   accepts_nested_attributes_for :employees, :allow_destroy => :true
   has_many :timesheets, through: :employees
+  has_one :branch_tax, dependent: :destroy
+  has_one :tax_type, through: :branch_tax
+  accepts_nested_attributes_for :branch_tax
+
+  
   # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
   # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }
   
@@ -46,6 +51,11 @@ class Branch < ActiveRecord::Base
     if !( /\s/ =~ aka ).nil?
       errors.add('Alias', 'should not have spaces')
     end
+  end
+
+  def percentage_tax
+    tax = tax_type.present? ? tax_type.percentage : 12.0
+    return { inc: (1 + (tax / 100)).to_d, dec: (tax / 100).to_d }
   end
 
   def set_default_color

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180823070516) do
+ActiveRecord::Schema.define(version: 20180828045843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,17 @@ ActiveRecord::Schema.define(version: 20180823070516) do
   add_index "branch_subscriptions", ["branch_id"], name: "index_branch_subscriptions_on_branch_id", using: :btree
   add_index "branch_subscriptions", ["subscription_id"], name: "index_branch_subscriptions_on_subscription_id", using: :btree
 
+  create_table "branch_taxes", force: :cascade do |t|
+    t.integer  "branch_id"
+    t.integer  "tax_type_id"
+    t.decimal  "percentage"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "branch_taxes", ["branch_id"], name: "index_branch_taxes_on_branch_id", using: :btree
+  add_index "branch_taxes", ["tax_type_id"], name: "index_branch_taxes_on_tax_type_id", using: :btree
+
   create_table "branches", force: :cascade do |t|
     t.integer  "brand_id"
     t.string   "name"
@@ -160,6 +171,7 @@ ActiveRecord::Schema.define(version: 20180823070516) do
     t.string   "email"
     t.text     "email_footer"
     t.string   "slug"
+    t.string   "currency"
   end
 
   add_index "brands", ["client_id"], name: "index_brands_on_client_id", using: :btree
@@ -835,6 +847,19 @@ ActiveRecord::Schema.define(version: 20180823070516) do
   add_index "suppliers", ["branch_id"], name: "index_suppliers_on_branch_id", using: :btree
   add_index "suppliers", ["brand_id"], name: "index_suppliers_on_brand_id", using: :btree
   add_index "suppliers", ["client_id"], name: "index_suppliers_on_client_id", using: :btree
+
+  create_table "tax_types", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "brand_id"
+    t.integer  "branch_id"
+    t.decimal  "percentage"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "tax_types", ["branch_id"], name: "index_tax_types_on_branch_id", using: :btree
+  add_index "tax_types", ["brand_id"], name: "index_tax_types_on_brand_id", using: :btree
 
   create_table "timesheet_fields", force: :cascade do |t|
     t.string   "name"

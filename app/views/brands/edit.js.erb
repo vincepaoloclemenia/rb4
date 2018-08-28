@@ -3,6 +3,9 @@ $('#modal h4').html('Edit Brand');
 $('.modal-body').html('<%= j render("form") %>');
 
 $('#modal').modal("show");
+$('.chosen').chosen({
+	width: "100%"
+});
 
 $(document).ready(function(){
 	function readURL(input) {

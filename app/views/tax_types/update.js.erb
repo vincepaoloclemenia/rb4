@@ -5,4 +5,4 @@ $('#modal').modal('hide');
 $('body').removeClass('modal-open');
 $('.modal-backdrop').remove();
 
-$('#holidays').html('<%= j render @holidays %>').fadeIn();
+$('#tax_type_<%= @tax_type.id %>').replaceWith('<%= j render @tax_type %>').fadeIn();

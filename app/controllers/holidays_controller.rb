@@ -29,8 +29,10 @@ class HolidaysController < ApplicationController
     end
 
     def update
+        @holiday.update(holiday_params)   
+        @holiday.date = Date.strptime(params[:holiday][:date], '%m/%d/%Y')             
         respond_to do |format|
-            if @holiday.update(holiday_params)
+            if @holiday.save
                 @holidays = current_brand.holidays
 				format.json { head :no_content }
 				format.js { flash[:notice] = "Employee benefit successfully saved" }

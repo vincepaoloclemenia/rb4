@@ -1,5 +1,6 @@
 class Brand < ActiveRecord::Base
   extend FriendlyId
+  Currencies = [["Philippine Peso (₱)", "php"], ["United States Dollar ($)", "usd"], ["Hongkong Dollar (HK$)", "hkd"]]
   friendly_id :name, use: :slugged
   belongs_to :client
   has_many :branches, dependent: :destroy
@@ -31,6 +32,7 @@ class Brand < ActiveRecord::Base
   has_many :employee_benefits, dependent: :destroy
   has_many :holidays, dependent: :destroy
   has_many :timesheet_fields, dependent: :destroy
+  has_many :tax_types, dependent: :destroy
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 

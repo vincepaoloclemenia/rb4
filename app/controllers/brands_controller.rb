@@ -201,6 +201,6 @@ class BrandsController < ApplicationController
 		end
 
 		def brand_params
-			params.require(:brand).permit(:name, :website, :avatar, :description, :landline_no, :mobile_no, :fax_no, :email, :email_footer)
+			params.require(:brand).permit(:currency, :name, :website, :avatar, :description, :landline_no, :mobile_no, :fax_no, :email, :email_footer)
 		end
 end

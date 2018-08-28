@@ -74,7 +74,7 @@ class Purchase < ActiveRecord::Base
 	end
 
 	def compute_net_vat_total
-		vat_rate = 0.12 #12%
+		vat_rate = branch.percentage_tax[:dec] #12%
 		total_net = 0
 		total_vat = 0
 		total_amount = 0

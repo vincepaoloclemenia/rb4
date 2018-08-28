@@ -94,15 +94,15 @@ javascript:
 			var qty = $("#purchase_item_quantity").val()
 			if(qty > 0 && entryAmount > 0){
 				if($(this).val() === 'VAT-Inclusive'){
-					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / 1.12 / qty).toFixed(2))
-					$("#total_vat").prop("value", (entryAmount - (entryAmount / 1.12)).toFixed(2))
-					$("#total_net").prop("value", (entryAmount / 1.12).toFixed(2))
+					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / parseFloat("#{@purchase.branch.percentage_tax[:inc]}") / qty).toFixed(2))
+					$("#total_vat").prop("value", (entryAmount - (entryAmount / parseFloat("#{@purchase.branch.percentage_tax[:inc]}"))).toFixed(2))
+					$("#total_net").prop("value", (entryAmount / parseFloat("#{@purchase.branch.percentage_tax[:inc]}")).toFixed(2))
 					$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount)
 				}else if($(this).val() === 'VAT-Exclusive'){
 					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
-					$("#total_vat").prop("value", (entryAmount * 1.12 - entryAmount).toFixed(2))
+					$("#total_vat").prop("value", (entryAmount * parseFloat("#{@purchase.branch.percentage_tax[:inc]}") - entryAmount).toFixed(2))
 					$("#total_net").prop("value", entryAmount)
-					$("#purchase_item_purchase_item_total_amount").prop("value", (entryAmount * 1.12).toFixed(2) )
+					$("#purchase_item_purchase_item_total_amount").prop("value", (entryAmount * parseFloat("#{@purchase.branch.percentage_tax[:inc]}")).toFixed(2) )
 				}else if($(this).val() === 'VAT-Exempted'){
 					$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
 					$("#total_vat").prop("value", 0.00)
@@ -123,7 +123,7 @@ javascript:
 			if($("#type-of-vat").val() === 'VAT-Inclusive' && $('#purchase_item_purchase_item_amount').val() > 0){
 				var qty = $('#purchase_item_quantity').val();
 				var itemAmount = $('#purchase_item_purchase_item_amount').val();
-				$('#total_net').prop('value', ((qty * itemAmount) / 1.12).toFixed(2));
+				$('#total_net').prop('value', ((qty * itemAmount) / parseFloat("#{@purchase.branch.percentage_tax[:inc]}")).toFixed(2));
 			}
 		}
 	});
@@ -132,15 +132,15 @@ javascript:
 		var entryAmount = $(this).val()
 		var qty = $('#purchase_item_quantity').val()
 		if(vatType === 'VAT-Inclusive' && qty > 0){
-			$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / 1.12 / qty).toFixed(2))
-			$("#total_vat").prop("value", (entryAmount - (entryAmount / 1.12)).toFixed(2))
-			$("#total_net").prop("value", (entryAmount / 1.12).toFixed(2))
+			$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / parseFloat("#{@purchase.branch.percentage_tax[:inc]}") / qty).toFixed(2))
+			$("#total_vat").prop("value", (entryAmount - (entryAmount / parseFloat("#{@purchase.branch.percentage_tax[:inc]}"))).toFixed(2))
+			$("#total_net").prop("value", (entryAmount / parseFloat("#{@purchase.branch.percentage_tax[:inc]}")).toFixed(2))
 			$("#purchase_item_purchase_item_total_amount").prop("value", entryAmount)
 		}else if(vatType === 'VAT-Exclusive' && qty > 0){
 			$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
-			$("#total_vat").prop("value", (entryAmount * 1.12 - entryAmount).toFixed(2))
+			$("#total_vat").prop("value", (entryAmount * parseFloat("#{@purchase.branch.percentage_tax[:inc]}") - entryAmount).toFixed(2))
 			$("#total_net").prop("value", entryAmount)
-			$("#purchase_item_purchase_item_total_amount").prop("value", (entryAmount * 1.12).toFixed(2) )
+			$("#purchase_item_purchase_item_total_amount").prop("value", (entryAmount * parseFloat("#{@purchase.branch.percentage_tax[:inc]}")).toFixed(2) )
 		}else if(vatType === 'VAT-Exempted' && qty > 0){
 			$("#purchase_item_purchase_item_amount").prop("value", (entryAmount / qty).toFixed(2))
 			$("#total_vat").prop("value", 0.00)

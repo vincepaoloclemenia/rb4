@@ -22,20 +22,25 @@
       .col-xs-12.mb10
         = f.label :description
         = f.text_area :description, class: "form-control", placeholder:"Description of Brand", rows: "2"
-      .col-xs-12.col-lg-4.mb10
+      .col-xs-12.col-lg-6.mb10
+        = f.label :currency, class: 'control-label'
+          | Currency
+          small.field-req *
+        = f.select :currency, Brand::Currencies, { include_blank: true }, class: "chosen validate_currency", data: { placeholder: "Select" }, style: "width: 100%;"
+      .col-xs-12.col-lg-6.mb10
         = f.label :landline_no
         = f.number_field :landline_no, class: "form-control"
-      .col-xs-12.col-lg-4.mb10
+      .col-xs-12.col-lg-6.mb10
         = f.label :mobile_no
         = f.number_field :mobile_no, class: "form-control"
-      .col-xs-12.col-lg-4.mb10
+      .col-xs-12.col-lg-6.mb10
         = f.label :fax_no
         = f.number_field :fax_no, class: "form-control"
       .col-xs-12.col-lg-12.mb10
         = f.label :email_footer
           | Email Footer
           small.field-req  * <i>For email purposes</i>
-        = f.text_area :email_footer, class: "form-control", required: true, rows: "5", placeholder: "Write your email footer here"
+        = f.text_area :email_footer, class: "form-control", rows: "5", placeholder: "Write your email footer here"
       .col-xs-12
         | (
         small.field-req  *

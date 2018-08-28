@@ -4,6 +4,10 @@ $('.modal-body').html('<%= j render("form") %>');
 
 $('#modal').modal("show");
 
+$('.chosen').chosen({
+	width: "100%"
+});
+
 $(document).ready(function(){
 	function readURL(input) {
     if (input.files && input.files[0]) {
