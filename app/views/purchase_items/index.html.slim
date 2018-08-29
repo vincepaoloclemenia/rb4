@@ -11,28 +11,11 @@
 
 
 	.panel-body#purchase
-		= render "purchase_profile", purchase: @purchase
+		= render partial: "purchase_profile", locals: { purchase: @purchase }
 .panel
 	.panel-heading.border Purchase Items
 	.panel-body				
-		| Show
-		.btn-group.mb10
-			- params[:show] = "10" if params[:show].nil?
-			= link_to "<span class='mr5'>#{params[:page].eql?('all') ? 'All' : params[:show] } </span><span class='caret'></span>".html_safe, 'javascript:;', data: { toggle: "dropdown" }, class: "btn btn-default btn-sm dropdown-toggle"
-			ul.dropdown-menu role="menu"
-				li
-					= link_to "10", purchase_purchase_items_path(show: "10", purchase_id: @purchase.id)
-				li
-					= link_to "25", purchase_purchase_items_path(show: "25", purchase_id: @purchase.id)
-				li
-					= link_to "50", purchase_purchase_items_path(show: "50", purchase_id: @purchase.id)
-				li
-					= link_to "100", purchase_purchase_items_path(show: "100", purchase_id: @purchase.id)
-				li.divider
-				li
-					= link_to "Show All", purchase_purchase_items_path(show: "all", purchase_id: @purchase.id)
-		.no-more-tables#purchase-item-list
-			.row.pt10
-				= render "purchase_item_list", purchase_items: @purchase_items, purchase: @purchase		
+		.no-more-tables#purchase-items
+			= render partial: "purchase_item_list", locals: { purchase: @purchase }
 
 = render "partials/modal"

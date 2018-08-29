@@ -1,17 +1,10 @@
 $('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
 retriggerFlash();
 
-<% if @success %>
-	$('.modal').modal('hide');
-	$('body').removeClass('modal-open');
-	$('.modal-backdrop').remove();
-	$('#purchase-item-list').html("<%= j render partial: 'purchase_item_list', purchase_items: @purchase_items, purchase: @purchase %>");
-	$('#purchased_items').html("<%= j render partial: 'purchases/purchased_items_via_po', purchase: @purchase %>");
-	$('#purchase').html("<%= j render partial: 'purchase_profile', purchase: @purchase %>");
-	<% if @purchase_order %>
-		$('#purchase_items').html("<%= j render partial: 'purchases/purchase_items_list', purchase_order: @purchase_order, purchase: @purchase %>");
-	<% end %>
-	$('.chosen').chosen({
-		width: "100%"
-	});
+$('#purchase_item_<%= @purchase_item.id %>').fadeOut();
+$('#purchase-items').html("<%= j render partial: 'purchase_item_list', locals: { purchase: @purchase } %>");
+$('#purchase').html("<%= j render partial: 'purchase_profile', locals: { purchase: @purchase } %>");
+<% if @purchase_order %>
+	$('#purchased_items').html("<%= j render partial: 'purchases/purchased_items_via_po', locals: { purchase: @purchase } %>");
+	$('#purchase_items').html("<%= j render partial: 'purchases/purchase_items_list', locals: { purchase_order: @purchase_order, purchase: @purchase } %>");
 <% end %>

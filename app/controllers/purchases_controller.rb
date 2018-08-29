@@ -83,20 +83,16 @@ class PurchasesController < ApplicationController
 		respond_to do |format|
 			if client_admin? || @purchase.allowed_to_modify?
 				@purchase_order = @purchase.purchase_order
+				@purchase_order.update(saved_as_purchase: false) if @purchase_order				
 				if @purchase.destroy
-					@purchase_order.update(saved_as_purchase: false)
-					index
-					@success = true
-					flash[:notice] = "Purchase successfully deleted"
+					format.json { head :no_content }
+					format.js { flash[:notice] = "Purchase item deleted" }
 				else
-					@success = false
-					flash[:alert] = @purchase.errors.full_messages.join(", ")
+					format.json { render json: @purchase.errors, status: :unprocessable_entity }
 				end
 			else
-				@success = false
-				flash[:alert] = "You are no longer allowed to update nor delete the purchase record"
-			end
-			format.js
+				format.json { render json: "You are no longer allowed to update nor delete the purchase record", status: :unprocessable_entity }
+			end				
 		end
 		#redirect_to purchases_path, notice: "Purchase successfully deleted"
 	end

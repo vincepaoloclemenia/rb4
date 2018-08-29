@@ -6,8 +6,6 @@ class PurchaseItemsController < ApplicationController
 
 	def index
 		@purchase = current_brand.purchases.friendly.find(params[:purchase_id])
-		@purchase_items = @purchase.purchase_items.paginate(page: params[:page], per_page: per_page)
-		@purchase_item = PurchaseItem.new
 	end
 
 	def new
@@ -17,36 +15,33 @@ class PurchaseItemsController < ApplicationController
 	end
 
 	def create
-		purchase = current_brand.purchases.friendly.find(params[:purchase_id])
-		purchase.update(user_modified_by_id: current_user.id) unless purchase.created_by == current_user
-		@purchase_item = purchase.purchase_items.new(purchase_item_params)
+		@purchase = current_brand.purchases.friendly.find(params[:purchase_id])
+		@purchase.update(user_modified_by_id: current_user.id) unless @purchase.created_by == current_user
+		@purchase_item = @purchase.purchase_items.new(purchase_item_params)
 		@purchase_item.date_of_purchase = Date.today
 		respond_to do |format|
-			if @purchase_item.save
-				if current_user.role.role_level.eql?('branch')
-					current_brand.activities.create(
-						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name}",
-						recordable: @purchase_item
-					)
-				else
-					current_brand.activities.create(
-						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
-						recordable: @purchase_item
-					)
-				end
-				index
-				@items = current_brand.items.where.not(id: purchase.purchase_items.pluck(:item_id))				
-				@success = true
-				flash[:notice] = "Purchase Item successfully added"
+            if @purchase_item.save
+				format.json { head :no_content }
+				format.js { flash[:notice] = "Purchase item #{@purchase_item.item.name} added" }
 			else
-				@success = false
-				flash[:alert] = @purchase_item.errors.full_messages.join(", ")
+				format.json { render json: @purchase_item.errors, status: :unprocessable_entity }
 			end
-			format.js
 		end
-		#redirect_to purchase_purchase_items_path(purchase_id: purchase.id)
+=begin
+			if current_user.role.role_level.eql?('branch')
+				current_brand.activities.create(
+					user_id: current_user.id,
+					action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name}",
+					recordable: @purchase_item
+				)
+			else
+				current_brand.activities.create(
+					user_id: current_user.id,
+					action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
+					recordable: @purchase_item
+				)
+			end 
+=end
 	end
 
 	def show
@@ -54,21 +49,17 @@ class PurchaseItemsController < ApplicationController
 
 	def destroy
 		@purchase = current_brand.purchases.find(params[:purchase_id])
-		@purchase.update(user_modified_by_id: current_user.id) unless @purchase.created_by == current_user
+		@purchase.update(user_modified_by_id: current_user.id)
 		@purchase_item = @purchase.purchase_items.find(params[:id])
 		@purchase_order = PurchaseOrder.find_by_id params[:purchase_order_id]
 		respond_to do |format|
 			if @purchase_item.destroy
-				index
-				@success = true
-				flash[:notice] = "Purchase item successfully deleted"
+				format.json { head :no_content }
+				format.js { flash[:notice] = "Purchase item was deleted" }
 			else
-				@success = false
-				flash[:alert] = @purchase_item.errors.full_messages.join(", ")
+				format.json { render json: @purchase_item.errors, status: :unprocessable_entity }
 			end
-			format.js
 		end
-		#redirect_to purchase_purchase_items_path(purchase_id: purchase.id), notice: "Purchase Item successfully deleted"
 	end
 
 	private

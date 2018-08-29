@@ -1,6 +1,6 @@
 - content_for :title, "Restobot | Purchases"
-
-= react_component 'Purchases', { branchUser: branch_admin?, clientOrBrandAdmin: client_admin? || brand_admin? }
+div#purchases
+    = react_component 'Purchases', { branchUser: branch_admin?, clientOrBrandAdmin: client_admin? || brand_admin? }
 /.panel
 /	.panel-heading.border.pb45
 /		.pull-left.mt7 Purchases

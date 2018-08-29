@@ -1,7 +1,4 @@
-- purchase_items = purchase_items || @purchase_items
-- purchase = purchase || @purchase
-- nvt = net_vat_total_computation(purchase_items)
-- if @purchase.purchase_order.present? && !@purchase.complete_purchase_items?
+- if purchase.purchase_order.present? && !purchase.complete_purchase_items?
 	.row.mb10
 		.col-xs-offset-2.col-xs-8
 			.alert.alert-info role="alert"
@@ -10,9 +7,9 @@
 						i.icon-glyph-73.f25
 					.col-xs-11 
 						h4.f15 style='line-height: 1.6'
-							| This purchase record was created through purchase order (#{@purchase.purchase_order.po_number}) and currently has ordered items that were not included in the purchase items list. Click this  
+							| This purchase record was created through purchase order (#{purchase.purchase_order.po_number}) and currently has ordered items that were not included in the purchase items list. Click this  
 							b 
-								u = link_to " link ".html_safe, purchase_order_lookup_purchases_path(purchase: @purchase.id, purchase_order_id: @purchase.purchase_order.id), data: { tt: "tooltip", placement: "top", "original-title" => "Add Items through Purchase Order" }
+								u = link_to " link ".html_safe, purchase_order_lookup_purchases_path(purchase: purchase.id, purchase_order_id: purchase.purchase_order.id), data: { tt: "tooltip", placement: "top", "original-title" => "Add Items through Purchase Order" }
 							| to add the remaining items.
 table.table.table-bordered.table-striped.mb0
 	thead
@@ -26,35 +23,14 @@ table.table.table-bordered.table-striped.mb0
 			th width="140" VAT Type
 			th width="140" Total Amount
 			th width="60" data-sortable="false" Action
-	tbody
-		- purchase_items.each do |pi|
-			tr
-				td data-title="Item Name" = pi.item.name
-				td data-title="Item Description" = pi.remarks
-				td.text-centered data-title="Quantity" = pi.quantity % 1 == 0 ? pi.quantity.to_i : pi.quantity.to_d
-				td.text-centered data-title="Unit" = pi.unit_name
-				td data-title="Packaging" = pi.packaging
-				td.text-pull-right data-title="Unit Price" = to_peso(pi.purchase_item_amount)
-				td.text-centered data-title="VAT Type" = pi.vat_type
-				td.text-pull-right data-title="Total Action" = to_peso(pi.purchase_item_total_amount)
-				td.action data-title="Action"
-					- if view_access_control('purchase_items','destroy')
-						- if branch_admin?
-							- if purchase.allowed_to_modify?
-								= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
-						- else
-							= link_to "<i class='icon-glyph-76 f14'></i>".html_safe, purchase_purchase_item_path(purchase_id: @purchase.id, id: pi.id), method: :delete, data: { confirm: "Are you sure?", tt: "tooltip", placement: "top", "original-title" => "Delete" }, class: "btn btn-default btn-xs mb10", remote: true
-
+	tbody#purchase-items
+		= render purchase.purchase_items
 		tr.bg-total
 			td.text-right.label-total colspan="7" Net Amount:
-			td.label-total-num colspan="2" = to_peso(purchase_items.map(&:item_total_net).sum.round(2))
+			td.label-total-num colspan="2" = to_peso(purchase.purchase_items.map(&:item_total_net).sum.round(2))
 		tr.bg-total
 			td.text-right.label-total colspan="7" VAT Amount:
-			td.label-total-num colspan="2" = to_peso(purchase_items.map(&:item_total_vat).sum.round(2))
+			td.label-total-num colspan="2" = to_peso(purchase.purchase_items.map(&:item_total_vat).sum.round(2))
 		tr.bg-total
 			td.text-right.label-total colspan="7" Total Amount:
-			td.label-total-num colspan="2" = to_peso(purchase_items.map(&:item_total_amount).sum.round(2))
-.align-center
-	p
-		= page_entries_info purchase_items, renderer: BootstrapPagination::Rails
-	= will_paginate purchase_items, renderer: BootstrapPagination::Rails, previous_label: "←", next_label: "→"
+			td.label-total-num colspan="2" = to_peso(purchase.purchase_items.map(&:item_total_amount).sum.round(2))	
