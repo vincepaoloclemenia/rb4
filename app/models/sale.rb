@@ -131,4 +131,10 @@ class Sale < ActiveRecord::Base
 			sale.present? ? { value: sale.net_total_sales } : { value: 0.0 }
 		end
 	end
+	
+	def self.get_month_sales_ave(month)
+		all_sales = all.where(sale_date: month.to_date.all_month)
+		sum = all_sales.map(&:net_total_sales).sum 
+		return sum == 0 ? 0.0 : (sum / all_sales.size).round(2)
+	end
 end

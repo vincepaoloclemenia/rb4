@@ -13,10 +13,9 @@
   = render 'admins_dashboard'
   
 .row
-  .col-xs-12.col-md-12.mb10
+  .col-xs-12.col-md-7.mb10
     .panel
       .panel-heading.border.pb45
-        .pull-left Sales vs Expenses
         .panel-controls.no-upp.nave-tabs
           .tab
             button.tablinks onclick="openTab(event, 'today')" Today
@@ -26,8 +25,7 @@
         .tabcontent id="today"
           = react_component "TodaySalesVsExpense"
         .tabcontent id="week"
-          = react_component "ThisweekSalesVsExpense"
-          
+          = react_component "ThisweekSalesVsExpense"        
         .tabcontent id="month"
           = react_component "ThisYearsSalesExpense"
 

@@ -24,7 +24,7 @@ class TodaySalesVsExpense extends React.Component{
                     renderAt="today-sales-vs-expense-container"
                     type="pie2d"
                     width="100%"
-                    height={400}
+                    height={350}
                     dataFormat="json"
                 />
             </div>

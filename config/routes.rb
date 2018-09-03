@@ -206,6 +206,7 @@ Rails.application.routes.draw do
     resources :dashboards, only: :index do
       get :this_week_sales_vs_expense, on: :collection
       get :this_years_sales_expense, on: :collection
+      get :monthly_sales_average, on: :collection
     end
 
     resources :purchase_order_summary, only: :index do

@@ -7,7 +7,8 @@ class SalesDashboard extends React.Component{
             thisWeekSales: 0, 
             thisYearSales: 0,
             thisYearAverage: 0,
-            salesPercentage: 0,
+            weekPercentage: 0,
+            monthPercentage: 0,
             date: '--/--/----'
         }
     }
@@ -22,7 +23,8 @@ class SalesDashboard extends React.Component{
                     thisMonthSales: data.this_month_sales_ave,
                     thisWeekSales: data.this_week_sales_ave,
                     thisYearAverage: data.this_year_sales_ave,
-                    //thisYearSales: data.this_year_sales_total,
+                    weekPercentage: data.week_percentage,
+                    monthPercentage: data.month_percentage,
                     date: data.month,
                     fetching: false
                 })
@@ -31,7 +33,7 @@ class SalesDashboard extends React.Component{
     }
     render(){
         return(
-            <div className='panel green'>
+            <div className='panel blue'>
                 <div className='panel-heading mt5' >
                     <div className='pull-left white-border'> Sales Average</div>
                     
@@ -44,7 +46,9 @@ class SalesDashboard extends React.Component{
                                 <label className="dashboard">This Week's Average</label>
                             </div>
                             <div className="pull-right">
-                                <p className="dashboard">{this.state.thisWeekSales}</p>
+                                <p className="dashboard">{this.state.thisWeekSales}
+                                    <span style={this.state.weekPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#5CC189", marginLeft: "10px" }}>{this.state.weekPercentage} %</span>
+                                </p>                               
                             </div>
                         </div>
                         <div className="row mb5">
@@ -52,7 +56,9 @@ class SalesDashboard extends React.Component{
                                 <label className="dashboard">This Month's Average</label>
                             </div>
                             <div className="pull-right">
-                                <p className="dashboard">{this.state.thisMonthSales}</p>
+                                <p className="dashboard">{this.state.thisMonthSales}
+                                    <span style={this.state.monthPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#5CC189", marginLeft: "10px" }}>{this.state.monthPercentage} %</span>
+                                </p>
                             </div>                    
                         </div>
                         <div className="row mb10">

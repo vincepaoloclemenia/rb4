@@ -27,7 +27,7 @@ class ThisweekSalesVsExpense extends React.Component{
                     renderAt="this-weeks-sales-vs-expense-container"
                     type="mscombi2d"
                     width="100%"
-                    height={400}
+                    height={350}
                     dataFormat="json"
                 />
             </div>
