@@ -27,6 +27,7 @@
 //= require moment.js
 //= require moment-with-locales.js
 //= require fusioncharts.js
+//= require themes/fusioncharts.theme.fusion.js
 //= require themes/fusioncharts.theme.ocean.js
 //= require themes/fusioncharts.theme.carbon.js
 //= require themes/fusioncharts.theme.fint.js

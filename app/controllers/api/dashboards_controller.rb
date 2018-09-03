@@ -33,6 +33,6 @@ class Api::DashboardsController < ApplicationController
 
     def this_years_sales_expense
         @sales = branch_admin? ? current_user.branch.sales.get_all_by_month : current_brand.sales.get_all_by_month
-        @expenses = branch_admin? ? current_user.branch.purchases.get_all_by_month : current_brand.purchases.get_all_by_month
+        @expenses = branch_admin? ? current_user.branch.purchase_items.get_all_by_month : current_brand.purchases.get_all_by_month
     end
 end

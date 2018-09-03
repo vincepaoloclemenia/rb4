@@ -6,8 +6,10 @@ class PurchaseItem < ActiveRecord::Base
 	has_one :branch, through: :purchase
 	validates :item_id, :quantity, :purchase_item_total_amount, :vat_type, presence: true
 	default_scope { joins(:item).order("items.name ASC") }
-	after_destroy { |pi| Activity.find_by_recordable_id(pi.id).destroy } 
+	#after_destroy { |pi| Activity.find_by_recordable_id(pi.id).destroy } 
 	validates_uniqueness_of :item_id, scope: :purchase
+
+	after_commit :update_purchase, on: [:create, :destroy, :update ]
 
 	pg_search_scope :search_item, against: :item_id,
 	using: { tsearch: { any_word: true } }
@@ -77,5 +79,10 @@ class PurchaseItem < ActiveRecord::Base
 			last_month_comparison: last_month_difference > 0 || last_month_percentage > 0
 		}
 		
+	end
+	
+	def update_purchase
+		total = purchase.purchase_items.map(&:item_total_net).sum
+		purchase.update(total_net_sum: total)
 	end
 end

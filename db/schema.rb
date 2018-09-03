@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180828045843) do
+ActiveRecord::Schema.define(version: 20180831060323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -584,6 +584,7 @@ ActiveRecord::Schema.define(version: 20180828045843) do
     t.boolean  "saved_through_po",    default: false
     t.integer  "purchase_order_id"
     t.string   "slug"
+    t.decimal  "total_net_sum",       default: 0.0
   end
 
   add_index "purchases", ["branch_id"], name: "index_purchases_on_branch_id", using: :btree

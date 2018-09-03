@@ -1,9 +1,19 @@
 - content_for :title, "Restobot | Dashboard"
+
+
+.panel-body
+  .pull-left style='font-weight:900'
+    = @holiday
+
+  .pull-right style='font-weight:900'
+    = "Last year's sales #{Date.today.last_year.strftime('%B %d, %Y')}: "
+    span.gap
+    span.green = "#{to_peso(@last_year_daily_average_sales)}"
 .row
   = render 'admins_dashboard'
   
 .row
-  .col-xs-12.col-md-12.col-lg-8
+  .col-xs-12.col-md-12.mb10
     .panel
       .panel-heading.border.pb45
         .pull-left Sales vs Expenses
@@ -21,14 +31,14 @@
         .tabcontent id="month"
           = react_component "ThisYearsSalesExpense"
 
-  .col-xs-12.col-md-12.col-lg-4
+  .col-xs-12.col-md-12.mb10
     / .widget.bg-danger-light
     /   .text-uppercase
     /     strong New update
     /   p.text-white Lorem ipsum dolor sit amet, consectetur adipiscing elit. Frater et T. Sed ad bona praeterita redeamus.
     /   a.btn.btn-danger.mt5 href="javascript:;"  Update Now
 
-    .panel
+    /.panel
       .panel-heading.border.pb45
         .pull-left Recent Activities
         .panel-controls.no-up
@@ -39,52 +49,10 @@
 
   .col-xs-12
     .panel
-      .panel-heading.border.pb45 style="font-size:13px"
-        .pull-left.mt5 Purchase Cost Stats
-        /.panel-controls.no-upp.nav-tabs
-          ul.nav.nav-tabs.btn-group data-toggle="buttons"
-            label.btn.btn-primary.no-margin.active class="#{brand_pane_active?('info')}"
-              a data-toggle="tab" href="#brand-purchase-info"  Brand Total
-            label.btn.btn-primary class="#{brand_pane_active?('branches')}"
-              a data-toggle="tab" href="#branches-purchase-list"  Branches Total
-      /.panel-body.tab-content
-        #brand-purchase-info.tab-pane class="#{brand_pane_active?('info')}"
-          = high_chart("brand_purchases", @brand_purchases)
-        #branches-purchase-list.tab-pane class="#{brand_pane_active?('branches')}" style="width: 100%"
-          = high_chart("branch_purchases", @branch_purchases)
 
-  /.col-xs-12.col-md-12.col-md-6
-    .panel
-      /.panel-heading.border.pb45 style="font-size:11px"
-        .pull-left
-          small style="font-size:8px" Price Movement<br>
-          | Highest to Lowest 
-        .panel-controls.no-upp
-          a.panel-refresh.refresh-icon data-toggle="panel-refresh" href="#" data-tt="tooltip" data-placement="top" data-original-title="Refresh"
-            i.icon-glyph-98
-      /.panel-body
-        .no-more-tables
-          table.table.table-bordered.table-striped.mb0
-            thead
-              tr.bg-thead
-                th width="100" Rank
-                th width="200" Branch
-                th width="250" Item
-                th width="150" Prev Amount
-                th width="150" Current Amount
-                th width="150" Price Movement
-            tbody
-              - @price_movement.each_with_index do |pm, index|
-                tr
-                  td data-title="Rank" = index+1
-                  td data-title="Branch" = pm[:branch_name]
-                  td data-title="Item" = pm[:item]
-                  td data-title="Prev Amount" = to_peso(pm[:prev_amount])
-                  td data-title="Current Amount" = to_peso(pm[:present_amount])
-                  td data-title="Price Movement" = to_peso(pm[:price_movement].abs)
+    
 
-  /.col-xs-12.col-md-12.col-md-6
-    = render "price_movement"
+  
 
 javascript:
   var tablinks = document.getElementsByClassName("tablinks");

@@ -5,6 +5,19 @@ class DashboardController < ApplicationController
 	include ReportsHelper
 
 	def index
+		@holiday = if current_brand.holidays.about_to_come.present?
+					last = current_brand.holidays.about_to_come.last
+					last.date == Date.today ? "Holiday today: <span class='gap'></span><span class='red'>#{last.name}, #{last.date.strftime('%d %b %Y')}</span>".html_safe : "Upcoming Holiday: <span class='gap'></span><span class='red'>#{last.name}, #{last.date.strftime('%d %b %Y')}</span>".html_safe
+				else
+					"<i>No upcoming holidays</i>".html_safe
+				end
+		@last_year_daily_average_sales = if branch_admin?
+									sale = current_user.branch.sales.find_by_sale_date(Date.today.last_year) 
+									sale.present? ? sale.net_total_sales : 0.0
+								else
+									sales = current_brand.sales.where(sale_date: Date.today.last_year)
+									sales.present? ? sales.map(&:net_total_sales) : 0.0
+								end
 		#@range_date = (Date.today - 7)..(Date.today - 1)
 		#@formatted_dates = @range_date.map{|d| d.strftime("%b %d, %Y | %a")}
 		#@colours = current_brand.branches.all.map { |b| b.color }

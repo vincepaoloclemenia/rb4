@@ -1,4 +1,5 @@
 class Branch < ActiveRecord::Base
+  #Associations
   belongs_to :brand
   has_one :client, through: :brand
   belongs_to :subscription
@@ -18,22 +19,28 @@ class Branch < ActiveRecord::Base
   has_many :sales_stats, through: :sales
   has_many :sales_non_misces, through: :sales
   has_many :employee_types
-  accepts_nested_attributes_for :employees, :allow_destroy => :true
   has_many :timesheets, through: :employees
   has_one :branch_tax, dependent: :destroy
   has_one :tax_type, through: :branch_tax
-  accepts_nested_attributes_for :branch_tax
+  has_many :sale_by_category_entries, through: :sales
+  has_many :sale_by_settlement_entries, through: :sales
 
+  #Nested Models
+  accepts_nested_attributes_for :employees, :allow_destroy => :true  
+  accepts_nested_attributes_for :branch_tax
   
-  # scope :all_unsubscribed, -> { joins(:subscriptions).where.not('subscriptions.status = ?', "Active") }
-  # scope :all_subscribed, -> { joins(:subscriptions).where.not('subscriptions.plan_id = ?', 1).where('subscriptions.status = ? OR subscriptions.status = ?', "Active", "Processing") }
-  
+  # Entry Validations
   validates :name, presence: true, length: { maximum: 50 }, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }
   validates :aka, presence: true, uniqueness: { scope: :brand_id, message: "already exist", case_sensitive: false }, if: :wizard_done?
   validates :company_registered_name, presence: true
   validates :tin_number, presence: true, uniqueness: true, if: :wizard_done?
   validate :validate_alias, on: [:create, :update], if: :wizard_done?
   after_create :set_default_color
+
+  # Object Validation
+  def valid_branch?
+    sales.invalid_sales?
+  end
 
   def free_trial?
     brand.client.on_free_trial?
@@ -53,11 +60,15 @@ class Branch < ActiveRecord::Base
     end
   end
 
+  
+  # Tax stuff
   def percentage_tax
     tax = tax_type.present? ? tax_type.percentage : 12.0
     return { inc: (1 + (tax / 100)).to_d, dec: (tax / 100).to_d }
   end
 
+
+  # Branch Setting
   def set_default_color
     #for nil branch color
     if self.color.nil?
@@ -67,6 +78,8 @@ class Branch < ActiveRecord::Base
     end
   end
 
+
+  # Sales
   def daily_average_sales
     unless valid_branch?
       @sales = sales.all.order(sale_date: :asc)
@@ -84,10 +97,6 @@ class Branch < ActiveRecord::Base
     else      
       return"Unable to calculate"
     end
-	end
-
-  def valid_branch?
-    sales.invalid_sales?
   end
   
   def total_average_sales
@@ -101,57 +110,95 @@ class Branch < ActiveRecord::Base
     end
   end
 
-  def last_week_sales
-    last_week_sales_average = if sales.any? && !nil? 
-      sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:net_total_sales).sum / 7
-    else
-      0
-    end
-    return last_week_sales_average
-  end
-
-  def customer_count_average
-    total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
-    count_average = if sales.any? && !nil?       
-      sales.where(sale_date: created_at..Date.today).pluck(:customer_count).sum / total_days
-    else
-      0
-    end
-    return count_average
-  end
-
-  def last_week_customer_count
-    last_week_count_average = if sales.any? && !nil? 
-      sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:customer_count).sum / 7
-    else
-      0
-    end
-    return last_week_count_average
-  end
-
-  def average_revenues(range)
-    case range
-      when "daily"
-        @total_days = created_at.to_date == Date.today ? 1 : ( Date.today - created_at.to_date ).to_i
-        @all_sales = sales.any? ? sales.where(sale_date: created_at..Date.today).pluck(:net_total_sales).sum : 0
-        @sales_vat = sales.any? ? sales.where(sale_date: created_at..Date.today).pluck(:vat).sum : 0
-        @service_charge = sales.any? ? sales.where(sale_date: created_at..Date.today).pluck(:service_charge).sum : 0
-      when "last_week"
-        @total_days = 7
-        @all_sales = sales.any? ? sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:net_total_sales).sum : 0
-        @sales_vat = sales.any? ? sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:vat).sum : 0
-        @service_charge = sales.any? ? sales.where(sale_date: (Date.today - 7)..Date.today).pluck(:service_charge).sum : 0
-    end
+  def this_week_sales
+    this_week = sales.where(sale_date: Date.today.beginning_of_week..Date.today)
+    total = this_week.present? ? this_week.map(&:net_total_sales).sum : 0.0
+    this_week_sales_average = total != 0 ? total / this_week.size : 0.0
     
-    average_revenues = if sales.any? && !nil?
-      ( @all_sales + @sales_vat + @service_charge ) / @total_days
-    else
-      0
-    end
-
-    return average_revenues
+    return { total: total, average: this_week_sales_average }
   end
 
+  def this_month_sales
+    this_month = sales.where(sale_date: Date.today.beginning_of_month..Date.today)
+    total = this_month.present? ? this_month.map(&:net_total_sales).sum : 0.0
+    average = total != 0 ? total / this_month.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def this_year_sales
+    this_year = sales.where(sale_date: Date.today.beginning_of_year..Date.today)
+    total = this_year.present? ? this_year.pluck(:net_total_sales).sum : 0.0
+    average = total != 0 ? total / this_year.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def last_week_sales
+    last_week = sales.where(sale_date: Date.today.last_week.beginning_of_week..(Date.today - 7) )
+    total = last_week.present? ? last_week.map(&:net_total_sales).sum : 0.0
+    average = total != 0 ? total / last_week.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def last_month_sales
+    last_month = sales.where(sale_date: Date.today.last_month.beginning_of_month..Date.today.last_month)
+    total = last_month.present? ? last_month.map(&:net_total_sales).sum : 0.0
+    average = total != 0 ? total / last_month.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def last_year_sales
+    last_year = sales.where(sale_date: Date.today.last_year.beginning_of_year..Date.today.last_year)
+    total = last_year.present? ? last_year.map(&:net_total_sales).sum : 0.0
+    average = total != 0 ? total / last_year.size : 0.0
+    return { total: total, average: average }
+  end
+
+
+  # Revenues
+  def this_week_revenues
+    this_week = sale_by_category_entries.includes(:sale).where(sales: { sale_date: Date.today.beginning_of_week..Date.today } ) 
+    total = this_week.present? ? this_week.pluck(:amount).sum : 0.0
+    average = total != 0 ? total / this_week.map(&:sale_id).uniq.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def this_month_revenues
+    this_month = sale_by_category_entries.includes(:sale).where(sales: { sale_date: Date.today.beginning_of_month..Date.today } ) 
+    total = this_month.present? ? this_month.pluck(:amount).sum : 0.0
+    average = total != 0 ? total / this_month.map(&:sale_id).uniq.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def this_year_revenues
+    this_year = sale_by_category_entries.includes(:sale).where(sales: { sale_date: Date.today.beginning_of_year..Date.today } ) 
+    total = this_year.present? ? this_year.pluck(:amount).sum : 0.0
+    average = total != 0 ? total / this_year.map(&:sale_id).uniq.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def last_week_revenues
+    reveneues = sale_by_category_entries.includes(:sale).where(sales: { sale_date: Date.today.last_week.beginning_of_week..(Date.today - 7) } )
+    total = reveneues.present? ? reveneus.pluck(:amount).sum : 0.0
+    average = total != 0 ? total / reveneues.map(&:sale_id).uniq.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def last_month_revenues
+    reveneues = sale_by_category_entries.includes(:sale).where(sales: { sale_date: Date.today.last_month.beginning_of_month..Date.today.last_month } )
+    total = reveneues.present? ? reveneus.pluck(:amount).sum : 0.0
+    average = total != 0 ? total / reveneues.map(&:sale_id).uniq.size : 0.0
+    return { total: total, average: average }
+  end
+
+  def last_year_revenues
+    reveneues = sale_by_category_entries.includes(:sale).where(sales: { sale_date: Date.today.last_year.beginning_of_year..Date.today.last_year } )
+    total = reveneues.present? ? reveneus.pluck(:amount).sum : 0.0
+    average = total != 0 ? total / reveneues.map(&:sale_id).uniq.size : 0.0
+    return { total: total, average: average }
+  end
+
+  
+  # Selections
   def filter_sales_purchase_items
     records = []
     records << purchase_items.all.to_a

@@ -72,13 +72,7 @@ class Api::SalesController < ApplicationController
     end
 
     def get_sales_averages
-        if current_user.role.role_level.eql?('client') || current_user.role.role_level.eql?('brand')
-            @last_week_ave_sales =  current_brand.last_week_sales                      
-            @average_sales = current_brand.get_sales_average
-        else
-            @average_sales = current_user.branch.total_average_sales
-            @last_week_ave_sales = current_user.branch.last_week_sales
-        end     
+        @object = branch_admin? ? current_user.branch : current_brand
     end
 
     def get_customer_count
@@ -89,8 +83,7 @@ class Api::SalesController < ApplicationController
     end
 
     def get_average_revenues
-        @last_week_revenues = current_user.role.role_level.eql?('branch') ? current_user.branch.average_revenues("last_week") : current_brand.average_revenues("last_week")
-        @average_revenues = current_user.role.role_level.eql?('branch') ? current_user.branch.average_revenues("daily") : current_brand.average_revenues("daily")
+        @object = branch_admin? ? current_user.branch : current_brand
     end
 
     private

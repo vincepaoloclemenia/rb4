@@ -1,7 +1,7 @@
 json.chart do |chart|
     json.caption "Sales vs Expenses"
     json.subcaption "#{Date.today.strftime('%Y')}'s Monthly Report"
-    json.xaxisname "January - December"
+    json.xaxisname "January - #{Date.today.strftime('%B')}"
     json.yaxisname "Amount"
     json.numberprefix "₱ "
     json.theme "ocean"

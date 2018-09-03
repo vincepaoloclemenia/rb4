@@ -134,8 +134,8 @@ class Purchase < ActiveRecord::Base
 
 	def self.get_all_by_week
 		Date.today.all_week.map do |date|
-			all_purchases = all.includes(:purchase_items).where(purchase_date: date)
-			{ value: all_purchases.map { |pur| pur.purchase_items.map(&:item_total_net).sum.round(2) }.sum }
+			all_purchases = all.where(purchase_date: date)
+			{ value: all_purchases.map(&:total_net_sum).sum.round(2) }
 		end
 	end
 
@@ -143,7 +143,7 @@ class Purchase < ActiveRecord::Base
 		arr = []
 		Date::MONTHNAMES.reject { |m| m.nil? }.map do |month|
 			this_month_purchases = all.where(purchase_date: month.to_date.all_month)
-			{ value: this_month_purchases.includes(:purchase_items).map { |p| p.purchase_items.map(&:item_total_net).sum.round(2) }.sum }
+			{ value: this_month_purchases.map(&:total_net_sum).sum.round(2) }
 		end
 	end
 
