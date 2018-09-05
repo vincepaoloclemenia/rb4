@@ -3,7 +3,10 @@
     = react_component 'SalesDashboard'
 
 .col-xs-12.col-md-12.col-lg-4
-    = react_component 'MonthlyCustomerCountChart', props: { data: @data }
+    = react_component 'MonthlyCustomerCountChart'
+
+.col-xs-12.col-md-12.col-lg-4
+    = react_component "TotalSalesThisYear"
                     
 /.col-xs-12.col-md-12.col-lg-4
     .panel.red

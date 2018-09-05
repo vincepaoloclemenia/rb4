@@ -42,24 +42,28 @@ class SalesDashboard extends React.Component{
                 <div className={`panel-body ${this.state.fetching ? 'blurry' : ''}`}>
                     <div className='col-xs-12'>
                         <div className="row mb5">
-                            <div className="pull-left">
+                            <div className="col-xs-6">
                                 <label className="dashboard">This Week's Average</label>
                             </div>
-                            <div className="pull-right">
-                                <p className="dashboard">{this.state.thisWeekSales}
-                                    <span style={this.state.weekPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#A4FFCC", marginLeft: "10px" }}>{this.state.weekPercentage} %</span>
-                                </p>                               
+                            <div className="col-xs-6">
+                                <div className="pull-right">
+                                    <p className="dashboard">{this.state.thisWeekSales}
+                                        <span style={this.state.weekPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#A4FFCC", marginLeft: "10px" }}>{this.state.weekPercentage} %</span>
+                                    </p>                               
+                                </div>
                             </div>
                         </div>
                         <div className="row mb5">
-                            <div className="pull-left">
+                            <div className="col-xs-6">
                                 <label className="dashboard">This Month's Average</label>
                             </div>
-                            <div className="pull-right">
-                                <p className="dashboard">{this.state.thisMonthSales}
-                                    <span style={this.state.monthPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#A4FFCC", marginLeft: "10px" }}>{this.state.monthPercentage} %</span>
-                                </p>
-                            </div>                    
+                            <div className="col-xs-6">
+                                <div className="pull-right">
+                                    <p className="dashboard">{this.state.thisMonthSales}
+                                        <span style={this.state.monthPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#A4FFCC", marginLeft: "10px" }}>{this.state.monthPercentage} %</span>
+                                    </p>
+                                </div>   
+                            </div>                 
                         </div>
                         <div className="row mb10">
                             <center>

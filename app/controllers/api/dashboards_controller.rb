@@ -43,4 +43,9 @@ class Api::DashboardsController < ApplicationController
     def monthly_customer_count_average
         @object = branch_admin? ? current_user.branch : current_brand
     end
+
+    def this_year_total_sales
+        @object = branch_admin? ? current_user.branch : current_brand
+    end
+
 end

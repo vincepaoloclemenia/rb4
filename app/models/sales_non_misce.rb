@@ -31,30 +31,30 @@ class SalesNonMisce < ActiveRecord::Base
     def self.this_year_count
         records = inc.all.includes(:sale).where( sales: { sale_date: Date.today.beginning_of_year..Date.today} )
         total = records.sum(:count)
-        average = total == 0 ? 0.0 : (total / records.size).round(2)
+        average = total == 0 ? 0.0 : (total / records.map(&:sale_id).uniq.size).round(2)
         return { total: total, average: average }
     end
 
     def self.this_month_count
         records = inc.all.includes(:sale).where( sales: { sale_date: Date.today.beginning_of_month..Date.today} )
         total = records.sum(:count)
-        average = total == 0 ? 0.0 : (total / records.size).round(2)
+        average = total == 0 ? 0.0 : (total / records.map(&:sale_id).uniq.size).round(2)
         return { total: total, average: average }
     end
 
     def self.this_week_count
         records = inc.all.includes(:sale).where( sales: { sale_date: Date.today.beginning_of_week..Date.today} )
         total = records.sum(:count)
-        average = total == 0 ? 0.0 : (total / records.size).round(2)
+        average = total == 0 ? 0.0 : (total / records.map(&:sale_id).uniq.size).round(2)
         return { total: total, average: average }
     end
 
     def self.highest_count
-        inc.all.includes(:sale).where( sales: { sale_date: Date.today.beginning_of_year..Date.today} ).maximum(:count)
+        inc.includes(:sale).where( sales: { sale_date: Date.today.beginning_of_year..Date.today} ).group_by { |x| x.sale_id }.values.map { |s| s.map(&:count).sum }.max
     end
 
     def self.lowest_count
-        inc.all.includes(:sale).where( sales: { sale_date: Date.today.beginning_of_year..Date.today} ).minimum(:count)
+        inc.includes(:sale).where( sales: { sale_date: Date.today.beginning_of_year..Date.today} ).group_by { |x| x.sale_id }.values.map { |s| s.map(&:count).sum }.min
     end
 
 end

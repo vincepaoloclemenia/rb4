@@ -141,4 +141,12 @@ class Sale < ActiveRecord::Base
 		sum = all_sales.map(&:net_total_sales).sum 
 		return sum == 0 ? 0.0 : (sum / all_sales.size).round(2)
 	end
+
+	def self.highest_sales
+		find_by_net_total_sales all.maximum(:net_total_sales)
+	end
+
+	def self.lowest_sales
+		find_by_net_total_sales all.minimum(:net_total_sales)
+	end
 end
