@@ -27,7 +27,7 @@
 //= require moment.js
 //= require moment-with-locales.js
 //= require fusioncharts.js
-//= require themes/fusioncharts.theme.fusion.js
+//= require react-fusioncharts.min.js
 //= require themes/fusioncharts.theme.ocean.js
 //= require themes/fusioncharts.theme.carbon.js
 //= require themes/fusioncharts.theme.fint.js
@@ -38,7 +38,6 @@
 //= require fusioncharts.treemap.js
 //= require fusioncharts.widgets.js
 //= require fusioncharts.zoomscatter.js
-//= require react-fusioncharts.min.js
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
