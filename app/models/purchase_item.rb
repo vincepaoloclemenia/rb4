@@ -82,7 +82,9 @@ class PurchaseItem < ActiveRecord::Base
 	end
 	
 	def update_purchase
-		total = purchase.purchase_items.map(&:item_total_net).sum
-		purchase.update(total_net_sum: total)
+		if purchase.purchase_items.present?
+			total = purchase.purchase_items.map(&:item_total_net).sum
+			purchase.update(total_net_sum: total)
+		end
 	end
 end

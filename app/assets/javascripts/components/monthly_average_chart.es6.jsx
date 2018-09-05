@@ -28,7 +28,7 @@ class MonthlyAverageChart extends React.Component{
                         renderAt="monthly-average-chart"
                         type="line"
                         width="100%"
-                        height={225}
+                        height={450}
                         dataFormat="json"
                     />
                 </div>

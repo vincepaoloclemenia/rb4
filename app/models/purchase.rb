@@ -203,6 +203,12 @@ class Purchase < ActiveRecord::Base
 			last_month_comparison: last_month_difference > 0 || last_month_percentage > 0
 		}
 	end
+
+	def update_total_net_sum
+		if purchase_items.present?
+			update(total_net_sum: purchase_items.map(&:item_total_net).sum)
+		end
+	end
 	
 
 end
