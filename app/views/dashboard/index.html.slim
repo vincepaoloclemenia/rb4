@@ -5,7 +5,7 @@
   .pull-left style='font-weight:900'
     = @holiday
 
-  .pull-right style='font-weight:900'
+  /.pull-right style='font-weight:900'
     = "Last year's sales #{Date.today.last_year.strftime('%B %d, %Y')}: "
     span.gap
     span.green = "#{to_peso(@last_year_daily_average_sales)}"
@@ -13,7 +13,7 @@
   = render 'admins_dashboard'
   
 .row
-  .col-xs-12.col-md-7.mb10
+  .col-xs-12.col-md-12.col-lg-6.mb10
     .panel
       .panel-heading.border.pb45
         .panel-controls.no-upp.nave-tabs
@@ -28,8 +28,8 @@
           = react_component "ThisweekSalesVsExpense"        
         .tabcontent id="month"
           = react_component "ThisYearsSalesExpense"
-
-  .col-xs-12.col-md-12.mb10
+  .col-xs-12.col-md-12.col-lg-6.mb10
+    = react_component 'MonthlyAverageChart'
     / .widget.bg-danger-light
     /   .text-uppercase
     /     strong New update

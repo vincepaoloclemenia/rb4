@@ -47,7 +47,7 @@ class SalesDashboard extends React.Component{
                             </div>
                             <div className="pull-right">
                                 <p className="dashboard">{this.state.thisWeekSales}
-                                    <span style={this.state.weekPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#5CC189", marginLeft: "10px" }}>{this.state.weekPercentage} %</span>
+                                    <span style={this.state.weekPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#A4FFCC", marginLeft: "10px" }}>{this.state.weekPercentage} %</span>
                                 </p>                               
                             </div>
                         </div>
@@ -57,7 +57,7 @@ class SalesDashboard extends React.Component{
                             </div>
                             <div className="pull-right">
                                 <p className="dashboard">{this.state.thisMonthSales}
-                                    <span style={this.state.monthPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#5CC189", marginLeft: "10px" }}>{this.state.monthPercentage} %</span>
+                                    <span style={this.state.monthPercentage < 0 ? { fontSize: "11px", color: "#A32C17", marginLeft: "10px" } : { fontSize: "11px", color: "#A4FFCC", marginLeft: "10px" }}>{this.state.monthPercentage} %</span>
                                 </p>
                             </div>                    
                         </div>

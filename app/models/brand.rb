@@ -35,6 +35,8 @@ class Brand < ActiveRecord::Base
   has_many :tax_types, dependent: :destroy
   has_many :sale_by_category_entries, through: :sales
   has_many :sale_by_settlement_entries, through: :sales
+  has_many :sales_non_misces, through: :sales
+  has_many :sales_stats, through: :sales
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "35x35>" }, :default_url => "/img/brand2.png"
   validates_attachment :avatar, 

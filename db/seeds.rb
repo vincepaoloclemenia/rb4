@@ -5,6 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+=begin
 puts "Loading sections.."
 Section.find_or_create_by name: "clients", page: "Company"
 Section.find_or_create_by name: "brands", page: "Brands"
@@ -40,3 +41,31 @@ Plan.find_or_create_by name: "Free Trial", description: "Free trial for 2 months
 Plan.find_or_create_by name: "Monthly Payment", description: "Monthly payment with unlimited usage", amount: 39.99, plan_type: "Subscription", period: "monthly", brand_limit: 0, branch_limit: 0
 Plan.find_or_create_by name: "Yearly Payment", description: "Yearly payment with unlimited usage", amount: 399.99, plan_type: "Subscription", period: "yearly", brand_limit: 0, branch_limit: 0
 puts "Done!"	
+=end
+
+#Sales DB population
+Branch.all.map do |br|
+    (Date.today.beginning_of_year..Date.today).map do |date|
+        sale = br.sales.new(sale_date: date)
+        if sale.save
+            range = Random.new
+            chance = range.rand(1..100)
+            br.brand.categories.main.saleable.map do |cat|
+                sale.sale_by_category_entries.create(category_id: cat.id, amount: chance <= 50 ? range.rand(38000..53000) : range.rand(10000..15000))
+            end
+            br.client.statistics.active.map do |stat|
+                sale.sales_stats.create(statistic_id: stat.id, branch_id: br.id, count: range.rand(300..2100), non_transac: stat.non_transac)
+            end
+            br.client.settlements.saleable.map do |stat|
+                sale.sale_by_settlement_entries.create(settlement_id: stat.id, branch_id: br.id, amount: range.rand(11000..30000))
+            end
+            br.client.non_misces.active.map do |stat|
+                sale.sales_non_misces.create(non_misce_id: stat.id, branch_id: br.id, count: range.rand(300..2100), percentage_scope: stat.percentage_scope)
+            end
+            sale.update_net_sales
+            puts "Sale for #{sale.branch.name} #{sale.sale_date.strftime('%b %d, %Y')} created"
+        else
+            puts sale.errors.full_messages.join(", ")
+        end
+    end
+end

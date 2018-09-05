@@ -2,6 +2,7 @@ class SalesStat < ActiveRecord::Base
     belongs_to :sale
     belongs_to :statistic
     has_one :branch, through: :sale
+    scope :no_transactions, -> { where non_transac: false }
 
     def average_per
         #get count average

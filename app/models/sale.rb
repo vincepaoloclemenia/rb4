@@ -29,6 +29,10 @@ class Sale < ActiveRecord::Base
 		sale_by_category_entries.pluck(:amount).sum
 	end
 
+	def update_net_sales
+		update(net_total_sales: net_sales)
+	end
+
 	def total_settlement_sales
 		self.sale_by_settlement_entries.where.not(amount: nil).pluck(:amount).sum
 	end
