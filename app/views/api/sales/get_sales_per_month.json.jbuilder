@@ -3,7 +3,7 @@ json.chart do |chart|
     json.subcaption "#{Date.today.last_year.beginning_of_year.strftime('%B %d, %Y')} - #{Date.today.strftime('%B %d, %Y')}"
     json.xaxisname "Monthly Data Representation of Sales (year #{Date.today.year})"
     json.yaxisname "Net total sales per month"
-    json.numberprefix "₱ "
+    json.numberprefix "#{current_brand.currency || 'php'}"
     json.theme "ocean"
 end
 
@@ -45,7 +45,7 @@ json.piechart do |chart|
     json.slicingdistance "15"
     json.showpercentvalues "1"
     json.showpercentintooltip "0"
-    json.plottooltext "$label: ₱ $datavalue"
+    json.plottooltext "$label: #{get_currency(current_brand.currency || 'php')}$datavalue"
     json.theme "fint"
 end
 this_year = { label: "This year's sales", value: total_this_year }

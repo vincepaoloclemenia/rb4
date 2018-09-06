@@ -41,10 +41,10 @@ Plan.find_or_create_by name: "Free Trial", description: "Free trial for 2 months
 Plan.find_or_create_by name: "Monthly Payment", description: "Monthly payment with unlimited usage", amount: 39.99, plan_type: "Subscription", period: "monthly", brand_limit: 0, branch_limit: 0
 Plan.find_or_create_by name: "Yearly Payment", description: "Yearly payment with unlimited usage", amount: 399.99, plan_type: "Subscription", period: "yearly", brand_limit: 0, branch_limit: 0
 puts "Done!"	
-
+=end
 
 #Sales DB population
-Branch.all.map do |br|
+Branch.all.includes(:sales).where( sales: { branch_id: nil } ).map do |br|
     (Date.today.beginning_of_year..Date.today).map do |date|
         sale = br.sales.new(sale_date: date)
         if sale.save
@@ -69,10 +69,10 @@ Branch.all.map do |br|
         end
     end
 end
-=end
+
 
 # Purchases
-Branch.all.map do |br|
+Branch.all.includes(:purchases).where(purchases: { branch_id: nil } ).map do |br|
     (Date.today.beginning_of_year..Date.today).map do |date|
         if br.purchases.find_by_purchase_date(date)
             puts "Existing"

@@ -3,7 +3,7 @@ json.chart do |chart|
     json.subcaption "This week ( #{Date.today.beginning_of_week.strftime('%b %d, %Y')} - #{Date.today.end_of_week.strftime('%b %d, %Y')} )"
     json.xaxisname "#{Date.today.beginning_of_week.strftime('%b %d')} - #{Date.today.end_of_week.strftime('%b %d')}"
     json.yaxisname "Amount"
-    json.numberprefix "₱"
+    json.numberprefix "#{get_currency(current_brand.currency || 'php')}"
     json.theme "ocean"
 end
 

@@ -10,7 +10,7 @@ json.chart do |chart|
     json.slicingdistance "15"
     json.showpercentvalues "1"
     json.showpercentintooltip "0"
-    json.plottooltext "$label: ₱ $datavalue"
+    json.plottooltext "$label: #{get_currency(current_brand.currency || 'php')}$datavalue"
     json.theme "ocean"
 end
 expense = { label: "Expense", value: @expenses }

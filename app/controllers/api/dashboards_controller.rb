@@ -48,4 +48,8 @@ class Api::DashboardsController < ApplicationController
         @object = branch_admin? ? current_user.branch : current_brand
     end
 
+    def get_branches_ranking
+        
+    end
+
 end

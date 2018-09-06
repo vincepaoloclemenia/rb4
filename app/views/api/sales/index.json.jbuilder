@@ -19,7 +19,7 @@ unless branch_admin?
             json.subcaption "Sales Comparison"
             json.xaxisname "#{@from.strftime('%b %d')} - #{@to.strftime('%b %d')}"
             json.yaxisname "Net total sales per day"
-            json.numberprefix "₱ "
+            json.numberprefix get_currency(current_brand.currency || 'php')
             json.theme "fint"
         end
         

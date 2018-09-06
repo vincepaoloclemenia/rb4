@@ -3,7 +3,7 @@ json.chart do |chart|
     json.subcaption "Last Week's vs This Week's"
     json.xaxisname "#{Date.today.last_week.beginning_of_week.strftime('%b %d, %Y')} - #{Date.today.end_of_week.strftime('%b %d, %Y')}"
     json.yaxisname "Net total sales per day"
-    json.numberprefix "₱ "
+    json.numberprefix get_currency(current_brand.currency || 'php')
     json.theme "ocean"
 end
 
@@ -45,7 +45,7 @@ json.piechart do |chart|
     json.slicingdistance "15"
     json.showpercentvalues "1"
     json.showpercentintooltip "0"
-    json.plottooltext "$label: ₱ $datavalue"
+    json.plottooltext "$label: #{get_currency(current_brand.currency || 'php')}$datavalue"
     json.theme "fint"
 end
 this_week = { label: "This week's sales percentage", value: total_this_week }

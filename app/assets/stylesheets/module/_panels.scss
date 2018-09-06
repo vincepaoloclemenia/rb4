@@ -1,4 +1,8 @@
 .panel{
+    &#branch-ranking-panel{
+        max-height: 450px;
+        overflow-y: auto;
+    }   
     box-shadow: 7px 6px 3px 3px rgba(204, 204, 204, 0.75);
     &.green{ 
         background-color: #5CC189;

@@ -30,12 +30,7 @@
           = react_component "ThisYearsSalesExpense"
   .col-xs-12.col-md-12.col-lg-6.mb10
     = react_component 'MonthlyAverageChart'
-    / .widget.bg-danger-light
-    /   .text-uppercase
-    /     strong New update
-    /   p.text-white Lorem ipsum dolor sit amet, consectetur adipiscing elit. Frater et T. Sed ad bona praeterita redeamus.
-    /   a.btn.btn-danger.mt5 href="javascript:;"  Update Now
-
+   
     /.panel
       .panel-heading.border.pb45
         .pull-left Recent Activities
@@ -44,10 +39,10 @@
             i.icon-glyph-98
       .panel-body
         = react_component 'ActivitiesContainer'
-
-  .col-xs-12
+.row.mb10
+  .col-xs-12.col-lg-6
     .panel
-
+      = react_component "BranchRanking"
     
 
   
