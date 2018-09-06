@@ -108,6 +108,12 @@ class EmployeesController < ApplicationController
   end
 
   def save_timesheets
+    @date = params[:date_range]
+    if @date.present?
+      @from = Date.strptime(@date.split(" - ")[0], '%m/%d/%Y')
+      @to = Date.strptime(@date.split(" - ")[1], '%m/%d/%Y')
+      @date_range = @from..@to
+    end
     @employee = Employee.find params[:employee_id]
     @employees = @employee.branch.employees
     @empty_warning = @employees.empty? ? "block" : "none"  
@@ -118,6 +124,20 @@ class EmployeesController < ApplicationController
 				format.js { flash[:notice] = "Timesheets for #{@employee.first_name} saved" }
       else
 				format.json { render json: @employee.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def download_timesheet
+    respond_to do |format|
+      if params[:date_range].present?
+        @employee = Employee.find params[:employee_id]
+        @date = params[:date_range]
+        @from = Date.strptime(@date.split(" - ")[0], "%m/%d/%Y") if @date.present?
+        @to = Date.strptime(@date.split(" - ")[1], "%m/%d/%Y") if @date.present?
+        @date_range = @from..@to if @from.present? && @to.present?
+        @timesheets = @employee.timesheets.where( date: @date_range )
+        format.pdf { render template: 'employees/employee_timesheet', pdf: "Timesheets for #{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')} #{@employee.full_name}"}      
       end
     end
   end
@@ -139,7 +159,8 @@ class EmployeesController < ApplicationController
           :special_holiday_ot,
           :legal_holiday,
           :legal_holiday_ot,
-          :tardiness
+          :tardiness,
+          :_destroy
         ]
       )
     end

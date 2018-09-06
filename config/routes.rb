@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     get 'labor_hours' => 'employees#labor_hours'
     get "add_timesheets" => 'employees#add_timesheets'
     put "save_timesheets" => 'employees#save_timesheets'
+    get "download_timesheet" => 'employees#download_timesheet'
   end
   resources :labor_hours do
     get 'work_hours_list' => 'labor_hours#work_hours_list'

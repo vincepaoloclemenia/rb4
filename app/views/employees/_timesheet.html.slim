@@ -1,7 +1,12 @@
-.panel-heading.pb10 = date_range.present? ? "#{date_range.first.strftime('%b %d, %Y')} - #{date_range.last.strftime('%b %d, %Y')}" : "Pick date of cut off first"
-.panel-body
-    - if date.present?
-        = form_for employee, url: employee_save_timesheets_path(employee_id: employee.id), method: :put, remote: true do |e|
+
+- if date.present?
+    .panel-heading.pb10 
+        .pull-left
+            = "#{date_range.first.strftime('%b %d, %Y')} - #{date_range.last.strftime('%b %d, %Y')}"
+        .pull-right
+            = link_to "<i class='fa blue icon-glyph-162 f14 mr5'></i>Download PDF".html_safe, employee_download_timesheet_path(employee_id: employee.id, date_range: date, format: :pdf, q: request.params[:q]), class: "btn btn-link", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"  
+    .panel-body
+        = form_for employee, url: employee_save_timesheets_path(employee_id: employee.id, date_range: date), method: :put, remote: true do |e|
             .no-more-tables#record
                 table.table.table-bordered.table-striped.mb0
                     thead
@@ -21,6 +26,8 @@
                             th width="110"  
                                 | Legal <br> Holiday OT
                             th width="110" Tardiness
+                            - if employee.timesheets.where(date: date_range).present?
+                                th width="110" Delete
                     tbody
                           
                         - date_range.map do |date|
@@ -37,20 +44,24 @@
                                     td data-title='Legal Holiday' = t.number_field :legal_holiday, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
                                     td data-title='Legal Holiday OT' = t.number_field :legal_holiday_ot, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
                                     td data-title='Tardiness' = t.number_field :tardiness, class: 'form-control', step: '.01', style: 'padding-right: 0px; text-align:right'
-
+                                    - unless timesheet.new_record?
+                                        td data-title='Remove'
+                                            = t.check_box :_destroy
 
             .modal-footer.no-border
                 span.inline.float-right
-                    = link_to "Cancel", "#", class: "btn btn-default", data: { dismiss: "modal" }
+                    = link_to "Back", employee_add_timesheets_path(selected_date: date, employee_id: employee.id), class: "btn btn-default", data: { dismiss: "modal" }, remote: true
                     |
                     = e.submit "Save", class: "btn btn-primary", id: 'save'
-    - else       
+- else  
+    .panel-heading.pb10 Pick date of cut off first
+    .panel-body     
         = form_tag employee_add_timesheets_path(employee_id: employee.id), method: :get, id: 'date-form', remote: true, format: :js do 
             .row.mb10
                 .col-xs-12
-                    = text_field_tag :date_range, nil, class: 'form-control drp', placeholder: "Enter Date Range"
+                    = text_field_tag :date_range, nil, class: 'form-control drp', placeholder: "Enter Date Range", value: params[:selected_date]
             .modal-footer.no-border
-		        span.inline.float-right        
+                span.inline.float-right        
                     = submit_tag "Next", class: 'btn btn-primary',  id: "submit"
 
 

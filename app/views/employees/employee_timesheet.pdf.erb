@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Timesheets</title>
+            <%= wicked_pdf_stylesheet_link_tag 'style' %>
+            <%= wicked_pdf_stylesheet_link_tag 'pdf' %>
+        <meta charset='utf-8'>
+    </head>
+    <body id='pdf-body'>  
+        <div class='pdf-container' style='page-break-before: always;'>
+            <div class='panel-heading pb45'>
+                <div class='pull-left'>
+                    <h4>Timesheets: <%= @from.strftime("%B %d, %Y") %> - <%= @to.strftime("%B %d, %Y") %></h4>
+                </div>
+                <div class='pull-right'>
+                    <h4><%= @employee.branch.name %> Branch</h4>
+                </div>
+            </div>
+            
+            <table style='margin:0px;padding:0px;width: 1000px'>
+                <thead>
+                    <tr class='bg-thead'>
+                        <th width="145"><%= @employee.last_name + ", " + @employee.first_name %></th>
+                        <th width="110" > Regular <br> Hours</th>
+                        <th width="110" >Overtime</th>
+                        <th width="110"> Night <br> Differential</th>
+                        <th width="110"> Special <br> Holiday</th>
+                        <th width="110">Special <br> Holiday OT</th>
+                        <th width="110"> Legal <br> Holiday</th>
+                        <th width="110"> Legal <br> Holiday OT</th>
+                        <th width="110"> Tardiness</th>
+                    </tr>
+                </thead>
+                <tbody>                            
+                    <% @timesheets.map do |timesheet| %>
+                        
+                        <tr>
+                            <td><%= timesheet.date.strftime("%b %d") %></td>
+                            <td <td style="text-align:center"><%= timesheet.regular_hours || 0.0 %></td>
+                            <td <td style="text-align:center"><%= timesheet.overtime || 0.0 %></td>
+                            <td <td style="text-align:center"><%= timesheet.night_differential || 0.0 %></td>
+                            <td <td style="text-align:center"><%= timesheet.special_holiday || 0.0 %></td>
+                            <td <td style="text-align:center"><%= timesheet.special_holiday_ot || 0.0 %></td>
+                            <td <td style="text-align:center"><%= timesheet.legal_holiday || 0.0 %></td>
+                            <td <td style="text-align:center"><%= timesheet.legal_holiday_ot || 0.0 %></td>
+                            <td <td style="text-align:center"><%= timesheet.tardiness || 0.0 %></td>                         
+                        </tr>            
+                    <% end %>
+                    <tr class='highlighted'>
+                        <td style="text-align:center"> Total</td>
+                        <td style="text-align:center"> <%= @timesheets.map{|ts| ts.regular_hours || 0.0 }.sum %></td>
+                        <td style="text-align:center"> <%= @timesheets.map{|ts| ts.overtime || 0.0 }.sum %></td>
+                        <td style="text-align:center"> <%= @timesheets.map{|ts| ts.night_differential || 0.0 }.sum %></td>
+                        <td style="text-align:center"> <%= @timesheets.map{|ts| ts.special_holiday || 0.0 }.sum %></td>
+                        <td style="text-align:center"> <%= @timesheets.map{|ts| ts.special_holiday_ot || 0.0 }.sum %></td>
+                        <td style="text-align:center"> <%= @timesheets.map{|ts| ts.legal_holiday || 0.0 }.sum %></td>
+                        <td style="text-align:center"> <%= @timesheets.map{|ts| ts.legal_holiday_ot || 0.0 }.sum %></td>
+                        <td style="text-align:center">  <%= @timesheets.map{|ts| ts.tardiness || 0.0 }.sum %></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class='row mb10 mt30 '>
+                <div class='col-xs-4 ml15 pull-left'>
+                    <center>
+                        <h3 style='color:black;font-weight:900;font-style:bold;'>___________________________</h3>
+                        <h3 style='color:black;font-weight:900;font-style:bold;'><%= @employee.last_name + ", " + @employee.first_name %></h3>
+                    </center>
+                </div>
+            </div>
+        </div>    
+    </body>
+</html>
