@@ -153,6 +153,61 @@ class Branch < ActiveRecord::Base
     return { total: total, average: average }
   end
 
+  
+  # SalesByCategoryEntries
+  def get_mtd_sales_per_cat(category_id, date)
+    sale_by_category_entries.includes(:sale).where( category_id: category_id, sales: { sale_date: date.beginning_of_month...date } ).sum(:amount)
+  end
+
+  def get_ytd_sales_per_cat(category_id, date)
+    sale_by_category_entries.includes(:sale).where( category_id: category_id, sales: { sale_date: date.beginning_of_year...date } ).sum(:amount)
+  end
+
+  def get_total_mtd_sales_all_cat(date)
+    sale_by_category_entries.includes(:sale).where( sales: { sale_date: date.beginning_of_month...date } ).sum(:amount)    
+  end
+
+  def get_total_ytd_sales_all_cat(date)
+    sale_by_category_entries.includes(:sale).where( sales: { sale_date: date.beginning_of_year...date } ).sum(:amount)    
+  end
+
+
+  # SaleBySettlementEntry
+  def get_mtd_settlements(setllement_id, date)
+    sale_by_settlement_entries.includes(:sale).where( settlement_id: setllement_id, sales: { sale_date: date.beginning_of_month..date } ).sum(:amount)
+  end
+
+  def get_ytd_settlements(setllement_id, date)
+    sale_by_settlement_entries.includes(:sale).where( settlement_id: setllement_id, sales: { sale_date: date.beginning_of_year..date } ).sum(:amount)
+  end
+
+
+  # SalesStats
+  def get_mtd_sales_stats(statistic_id, date)
+    sales_stats.includes(:sale).where(statistic_id: statistic_id, sales: { sale_date: date.beginning_of_month..date} ).sum(:count)
+  end
+
+  def get_ytd_sales_stats(statistic_id, date)
+    sales_stats.includes(:sale).where(statistic_id: statistic_id, sales: { sale_date: date.beginning_of_year..date} ).sum(:count)
+  end
+
+
+  # Sales Non Misces
+  def get_mtd_non_misces(non_misce_id, date)
+    sales_non_misces.includes(:sale).where( non_misce_id: non_misce_id, sales: { sale_date: date.beginning_of_month..date } ).sum(:count)
+  end
+
+  def get_ytd_non_misces(non_misce_id, date)
+    sales_non_misces.includes(:sale).where( non_misce_id: non_misce_id, sales: { sale_date: date.beginning_of_year..date } ).sum(:count)
+  end
+
+  def get_total_of_year_inc(date)
+    sales_non_misces.inc.includes(:sale).where( sales: { sale_date: date.beginning_of_year..date } ).sum(:count)    
+  end
+
+  def get_total_of_month_inc(date)
+    sales_non_misces.inc.includes(:sale).where( sales: { sale_date: date.beginning_of_month..date } ).sum(:count)    
+  end
 
   # Revenues
   def this_week_revenues

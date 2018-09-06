@@ -6,7 +6,7 @@ class DashboardController < ApplicationController
 
 	def index
 		@holiday = if current_brand.holidays.about_to_come.present?
-					last = current_brand.holidays.about_to_come.last
+					last = current_brand.holidays.about_to_come.first
 					last.date == Date.today ? "Holiday today: <span class='gap'></span><span class='red'>#{last.name}, #{last.date.strftime('%d %b %Y')}</span>".html_safe : "Upcoming Holiday: <span class='gap'></span><span class='red'>#{last.name}, #{last.date.strftime('%d %b %Y')}</span>".html_safe
 				else
 					"<i>No upcoming holidays</i>".html_safe

@@ -1,7 +1,10 @@
+- stat_mtd = 0.0
+- stat_ytd = 0.0
+- sale_date = @sale.sale_date
 .panel
     .panel-heading 
         .pull-left = "#{@sale.branch.name} (#{@sale.branch.aka})"
-        .pull-right = @sale.sale_date.strftime("%B %d, %Y")
+        .pull-right = sale_date.strftime("%B %d, %Y")
 
     .panel-body.ml15.mr15
         .row
@@ -12,32 +15,30 @@
                     thead
                         tr.bg-thead
                             th.text-center
-                            th.text-center colspan='2' = @sale.sale_date.strftime("%B %d, %Y")
-                            th.text-center colspan='2' = "#{@sale.sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{@sale.sale_date.end_of_month.strftime('%b %d, %Y')}" 
-                            th.text-center colspan='2' = "#{@sale.sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{@sale.sale_date.strftime('%b %d, %Y')}"             
+                            th.text-center colspan='2' = sale_date.strftime("%B %d, %Y")
+                            th.text-center colspan='2' = "#{sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{sale_date.end_of_month.strftime('%b %d, %Y')}" 
+                            th.text-center colspan='2' = "#{sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{sale_date.strftime('%b %d, %Y')}"             
                     tbody
-                        - total = @sale.sale_by_category_entries.map(&:amount).sum
                         - @sale.sale_by_category_entries.sort_by(&:amount).reverse.map do |sbce|
+                            - mtd = @branch.get_mtd_sales_per_cat(sbce.category_id, sale_date)
+                            - ytd = @branch.get_ytd_sales_per_cat(sbce.category_id, sale_date)
                             tr
                                 td data-title='Category' = sbce.category.name
-                                td.align-right data-title='#{@sale.sale_date.strftime("%b %d, %Y")} Amount' = to_peso(sbce.amount)
-                                td.align-right data-title='#{@sale.sale_date.strftime("%b %d, %Y")} (%)' = to_percentage(sbce.amount, total)
-                                td.align-right data-title='MTD Amount' = to_peso(sbce.get_sales_per[:month])
-                                td.align-right data-title='YTD (%)' = to_percentage(sbce.get_sales_per[:month], @total_categories_month)
-                                td.align-right data-title='YTD Amount' = to_peso(sbce.get_sales_per[:year])
-                                td.align-right data-title='YTD (%)' = to_percentage(sbce.get_sales_per[:year], @total_categories_year)
+                                td.align-right data-title='#{sale_date.strftime("%b %d, %Y")} Amount' = to_peso(sbce.amount)
+                                td.align-right data-title='#{sale_date.strftime("%b %d, %Y")} (%)' = to_percentage(sbce.amount, @total)
+                                td.align-right data-title='MTD Amount' = to_peso(mtd)
+                                td.align-right data-title='YTD (%)' = to_percentage(mtd, @mtd_total)
+                                td.align-right data-title='YTD Amount' = to_peso(ytd)
+                                td.align-right data-title='YTD (%)' = to_percentage(ytd, @ytd_total)
                                 
                         tr.bg-total
                             td.label-total-num data-title='Total' Total
-                            td.label-total-num.align-right data-title='#{@sale.sale_date.strftime("%b %d, %Y")} Amount' = to_peso(total)
-                            td.label-total-num.align-right data-title='Total %' = to_percentage(total, total)
-                            td.label-total-num.align-right data-title='MTD Amount' = to_peso(@total_categories_month)
-                            td.label-total-num.align-right data-title='MTD Total %' = to_percentage(@total_categories_month, @total_categories_month)
-                            td.label-total-num.align-right data-title='YTD Amount' = to_peso(@total_categories_year)
-                            td.label-total-num.align-right data-title='YTD Total %' = to_percentage(@total_categories_year, @total_categories_year)
-
-
-                                
+                            td.label-total-num.align-right data-title='#{sale_date.strftime("%b %d, %Y")} Amount' = to_peso(@total)
+                            td.label-total-num.align-right data-title='Total %' 100 %
+                            td.label-total-num.align-right data-title='MTD Amount' = to_peso(@mtd_total)
+                            td.label-total-num.align-right data-title='MTD Total %' 100 %
+                            td.label-total-num.align-right data-title='YTD Amount' = to_peso(@ytd_total)
+                            td.label-total-num.align-right data-title='YTD Total %' 100 %                        
         .row
             h4 Sales by Settlements
         .row.mb25
@@ -46,16 +47,16 @@
                     thead
                         tr.bg-thead
                             th.text-center
-                            th.text-center = @sale.sale_date.strftime("%B %d, %Y")
-                            th.text-center = "#{@sale.sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{@sale.sale_date.end_of_month.strftime('%b %d, %Y')}" 
-                            th.text-center = "#{@sale.sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{@sale.sale_date.strftime('%b %d, %Y')}"        
+                            th.text-center = sale_date.strftime("%B %d, %Y")
+                            th.text-center = "#{sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{sale_date.end_of_month.strftime('%b %d, %Y')}" 
+                            th.text-center = "#{sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{sale_date.strftime('%b %d, %Y')}"        
                     tbody
                         - @sale.sale_by_settlement_entries.map do |sbse|
                             tr
                                 td data-title='Settlement' = sbse.settlement.name
                                 td.align-right data-title='Amount' = to_peso(sbse.amount)
-                                td.align-right data-title='MTD Amount' = to_peso(sbse.get_sales_per[:month])
-                                td.align-right data-title='YTD Amount' = to_peso(sbse.get_sales_per[:year])
+                                td.align-right data-title='MTD Amount' = to_peso(@branch.get_mtd_settlements(sbse.settlement_id, sale_date))
+                                td.align-right data-title='YTD Amount' = to_peso(@branch.get_ytd_settlements(sbse.settlement_id, sale_date))
         .row
             h4 Statistics
         .row.mb25
@@ -64,9 +65,9 @@
                     thead
                         tr.bg-thead
                             th.text-center
-                            th.text-center colspan='2' = @sale.sale_date.strftime("%B %d, %Y")
-                            th.text-center colspan='2' = "#{@sale.sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{@sale.sale_date.end_of_month.strftime('%b %d, %Y')}" 
-                            th.text-center colspan='2' = "#{@sale.sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{@sale.sale_date.strftime('%b %d, %Y')}"
+                            th.text-center colspan='2' = sale_date.strftime("%B %d, %Y")
+                            th.text-center colspan='2' = "#{sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{sale_date.end_of_month.strftime('%b %d, %Y')}" 
+                            th.text-center colspan='2' = "#{sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{sale_date.strftime('%b %d, %Y')}"
                         tr.bg-thead
                             th.text-center
                             th.text-center Count
@@ -77,14 +78,16 @@
                             th.text-center Ave
                     tbody
                         - @sale.sales_stats.map do |stat|
+                            - stat_mtd = @branch.get_mtd_sales_stats(stat.statistic_id, sale_date)
+                            - stat_ytd = @branch.get_ytd_sales_stats(stat.statistic_id, sale_date)
                             tr
                                 td data-title='Statistic' = stat.statistic.name
                                 td.text-centered data-title='Total' = stat.count
-                                td.text-centered data-title='#{stat.average_per[:label]}' = stat.average_per[:average]
-                                td.text-centered data-title='MTD Total' = stat.average_per[:month_count]
-                                td.text-centered data-title='MTD #{stat.average_per[:label]}' = stat.average_per[:monthly_ave]
-                                td.text-centered data-title='YTD Total' = stat.average_per[:year_count]
-                                td.text-centered data-title='YTD #{stat.average_per[:label]}' = stat.average_per[:yearly_ave]
+                                td.text-centered data-title="#{stat.non_transac ? stat.statistic.name + ' PTA' : stat.statistic.name + ' PPA'}" = @total == 0 || stat.count == 0 ? 0.0 : (@total / stat.count).round(2)
+                                td.text-centered data-title='MTD Total' = stat_mtd
+                                td.text-centered data-title="MTD#{stat.non_transac ? stat.statistic.name + ' PTA' : stat.statistic.name + ' PPA'}" = (@mtd_total / stat_mtd).round(2)
+                                td.text-centered data-title='YTD Total' = stat_ytd
+                                td.text-centered data-title="YTD #{stat.non_transac ? stat.statistic.name + ' PTA' : stat.statistic.name + ' PPA'}" = @ytd_total == 0 || stat_ytd == 0 ? 0.0 : (@ytd_total / stat_ytd).round(2)
 
         .row
             h4 Non Miscellaneous
@@ -94,27 +97,27 @@
                     thead
                         tr.bg-thead
                             th.text-center
-                            th.text-center = @sale.sale_date.strftime("%B %d, %Y")
-                            th.text-center = "#{@sale.sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{@sale.sale_date.end_of_month.strftime('%b %d, %Y')}" 
-                            th.text-center = "#{@sale.sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{@sale.sale_date.strftime('%b %d, %Y')}"                 
+                            th.text-center = sale_date.strftime("%B %d, %Y")
+                            th.text-center = "#{sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{sale_date.end_of_month.strftime('%b %d, %Y')}" 
+                            th.text-center = "#{sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{sale_date.strftime('%b %d, %Y')}"                 
                     tbody
                         - inc = @sale.sales_non_misces.inc
                         - total_count = inc.present? ? inc.map(&:count).sum : 0
-                        - total_month_count = inc.present? ? inc.map { |nm| nm.get_misces_per_inc[:month_count] }.sum : 0
-                        - total_year_count = inc.present? ? inc.map { |nm| nm.get_misces_per_inc[:year_count] }.sum : 0
                         - inc.map do |nm|
+                            - nm_mtd = @branch.get_mtd_non_misces(nm.non_misce_id, sale_date)
+                            - nm_ytd = @branch.get_ytd_non_misces(nm.non_misce_id, sale_date)
                             tr
                                 td data-title='Non Miscellaneous' = nm.non_misce.name
                                 td data-title='Total' = "#{nm.count} <span style='float:right;'>#{to_percentage(nm.count.to_d, total_count.to_d)}</span>".html_safe
-                                td data-title='MTD Total' = "#{nm.get_misces_per_inc[:month_count]} <span style='float:right;'>#{to_percentage(nm.get_misces_per_inc[:month_count].to_d, total_month_count.to_d)}</span>".html_safe
-                                td data-title='YTD Total' = "#{nm.get_misces_per_inc[:year_count]} <span style='float:right;'>#{to_percentage(nm.get_misces_per_inc[:year_count].to_d, total_year_count.to_d)}</span>".html_safe
+                                td data-title='MTD Total' = "#{nm_mtd} <span style='float:right;'>#{to_percentage(nm_mtd.to_d, @branch.get_total_of_month_inc(sale_date).to_d)}</span>".html_safe
+                                td data-title='YTD Total' = "#{nm_ytd} <span style='float:right;'>#{to_percentage(nm_ytd.to_d, @branch.get_total_of_year_inc(sale_date).to_d)}</span>".html_safe
 
                         - @sale.sales_non_misces.exc.map do |nm|
                             tr
                                 td data-title='Non Miscellaneous' = nm.non_misce.name
                                 td class='text-centered' data-title='Total' = nm.count
-                                td class='text-centered' data-title='MTD Total' = nm.get_misces_per_inc[:month_count]
-                                td class='text-centered' data-title='YTD Total' = nm.get_misces_per_inc[:year_count]
+                                td class='text-centered' data-title='MTD Total' = @branch.get_mtd_non_misces(nm.non_misce_id, sale_date)
+                                td class='text-centered' data-title='YTD Total' = @branch.get_ytd_non_misces(nm.non_misce_id, sale_date)
                                 
 
     

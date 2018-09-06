@@ -10,10 +10,10 @@ class SalesController < ApplicationController
 
 	def show
 		@sale = current_brand.sales.find(params[:id])
-		@total_categories_month = @sale.sale_by_category_entries.map {|sc| sc.get_sales_per[:month] }.sum
-		@total_categories_year = @sale.sale_by_category_entries.map {|sc| sc.get_sales_per[:year] }.sum
-		@total_settlement_month = @sale.sale_by_settlement_entries.map {|sc| sc.get_sales_per[:month] }.sum
-		@total_settlement_year = @sale.sale_by_settlement_entries.map {|sc| sc.get_sales_per[:year] }.sum
+		@branch = @sale.branch
+		@total = @sale.sale_by_category_entries.map(&:amount).sum
+		@mtd_total = @branch.get_total_mtd_sales_all_cat(@sale.sale_date)
+		@ytd_total = @branch.get_total_ytd_sales_all_cat(@sale.sale_date)
 	end
 
 	def new
