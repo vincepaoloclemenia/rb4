@@ -265,6 +265,22 @@ class Branch < ActiveRecord::Base
     purchase_orders.where(status: "Approved", sent: true, saved_as_purchase: false)
   end
 
+
+  # PurchaseItems
+  def get_total_per_month(item_id, date)
+    pis = purchase_items.includes(:purchase).where(item_id: item_id, purchases: { purchase_date: date.all_month } )
+    total_cost = pis.sum(:purchase_item_amount)
+    average_cost = total_cost == 0 ? 0.0 : (total_cost / pis.size).round(2)
+    return { total: total_cost, average: average_cost }
+  end
+
+  def get_total_per_year(item_id, date)
+    pis = purchase_items.includes(:purchase).where(item_id: item_id, purchases: { purchase_date: date.all_year } )
+    total_cost = pis.sum(:purchase_item_amount)
+    average_cost = total_cost == 0 ? 0.0 : (total_cost / pis.size).round(2)
+    return { total: total_cost, average: average_cost }
+  end
+
   protected
 
     def wizard_done?

@@ -52,4 +52,9 @@ class Api::DashboardsController < ApplicationController
         
     end
 
+    def price_movement
+        @item = params[:item_id]
+        @object = branch_admin? ? current_user.branch : current_brand
+    end
+
 end

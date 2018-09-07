@@ -1,7 +1,7 @@
 .panel{
     &#branch-ranking-panel{
         max-height: 450px;
-        overflow-y: auto;
+        overflow-y: hidden;
     }   
     box-shadow: 7px 6px 3px 3px rgba(204, 204, 204, 0.75);
     &.green{ 
@@ -70,6 +70,10 @@ img.client-avatar{
     width: 300px; height: 300px; image-rendering: auto; image-rendering: crisp-edges; image-rendering: pixelated
 }
 .panel-body{
+    &#item-price-movement{ 
+        max-height: 400px;
+        overflow-y: hidden;
+    }
     &.blurry{
         background-color: rgb(27, 27, 27);
         opacity:0.5;

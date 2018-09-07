@@ -18,6 +18,8 @@ class DashboardController < ApplicationController
 									sales = current_brand.sales.where(sale_date: Date.today.last_year)
 									sales.present? ? sales.map(&:net_total_sales) : 0.0
 								end
+		@items = current_brand.items.for_inventory
+		@object = branch_admin? ? current_user.branch : current_brand
 		#@range_date = (Date.today - 7)..(Date.today - 1)
 		#@formatted_dates = @range_date.map{|d| d.strftime("%b %d, %Y | %a")}
 		#@colours = current_brand.branches.all.map { |b| b.color }

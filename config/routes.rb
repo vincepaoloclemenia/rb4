@@ -211,6 +211,7 @@ Rails.application.routes.draw do
       get :monthly_customer_count_average, on: :collection
       get :this_year_total_sales, on: :collection
       get :get_branches_ranking, on: :collection
+      get :price_movement, on: :collection
     end
 
     resources :purchase_order_summary, only: :index do

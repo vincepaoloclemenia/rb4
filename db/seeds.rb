@@ -41,7 +41,7 @@ Plan.find_or_create_by name: "Free Trial", description: "Free trial for 2 months
 Plan.find_or_create_by name: "Monthly Payment", description: "Monthly payment with unlimited usage", amount: 39.99, plan_type: "Subscription", period: "monthly", brand_limit: 0, branch_limit: 0
 Plan.find_or_create_by name: "Yearly Payment", description: "Yearly payment with unlimited usage", amount: 399.99, plan_type: "Subscription", period: "yearly", brand_limit: 0, branch_limit: 0
 puts "Done!"	
-=end
+
 
 #Sales DB population
 Branch.all.includes(:sales).where( sales: { branch_id: nil } ).map do |br|
@@ -69,10 +69,11 @@ Branch.all.includes(:sales).where( sales: { branch_id: nil } ).map do |br|
         end
     end
 end
-
+=end
 
 # Purchases
-Branch.all.includes(:purchases).where(purchases: { branch_id: nil } ).map do |br|
+# Branch.all.includes(:purchases).where(purchases: { branch_id: nil } ).map do |br|
+Branch.all.map do |br|
     (Date.today.beginning_of_year..Date.today).map do |date|
         if br.purchases.find_by_purchase_date(date)
             puts "Existing"
@@ -86,10 +87,10 @@ Branch.all.includes(:purchases).where(purchases: { branch_id: nil } ).map do |br
                 brand_id: br.brand.id
             )
             if purchase.save
-                item_total_amount = Random.new.rand(1000..13000)
-                quantity = Random.new.rand(1..100)
-                item_amount = (item_total_amount / quantity).round(2)
                 Item.all.map do |item|
+                    item_total_amount = Random.new.rand(1000..13000)
+                    quantity = Random.new.rand(1..100)
+                    item_amount = (item_total_amount / quantity).round(2)
                     pi = purchase.purchase_items.new(
                         unit_id: item.unit.id,
                         quantity: quantity,
@@ -108,7 +109,7 @@ Branch.all.includes(:purchases).where(purchases: { branch_id: nil } ).map do |br
                     end
                 end
                 purchase.update_total_net_sum
-                puts purchase.total_net_sum.to_f
+                puts purchase.total_net_sum.to_f.to_s + " " + br.name
             else
                 puts purchase.errors.full_messages.join(', ')
             end

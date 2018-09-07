@@ -9,7 +9,7 @@ class PurchaseItem < ActiveRecord::Base
 	#after_destroy { |pi| Activity.find_by_recordable_id(pi.id).destroy } 
 	validates_uniqueness_of :item_id, scope: :purchase
 
-	after_commit :update_purchase, on: [:create, :destroy, :update ]
+	#after_commit :update_purchase, on: [:create, :destroy, :update ]
 
 	pg_search_scope :search_item, against: :item_id,
 	using: { tsearch: { any_word: true } }

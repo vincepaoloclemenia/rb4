@@ -39,14 +39,36 @@
             i.icon-glyph-98
       .panel-body
         = react_component 'ActivitiesContainer'
+
 .row.mb10
-  .col-xs-12.col-lg-6
+  - unless branch_admin?
+    .col-xs-12.col-lg-6
+      .panel
+        = react_component "BranchRanking"
+
+  div class="#{branch_admin? ? 'col-xs-12' : 'col-xs-12 col-lg-6'}"
     .panel
-      = react_component "BranchRanking"
-    
+      .panel-heading Item Price Movement
+      .panel-body#item-price-movement
+        .col-xs-12
+          - @items.map do |item|   
+            .row.mb25
+              .col-xs-12            
+                label = item.name 
+                  |
+                span.pull-right style='font-size:12px' 
+                  | Total Average: <span class='gap3'></span>#{to_peso(@object.get_total_per_year(item.id, Date.today)[:average])}
+                = react_component "ItemPriceMovement", { itemId: item.id }
 
   
 
 javascript:
   var tablinks = document.getElementsByClassName("tablinks");
   tablinks[0].click();
+
+  $('#item-price-movement').on('mouseenter', function(){
+    $(this).css('overflow-y', 'auto');
+  })
+  $('#item-price-movement').on('mouseleave', function(){
+      $(this).css('overflow-y', 'hidden');
+  }) 
