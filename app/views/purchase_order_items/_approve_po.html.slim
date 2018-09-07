@@ -29,7 +29,10 @@
 						| To
 						small.field-req  *
 					input.form-control type='time' name='approval[delivery_time_to]' id='delivery_time_to' value="#{@po.delivery_time_to}"
-				
+			.row.mb10
+				.col-xs-12
+					= f.label :remarks
+					= f.text_area :remarks, class: "form-control", placeholder: "Optional", rows: 2, id: 'remarks'
 
 	.modal-footer.no-border
 		span.inline.float-right
