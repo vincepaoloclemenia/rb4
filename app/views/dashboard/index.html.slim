@@ -57,7 +57,7 @@
                 label = item.name 
                   |
                 span.pull-right style='font-size:12px' 
-                  | Total Average: <span class='gap3'></span>#{to_peso(@object.get_total_per_year(item.id, Date.today)[:average])}
+                  | Item Cost Average: <span class='gap3'></span>#{to_peso(@object.get_total_per_year(item.id, Date.today)[:average])}
                 = react_component "ItemPriceMovement", { itemId: item.id }
 
   
