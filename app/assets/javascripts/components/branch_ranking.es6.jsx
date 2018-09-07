@@ -5,27 +5,27 @@ class BranchRanking extends React.Component{
     }
     getHeight(height){
         if( height <= 5 ){ 
-            return  400 
+            return  400; 
         }
         else if(height <= 10 ){
-           return 550 
+            return 550;
         }
         else if (height <= 15 ) {
-           return  700 
+            return  700;
         }
         else if( height <= 20 ){
-            return 850 
+            return 850;
         }
         else if( height <= 25 ){
-             1000 
+            return 1000; 
         }
         else if( height <= 30 ){
-            return 1150 
+            return 1150; 
         }
         else if( height <= 35 ){
-            return 1300 
+            return 1300; 
         }
-        else{ return 1450 }
+        else{ return 1450; }
     }
 
     componentDidMount(){
