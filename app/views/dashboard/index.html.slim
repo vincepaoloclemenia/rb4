@@ -44,7 +44,7 @@
   - unless branch_admin?
     .col-xs-12.col-lg-6
       .panel
-        = react_component "BranchRanking"
+        = react_component "BranchRanking", { count: current_branches.size }
 
   div class="#{branch_admin? ? 'col-xs-12' : 'col-xs-12 col-lg-6'}"
     .panel

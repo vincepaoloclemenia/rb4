@@ -4,6 +4,12 @@ class BranchRanking extends React.Component{
         this.state = { data: {}, fetching: false }
     }
 
+
+    getHeight(height){
+        return height <= 5 ? 400 : height <= 10 ? 550 : height <= 15 ? 700 : height <= 20 ? 850 : height <= 25 ? 1000 
+        : height <= 30 ? 1150 : height <= 35 ? 1300 : 1450
+    }
+
     componentDidMount(){
       $('#branch-ranking-panel').on('mouseenter', function(){
         $(this).css('overflow-y', 'auto');
@@ -19,7 +25,7 @@ class BranchRanking extends React.Component{
             success: (data) => {
                 this.setState({
                     data: data,
-                    fetching: false
+                    fetching: false,
                 })
             }
         })
@@ -36,7 +42,7 @@ class BranchRanking extends React.Component{
                           renderAt="bar-chart-for-branches"
                           type="bar2d"
                           width="100%"
-                          height={500}
+                          height={this.getHeight(this.props.count)}
                           dataFormat="json"
                       />
                   </div>
