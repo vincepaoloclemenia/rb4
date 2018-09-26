@@ -14,7 +14,9 @@ center
                 .row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'
                     .pull-right
                         = link_to "<i class='fa icon-glyph'></i>".html_safe, show_branch_subscriptions_admin_clients_path(subscription_id: subs.id), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
-
+                    .pull-right
+                        = link_to "<i class='fa icon-glyph-78'></i>".html_safe, get_subscription_admin_clients_path(subscription_id: subs.id), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
+                    
                     h4 
                         = subs.paypal_recurring_profile_token
                     h6
@@ -22,7 +24,7 @@ center
                             = "#{subs.start_date.strftime('%B %d, %Y')} - #{subs.end_date.strftime('%B %d, %Y')}"
                     
                     .col-xs-12
-                        p style='font-size: 13px' = "#{subs.plan.name} subscription of <b>#{pluralize(subs.branch_count, 'branch')}</b> with a total amount of #{to_peso(subs.amount)}".html_safe
+                        p style='font-size: 13px' = "#{subs.plan.name} subscription of <b>#{pluralize(subs.branch_count, 'branch')}</b> with a total amount of ₱ #{subs.amount}".html_safe
 
             
 - if @client.subscribed_branches.empty?

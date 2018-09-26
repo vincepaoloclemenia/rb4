@@ -185,6 +185,8 @@ Rails.application.routes.draw do
       post "create_subscription" => "clients#create_subscription"
       post :remove_selected_branches, on: :collection
       post :resubscribe_branches, on: :collection
+      get :get_subscription, on: :collection
+      post :update_subscription, on: :collection
     end
   end
 

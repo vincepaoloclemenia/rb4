@@ -98,7 +98,7 @@ class Client < ActiveRecord::Base
 	end
 
 	def self.free_trials
-		all.includes(:subscriptions).where( subscriptions: { plan_id: 1 })
+		all.includes(:subscriptions).where( subscriptions: { plan_id: 1, free_trial: true })
 	end
 
 	private

@@ -16,7 +16,8 @@ class ApplicationController < ActionController::Base
                 :current_brand, 
                 :view_access_control, 
                 :free_trial_subscription, 
-                :branch_admin?
+                :branch_admin?,
+                :current_branch
 
   def branch_admin?
     current_user.role.role_level == 'branch'
@@ -28,6 +29,12 @@ class ApplicationController < ActionController::Base
 
   def brand_admin?
     current_user.role.role_level == 'brand'
+  end
+
+  def current_branch
+    if branch_admin?
+      current_user.branch
+    end
   end
 
   def client_admin?

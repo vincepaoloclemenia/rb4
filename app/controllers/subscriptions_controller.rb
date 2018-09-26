@@ -5,6 +5,7 @@ class SubscriptionsController < ApplicationController
 		@subscriptions = current_client.subscriptions
 		@free_trial = current_client.trial
 		@branches_count = current_client.branches.count
+		@profile_token = current_branch.name.downcase.gsub(/ /, '-') + "-" + current_branch.aka.downcase + "-" + current_branch.branch_subscription.subscription.paypal_recurring_profile_token if branch_admin?
 	end
 
 	def new

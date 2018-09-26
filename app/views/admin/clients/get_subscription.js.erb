@@ -1,0 +1,14 @@
+$('#modal h4').html('Update period for <%= @subscription.paypal_recurring_profile_token %>');
+
+$('.modal-body').html('<%= j render partial: "subscription", locals: { subscription: @subscription } %>');
+
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
+
+$("#date").datepicker({ autoclose: true })

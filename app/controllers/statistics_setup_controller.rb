@@ -8,6 +8,7 @@ class StatisticsSetupController < ApplicationController
 
     def new
         @statistic = current_client.statistics.new
+        @settlements = current_client.settlements.saleable
     end
 
     def create

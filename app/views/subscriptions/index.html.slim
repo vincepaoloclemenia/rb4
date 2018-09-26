@@ -20,7 +20,30 @@
 						/- if subtitle
 						/	br = subtitle.html_safe
 		- elsif current_client.has_paid_subscription?
-
+			.row.mb10
+				- if branch_admin?
+					- subs = current_branch.branch_subscription.subscription
+					.col-lg-offset-2.col-lg-8.col-md-offset-1.col-md-10.col-xs-12 style='padding: 10px' 
+						.row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'	
+							h4 
+								= @profile_token
+							h6
+								span class="#{subs.payment_provided? && subs.has_paid_on_time? ? 'green' : 'red'}"
+									= "#{subs.start_date.strftime('%B %d, %Y')} - #{subs.end_date.strftime('%B %d, %Y')}"	
+							.col-xs-12
+								p style='font-size: 13px' = "#{subs.plan.name} subscription of #{to_peso subs.plan.amount}".html_safe
+				- else
+					- current_client.subscriptions.where(plan_id: 2).map do |subs|
+						.col-lg-offset-2.col-lg-8.col-md-offset-1.col-md-10.col-xs-12 style='padding: 10px' 
+							.row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'	
+								h4 
+									= subs.paypal_recurring_profile_token
+								h6
+									span class="#{subs.payment_provided? && subs.has_paid_on_time? ? 'green' : 'red'}"
+										= "#{subs.start_date.strftime('%B %d, %Y')} - #{subs.end_date.strftime('%B %d, %Y')}"	
+								.col-xs-12
+									p style='font-size: 13px' = "#{subs.plan.name} subscription of <b>#{pluralize(subs.branch_count, 'branch')}</b> with a total amount of ₱ #{subs.amount}".html_safe
+		
 		- elsif current_client.on_free_trial? #&& !current_client.has_paid_subscription?
 			.row.mb10
 				.col-xs-offset-1.col-xs-10

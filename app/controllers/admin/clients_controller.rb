@@ -1,6 +1,7 @@
 class Admin::ClientsController < Admin::AdminBaseController
     before_action :return_login
     before_action :set_client, only: [:show, :edit, :update, :get_total_amount]
+    before_action :set_subscription, only: [:get_subscription, :update_subscription]
     
     def index
         @subscribers = Client.subscribers.includes(:brands, :subscriptions)
@@ -33,7 +34,7 @@ class Admin::ClientsController < Admin::AdminBaseController
         start_date = Date.strptime(params[:subscription][:start_date], '%m/%d/%Y')
         branch_ids = params[:subscription][:branches].reject { |b| b == "" || b.nil? }
         @client =  Client.friendly.find(params[:client_id])
-        @client.trial.update(free_trial: false)
+        @client.trial.update(free_trial: false, date_subscribed: start_date)
         @subscription = @client.subscriptions.new subscription_params
         @subscription.start_date = start_date
         @subscription.paypal_payment_token = @client.manual_payment_token(start_date)
@@ -82,6 +83,22 @@ class Admin::ClientsController < Admin::AdminBaseController
         redirect_to admin_client_path(subscription.client), notice: "Successfully re-subscribed #{branch_count} " + "branch".pluralize(branch_ids.count)
     end
 
+    def get_subscription
+        
+    end
+
+    def update_subscription
+        date = params[:subscription][:start_date]
+        start_date = Date.strptime(date, "%m/%d/%Y")
+        if @subscription.update(start_date: start_date, end_date: start_date + 1.month)
+            @subscription.branch_subscriptions.map do |bs|
+                bs.update(subs_start: start_date, subs_end: start_date.next_month)
+            end
+            redirect_to admin_client_path(@subscription.client), notice: "Successfully updated subscriptions"
+        else
+            redirect_to admin_client_path(@subscription.client), alert: @subscription.errors.full_messages.join(", ")
+        end
+    end
 
     private
         def set_client
@@ -90,5 +107,9 @@ class Admin::ClientsController < Admin::AdminBaseController
 
         def subscription_params
             params.require(:subscription).permit(:branches, :start_date, :end_date, :paypal_recurring_profile_token, :plan_id)
+        end
+
+        def set_subscription
+            @subscription = Subscription.find params[:subscription_id]
         end
 end

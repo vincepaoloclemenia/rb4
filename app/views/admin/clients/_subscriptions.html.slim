@@ -24,7 +24,7 @@
                 span.inline.float-right
                     = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
                     |
-                    = f.submit "Subscribe Selected", class: "btn btn-primary", id: 'add'
+                    = f.submit "Unsubscribe Selected", class: "btn btn-primary", id: 'add'
 
 - if subscription.branch_subscriptions.inactive_subscriptions.present?
     .panel-heading Cancelled Subscription

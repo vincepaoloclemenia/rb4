@@ -1,0 +1,16 @@
+.panel-heading 
+    .pull-left Last paid subscription period
+    .pull-right 
+        = "#{subscription.start_date.strftime('%b %d, %Y')} - #{subscription.end_date.strftime('%b %d, %Y')}"
+.panel-body
+    = form_for subscription, url: update_subscription_admin_clients_path(subscription_id: subscription.id), method: :post do |f|
+        .row.mb10
+            .col-xs-12        
+                = f.label :start_date, "Beginning Period"
+                = f.text_field :start_date, class: 'form-control', id: 'date', placeholder: "Start date of period", value: ''
+        
+        .modal-footer.no-border
+                span.inline.float-right
+                    = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+                    |
+                    = f.submit "Update Subscription", class: "btn btn-primary", id: 'add'

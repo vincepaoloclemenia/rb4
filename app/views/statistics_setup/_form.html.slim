@@ -7,6 +7,13 @@
             = f.text_field :name, class: "form-control validate_name"
     .row.mb10
         .col-xs-12
+            = f.label :settlement_id, class: "control-label"
+                | Settlement
+                small.field-req *
+            = f.select :settlement_id, @settlements.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }								
+
+    .row.mb10
+        .col-xs-12
             = f.label :description
             = f.text_area :description, class: "form-control", rows: "2"
     .row.mb10

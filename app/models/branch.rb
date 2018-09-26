@@ -281,6 +281,10 @@ class Branch < ActiveRecord::Base
     return { total: total_cost, average: average_cost }
   end
 
+  def self.subscribers
+    all.reject { |br| !br.subscribed? }
+  end
+
   protected
 
     def wizard_done?

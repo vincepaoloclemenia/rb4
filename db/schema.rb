@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180831060323) do
+ActiveRecord::Schema.define(version: 20180926014033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -778,12 +778,14 @@ ActiveRecord::Schema.define(version: 20180831060323) do
     t.string   "name"
     t.text     "description"
     t.boolean  "is_active"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.boolean  "non_transac"
+    t.integer  "settlement_id"
   end
 
   add_index "statistics", ["client_id"], name: "index_statistics_on_client_id", using: :btree
+  add_index "statistics", ["settlement_id"], name: "index_statistics_on_settlement_id", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "client_id"
@@ -805,6 +807,7 @@ ActiveRecord::Schema.define(version: 20180831060323) do
     t.datetime "updated_at",                                                              null: false
     t.boolean  "free_trial",                                              default: true
     t.boolean  "manual_payment",                                          default: false
+    t.date     "date_subscribed"
   end
 
   add_index "subscriptions", ["client_id"], name: "index_subscriptions_on_client_id", using: :btree
