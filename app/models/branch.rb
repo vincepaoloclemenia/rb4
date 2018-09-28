@@ -156,19 +156,31 @@ class Branch < ActiveRecord::Base
   
   # SalesByCategoryEntries
   def get_mtd_sales_per_cat(category_id, date)
-    sale_by_category_entries.includes(:sale).where( category_id: category_id, sales: { sale_date: date.beginning_of_month...date } ).sum(:amount)
+    sales_per_cat = sale_by_category_entries.includes(:sale).where( category_id: category_id, sales: { sale_date: date.beginning_of_month..date } )
+    total = sales_per_cat.sum(:amount)
+    ave = sales_per_cat.present? ? (total / sales_per_cat.size).round(2) : 0.0
+    return { total: total, ave: ave }
   end
 
   def get_ytd_sales_per_cat(category_id, date)
-    sale_by_category_entries.includes(:sale).where( category_id: category_id, sales: { sale_date: date.beginning_of_year...date } ).sum(:amount)
+    sales_per_cat = sale_by_category_entries.includes(:sale).where( category_id: category_id, sales: { sale_date: date.beginning_of_year..date } )
+    total = sales_per_cat.sum(:amount)
+    ave = sales_per_cat.present? ? (total / sales_per_cat.size).round(2) : 0.0
+    return { total: total, ave: ave }
   end
 
   def get_total_mtd_sales_all_cat(date)
-    sale_by_category_entries.includes(:sale).where( sales: { sale_date: date.beginning_of_month...date } ).sum(:amount)    
+    all_sales_by_cat = sale_by_category_entries.includes(:sale).where( sales: { sale_date: date.beginning_of_month..date } )
+    total = all_sales_by_cat.sum(:amount)    
+    ave = all_sales_by_cat.present? ? ( total / all_sales_by_cat.pluck(:sale_id).uniq.size ).round(2) : 0.0
+    return { total: total, ave: ave}
   end
 
   def get_total_ytd_sales_all_cat(date)
-    sale_by_category_entries.includes(:sale).where( sales: { sale_date: date.beginning_of_year...date } ).sum(:amount)    
+    all_sales_by_cat = sale_by_category_entries.includes(:sale).where( sales: { sale_date: date.beginning_of_year..date } )
+    total = all_sales_by_cat.sum(:amount)    
+    ave = all_sales_by_cat.present? ? ( total / all_sales_by_cat.pluck(:sale_id).uniq.size ).round(2) : 0.0
+    return { total: total, ave: ave}
   end
 
 
@@ -189,6 +201,14 @@ class Branch < ActiveRecord::Base
 
   def get_ytd_sales_stats(statistic_id, date)
     sales_stats.includes(:sale).where(statistic_id: statistic_id, sales: { sale_date: date.beginning_of_year..date} ).sum(:count)
+  end
+
+  def get_settlement_stat_ave(mtd, ytd, settlement_id, date)
+    mtd_stat = get_mtd_settlements(settlement_id, date)
+    ytd_stat = get_ytd_settlements(settlement_id, date)
+    mtd_ave = mtd_stat == 0 || mtd == 0 ? 0.0 : (mtd / mtd_stat).round(2)
+    ytd_ave = ytd_stat == 0 || ytd == 0 ? 0.0 : (ytd / ytd_stat).round(2)
+    return { mtd_ave: mtd_ave, ytd_ave: ytd_ave }
   end
 
 

@@ -24,6 +24,7 @@ class StatisticsSetupController < ApplicationController
     end
 
     def edit
+        @settlements = current_client.settlements.saleable
     end
 
     def update
@@ -51,7 +52,7 @@ class StatisticsSetupController < ApplicationController
     private
 
         def stats_params
-            params.require(:statistic).permit(:description, :name, :is_active, :non_transac)
+            params.require(:statistic).permit(:settlement_id, :description, :name, :is_active, :non_transac)
         end
 
         def set_stat

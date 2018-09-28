@@ -8,8 +8,9 @@
     .row.mb10
         .col-xs-12
             = f.label :settlement_id, class: "control-label"
-                | Settlement
-                small.field-req *
+                | Settlement 
+                small.field-req 
+                    i Specify a settlement (if there is)
             = f.select :settlement_id, @settlements.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }								
 
     .row.mb10

@@ -38,15 +38,15 @@
                             <% timesheets.map do |timesheet| %>
                                 
                                 <tr>
-                                    <td><%= timesheet.date.strftime("%b %d") %></td>
-                                    <td <td style="text-align:center"><%= timesheet.regular_hours || 0.0 %></td>
-                                    <td <td style="text-align:center"><%= timesheet.overtime || 0.0 %></td>
-                                    <td <td style="text-align:center"><%= timesheet.night_differential || 0.0 %></td>
-                                    <td <td style="text-align:center"><%= timesheet.special_holiday || 0.0 %></td>
-                                    <td <td style="text-align:center"><%= timesheet.special_holiday_ot || 0.0 %></td>
-                                    <td <td style="text-align:center"><%= timesheet.legal_holiday || 0.0 %></td>
-                                    <td <td style="text-align:center"><%= timesheet.legal_holiday_ot || 0.0 %></td>
-                                    <td <td style="text-align:center"><%= timesheet.tardiness || 0.0 %></td>                         
+                                    <td style="text-align:center"><%= timesheet.date.strftime("%b %d") %></td>
+                                    <td style="text-align:center"><%= timesheet.regular_hours || 0.0 %></td>
+                                    <td style="text-align:center"><%= timesheet.overtime || 0.0 %></td>
+                                    <td style="text-align:center"><%= timesheet.night_differential || 0.0 %></td>
+                                    <td style="text-align:center"><%= timesheet.special_holiday || 0.0 %></td>
+                                    <td style="text-align:center"><%= timesheet.special_holiday_ot || 0.0 %></td>
+                                    <td style="text-align:center"><%= timesheet.legal_holiday || 0.0 %></td>
+                                    <td style="text-align:center"><%= timesheet.legal_holiday_ot || 0.0 %></td>
+                                    <td style="text-align:center"><%= timesheet.tardiness || 0.0 %></td>                         
                                 </tr>            
                             <% end %>
                             <tr class='highlighted'>

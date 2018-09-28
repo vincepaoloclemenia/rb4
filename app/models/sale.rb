@@ -29,6 +29,10 @@ class Sale < ActiveRecord::Base
 		sale_by_category_entries.pluck(:amount).sum
 	end
 
+	def get_settlement_transac_average(settlement_id, stat_count)
+		(sale_by_settlement_entries.where(settlement_id: settlement_id).sum(:amount) / stat_count).round(2)
+	end
+
 	def update_net_sales
 		update(net_total_sales: net_sales)
 	end

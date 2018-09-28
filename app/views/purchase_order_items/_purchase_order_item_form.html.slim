@@ -20,52 +20,31 @@
                     th width="140" Delete
             tbody
                 - @supplier.arranged_item_prices.each do |price|
-                   
-                    - pur_ord_item = @purchase_order.purchase_order_items.find_by_item_id price.item.id 
-                    - if pur_ord_item
-                        = po.fields_for :purchase_order_items, pur_ord_item do |poi|
-                            = poi.hidden_field :item_id, value: price.item.id
-                            = poi.hidden_field :unit_id, value: price.unit.id
-                            = poi.hidden_field :packaging, value: price.packaging
-                            = poi.hidden_field :item_brand, value: price.brand_name
-                            = poi.hidden_field :price_selected, value: price.supplier_amount
-                            = poi.hidden_field :brand_id, value: @purchase_order.brand.id
-                            = poi.hidden_field :branch_id, value: @purchase_order.branch_id
-                            tr style='background-color: #C6EEFF'
-                                td data-title='Item name' = price.item.name
-                                td data-title='Brand name' = price.brand_name
-                                td data-title='Packaging' = price.packaging
-                                td.text-centered data-title='Unit name' = price.unit.name
-                                td.align-right data-title='Unit price' = to_peso(price.supplier_amount.round(2))
-                                td data-title='Quantity' = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center", step: ".01"	
-                                td.align-right data-title='Total amount'
-                                    label for="#{price.id}" #{to_peso(pur_ord_item.total_amount.round(2))}
-                                    = poi.hidden_field :total_amount, id: "#{price.id}"
-                                td data-title='Remove/Add Item'
-                                    - if client_admin? || !@purchase_order.approved? 
-                                        = poi.check_box :_destroy, checked: false, data: {off: "Remove", offstyle: "default", on: "Add", onstyle: "success", style:"android", toggle: "toggle"}
-                                    - else
-                                        = "<i><span class='red'>No action allowed</span></i>".html_safe
-                    - else
-                        = po.fields_for :purchase_order_items, @purchase_order_item do |poi|
-                            tr
-                                = poi.hidden_field :item_id, value: price.item.id
-                                = poi.hidden_field :unit_id, value: price.unit.id
-                                = poi.hidden_field :packaging, value: price.packaging
-                                = poi.hidden_field :item_brand, value: price.brand_name
-                                = poi.hidden_field :price_selected, value: price.supplier_amount
-                                = poi.hidden_field :brand_id, value: @purchase_order.brand.id
-                                = poi.hidden_field :branch_id, value: @purchase_order.branch_id
-                                td = price.item.name
-                                td = price.brand_name
-                                td = price.packaging
-                                td.text-centered = price.unit.name
-                                td.align-right = to_peso(price.supplier_amount.round(2))	
-                                td = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center", step: ".01"
-                                td.align-right 
-                                    label for="#{price.id}" #{to_peso(0.00)}
-                                    = poi.hidden_field :total_amount, id: "#{price.id}"
-                                td = "<i><span class='red'>Not yet added</span></i>".html_safe
+                    - pur_ord_item = @purchase_order.purchase_order_items.find_by_item_id(price.item.id) || @purchase_order.purchase_order_items.build
+                    
+                    = po.fields_for :purchase_order_items, pur_ord_item do |poi|
+                        = poi.hidden_field :item_id, value: price.item.id
+                        = poi.hidden_field :unit_id, value: price.unit.id
+                        = poi.hidden_field :packaging, value: price.packaging
+                        = poi.hidden_field :item_brand, value: price.brand_name
+                        = poi.hidden_field :price_selected, value: price.supplier_amount
+                        = poi.hidden_field :brand_id, value: @purchase_order.brand.id
+                        = poi.hidden_field :branch_id, value: @purchase_order.branch_id
+                        tr style="#{ pur_ord_item.new_record? ? '' : 'background-color: #C6EEFF' }"
+                            td data-title='Item name' = price.item.name
+                            td data-title='Brand name' = price.brand_name
+                            td data-title='Packaging' = price.packaging
+                            td.text-centered data-title='Unit name' = price.unit.name
+                            td.align-right data-title='Unit price' = to_peso(price.supplier_amount.round(2))
+                            td data-title='Quantity' = poi.number_field :quantity, class: "form-control", placeholder: "0", id: 'quantity', style: "text-align: center", step: ".01"	
+                            td.align-right data-title='Total amount'
+                                label for="#{price.id}" #{pur_ord_item.new_record? ? to_peso(0.00) : to_peso(pur_ord_item.total_amount.round(2)) }
+                                = poi.hidden_field :total_amount, id: "#{price.id}"
+                            td data-title='Remove/Add Item'
+                                - if client_admin? || !@purchase_order.approved? 
+                                    = poi.check_box :_destroy, checked: false, data: {off: "Remove", offstyle: "default", on: "Add", onstyle: "success", style:"android", toggle: "toggle"}
+                                - else
+                                    = "<i><span class='red'>No action allowed</span></i>".html_safe
                     
                 tr.bg-total
                     th.text-left.label-total colspan='7' Total Amount

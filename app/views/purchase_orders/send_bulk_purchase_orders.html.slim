@@ -35,7 +35,7 @@
 					button.btn.btn-primary type="submit" Send
 
         #purchase_orders
-            = render "purchase_orders", purchase_orders: @purchase_orders, ids: @ids
+            = render partial: "purchase_orders", locals: { purchase_orders: @purchase_orders, ids: @ids }
 
     
 

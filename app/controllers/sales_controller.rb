@@ -12,8 +12,12 @@ class SalesController < ApplicationController
 		@sale = current_brand.sales.find(params[:id])
 		@branch = @sale.branch
 		@total = @sale.sale_by_category_entries.map(&:amount).sum
-		@mtd_total = @branch.get_total_mtd_sales_all_cat(@sale.sale_date)
-		@ytd_total = @branch.get_total_ytd_sales_all_cat(@sale.sale_date)
+		mtd_total = @branch.get_total_mtd_sales_all_cat(@sale.sale_date)
+		@mtd_total = mtd_total[:total]
+		@mtd_ave = mtd_total[:ave]
+		ytd_total = @branch.get_total_ytd_sales_all_cat(@sale.sale_date)
+		@ytd_total = ytd_total[:total]
+		@ytd_ave = ytd_total[:ave]
 	end
 
 	def new
@@ -68,8 +72,8 @@ class SalesController < ApplicationController
 										#:credit_card_sales, :cash_in_drawer, :gc_redeemed, :delivery_sales, :gc_sales, :other_income,
 											sale_by_category_entries_attributes: [:id, :category_id, :amount],
 											sale_by_settlement_entries_attributes: [:id, :settlement_id, :amount],
-											sales_stats_attributes: [:id, :branch_id, :count, :statistic_id, :non_transac],
-											sales_non_misces_attributes: [:id, :branch_id, :count, :percentage_scope, :non_misce_id]
+											sales_stats_attributes: [:id, :name, :branch_id, :count, :statistic_id, :non_transac],
+											sales_non_misces_attributes: [:id, :name, :branch_id, :count, :percentage_scope, :non_misce_id]
 										)
 		end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180926014033) do
+ActiveRecord::Schema.define(version: 20180927051156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -700,6 +700,7 @@ ActiveRecord::Schema.define(version: 20180926014033) do
     t.datetime "updated_at",       null: false
     t.boolean  "percentage_scope"
     t.integer  "non_misce_id"
+    t.string   "name"
   end
 
   add_index "sales_non_misces", ["branch_id"], name: "index_sales_non_misces_on_branch_id", using: :btree
@@ -727,6 +728,7 @@ ActiveRecord::Schema.define(version: 20180926014033) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.boolean  "non_transac"
+    t.string   "name"
   end
 
   add_index "sales_stats", ["branch_id"], name: "index_sales_stats_on_branch_id", using: :btree
