@@ -4,5 +4,8 @@ retriggerFlash();
 $('#modal').modal('hide');
 $('body').removeClass('modal-open');
 $('.modal-backdrop').remove();
-
-$('#misc_<%= @non_misce.id %>').replaceWith('<%= j render @non_misce %>').fadeIn();
+<% if @non_misce.is_sub_non_misce? %>
+    $('#non_misce<%= @non_misce.parent_id %>').find("#sub_non_misces").replaceWith('<%= j render @non_misce %>').fadeIn();
+<% else %>
+    $('#non_misce<%= @non_misce.id %>').replaceWith('<%= j render @non_misce %>').fadeIn();
+<% end %>

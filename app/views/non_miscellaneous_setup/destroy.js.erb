@@ -1,8 +1,11 @@
 $('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
 retriggerFlash();
 
-
-$('#misc_<%= @non_misce.id %>').fadeOut();
+<% if @non_misce.is_sub_non_misce? %>
+	$('#non_misce_<%= @non_misce.parent_id %>').find("#sub_non_misces").fadeOut();
+<% else %>
+	$('#non_misce_<%= @non_misce.id %>').fadeOut();
+<% end %>
 
 
 <% if current_client.non_misces.empty? %>

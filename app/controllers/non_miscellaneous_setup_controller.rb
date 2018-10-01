@@ -1,9 +1,10 @@
 class NonMiscellaneousSetupController < ApplicationController
     before_action :authenticate_user!
     before_action :set_misce, only: [:edit, :update, :destroy]
+    before_action :set_parent, only: [:edit, :new, :update, :destroy]
 
     def index
-        @non_misces = current_client.non_misces
+        @non_misces = current_client.non_misces.main
     end
 
     def new
@@ -50,11 +51,15 @@ class NonMiscellaneousSetupController < ApplicationController
     private
 
         def non_misce_params
-            params.require(:non_misce).permit(:name, :description, :is_active, :percentage_scope)
+            params.require(:non_misce).permit(:name, :parent_id, :description, :is_active, :percentage_scope)
         end
         
         def set_misce
             @non_misce = current_client.non_misces.find params[:id]
+        end
+
+        def set_parent
+            @parent = params[:non_misce_id]
         end
     
 end

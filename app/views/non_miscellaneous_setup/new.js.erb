@@ -1,5 +1,8 @@
-$('#modal h4').html('New Non-Miscellaneous Category');
-
+<% if @parent.present? %>
+	$('#modal h4').html('New Sub-Non Miscellaneous Category');
+<% else %>
+	$('#modal h4').html('New Non-Miscellaneous Category');
+<% end %>
 $('.modal-body').html('<%= j render("form") %>');
 
 

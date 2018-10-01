@@ -5,7 +5,12 @@ $('#modal').modal('hide');
 $('body').removeClass('modal-open');
 $('.modal-backdrop').remove();
 
-$('#non_misces').append('<%= j render @non_misce %>').fadeIn();
+<% if @non_misce.is_sub_non_misce? %>
+    $('#non_misce_<%= @non_misce.parent_id %>').find('#sub_non_misces').append('<%= j render "sub_non_misce", sub_non_misce: @non_misce %>');
+<% else %>
+    $('#non_misces').append('<%= j render @non_misce %>').fadeIn();
+    $('#nestable').nestable('reinit');
+<% end %>
 
 $('.empty-warning').css("display","none");
 $('#non_misces').css("display","block");

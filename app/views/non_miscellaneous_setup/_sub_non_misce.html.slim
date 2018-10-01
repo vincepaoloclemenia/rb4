@@ -1,0 +1,8 @@
+li.dd-item id="non_misce_#{sub_non_misce.id}"
+  .dd-new-handle
+    span = sub_non_misce.name
+    span = sub_non_misce.percentage_scope ? "<span class='label label-track ml5'>Set for Customer Count Percentage</span>".html_safe : "<span class='label label-default ml5'>Not included for customer count</span>".html_safe
+    span = sub_non_misce.is_active ? "<span class='label label-success ml5'>Active</span>".html_safe : "<span class='label label-default ml5'>Deactivated</span>".html_safe
+    .pull-right   
+        = link_to "<i class='icon-glyph f14'></i>".html_safe, edit_non_misce_path(sub_non_misce), class: "btn btn-default btn-xs mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit" }, remote: true
+        = link_to "<i class='icon-glyph-76 f14'></i>".html_safe, non_misce_path(sub_non_misce), method: :delete, class: "btn btn-default btn-xs mb10 swal-warning-confirm", data: { tt: "tooltip", placement: "top", "original-title" => "Delete", confirm: "Are you sure?" }, remote: true

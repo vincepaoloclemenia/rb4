@@ -1,4 +1,6 @@
 = form_for @non_misce, remote: true do |f|
+    - if @parent.present?
+        = f.hidden_field :parent_id, value: @parent
     .row.mb10
         .col-xs-12
             = f.label :name, class: "control-label"

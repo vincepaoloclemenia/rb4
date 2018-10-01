@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180927051156) do
+ActiveRecord::Schema.define(version: 20181001080502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -409,9 +409,11 @@ ActiveRecord::Schema.define(version: 20180927051156) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.boolean  "percentage_scope"
+    t.integer  "parent_id"
   end
 
   add_index "non_misces", ["client_id"], name: "index_non_misces_on_client_id", using: :btree
+  add_index "non_misces", ["parent_id"], name: "index_non_misces_on_parent_id", using: :btree
 
   create_table "order_lists", force: :cascade do |t|
     t.datetime "po_date"
