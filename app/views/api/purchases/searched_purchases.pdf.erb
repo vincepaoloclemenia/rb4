@@ -31,7 +31,7 @@
 				<tbody>
 					<% total_purchases_net_amount = 0 %>
 					<% total_purchases_total_amount = 0 %>			
-					<% @purchases.each do |purchase| %>
+					<% @all_purchases.each do |purchase| %>
 						<% purchase_net_amount = 0 %>
 						<% purchase_total_amount = 0 %>
 						<% purchase_items = @items.present? ? purchase.purchase_items.search_item(@items) : purchase.purchase_items %>

@@ -14,14 +14,6 @@ json.branches do |json|
     end
 end
 
-json.categories do |json|
-    json.array! @categories.each_with_index.to_a do |category, index|
-        json.label category.name
-        json.input category.id
-        json.value index
-    end
-end
-
 json.items do |json|
     json.array! @items.each_with_index.to_a do |item, index|
         json.label item.name

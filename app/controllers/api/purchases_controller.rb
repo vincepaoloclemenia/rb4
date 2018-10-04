@@ -5,12 +5,7 @@ class Api::PurchasesController < ApplicationController
 
     def index
         @suppliers = current_brand.suppliers.select(:name, :id)
-        @items = if params[:category].present?
-                    current_brand.items.search_category(params[:category]).select(:name, :id)
-                else
-                    current_brand.items.select(:name, :id)
-                end   
-        @categories = current_brand.categories.where.not(parent_id: nil).select(:name, :id)
+        @items = current_brand.items.select(:name, :id)   
         @purchases = @user.purchases.where(purchase_date: Date.today.at_beginning_of_month..Date.today.end_of_month).with_purchase_items.paginate(page: params[:page], per_page: 15)        
     end
 
@@ -27,12 +22,14 @@ class Api::PurchasesController < ApplicationController
     end
 
     def searched_purchases
+        pp = 15
+        page_num = params[:page]
         purchases = @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number])                                 
         date = params[:date]
-        @from = date.present? ? Date.strptime(date[0], "%m/%d/%Y") : purchases.last.purchase_date
-        @to = date.present? ? Date.strptime(date[1], "%m/%d/%Y") : purchases.first.purchase_date
-        @date = date.present? || purchases.size > 1 ? "#{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')}" : purchases.first.purchase_date.strftime("%B %d, %Y") 
-        @purchases = if @from.nil? || @to.nil?
+        @from = date.present? ? Date.strptime(date[0], "%m/%d/%Y") : purchases.present? ? purchases.last.purchase_date : nil
+        @to = date.present? ? Date.strptime(date[1], "%m/%d/%Y") : purchases.present? ? purchases.first.purchase_date : nil
+        @date = date.present? ? "#{@from.strftime('%B %d, %Y')} - #{@to.strftime('%B %d, %Y')}" : purchases.present? ? purchases.first.purchase_date.strftime("%B %d, %Y") : "No record found"
+        temp_purchases = if @from.nil? || @to.nil?
                         purchases
                     else    
                         if @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: @from..@to).exists?
@@ -41,6 +38,9 @@ class Api::PurchasesController < ApplicationController
                             []
                         end
                     end
+        @purchases = temp_purchases.paginate(page: page_num, per_page: pp) 
+        records = page_num.to_i >= 1 ? page_num.to_i : 1
+        @all_purchases = temp_purchases.first(pp * records)
         @items = params[:purchase_items]
         if params[:format] == 'xlsx' && @purchases.present?
             render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/searched_purchases'

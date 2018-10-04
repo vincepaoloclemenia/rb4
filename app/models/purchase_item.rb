@@ -11,8 +11,10 @@ class PurchaseItem < ActiveRecord::Base
 
 	after_commit :update_purchase, on: [:create, :destroy, :update ]
 
-	pg_search_scope :search_item, against: :item_id,
-	using: { tsearch: { any_word: true } }
+	pg_search_scope :search_item, against: :item_id, using: { tsearch: { any_word: true } }
+	pg_search_scope :search_branches, associated_against: { purchase: [:branch_id] }, using: { tsearch: { any_word: true  } }
+	pg_search_scope :search_suppliers, associated_against: { purchase: [:supplier_id] }, using: { tsearch: { any_word: true } }
+	pg_search_scope :search_for_invoice, associated_against: { purchase: [:invoice_number] }, using: { tsearch: { any_word: true, prefix: true } }
 
 	def get_purchases_per_branch
 		d = DateTime.now - 1
@@ -86,5 +88,11 @@ class PurchaseItem < ActiveRecord::Base
 			total = purchase.purchase_items.map(&:item_total_net).sum
 			purchase.update(total_net_sum: total)
 		end
+	end
+
+	#Class method for searching items
+	def self.search_purchased_items(branch_ids, supplier_ids, item_ids, invoice)
+		searched_items = self.includes(:purchase).search_branches(branch_ids) + self.includes(:purchase).search_suppliers(supplier_ids)+ self.search_item(item_ids)+ self.includes(:purchase).search_for_invoice(invoice)
+		return searched_items.uniq
 	end
 end

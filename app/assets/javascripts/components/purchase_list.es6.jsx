@@ -4,13 +4,11 @@ class PurchaseList extends React.Component{
         this.state = {
             fetching: false,
             suppliers: [],
-            categories: [],
             categoryIds: [],
             branches: [],
             items: [],
             invoice: '',
             purchases: [],
-            category: [],
             item: [],
             branch: [],
             supplier: [],
@@ -19,6 +17,7 @@ class PurchaseList extends React.Component{
             itemTotalVat: null,
             itemTotalAmount: null,
             itemTotalNet: null,
+            currentPage: 1,
         }
     }
 
@@ -41,7 +40,8 @@ class PurchaseList extends React.Component{
                     nextPage: data.next_page,
                     itemTotalAmount: data.total_amount,
                     itemTotalNet: data.total_net,
-                    itemTotalVat: data.total_vat
+                    itemTotalVat: data.total_vat,
+                    currentPage: 1,
                 })
             }
         })
@@ -66,7 +66,13 @@ class PurchaseList extends React.Component{
                 },
                 success: (data) => {
                     this.setState({
-                        purchases: [...this.state.purchases, ...data.purchases], nextPage: data.next_page, fetching: false
+                        purchases: [...this.state.purchases, ...data.purchases], 
+                        nextPage: data.next_page, 
+                        fetching: false,
+                        itemTotalAmount: data.total_amount,
+                        itemTotalNet: data.total_net,
+                        itemTotalVat: data.total_vat,
+                        currentPage: this.state.currentPage + 1
                     })
                 }
             })
@@ -83,20 +89,6 @@ class PurchaseList extends React.Component{
         }
     }
 
-    searchForItem(value){
-        this.setState({ category: value })
-        var ids = []
-        value.map( x => ids.push(x.input))
-        $.ajax({
-            url: `/api/purchases.json`,
-            data: { category: ids },
-            method: 'GET',
-            success: (data) => {
-                this.setState({ items: data.items })
-            }
-        })
-    }
-
     downloadExcel(event){    
         var items = this.state.item.map( x => `&purchase_items[]=${x.input}` ).toString()
         var branches = this.state.branch.map( x => `&branches[]=${x.input}`).toString()
@@ -104,7 +96,7 @@ class PurchaseList extends React.Component{
         var dates = $("#q_purchase_date_cont").val().split(" - ").map( x => `&date[]=${x}` ).toString()
         if(this.state.searching){
             event.target.target = "_blank"
-            event.target.href = `/api/purchases/searched_purchases.xlsx?invoice_number=${this.state.invoice}${$("#q_purchase_date_cont").val() === '' ? [] : dates.replace(/,/, '') }${this.state.item.length === 0 ? '' : items.replace(/,/, '') }${this.state.branch.length === 0 ? '' : branches.replace(/,/,'')}${this.state.supplier.length === 0 ? '' : suppliers.replace(/,/,'')}` 
+            event.target.href = `/api/purchases/searched_purchases.xlsx?invoice_number=${this.state.invoice}${$("#q_purchase_date_cont").val() === '' ? [] : dates.replace(/,/, '') }${this.state.item.length === 0 ? '' : items.replace(/,/, '') }${this.state.branch.length === 0 ? '' : branches.replace(/,/,'')}${this.state.supplier.length === 0 ? '' : suppliers.replace(/,/,'')}&page=${this.state.currentPage}` 
         }else{
             event.target.target = "_blank"
             event.target.href = '/api/purchases/default_excel.xlsx'
@@ -118,7 +110,7 @@ class PurchaseList extends React.Component{
         var dates = $("#q_purchase_date_cont").val().split(" - ").map( x => `&date[]=${x}` ).toString()
         if(this.state.searching){
             event.target.target = "_blank"
-            event.target.href = `/api/purchases/searched_purchases.pdf?invoice_number=${this.state.invoice}${$("#q_purchase_date_cont").val() === '' ? [] : dates.replace(/,/, '') }${this.state.item.length === 0 ? '' : items.replace(/,/, '') }${this.state.branch.length === 0 ? '' : branches.replace(/,/,'')}${this.state.supplier.length === 0 ? '' : suppliers.replace(/,/,'')}` 
+            event.target.href = `/api/purchases/searched_purchases.pdf?invoice_number=${this.state.invoice}${$("#q_purchase_date_cont").val() === '' ? [] : dates.replace(/,/, '') }${this.state.item.length === 0 ? '' : items.replace(/,/, '') }${this.state.branch.length === 0 ? '' : branches.replace(/,/,'')}${this.state.supplier.length === 0 ? '' : suppliers.replace(/,/,'')}&page=${this.state.currentPage}` 
         }else{
             event.target.target = "_blank"
             event.target.href = '/api/purchases/default_excel.pdf'
@@ -152,8 +144,8 @@ class PurchaseList extends React.Component{
 
     render(){
         return(    
-            <div>
-                <div className='panel'>
+            [
+                <div key='panel-1' className='panel'>
                     <div className='panel-heading pb20'>
                         <div className='pull-left mt7'>Search Filter</div>                       
                     </div>
@@ -161,7 +153,8 @@ class PurchaseList extends React.Component{
                         {this.renderFilters()}         
                     </div>
                 </div>
-                <div className='panel'>
+                ,
+                <div key='panel-2' className='panel'>
                     <div className='panel-heading border pb45'>
                         <div className='pull-left mt7'>Purchase List</div>
                         <div className='pull-right'>
@@ -171,7 +164,7 @@ class PurchaseList extends React.Component{
                     </div>
                     <div className='panel-body'>
                         <div className='no-more-tables'>
-                            <table className='table table-bordered table-striped mb0'>
+                            <table className='table table-bordered mb0'>
                                 <thead>
                                     <tr className='bg-thead'>
                                         <th width='150'>Invoice Number</th>
@@ -196,7 +189,7 @@ class PurchaseList extends React.Component{
                         </div>
                     </div>
                 </div>
-            </div>
+            ]
         )
     }
 
@@ -206,16 +199,9 @@ class PurchaseList extends React.Component{
                 <div className='row'> 
                     <div className='row pb10'>
                         <div className='col-md-6 col-xs-6 mb5'>
-                            <label htmlFor='category'>Category</label>
-                            <Select.Creatable
-                                multi={true}
-                                name='category'
-                                optionClassName='form-control'
-                                options={this.state.categories}
-                                onChange={ this.searchForItem.bind(this) }
-                                value={this.state.category}               
-                            /> 
-                        </div>
+                            <label htmlFor='date_range'>Date</label>
+                            <input readOnly="true" className="form-control drp" placeholder="Search" type="text" name="date_range" id="q_purchase_date_cont"/>         
+                        </div> 
                         <div className='col-xs-6 mb5'>
                             <label htmlFor='q[item]'>Items</label>
                             <Select.Creatable
@@ -246,12 +232,6 @@ class PurchaseList extends React.Component{
                         </div>   
                     </div>
                     <div className='row pb10'>
-                        <div className='col-md-6 col-xs-6 mb5'>
-                            <label htmlFor='date_range'>Date</label>
-                            <input className="form-control drp" placeholder="Search" type="text" name="date_range" id="q_purchase_date_cont"/>         
-                        </div>                                           
-                    </div>
-                    <div className='row pb10'>
                         <div className='row mb10' style={{ marginRight: '15px' }}>
                             <div className='col-xs-12'>
                                 <div className='pull-right'>
@@ -263,22 +243,14 @@ class PurchaseList extends React.Component{
                     </div>
                 </div>  
             )
-
         }
         return(
             <div className='row'> 
                 <div className='row pb10'>
                     <div className='col-md-6 col-xs-6 mb5'>
-                        <label htmlFor='category'>Category</label>
-                        <Select.Creatable
-                            multi={true}
-                            name='category'
-                            optionClassName='form-control'
-                            options={this.state.categories}
-                            onChange={ this.searchForItem.bind(this) }
-                            value={this.state.category}               
-                        /> 
-                    </div>
+                        <label htmlFor='invoice_no'>Invoice No.</label>
+                        <input className='form-control' placeholder='Input invoice' value={this.state.invoice} onChange={ (e) => this.setState({ invoice: e.target.value })} />
+                    </div>  
                     <div className='col-xs-6 mb5'>
                         <label htmlFor='q[item]'>Items</label>
                         <Select.Creatable
@@ -318,12 +290,8 @@ class PurchaseList extends React.Component{
                 <div className='row pb10'>
                     <div className='col-md-6 col-xs-6 mb5'>
                         <label htmlFor='date_range'>Date</label>
-                        <input className="form-control drp" placeholder="Search" type="text" name="date_range" id="q_purchase_date_cont"/>         
-                    </div>
-                    <div className='col-md-6 col-xs-6 mb5'>
-                        <label htmlFor='invoice_no'>Invoice No.</label>
-                        <input className='form-control' placeholder='Input invoice' value={this.state.invoice} onChange={ (e) => this.setState({ invoice: e.target.value })} />
-                    </div>                              
+                        <input readOnly="true" className="form-control drp" placeholder="Search" type="text" name="date_range" id="q_purchase_date_cont"/>         
+                    </div>                            
                 </div>
                 <div className='row pb10'>
                     <div className='row mb10' style={{ marginRight: '15px' }}>
@@ -385,24 +353,23 @@ class PurchaseList extends React.Component{
     }
     
     renderData(){
-        if(this.state.fetching){ return }
         if(this.state.searching){
             return(
                 this.state.purchases.map((purchase, index) => 
                     <tbody key={index}>
                         { purchase.purchase_items.map((purchase_item, index) =>
                             <tr key={index}>
-                                <td>{purchase.invoice_number}</td>
-                                <td>{purchase.purchase_date}</td>
-                                <td>{purchase.branch.name}</td>
-                                <td>{purchase.supplier.name}</td>
-                                <td>{purchase_item.item.name}</td>
-                                <td>{purchase_item.category}</td>
-                                <td className='text-centered'>{purchase_item.quantity}</td>
-                                <td className='text-pull-right'>{purchase_item.unit_cost}</td>
-                                <td className='text-pull-right'>{purchase_item.item_total_vat}</td>
-                                <td className='text-pull-right'>{purchase_item.item_total_net}</td>
-                                <td className='text-pull-right'>{purchase_item.item_total_amount}</td>
+                                <td data-title='Invoice'>{purchase.invoice_number}</td>
+                                <td data-title='Purchase Date'>{purchase.purchase_date}</td>
+                                <td data-title='Branch'>{purchase.branch.name}</td>
+                                <td data-title='Supplier'>{purchase.supplier.name}</td>
+                                <td data-title='Item'>{purchase_item.item.name}</td>
+                                <td data-title='Category'>{purchase_item.category}</td>
+                                <td data-title='Quantity' className='text-centered'>{purchase_item.quantity}</td>
+                                <td data-title='Unit' className='text-pull-right'>{purchase_item.unit_cost}</td>
+                                <td data-title='Tax' className='text-pull-right'>{purchase_item.item_total_vat}</td>
+                                <td data-title='Net Amount' className='text-pull-right'>{purchase_item.item_total_net}</td>
+                                <td data-title='Total Amount' className='text-pull-right'>{purchase_item.item_total_amount}</td>
                             </tr> 
                         )}   
                     </tbody>                         
@@ -460,7 +427,7 @@ class PurchaseList extends React.Component{
             url: '/api/purchases.json',
             method: 'GET',
             success: (data => {
-                this.setState({ items: data.items, purchases: data.purchases, fetching: false, nextPage: data.next_page })
+                this.setState({ currentPage: 1, items: data.items, purchases: data.purchases, fetching: false, nextPage: data.next_page })
             })
         })
     }

@@ -1,9 +1,10 @@
 wb = xlsx_package.workbook
-wb.add_worksheet(name: "#{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}") do |sheet|
-purchases_size = @purchases.map { |p| p.purchase_items.size }.sum
-vat = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_vat).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_vat).sum }.sum
-net = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_net).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_net).sum }.sum
-amount = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_amount).sum }.sum : @purchases.map { |purchase| purchase.purchase_items.map(&:item_total_amount).sum }.sum
+wb.add_worksheet(name: "#{@all_purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@all_purchases.first.purchase_date.strftime('%b %d, %Y')}") do |sheet|
+    purchases_size = @items.present? ? @all_purchases.map { |p| p.purchase_items.search_item(@items).size }.sum : @all_purchases.map { |p| p.purchase_items.size }.sum 
+    vat = @items.present? ? @all_purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_vat).sum }.sum : @all_purchases.map { |purchase| purchase.purchase_items.map(&:item_total_vat).sum }.sum
+    net = @items.present? ? @all_purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_net).sum }.sum : @all_purchases.map { |purchase| purchase.purchase_items.map(&:item_total_net).sum }.sum
+    amount = @items.present? ? @all_purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_amount).sum }.sum : @all_purchases.map { |purchase| purchase.purchase_items.map(&:item_total_amount).sum }.sum
+    
     sheet.add_row [
         "Invoice Number",
         "Date",
@@ -15,7 +16,7 @@ amount = @items.present? ? @purchases.map { |purchase| purchase.purchase_items.s
         "Total Amount"
     ]
 
-    @purchases.each do |purchase|
+    @all_purchases.each do |purchase|
         if @items.present?
             purchase.purchase_items.search_item(@items).each do |purchase_item|
                 sheet.add_row [
