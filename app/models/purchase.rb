@@ -22,7 +22,8 @@ class Purchase < ActiveRecord::Base
 	pg_search_scope :search_supplier, associated_against: { supplier: [:id] }, using: { tsearch: { any_word: true } }
 	pg_search_scope :search_purchase_item, associated_against: { purchase_items: [:item_id] }, using: { tsearch: { any_word: true } }
 	pg_search_scope :search_branch, associated_against: { branch: [:id] }, using: { tsearch: { any_word: true } }
-
+	pg_search_scope :search_item, associated_against: { purchase_items: [:item_id] }, using: { tsearch: { any_word: true } }
+	
 	#validate :restrict_modification
 
 	def self.get_total_purchases_per_branch(branch, date)
@@ -114,8 +115,8 @@ class Purchase < ActiveRecord::Base
 		all.includes(:purchase_items).where.not( purchase_items: { purchase_id: nil })
 	end
 
-	def self.search_purchases(suppliers, branches, invoice_number)
-		keywords = "all#{invoice_number == '' ? '' : '.search_invoice(invoice_number)'}#{suppliers.present? ? '.search_supplier(suppliers)' : ''}#{branches.present? ? '.search_branch(branches)' : ''}"
+	def self.search_purchases(suppliers, branches, items, invoice_number)
+		keywords = "all#{invoice_number == '' ? '' : '.search_invoice(invoice_number)'}#{suppliers.present? ? '.search_supplier(suppliers)' : ''}#{branches.present? ? '.search_branch(branches)' : ''}#{items.present? ? '.search_item(items)' : ''}"
 		eval(keywords)
 	end
 

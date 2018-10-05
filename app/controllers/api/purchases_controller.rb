@@ -24,7 +24,8 @@ class Api::PurchasesController < ApplicationController
     def searched_purchases
         pp = 15
         page_num = params[:page]
-        purchases = @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number])                                 
+        @items = params[:purchase_items]
+        purchases = @user.purchases.search_purchases(params[:suppliers], params[:branches], @items, params[:invoice_number])                                 
         date = params[:date]
         @from = date.present? ? Date.strptime(date[0], "%m/%d/%Y") : purchases.present? ? purchases.last.purchase_date : nil
         @to = date.present? ? Date.strptime(date[1], "%m/%d/%Y") : purchases.present? ? purchases.first.purchase_date : nil
@@ -32,8 +33,8 @@ class Api::PurchasesController < ApplicationController
         temp_purchases = if @from.nil? || @to.nil?
                         purchases
                     else    
-                        if @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: @from..@to).exists?
-                            @user.purchases.search_purchases(params[:suppliers], params[:branches], params[:invoice_number]).where(purchase_date: @from..@to)
+                        if @user.purchases.search_purchases(params[:suppliers], params[:branches], @items, params[:invoice_number]).where(purchase_date: @from..@to).exists?
+                            @user.purchases.search_purchases(params[:suppliers], params[:branches], @items, params[:invoice_number]).where(purchase_date: @from..@to)
                         else
                             []
                         end
@@ -41,7 +42,6 @@ class Api::PurchasesController < ApplicationController
         @purchases = temp_purchases.paginate(page: page_num, per_page: pp) 
         records = page_num.to_i >= 1 ? page_num.to_i : 1
         @all_purchases = temp_purchases.first(pp * records)
-        @items = params[:purchase_items]
         if params[:format] == 'xlsx' && @purchases.present?
             render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/searched_purchases'
         elsif params[:format] == 'pdf' && @purchases.present?
