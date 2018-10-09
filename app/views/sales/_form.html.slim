@@ -1,0 +1,140 @@
+= form_for sale, remote: true do |f|
+
+	.panel
+		.panel-heading.border 
+			= "#{sale.new_record? ? 'New Sale' : 'Edit sale details: ' }"
+
+			- unless sale.new_record? 
+				.pull-right 
+					= link_to "<i class='icon-glyph mr5 f14' ></i> Back".html_safe, sale_path(@sale), class: "btn btn-success btn-round btn-outline"
+
+		.panel-body
+			.row
+			- if branch_admin?
+				= render partial: 'branch_user', locals: { f: f, sale: @sale }
+			- else
+				= render partial: 'client_brand_user', locals: { f: f, sale: @sale }
+
+	- if categories.any? 
+		.panel
+			.panel-heading.border Sales by Category
+			.panel-body
+				.row.mb15
+					- categories.each do |category| 
+						- cat = @sale.sale_by_category_entries.find_by_category_id(category.id) || @sale.sale_by_category_entries.build
+						= f.fields_for :sale_by_category_entries, cat do |sbce|
+							= sbce.hidden_field :category_id, value: category.id
+							.col-xs-12.col-lg-4.col-md-6.mb15
+								= sbce.label :amount, "#{category.name}"
+								.input-group
+									span.input-group-addon PHP
+									= sbce.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
+	- else
+		.panel
+			.panel-body
+				- empty_warning = current_brand.categories.main.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have no categories.<br> Click 
+								b
+									u  = link_to 'here', categories_path 
+								|  to create sale category.		
+
+	- if settlements.present? 
+		.panel
+			.panel-heading.border Sales by Settlements
+			.panel-body
+				.row.mb15
+					- settlements.each do |settlement| 
+						- set = @sale.sale_by_settlement_entries.find_by_settlement_id(settlement.id) || @sale.sale_by_settlement_entries.build
+						= f.fields_for :sale_by_settlement_entries, set do |sbse|
+							= sbse.hidden_field :settlement_id, value: settlement.id
+							.col-xs-12.col-lg-4.col-md-6.mb15
+								= sbse.label :amount, "#{settlement.name}"
+								.input-group
+									span.input-group-addon PHP
+									= sbse.number_field :amount, class: "form-control", placeholder: "0.00", step: '.01'
+	- else
+		.panel
+			.panel-body
+				- empty_warning = settlements.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have no settlements.<br> Click 
+								b
+									u  = link_to 'here', settlements_path 
+								|  to create sale settlements category.	
+
+	- if statistics.present? 
+		.panel
+			.panel-heading.border Statistics
+			.panel-body
+				.row.mb15
+					- statistics.each do |statistic| 
+						- stats = @sale.sales_stats.find_by_statistic_id(statistic.id) || @sale.sales_stats.build
+						= f.fields_for :sales_stats, stats do |stat|
+							= stat.hidden_field :statistic_id, value: statistic.id
+							= stat.hidden_field :non_transac, value: statistic.non_transac || false
+							= stat.hidden_field :name, value: statistic.name
+							.col-xs-12.col-lg-4.col-md-6.mb15
+								= stat.label :count, "#{statistic.name}"
+								|  
+								small.field-req *	
+								= stat.number_field :count, class: "form-control", placeholder: "0.00", step: '.01'
+	- else
+		.panel
+			.panel-body
+				- empty_warning = statistics.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have no categories.<br> Click 
+								b
+									u  = link_to 'here', statistics_path 
+								|  to create sale statistics category.	
+
+	- if non_misces.present? 
+		.panel
+			.panel-heading.border Non Miscellaneous
+			.panel-body
+				.row.mb15
+					- non_misces.each do |non_misce| 
+						- non_miscellaneous = @sale.sales_non_misces.find_by_non_misce_id(non_misce.id) || @sale.sales_non_misces.build
+						= f.fields_for :sales_non_misces, non_miscellaneous do |snm|
+							= snm.hidden_field :non_misce_id, value: non_misce.id
+							= snm.hidden_field :percentage_scope, value: non_misce.percentage_scope || false
+							= snm.hidden_field :name, value: non_misce.name
+							.col-xs-12.col-lg-4.col-md-6.mb15
+								= snm.label :count, "#{non_misce.name}", class: 'control-label'
+								|  
+								small.field-req *	
+								= snm.number_field :count, class: "form-control validate_count", placeholder: "0.00", step: '.01'
+	- else
+		.panel
+			.panel-body
+				- empty_warning = non_misces.empty? ? "block" : "none"
+				.empty-warning style="display: #{empty_warning}"
+					.alert.alert-info role="alert"
+						.row
+							.col-xs-1.text-right
+								i.icon-glyph-73.f25
+							.col-xs-11
+								| Oops! You currently have not set non-miscellaneous categories yet.<br> Click 
+								b
+									u  = link_to 'here', non_misces_path 
+								|  to create sale non-miscellaneous category.	
+		
+	.panel-body	
+		.row.pull-right
+			= f.submit "Save", class: 'btn btn-primary'

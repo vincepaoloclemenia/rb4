@@ -60,7 +60,7 @@ Branch.all.includes(:sales).where( sales: { branch_id: nil } ).map do |br|
                 sale.sale_by_settlement_entries.create(settlement_id: stat.id, branch_id: br.id, amount: range.rand(11000..30000))
             end
             br.client.non_misces.active.map do |stat|
-                sale.sales_non_misces.create(name: stat.name, non_misce_id: stat.id, branch_id: br.id, count: range.rand(300..2100), percentage_scope: stat.percentage_scope)
+                sale.sales_non_misces.create(name: stat.name, non_misce_id: stat.id, branch_id: br.id, count: range.rand(300..1300), percentage_scope: stat.percentage_scope)
             end
             sale.update_net_sales
             puts "Sale for #{sale.branch.name} #{sale.sale_date.strftime('%b %d, %Y')} created"

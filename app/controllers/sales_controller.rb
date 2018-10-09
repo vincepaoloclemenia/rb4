@@ -4,6 +4,7 @@ class SalesController < ApplicationController
 	before_action :destroy_activity, only: :destroy
 	before_action :get_off_non_branch_user, only: :show
 	after_action :get_total_sales, only: :create
+	before_action :format_date, only: :update
 
 	def index
 	end
@@ -18,6 +19,10 @@ class SalesController < ApplicationController
 		ytd_total = @branch.get_total_ytd_sales_all_cat(@sale.sale_date)
 		@ytd_total = ytd_total[:total]
 		@ytd_ave = ytd_total[:ave]
+		@gen_transaction = current_client.statistics.general_transaction
+		@sales_stat_gt = @sale.sales_stats.where(statistic_id: @gen_transaction.id).sum(:count)
+		@mtd_stats_gt = @branch.get_mtd_sales_stats(@gen_transaction.id, @sale.sale_date)
+		@ytd_stats_gt = @branch.get_ytd_sales_stats(@gen_transaction.id, @sale.sale_date)
 	end
 
 	def new
@@ -30,6 +35,15 @@ class SalesController < ApplicationController
 		@sale.sale_by_category_entries.build
 		@sale.sales_stats.build
 		@sale.sales_non_misces.build
+	end
+	
+	def edit
+		@sale = Sale.find params[:id]
+		@branch = @sale.branch	
+		@categories = current_brand.categories.main.saleable
+		@statistics = current_client.statistics.active
+		@settlements = current_client.settlements.saleable
+		@non_misces = current_client.non_misces.active
 	end
 
 	def create
@@ -50,6 +64,20 @@ class SalesController < ApplicationController
 				#redirect_to new_sale_path, alert: @sale.errors.full_messages.join(", "), params: sale_params
 			end
 		end
+	end
+
+	def update
+		@sale = Sale.find params[:id]
+		respond_to do |format|
+			if @sale.update(sale_params)							
+				format.js { render js: "window.location='#{sale_path(@sale)}'"
+							flash[:notice] = "Sale for #{@sale.branch.name} has been successfully updated" 
+						}
+			else
+				format.json { render json: @sale.errors, status: :unprocessable_entity }
+				#redirect_to new_sale_path, alert: @sale.errors.full_messages.join(", "), params: sale_params
+			end
+		end	
 	end
 
 	def destroy
@@ -75,6 +103,10 @@ class SalesController < ApplicationController
 											sales_stats_attributes: [:id, :name, :branch_id, :count, :statistic_id, :non_transac],
 											sales_non_misces_attributes: [:id, :name, :branch_id, :count, :percentage_scope, :non_misce_id]
 										)
+		end
+
+		def format_date
+			params[:sale][:sale_date] = Date.strptime(params[:sale][:sale_date], "%m/%d/%Y")
 		end
 
 		def get_off_non_branch_user

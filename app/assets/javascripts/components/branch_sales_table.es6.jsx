@@ -11,9 +11,7 @@ class BranchSalesTable extends React.Component{
                         <th width="140">Date</th>
                         <th width="140">Branch</th>
                         <th width="130">Net Sales</th>
-                        <th width="130">Vat</th>
                         <th width="190">Settlement Type Sales</th>
-                        <th width="170">Cash for Deposits</th>
                         <th data-sortable="false" width="100">Action</th>
                     </tr>
                 </thead>
@@ -39,12 +37,13 @@ class BranchSalesTable extends React.Component{
                         <td data-title="Date">{sale.date}</td>
                         <td data-title="Branch">{sale.branch}</td>
                         <td className='align-right' data-title="Net Sales">{sale.net}</td>
-                        <td className='align-right' data-title="Vat">{sale.vat}</td>
                         <td className='align-right' data-title="Settlement Type Sales">{sale.settlement}</td>
-                        <td className='align-right' data-title="Cash for Deposits">{sale.deposits}</td>
                         <td className="action" data-sortable="false" data-title="Action">
                             <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="View Sales" href={`/sales/${sale.id}`}>
                                 <i className="icon-glyph-41 f14"></i>
+                            </a>
+                            <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Edit Sale Details" href={`/sales/${sale.id}/edit`}>
+                                <i className="icon-glyph f14"></i>
                             </a>
                             <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Delete" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href={`/sales/${sale.id}`}>
                                 <i className="icon-glyph-76 f14"></i>

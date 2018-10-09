@@ -1,0 +1,2 @@
+- content_for :title, "Edit Sales: #{@branch.name.gsub(/ /, '-').downcase}-#{@sale.sale_date.strftime('%b-%d-%Y')}"
+= render partial: "form", locals: { sale: @sale, statistics: @statistics, categories: @categories, settlements: @settlements, non_misces: @non_misces}

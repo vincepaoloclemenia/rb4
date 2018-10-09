@@ -4,8 +4,16 @@ class SalesNonMisce < ActiveRecord::Base
     belongs_to :non_misce
     #validates :count, presence: true
     scope :inc, -> { where percentage_scope: true }
-    scope :exc, -> { where.not percentage_scope: true }
+    #scope :exc, -> { where.not percentage_scope: true }
 
+    def self.exc 
+        where.not( percentage_scope: true ).reject { |nm| nm.non_misce.is_sub_non_misce? }
+    end
+
+    def self.sub_exc
+        where.not( percentage_scope: true ).reject { |nm| !nm.non_misce.is_sub_non_misce? }
+    end
+    
     def get_misces_per_inc
         this_month = branch.sales.where( sale_date: sale.sale_date.all_month)
         this_year = branch.sales.where( sale_date: sale.sale_date.beginning_of_year..sale.sale_date)
