@@ -5,6 +5,8 @@ class Sale < ActiveRecord::Base
 	has_many :sale_by_category_entries, :dependent => :destroy
 	has_many :sales_stats, dependent: :destroy
 	has_many :sales_non_misces, dependent: :destroy
+	has_many :activities, dependent: :destroy
+
 	accepts_nested_attributes_for :sales_stats, :reject_if => :all_blank, :allow_destroy=> true
 	accepts_nested_attributes_for :sales_non_misces, :reject_if => :all_blank, :allow_destroy=> true	
 	accepts_nested_attributes_for :sale_by_category_entries, :reject_if => :all_blank, :allow_destroy=> true

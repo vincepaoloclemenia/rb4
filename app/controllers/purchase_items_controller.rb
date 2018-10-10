@@ -20,28 +20,19 @@ class PurchaseItemsController < ApplicationController
 		@purchase_item = @purchase.purchase_items.new(purchase_item_params)
 		@purchase_item.date_of_purchase = Date.today
 		respond_to do |format|
-            if @purchase_item.save
+			if @purchase_item.save
+				current_brand.activities.create(
+					user_id: current_user.id,
+					action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit.symbol.downcase} of #{@purchase_item.item.name}",
+					recordable: @purchase_item,
+					purchase_id: @purchase.id
+				)
 				format.json { head :no_content }
 				format.js { flash[:notice] = "Purchase item #{@purchase_item.item.name} added" }
 			else
 				format.json { render json: @purchase_item.errors, status: :unprocessable_entity }
 			end
 		end
-=begin
-			if current_user.role.role_level.eql?('branch')
-				current_brand.activities.create(
-					user_id: current_user.id,
-					action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name}",
-					recordable: @purchase_item
-				)
-			else
-				current_brand.activities.create(
-					user_id: current_user.id,
-					action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
-					recordable: @purchase_item
-				)
-			end 
-=end
 	end
 
 	def show
@@ -51,11 +42,20 @@ class PurchaseItemsController < ApplicationController
 		@purchase = current_brand.purchases.find(params[:purchase_id])
 		@purchase.update(user_modified_by_id: current_user.id)
 		@purchase_item = @purchase.purchase_items.find(params[:id])
+		quantity = @purchase_item.quantity.to_i
+		symbol = @purchase_item.unit.present? ? @purchase_item.unit.symbol.downcase : @purchase_item.unit_name
+		item = @purchase_item.item.name
 		@purchase_order = PurchaseOrder.find_by_id params[:purchase_order_id]
 		respond_to do |format|
 			if @purchase_item.destroy
 				format.json { head :no_content }
 				format.js { flash[:notice] = "Purchase item was deleted" }
+				current_brand.activities.create(
+					user_id: current_user.id,
+					action: " deleted #{quantity} #{symbol} of #{item}",
+					recordable: @purchase,
+					purchase_id: @purchase.id
+				)
 			else
 				format.json { render json: @purchase_item.errors, status: :unprocessable_entity }
 			end
@@ -70,7 +70,7 @@ class PurchaseItemsController < ApplicationController
 	end
 
 	def purchase_item_params
-		params.require(:purchase_item).permit(:purchase_order_item_id, :item_id, :unit_name, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
+		params.require(:purchase_item).permit(:purchase_order_item_id, :unit_id, :item_id, :unit_name, :quantity, :purchase_item_amount, :purchase_item_total_amount, :vat_type, 
 																				:remarks, :date_of_purchase, :packaging)
 	end
 

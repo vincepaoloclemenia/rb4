@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     get "add_purchase_item" => "purchases#add_purchase_item"
     get :edit_purcahse_limit, on: :collection
     post :limit_edit, on: :collection 
+    get "view_history_log" => "purchases#view_history_log"
   end
   resources :subscriptions do
     get 'show_branches', on: :collection

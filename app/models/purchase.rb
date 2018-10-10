@@ -11,6 +11,7 @@ class Purchase < ActiveRecord::Base
 	belongs_to :created_by, class_name: 'User', :foreign_key => 'user_created_by_id'
 	belongs_to :modified_by, class_name: 'User', foreign_key: 'user_modified_by_id'
 	belongs_to :purchase_order
+	has_many :activities, dependent: :destroy
 	
 	default_scope -> { order(purchase_date: :desc)}
 

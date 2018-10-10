@@ -1,0 +1,11 @@
+$('#modal h4').html("<span class='gap' >History log for: </span><%= @purchase.invoice_number %>");
+
+$('.modal-body').html('<%= j render partial: "history", locals: { purchase: @purchase, activities: @activities } %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

@@ -8,6 +8,7 @@
                 = f.select :item_id, @items.pluck(:name,:id), { include_blank: "Select" }, class: "form-control", data: { placeholder: "Select" }								
         .row.mb10
             .col-xs-6
+				= f.hidden_field :unit_id, id: "unit_id"
                 = f.label :unit_id
                     | Unit
                     small.field-req  *

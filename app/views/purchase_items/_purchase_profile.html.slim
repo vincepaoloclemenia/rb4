@@ -7,8 +7,7 @@
                 th Branch
                 th Supplier
                 th Brand
-                th Created by
-                th Updated by
+                th History Log
         tbody
             tr
                 td data-title="Transaction Date" = purchase.purchase_date.strftime("%b %d %Y")
@@ -16,5 +15,5 @@
                 td data-title="Branch" = purchase.branch.name
                 td data-title="Supplier" = purchase.supplier.name
                 td data-title="Brand" = purchase.brand.name
-                td data-title="Created by" = purchase.created_by.full_name
-                td data-title="Updated by" = purchase.modified_by.full_name if purchase.modified_by.present?
+                td data-title='History Log' 
+                    = link_to "<i class='icon-glyph-78 f14'></i>".html_safe, purchase_view_history_log_path(purchase_id: purchase.id), data: { tt: "tooltip", placement: "top", "original-title" => "History Log" }, class: "btn btn-default btn-xs mb10", remote: true

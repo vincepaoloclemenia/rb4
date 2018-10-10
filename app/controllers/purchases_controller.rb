@@ -58,6 +58,12 @@ class PurchasesController < ApplicationController
 		@purchase = current_brand.purchases.create(purchase_params)
 		@purchase.user_created_by_id = current_user.id
 		if @purchase.save
+			current_brand.activities.create(
+				user_id: current_user.id,
+				action: " created purchase record ( Invoice number: #{@purchase.invoice_number} ) ",
+				recordable: @purchase,
+				purchase_id: @purchase.id
+			)
 			redirect_to purchase_purchase_items_path(@purchase.id)
 			flash[:notice] = "Purchase was successfully created"
 		else
@@ -70,6 +76,12 @@ class PurchasesController < ApplicationController
 		if branch_admin? && !@purchase.allowed_to_modify?
 			redirect_to purchases_path, alert: "You are no longer allowed to update nor delete the purchase record" 			
 		elsif @purchase.update(purchase_params)
+			current_brand.activities.create(
+				user_id: current_user.id,
+				action: " updated #{@purchase.invoice_number} ",
+				recordable: @purchase,
+				purchase_id: @purchase.id
+			)
 			@purchase.user_modified_by_id = current_user.id			
 			redirect_to purchases_path
 			flash[:notice] = "Purchase was successfully updated"
@@ -80,11 +92,17 @@ class PurchasesController < ApplicationController
 	end
 
 	def destroy	
+		invoice = @purchase.invoice_number
 		respond_to do |format|
 			if client_admin? || @purchase.allowed_to_modify?
 				@purchase_order = @purchase.purchase_order
 				@purchase_order.update(saved_as_purchase: false) if @purchase_order				
 				if @purchase.destroy
+					current_brand.activities.create(
+						user_id: current_user.id,
+						action: " deleted purchase record: #{invoice} ",
+						recordable: nil
+					)
 					format.json { head :no_content }
 					format.js { flash[:notice] = "Purchase item deleted" }
 				else
@@ -113,6 +131,12 @@ class PurchasesController < ApplicationController
 		@purchase.user_created_by_id = current_user.id
 		if @purchase.save
 			@purchase_order.update(saved_as_purchase: true)
+			current_brand.activities.create(
+				user_id: current_user.id,
+				action: " created purchase record ( Invoice number: #{@purchase.invoice_number} ) ",
+				recordable: @purchase,
+				purchase_id: @purchase.id
+			)
 			redirect_to purchase_order_lookup_purchases_path(purchase_order_id: params[:purchase_order_id], purchase: @purchase.id), notice: "Purchase through purchase order has been successfully created. You may now add purchase items" 
 		else
 			redirect_to purchases_path, alert: "Oops!, #{@purchase.errors.full_messages.join(', ')}"
@@ -132,20 +156,14 @@ class PurchasesController < ApplicationController
 		@purchase_item = @purchase.purchase_items.new(purchase_item_params)
 		@purchase_item.date_of_purchase = @purchase.purchase_date
 		respond_to do |format|
-			if @purchase_item.save
-				if current_user.role.role_level.eql?('branch')
-					current_brand.activities.create(
-						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name}",
-						recordable: @purchase_item
-					)
-				else
-					current_brand.activities.create(
-						user_id: current_user.id,
-						action: " purchased #{@purchase_item.quantity.to_i} #{@purchase_item.unit_name.pluralize(@purchase_item.quantity.to_i).downcase} of #{@purchase_item.item.name} for #{@purchase_item.branch.name}",
-						recordable: @purchase_item
-					)
-				end
+			if @purchase_item.save	
+				symbol = @purchase_item.unit.present? ? @purchase_item.unit.symbol.downcase : @purchase_item.unit_name
+				current_brand.activities.create(
+					user_id: current_user.id,
+					action: " purchased #{@purchase_item.quantity.to_i} #{symbol} of #{@purchase_item.item.name}",
+					recordable: @purchase_item,
+					purchase_id: @purchase.id
+				)			
 				purchase_order_lookup
 				@success = true
 				flash[:notice] = "Purchase Item successfully added"
@@ -174,6 +192,11 @@ class PurchasesController < ApplicationController
 		else
 			redirect_to purchases_path, alert: "Action cannot be completed."
 		end
+	end
+
+	def view_history_log
+		@purchase = Purchase.find params[:purchase_id]
+		@activities = @purchase.activities.includes(:user)
 	end
 
 	private
