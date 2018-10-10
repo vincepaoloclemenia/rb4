@@ -60,12 +60,12 @@ class Api::PurchasesController < ApplicationController
                 from = Date.strptime(search[:date][0], "%m/%d/%Y")
                 to = Date.strptime(search[:date][1], "%m/%d/%Y")  
                 if @user.purchases.where(purchase_date: from..to).exists? && ( search[:suppliers].present? || search[:branches].present? || search[:invoice].present? )
-                    @user.purchases.search_purchases(search[:suppliers], search[:branches], search[:invoice]).where(purchase_date: from..to).paginate(page: params[:page], per_page: 20)
+                    @user.purchases.search_purchases(search[:suppliers], search[:branches], [], search[:invoice]).where(purchase_date: from..to).paginate(page: params[:page], per_page: 20)
                 else
                     @user.purchases.where(purchase_date: from..to).paginate(page: params[:page], per_page: 20)
                 end
             else
-                @user.purchases.search_purchases(search[:suppliers], search[:branches], search[:invoice]).paginate(page: params[:page], per_page: 20)                
+                @user.purchases.search_purchases(search[:suppliers], search[:branches], [], search[:invoice]).paginate(page: params[:page], per_page: 20)                
             end
         else
             @user.purchases.paginate(page: params[:page], per_page: 20)
