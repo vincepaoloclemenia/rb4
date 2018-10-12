@@ -143,7 +143,7 @@
                                 td data-title='MTD Total' = "#{nm_mtd} <span style='float:right;'>#{to_percentage(nm_mtd.to_d, @branch.get_total_of_month_inc(sale_date).to_d)}</span>".html_safe
                                 td data-title='YTD Total' = "#{nm_ytd} <span style='float:right;'>#{to_percentage(nm_ytd.to_d, @branch.get_total_of_year_inc(sale_date).to_d)}</span>".html_safe
         
-        h5 Non Miscellaneous Ratio ( against #{@gen_transaction.name}: #{@sales_stat_gt} )
+        h5 Non Miscellaneous Ratio ( against #{@gen_transaction.name}: #{@sales_stat_gt}, Month to Date Count: #{@mtd_stats_gt.to_i}, Year to Date Count: #{@ytd_stats_gt.to_i} )
                         
         .row.mb25
             .col-xs-12
@@ -151,63 +151,59 @@
                     #nestable.dd
                         ol.dd-list#sales_non_misces
                             - @sale.sales_non_misces.exc.map do |nm|
+                                - mtd_count_gt = @branch.get_mtd_non_misces(nm.non_misce_id, sale_date).to_d
+                                - ytd_count_gt = @branch.get_ytd_non_misces(nm.non_misce_id, sale_date).to_d 
                                 .col-md-6
                                     li.dd-item 
                                         .dd-new-handle
                                             .row
-                                                .col-xs-4
-                                                    h4 = nm.name 
+                                                .col-xs-5
+                                                    h4 = nm.name    
+                                               
+                                                .col-xs-6
                                                     h6 
-                                                        | Total Count:  
-                                                        span.red = nm.count
-                                                
-                                                .col-xs-4
+                                                        | Total Count and Ratio:  
+                                                        span.green.pull-right = "#{@sales_stat_gt == 0 || nm.count == 0 ? 0 : (@sales_stat_gt/nm.count).round(1)}"
+                                                        span.red.pull-right.gap = nm.count
+                                                        
                                                     h6
-                                                        | MTD Count: 
-                                                        span.red = @branch.get_mtd_non_misces(nm.non_misce_id, sale_date)
-                                                    
+                                                        | MTD Count and Ratio: 
+                                                        span.green.pull-right = "#{@mtd_stats_gt == 0 || mtd_count_gt == 0 ? 0 : (@mtd_stats_gt/mtd_count_gt).round(1)}"
+                                                        span.red.pull-right.gap = mtd_count_gt.to_i
+                                                        
                                                     h6  
-                                                        | YTD Count:    
-                                                        span.red = @branch.get_ytd_non_misces(nm.non_misce_id, sale_date)
-                                                .col-xs-3
-                                                    h5 
-                                                        | Ratio:
-                                                        span.pull-right.green style='font-size: 18px' = (@sales_stat_gt/nm.count).round(1)
+                                                        | YTD Count and Ratio:    
+                                                        span.green.pull-right = "#{@ytd_stats_gt == 0 || ytd_count_gt == 0 ? 0 : (@ytd_stats_gt/ytd_count_gt).round(1)}"
+                                                        span.red.pull-right.gap = ytd_count_gt.to_i
+                                        
+                                        
                                         - unless nm.non_misce.is_sub_non_misce?
                                             ol.dd-list#subcategories
                                                 - @sale.sales_non_misces.sub_exc.map do |non_misce|
+                                                    - sub_nm_mtd = @branch.get_mtd_non_misces(non_misce.non_misce_id, sale_date).to_d
+                                                    - sub_nm_ytd = @branch.get_ytd_non_misces(non_misce.non_misce_id, sale_date).to_d
                                                     - if non_misce.non_misce.is_sub_non_misce? && non_misce.non_misce.parent == nm.non_misce          
                                                         li.dd-item 
                                                             .dd-new-handle style='background-color: #F9FFD4'
-                                                                .row
-                                                                    .col-xs-4
-                                                                        h4 = non_misce.name 
+                                                                .row 
+                                                                    .col-xs-5
+                                                                        h5 = non_misce.name 
+                                                                    .col-xs-6
                                                                         h6 
-                                                                            | Total Count:  
-                                                                            span.red = non_misce.count
-                                                                    
-                                                                    .col-xs-4
+                                                                            | Total Count and Ratio:  
+                                                                            span.pull-right.green = nm.count == 0 || non_misce.count == 0 ? 0 : (nm.count.to_d/non_misce.count.to_d).round(1)
+                                                                            span.red.pull-right.gap = non_misce.count
+                                        
                                                                         h6
-                                                                            | MTD Count: 
-                                                                            span.red = @branch.get_mtd_non_misces(non_misce.non_misce_id, sale_date)
+                                                                            | MTD Count and Ratio: 
+                                                                            span.pull-right.green = sub_nm_mtd == 0 || mtd_count_gt == 0 ? 0 : (mtd_count_gt/sub_nm_mtd).round(1)
+                                                                            span.red.pull-right.gap = sub_nm_mtd.to_i
                                                                         
                                                                         h6  
-                                                                            | YTD Count:    
-                                                                            span.red = @branch.get_ytd_non_misces(non_misce.non_misce_id, sale_date)
-                                                                    .col-xs-3
-                                                                        h5 
-                                                                            | Ratio:
-                                                                            span.pull-right.green style='font-size: 18px' = (nm.count.to_d/non_misce.count.to_d).round(1)
-                                                                
-
-                                              
-                    /tbody
-                        - @sale.sales_non_misces.exc.map do |nm|
-                            tr
-                                td data-title='Non Miscellaneous' = nm.name
-                                td class='text-centered' data-title='Total' = nm.count
-                                td class='text-centered' data-title='MTD Total' = @branch.get_mtd_non_misces(nm.non_misce_id, sale_date)
-                                td class='text-centered' data-title='YTD Total' = @branch.get_ytd_non_misces(nm.non_misce_id, sale_date)
+                                                                            | YTD Count and Ratio:    
+                                                                            span.pull-right.green = sub_nm_ytd || ytd_count_gt == 0 ? 0 : (ytd_count_gt/sub_nm_ytd).round(1)
+                                                                            span.red.pull-right.gap = sub_nm_ytd.to_i
+                                                                    
                                 
 
     

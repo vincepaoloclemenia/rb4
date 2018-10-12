@@ -20,7 +20,7 @@
 / 						.pull-right
 / 							button.btn.btn-primary data-tt="tooltip" data-placement="top"
 / 								| Search
-- content_for :title, branch_admin? ? "Restobot | PO Generator" : "Pending Purchase Orders (#{@purchase_orders.map(&:size).sum})"
+- content_for :title, branch_admin? ? "Restobot | PO Generator" : "Pending Purchase Orders (#{@purchase_orders.keys.map{ |key| @purchase_orders[key].size }.sum})"
 
 .panel
 	.panel-heading.border.pb45

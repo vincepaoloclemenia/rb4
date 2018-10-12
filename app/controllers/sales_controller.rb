@@ -21,8 +21,8 @@ class SalesController < ApplicationController
 		@ytd_ave = ytd_total[:ave]
 		@gen_transaction = current_client.statistics.general_transaction
 		@sales_stat_gt = @sale.sales_stats.where(statistic_id: @gen_transaction.id).sum(:count)
-		@mtd_stats_gt = @branch.get_mtd_sales_stats(@gen_transaction.id, @sale.sale_date)
-		@ytd_stats_gt = @branch.get_ytd_sales_stats(@gen_transaction.id, @sale.sale_date)
+		@mtd_stats_gt = @branch.get_mtd_sales_stats(@gen_transaction.id, @sale.sale_date).to_d
+		@ytd_stats_gt = @branch.get_ytd_sales_stats(@gen_transaction.id, @sale.sale_date).to_d
 	end
 
 	def new
