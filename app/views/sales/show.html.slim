@@ -163,7 +163,7 @@
                                                 .col-xs-6
                                                     h6 
                                                         | Total Count and Ratio:  
-                                                        span.green.pull-right = "#{@sales_stat_gt == 0 || nm.count == 0 ? 0 : (@sales_stat_gt/nm.count).round(1)}"
+                                                        span.green.pull-right = "#{@sales_stat_gt == 0 || nm.count == 0 ? 0 : (@sales_stat_gt.to_d/nm.count.to_d).round(1)}"
                                                         span.red.pull-right.gap = nm.count
                                                         
                                                     h6
