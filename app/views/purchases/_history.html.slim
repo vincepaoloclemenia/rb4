@@ -8,7 +8,7 @@
                             a
                                 span = avatar_for(act.user)
                                 .activity-metadata
-                                    h6 = act.user == current_user ? "You " + act.action : act.user.username 
+                                    h6 = act.user == current_user ? "You " + act.action : act.user.username + act.action
                                     span.gap05 
                                         i.fa.fa-shopping-cart aria-hidden='true'
                                     = time_ago_in_words(act.created_at) + " ago"
