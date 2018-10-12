@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_branches
-    current_client.on_free_trial? ? current_brand.branches : current_brand.subscribed_branches  
+    current_client.on_free_trial? && (brand_admin? || client_admin?) ? current_brand.branches : current_brand.subscribed_branches  
   end
 
   def find_wizard_flag

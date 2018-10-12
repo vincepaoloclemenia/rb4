@@ -1,10 +1,10 @@
 .panel-body
     - if activities.present?
-        .activities-container
-            ul.activities-list
+        .history-log
+            ul.history-logs
                 - activities.map do |act|
                     .activit-item
-                        li.activity-item-link
+                        li.activity-item-link style='border: grey 1px solid'
                             a
                                 span = avatar_for(act.user)
                                 .activity-metadata

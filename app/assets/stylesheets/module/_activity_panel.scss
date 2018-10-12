@@ -1,7 +1,10 @@
 
-.activities-container{
+.activities-container {
     min-width: 200px;
     overflow-x: auto;
+}
+.activities-container, .history-log{
+    
     .fetching-activities{
         margin-left: 50%;
         margin-top: 50;
@@ -10,6 +13,8 @@
     .activities-list{
         overflow: hidden;
         max-height: 340px;
+    }
+    .activities-list, .history-logs{    
         list-style: none;
         padding: 0;
         .load-more {

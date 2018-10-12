@@ -1,3 +1,5 @@
+- content_for :title, "Send #{@purchase_orders.map(&:count).sum} purchase order(S) to #{@supplier.name}"
+
 .panel
     .panel-heading.border.pb45
 		.pull-left.mt7 = "Send Purchase Order To #{@supplier.name}"

@@ -1,0 +1,17 @@
+- if purchases.empty?
+    tr
+        td colspan="9"
+            p.text-center.mt5
+                i.icon-maxicons3-danger.mr5.text-orange
+                | No Records Found
+- purchases.each do |purchase|
+    tr
+        td data-title="Invoice No." = purchase.invoice_number
+        td.text-centered data-title="Invoice Date"  = to_default_date_format(purchase.purchase_date)
+        td.text-centered data-title="Branch"  = purchase.branch.name
+        td.text-centered data-title="Supplier"  = purchase.supplier.name
+        td.align-right data-title="Vat Amount" = to_peso(purchase.overall_vat)
+        td.align-right data-title="Total Amount" = to_peso(purchase.overall_amount)
+        td.align-right data-title="Net Amount"  = to_peso(purchase.overall_net)
+        td.text-centered data-title="Entry Date" = purchase.created_at.strftime("%b %d, %Y | %l:%M %P")
+        td.text-centered data-title="Created By" = purchase.created_by.full_name

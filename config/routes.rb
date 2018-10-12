@@ -205,7 +205,9 @@ Rails.application.routes.draw do
       get :users_per_brand, on: :collection
     end
 
-    resources :reports, only: :index
+    resources :reports, only: :index do
+      get :get_invoices, on: :collection
+    end
 
     resources :dashboards, only: :index do
       get :this_week_sales_vs_expense, on: :collection

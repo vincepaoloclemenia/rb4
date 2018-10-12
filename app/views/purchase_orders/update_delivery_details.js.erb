@@ -5,7 +5,7 @@ retriggerFlash();
 	$('.modal').modal('hide');
 	$('body').removeClass('modal-open');
 	$('.modal-backdrop').remove();
-	$('#purchase_orders').html("<%= j render partial: 'purchase_orders', purchase_orders: @purchase_orders, ids: @ids %>");
+	$('#purchase_orders').html("<%= j render partial: 'purchase_orders', locals: { purchase_orders: @purchase_orders, ids: @ids } %>");
 	$('.chosen').chosen({
 		width: "100%"
 	});

@@ -113,8 +113,18 @@ class ReportsController < ApplicationController
 	
 	#INVOICE ENTRY REPORT
 	def invoice_entry_report
-		@date_range = drp_strip_date(params[:date_range])
-		@purchases = Purchase.where(purchase_date: @date_range, branch_id: params[:branch_id], brand_id: current_brand).order(:invoice_number, :created_at)
+		@suppliers = current_brand.suppliers
+		@user = branch_admin? ? current_branch : current_brand
+		q = params[:invoice]
+		@purchases = if q.present? && ( q[:branch].present? || q[:supplier].present? )
+			if q[:date_range].present?
+				[]
+			else
+				[]
+			end
+		else
+			@user.purchases.where(purchase_date: Date.today.all_week)
+		end
 	end
 
 	def drp_strip_date(date)
