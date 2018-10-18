@@ -307,22 +307,14 @@ class Purchases extends React.Component{
     }
 
     renderActionButtons(purchase){
-        if(this.props.branchUser){
-            if(purchase.unable_to_modify){ return }
+        if(!this.props.branchUser || purchase.allowed_to_modify){   
             return(
                 <span>
                     <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Edit Purchase" data-remote="true" href={`/purchases/${purchase.id}/edit`}><i className="icon-glyph f14"></i></a>
                     <a onClick={() => this.fetchData() } className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="Delete" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href={`/purchases/${purchase.id}`}><i className="icon-glyph-76 f14"></i></a>
                 </span>
-            )          
-        }else{
-            return(
-                <span>
-                    <a className="btn btn-default btn-xs mb10 mr2" data-tt="tooltip" data-placement="top" data-original-title="Edit Purchase" data-remote="true" href={`/purchases/${purchase.id}/edit`}><i className="icon-glyph f14"></i></a>
-                    <a onClick={() => this.fetchData() } className="btn btn-default btn-xs mb10 mr2 swal-warning-confirm" data-tt="tooltip" data-placement="top" data-original-title="Delete" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="delete" href={`/purchases/${purchase.id}`}><i className="icon-glyph-76 f14"></i></a>
-                </span>
-            )
-        }
+            )   
+        }          
     }
 
     fetchData(){

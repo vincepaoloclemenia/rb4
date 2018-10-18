@@ -1,0 +1,11 @@
+$('#modal h4').html('Send sale details');
+
+$('.modal-body').html('<%= j render("email") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();

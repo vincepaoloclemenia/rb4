@@ -3,7 +3,7 @@ json.purchases do |json|
     json.array! @purchases do |purchase|
         json.id purchase.id
         json.branch_name purchase.branch.name
-        json.unable_to_modify purchase.unable_to_modify?
+        json.allowed_to_modify purchase.allowed_to_modify?
         json.supplier_name purchase.supplier.name
         json.purchase_date purchase.purchase_date.strftime("%m/%d/%Y")
         json.invoice_number purchase.invoice_number

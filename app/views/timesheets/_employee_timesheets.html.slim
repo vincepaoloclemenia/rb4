@@ -1,6 +1,9 @@
 - if timesheets.present?
     .row.pull-right
+            = link_to "<i class='fa blue icon-glyph-162 f14 mr5'></i>Download Excel".html_safe, get_timesheets_timesheets_path(branch_id: branch.id, date_range: date, format: :xlsx, q: request.params[:q]), class: "btn btn-link", data: { tt: "tooltip", placement: "top", "original-title" => "Download Excel" }, target: "_blank"  
+    .row.pull-right
             = link_to "<i class='fa blue icon-glyph-162 f14 mr5'></i>Download PDF".html_safe, get_timesheets_timesheets_path(branch_id: branch.id, date_range: date, format: :pdf, q: request.params[:q]), class: "btn btn-link", data: { tt: "tooltip", placement: "top", "original-title" => "Download PDF" }, target: "_blank"  
+            
     - timesheets.keys.sort.map do |employee|
         - emp_timesheets = timesheets[employee]
         .row

@@ -85,6 +85,23 @@ class SalesController < ApplicationController
 		redirect_to sales_path, notice: "Sale successfully deleted"
 	end
 
+	def email_form
+		@sale = Sale.find params[:sale_id]
+	end
+
+	def sale_setup
+		@brand_setting = current_brand.brand_setting || current_brand.brand_setting.new
+	end
+
+	def save_setup
+		@brand_setting = current_brand.brand_setting || current_brand.brand_setting.new(params.require(:brand_setting).permit(:email_for_sale))
+		if @brand_setting.save
+			redirect_to new_sale_path, notice: "Email has been set for Sales"
+		else 
+			redirect_to new_sale_path, alert: @brand_setting.errors.full_messages.join(", ")
+		end
+	end
+
 	def confirm
 		@sale = current_brand.sales.new(sale_params)
 	end

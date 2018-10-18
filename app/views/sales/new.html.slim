@@ -1,5 +1,8 @@
 - content_for :title, "Restobot | Add Sales"
 
+- unless branch_admin?
+	= link_to "<i class='fa icon-glyph-90 f20 mr5'></i> Sale Setup".html_safe, sales_setup_sales_path, class: "btn btn-setting", data: { tt: "tooltip", placement: "top", "original-title": 'Sale Setting' }, remote: true	
+
 = render partial: "form", locals: { sale: @sale, statistics: @statistics, categories: @categories, settlements: @settlements, non_misces: @non_misces}
 			
 		

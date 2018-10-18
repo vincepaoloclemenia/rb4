@@ -11,7 +11,7 @@ json.purchases do |json|
             json.invoice_number purchase.invoice_number
             json.creator User.find_by(id: purchase.user_created_by_id)
             json.editor User.find_by(id: purchase.user_modified_by_id)
-            json.purchase_items purchase.purchase_items.search_item(@items) do |pi|
+            json.purchase_items pis do |pi|
                 json.item pi.item
                 json.category pi.item.category.name
                 json.quantity pi.quantity
@@ -24,6 +24,6 @@ json.purchases do |json|
         end
     end
 end
-json.total_vat to_peso(@all_purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_vat).sum }.sum )
-json.total_amount to_peso(@all_purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_amount).sum }.sum )
-json.total_net to_peso(@all_purchases.map { |purchase| purchase.purchase_items.search_item(@items).map(&:item_total_net).sum }.sum )
+json.total_vat to_peso(@all_purchases.map { |purchase| @items.present? ? purchase.purchase_items.where(item_id: @items).map(&:item_total_vat).sum : purchase.purchase_items.map(&:item_total_vat).sum }.sum )
+json.total_amount to_peso(@all_purchases.map { |purchase| @items.present? ? purchase.purchase_items.where(item_id: @items).map(&:item_total_amount).sum : purchase.purchase_items.map(&:item_total_amount).sum }.sum )
+json.total_net to_peso(@all_purchases.map { |purchase| @items.present? ? purchase.purchase_items.where(item_id: @items).map(&:item_total_net).sum : purchase.purchase_items.map(&:item_total_net).sum }.sum )

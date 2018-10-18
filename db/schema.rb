@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181010055659) do
+ActiveRecord::Schema.define(version: 20181018103558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20181010055659) do
     t.hstore   "purchase_order_schedule",  default: [],                 array: true
     t.jsonb    "purchase_order_privilege", default: {},    null: false
     t.string   "purchase_edit_limit"
+    t.string   "email_for_sale"
   end
 
   add_index "brand_settings", ["brand_id"], name: "index_brand_settings_on_brand_id", using: :btree

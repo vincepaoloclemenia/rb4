@@ -6,7 +6,8 @@
     .panel-heading
         .pull-right 
             = link_to "<i class='icon-glyph mr5 f14' ></i> Edit Details".html_safe, edit_sale_path(@sale), class: "btn btn-success btn-round btn-outline"
-
+        .pull-right
+            = link_to "<i class='fa blue icon-glyph-11 f14 mr5' ></i> Send".html_safe, sale_email_form_path(@sale), class: "btn btn-success btn-round btn-outline", remote: true
     .panel-heading 
         .pull-left = "#{@sale.branch.name} (#{@sale.branch.aka})"
         .pull-right = sale_date.strftime("%B %d, %Y")
@@ -103,22 +104,22 @@
                             - if stat.statistic.settlement_id.nil?
                                 tr
                                     td data-title='Statistic' = stat.name
-                                    td.text-centered data-title='Total' = stat.count
-                                    td.text-centered data-title="#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = @total == 0 || stat.count == 0 ? 0.0 : (@total / stat.count).round(2)
-                                    td.text-centered data-title='MTD Total' = stat_mtd
-                                    td.text-centered data-title="MTD#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = (@mtd_total / stat_mtd).round(2)
-                                    td.text-centered data-title='YTD Total' = stat_ytd
-                                    td.text-centered data-title="YTD #{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = @ytd_total == 0 || stat_ytd == 0 ? 0.0 : (@ytd_total / stat_ytd).round(2)
+                                    td.text-centered data-title='Total' = number_with_delimiter(stat.count, delimiter: ",")
+                                    td.text-centered data-title="#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = @total == 0 || stat.count == 0 ? 0.0 : number_with_precision((@total / stat.count).round(2), delimiter: ",", precision: 2)
+                                    td.text-centered data-title='MTD Total' = number_with_delimiter(stat_mtd, delimiter: ",")
+                                    td.text-centered data-title="MTD#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = number_with_precision((@mtd_total / stat_mtd).round(2), precision: 2, delimiter: ",")
+                                    td.text-centered data-title='YTD Total' = number_with_delimiter(stat_ytd, delimiter: ",")
+                                    td.text-centered data-title="YTD #{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = @ytd_total == 0 || stat_ytd == 0 ? 0.0 : number_with_precision((@ytd_total / stat_ytd).round(2), precision: 2, delimiter: ",")
                             - else
                                 - stat_td = @branch.get_settlement_stat_ave(stat_mtd, stat_ytd, stat.statistic.settlement.id, sale_date)
                                 tr 
                                     td data-title='Statistic' = stat.name
-                                    td.text-centered data-title='Total' = stat.count
-                                    td.text-centered data-title="#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = @sale.get_settlement_transac_average(stat.statistic.settlement.id, stat.count)
-                                    td.text-centered data-title='MTD Total' = stat_mtd
-                                    td.text-centered data-title="MTD#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = (@branch.get_mtd_settlements(stat.statistic.settlement_id, sale_date) / stat_mtd).round(2)
-                                    td.text-centered data-title='YTD Total' = stat_ytd
-                                    td.text-centered data-title="YTD #{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = (@branch.get_ytd_settlements(stat.statistic.settlement_id, sale_date) / stat_ytd).round(2)
+                                    td.text-centered data-title='Total' = number_with_delimiter(stat.count, delimiter: ",")
+                                    td.text-centered data-title="#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = number_with_precision(@sale.get_settlement_transac_average(stat.statistic.settlement.id, stat.count), precision: 2, delimiter: ",")
+                                    td.text-centered data-title='MTD Total' = number_with_delimiter(stat_mtd, delimiter: ",")
+                                    td.text-centered data-title="MTD#{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = number_with_precision((@branch.get_mtd_settlements(stat.statistic.settlement_id, sale_date) / stat_mtd).round(2), precision: 2, delimiter: ",")
+                                    td.text-centered data-title='YTD Total' = number_with_delimiter(stat_ytd, delimiter: ",")
+                                    td.text-centered data-title="YTD #{stat.non_transac ? stat.name + ' PTA' : stat.name + ' PPA'}" = number_with_precision((@branch.get_ytd_settlements(stat.statistic.settlement_id, sale_date) / stat_ytd).round(2), precision: 2, delimiter: ",")
 
         .row
             h4 Non Miscellaneous
@@ -164,17 +165,17 @@
                                                     h6 
                                                         | Total Count and Ratio:  
                                                         span.green.pull-right = "#{@sales_stat_gt == 0 || nm.count == 0 ? 0 : (@sales_stat_gt.to_d/nm.count.to_d).round(1)}"
-                                                        span.red.pull-right.gap = nm.count
+                                                        span.red.pull-right.gap = number_with_delimiter(nm.count, delimiter: ",")
                                                         
                                                     h6
                                                         | MTD Count and Ratio: 
                                                         span.green.pull-right = "#{@mtd_stats_gt == 0 || mtd_count_gt == 0 ? 0 : (@mtd_stats_gt/mtd_count_gt).round(1)}"
-                                                        span.red.pull-right.gap = mtd_count_gt.to_i
+                                                        span.red.pull-right.gap = number_with_delimiter(mtd_count_gt.to_i, delimiter: ",")
                                                         
                                                     h6  
                                                         | YTD Count and Ratio:    
                                                         span.green.pull-right = "#{@ytd_stats_gt == 0 || ytd_count_gt == 0 ? 0 : (@ytd_stats_gt/ytd_count_gt).round(1)}"
-                                                        span.red.pull-right.gap = ytd_count_gt.to_i
+                                                        span.red.pull-right.gap = number_with_delimiter(ytd_count_gt.to_i, delimiter: ",")
                                         
                                         
                                         - unless nm.non_misce.is_sub_non_misce?
@@ -192,20 +193,21 @@
                                                                         h6 
                                                                             | Total Count and Ratio:  
                                                                             span.pull-right.green = nm.count == 0 || non_misce.count == 0 ? 0 : (nm.count.to_d/non_misce.count.to_d).round(1)
-                                                                            span.red.pull-right.gap = non_misce.count
+                                                                            span.red.pull-right.gap = number_with_delimiter(non_misce.count, delimiter: ",")
                                         
                                                                         h6
                                                                             | MTD Count and Ratio: 
                                                                             span.pull-right.green = sub_nm_mtd == 0 || mtd_count_gt == 0 ? 0 : (mtd_count_gt/sub_nm_mtd).round(1)
-                                                                            span.red.pull-right.gap = sub_nm_mtd.to_i
+                                                                            span.red.pull-right.gap = number_with_delimiter(sub_nm_mtd.to_i, delimiter: ",")
                                                                         
                                                                         h6  
                                                                             | YTD Count and Ratio:    
                                                                             span.pull-right.green = sub_nm_ytd || ytd_count_gt == 0 ? 0 : (ytd_count_gt/sub_nm_ytd).round(1)
-                                                                            span.red.pull-right.gap = sub_nm_ytd.to_i
+                                                                            span.red.pull-right.gap = number_with_delimiter(sub_nm_ytd.to_i, delimiter: ",")
                                                                     
                                 
 
     
             
         
+= render "partials/modal"

@@ -69,6 +69,9 @@ Rails.application.routes.draw do
   resources :shifts, only: [:index,:create,:update,:destroy]
   resources :sales do
     get :confirm, on: :collection
+    get "email_form" => "sales#email_form"
+    get :sales_setup, on: :collection
+    post "send_sale_details" => "sales#send_sale_details"
   end
   resources :units
   resources :items

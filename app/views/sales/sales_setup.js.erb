@@ -1,0 +1,11 @@
+$('#modal h4').html('Set email as recipient of all Sale Records');
+
+$('.modal-body').html('<%= j render("setup") %>');
+
+$('#modal').modal("show");
+
+$('.chosen').chosen({
+	width: "100%"
+});
+
+$("[data-toggle='toggle']").bootstrapToggle();
