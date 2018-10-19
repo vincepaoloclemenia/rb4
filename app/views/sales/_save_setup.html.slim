@@ -1,0 +1,41 @@
+.row.mb25
+    .col-xs-12
+        - if emails.present?
+            ul#email_addresses
+                - emails.each do |email|
+                    li style='list-style: none'  
+                        .alert.alert-dismissable.alert-info
+                            button.close type='button'
+                                | x
+                            = email
+        - else
+            .alert.alert-dismissable.alert-danger
+                
+                i No email has been set yet
+= form_for :sale_setup, url: save_setup_sales_path, method: :post, remote: true do |f|
+    = f.hidden_field :real_emails, value: emails, id: 'legit-emails'
+    .row.mb10
+        .col-xs-12
+            = f.label :sales_emails, "Email"
+            = f.email_field :sales_emails, class: "form-control", placeholder: "Input Recipient"
+    .modal-footer.no-border
+        span.inline.float-right
+            = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
+            
+            = f.submit "Save", class: "btn btn-primary"
+
+
+javascript:
+
+    $("#email_addresses").on('click', '.close',function(){
+        var leg_emails = $("#legit-emails").val();
+        var emails = $("#legit-emails").val().split(" ");
+		
+        var text = $(this).closest('li').not(":button").text().replace('x', '');		
+        var x = emails.find( x => x === text)	
+		emails.splice( $.inArray(x, emails), 1)
+
+        $(this).closest("button", ".close").text("removed");
+        $(this).closest("div").removeClass("alert-info").addClass("alert-danger");
+        $("#legit-emails").val(emails.join(" "))
+	})

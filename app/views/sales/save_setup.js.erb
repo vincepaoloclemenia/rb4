@@ -1,0 +1,4 @@
+$('.flash-notice').replaceWith("<%= j render partial: 'partials/flash' %>");
+retriggerFlash();
+
+$('#email_setup').html('<%= j render partial: "save_setup", locals: { emails: @emails } %>').fadeIn();

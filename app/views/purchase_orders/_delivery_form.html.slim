@@ -30,7 +30,12 @@
                         | To
                         small.field-req  *
                     input.form-control type='time' name='purchase_order[delivery_time_to]' value="#{@purchase_order.delivery_time_to}"
-
+            .row.mb10
+                .col-xs-12
+                    = f.label :remarks
+                        | Remarks
+                    
+                    = f.text_area :remarks, class: 'form-control', rows:"3", placeholder: "Write your remarks here"
             
             .modal-footer.no-border
                 span.inline.float-right

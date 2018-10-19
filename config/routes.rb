@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     get "email_form" => "sales#email_form"
     get :sales_setup, on: :collection
     post "send_sale_details" => "sales#send_sale_details"
+    post :save_setup, on: :collection
   end
   resources :units
   resources :items

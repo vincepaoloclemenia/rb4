@@ -87,18 +87,27 @@ class SalesController < ApplicationController
 
 	def email_form
 		@sale = Sale.find params[:sale_id]
+		@emails = current_brand.brand_setting.present? ? current_brand.brand_setting.sales_emails : []
 	end
 
-	def sale_setup
+	def sales_setup
 		@brand_setting = current_brand.brand_setting || current_brand.brand_setting.new
+		@emails = current_brand.brand_setting.present? ? current_brand.brand_setting.sales_emails : []
 	end
 
 	def save_setup
-		@brand_setting = current_brand.brand_setting || current_brand.brand_setting.new(params.require(:brand_setting).permit(:email_for_sale))
-		if @brand_setting.save
-			redirect_to new_sale_path, notice: "Email has been set for Sales"
-		else 
-			redirect_to new_sale_path, alert: @brand_setting.errors.full_messages.join(", ")
+		@brand_setting = current_brand.brand_setting || current_brand.brand_setting.new
+		s = params[:sale_setup]
+		emails = [s[:sales_emails]] + s[:real_emails].split(" ")
+		@brand_setting.sales_emails = emails.reject { |x| x.blank? }
+		respond_to do |format|
+			if @brand_setting.save
+				@emails = @brand_setting.sales_emails
+				format.json { head :no_content }
+				format.js { flash[:notice] = "Emails for sales has been saved" }
+			else 
+				format.json { render json: @brand_setting.errors, status: :unprocessable_entity }
+			end
 		end
 	end
 

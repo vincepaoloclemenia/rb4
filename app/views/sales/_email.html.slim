@@ -3,10 +3,16 @@
         .row.mb10
             .col-xs-12
                 =f.label :email, "Email Address"
-                = f.email_field :email, class: "form-control", placeholder: "Recipient"
+                = f.select :recipients, options_for_select(@emails, @emails), {}, class: "chosen", data: { placeholder: "Select Recipient(s)" }, style: "width: 100%; display: none;", multiple: true
+
         .modal-footer.no-border
             span.inline.float-right
                 = link_to "Cancel", '#', class: "btn btn-default", data: { dismiss: "modal" }
                 
                 = f.submit "Send", class: "btn btn-primary"
+
+    .panel-body
+        .row.mb10
+            .col-xs-12
+                
             

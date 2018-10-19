@@ -130,7 +130,7 @@ class PurchaseOrdersController < ApplicationController
 		po = params[:purchase_order]
 		if po[:delivery_date].present? 
 			date = Date.strptime(po[:delivery_date], "%m/%d/%Y")
-			@purchase_order.update(delivery_date: date, delivery_time: po[:delivery_time], delivery_time_to: po[:delivery_time_to], delivery_address: po[:delivery_address])
+			@purchase_order.update(remarks: po[:remarks], delivery_date: date, delivery_time: po[:delivery_time], delivery_time_to: po[:delivery_time_to], delivery_address: po[:delivery_address])
 			respond_to do |format|
 				if @purchase_order.save
 					send_bulk_purchase_orders
