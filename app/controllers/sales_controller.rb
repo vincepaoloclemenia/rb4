@@ -111,6 +111,20 @@ class SalesController < ApplicationController
 		end
 	end
 
+	def send_sale_details
+		@sale = Sale.find params[:sale_id]
+		emails = params[:details][:recipients].reject { |x| x.blank? }
+		if emails.empty?
+			redirect_to sale_path(@sale), alert: "No recipients."	
+		else
+			if @sale.send_through_email(emails)
+				redirect_to sale_path(@sale), notice: @sale.sale_date.strftime("%b %d, %Y")
+			else
+				redirect_to sale_path(@sale), alert: @sale.errors.full_messages.join(", ")
+			end
+		end
+	end
+
 	def confirm
 		@sale = current_brand.sales.new(sale_params)
 	end

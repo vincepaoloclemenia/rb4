@@ -153,4 +153,21 @@ class Sale < ActiveRecord::Base
 	def self.lowest_sales
 		find_by_net_total_sales all.minimum(:net_total_sales)
 	end
+
+	def sent?
+		date_sent.present?
+	end
+
+	def send_through_email(emails)
+		if emails.present?
+			SaleMailer.send_sale_record(
+				self,
+				emails,
+				branch.name
+			).deliver_now
+			self.update(date_sent: DateTime.now)
+		else
+			errors.add("Something went wrong ", " Email cannot be submitted due to incomplete information. Please check recipients and subject before sending.")
+        end
+	end
 end

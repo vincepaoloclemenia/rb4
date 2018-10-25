@@ -3,7 +3,9 @@
 - stat_ytd = 0.0
 - sale_date = @sale.sale_date
 .panel
-    .panel-heading
+    .panel-body
+        .pull-left
+            = @sale.sent? ? "<span class='space'>Sale record was sent #{time_ago_in_words(@sale.date_sent) + ' ago'}</span><i class='fa green icon-glyph-26 f14'></i>".html_safe : "<i><span class='red'>Unsent to email yet.</span></i>".html_safe
         .pull-right 
             = link_to "<i class='icon-glyph mr5 f14' ></i> Edit Details".html_safe, edit_sale_path(@sale), class: "btn btn-success btn-round btn-outline"
         .pull-right
@@ -11,22 +13,21 @@
     .panel-heading 
         .pull-left = "#{@sale.branch.name} (#{@sale.branch.aka})"
         .pull-right = sale_date.strftime("%B %d, %Y")
-    
+        
 
     .panel-body.ml15.mr15
         .row
-        h4 Sales by Categories
+            h4 Sales by Categories
         .row.mb25
             .no-more-tables
                 table.table.table-bordered.mb0               
                     thead
                         tr.bg-thead
-                            th.text-center
+                            th.text-center rowspan='2' Net Sales
                             th.text-center colspan='2' = sale_date.strftime("%B %d, %Y")
                             th.text-center colspan='3' = "#{sale_date.beginning_of_month.strftime('%b %d, %Y')} - #{sale_date.end_of_month.strftime('%b %d, %Y')}" 
                             th.text-center colspan='3' = "#{sale_date.beginning_of_year.strftime('%b %d, %Y')} - #{sale_date.strftime('%b %d, %Y')}"             
                         tr.bg-thead
-                            th style='border-top: none'
                             th.text-center Sales
                             th.text-center Percentage
                             th.text-center Sales

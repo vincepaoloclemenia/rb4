@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+ </head>
+   <style type="text/css">
+     @import url(http://fonts.googleapis.com/css?family=Lora|Ubuntu|Noto+Sans|Ubuntu|Vollkorn+SC|Work+Sans|Open+Sans|Patua+One|Francois+One);
+    div.half-container { display: inline; position: relative; width: 50% }
+    table tr th { text-align: center }
+    table td { border: 1px solid grey; padding: 10px 5px; font-family: 'Ubuntu Sans', sans-serif; font-size: 14px; }
+    table tr th { padding: 10px; font-family: 'Noto Sans', sans-serif; background-color: #1D75A1; color: white }
+    .pdf-container{ margin: 30px }
+    table { padding: 5px }
+    table tr td.center { text-align: center }
+    tr.highlighted { background-color: #C0EBFD }
+    td.bold { font-weight: 700 }
+    td.align-right { text-align: right }
+    p.pdf-body{ font-family: 'Open Sans', sans-serif;font-size: 15px; text-justify: justify; margin-top: 15px; color: grey; z-index: 999; }
+    .row { margin-right: -15px; margin-left: -15px }
+    .row:after, .row:before { display: table; content: " " }
+    .row:after { clear: both }
+    .panel { background-color: #fff; border: 1px solid transparent } 
+    .panel-body { padding: 15px }
+    .row.mb10 { margin-bottom: 10px }
+    .row.mb15 { margin-bottom: 15px }
+    div.panel-heading { font-family: 'Noto Sans', sans-serif; color: #0072c6; position: relative; border-color: transparent; border-top-right-radius: 0; border-top-left-radius: 0; padding: 15px; text-transform: uppercase; font-weight: 900; border-bottom: 0; border-bottom: 1px solid transparent; -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-width: 0; position: relative; margin-bottom: 20px }
+    .pull-left { float: left!important }
+    .pull-right { float: right!important }
+    h4.po-labels { font-family: 'Noto Sans', sans-serif; font-size: 15px; color: grey }
+    h4.pdf-header{ font-size: 20px; font-family: 'Noto Sans', sans-serif; font-weight: 800; display: inline-block !important; margin-left: 2em; color: #10374D }   
+    img.brand-avatar{ width: 250px; height: 100px; image-rendering: auto; image-rendering: crisp-edges; image-rendering: pixelated;}  
+    .bordered.h230 { padding: 20px; border: 1.5px solid grey; min-height: 230px}
+    p.po-info{ font-family: 'Ubuntu Sans', sans-serif; color: grey }
+    p.signature { margin-bottom: 40px; font-size: 16px; font-weight: 900; color: #10374D; font-family: 'Lora Sans', sans-serif; }
+    p.footer { width: 80%; font-size: 11px; color: grey; text-justify: justify; text-align: center; font-family: 'Lora Sans', sans-serif;}
+    label.header{ font-family: 'Ubuntu Sans', sans-serif;  font-size: 15px; font-weight: 900; margin-right: 8px; }
+    table#po-details { width:100%; border: 2px solid grey; padding: 5px; }
+    table#po-details th { width:20%; background-color: #e4e4e4; border: none; color: black; text-align: left; }
+    table#po-details td { width:30%; background-color: transparent; border: none }
+    p.mt20{ margin-top: 50px; }
+   </style>
+    <body>
+        
+
+        <div class='pdf-container'>
+            <h4>Daily Sales Report</h4>
+            <h4>Branch: <%= @name %></h4>
+            <h4>Date; <%= @sale_date.strftime("%B %d, %Y") %></h4>
+        
+            <div class='row mb15'>
+                <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+                    <thead>
+                        <tr>
+                            <th rowspan='2'>Net Sales</th>
+                            <th colspan='2'><%= @sale_date.strftime("%B %d, %Y") %></th>
+                            <th colspan='3'><%= "#{@sale_date.beginning_of_month.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                            <th colspan='3'><%= "#{@sale_date.beginning_of_year.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                        </tr>
+                        <tr>
+                            <th>Sales</th>
+                            <th>%</th>
+                            <th>Sales</th>
+                            <th>DAS</th>
+                            <th>%</th>
+                            <th>Sales</th>
+                            <th>DAS</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @sale.sale_by_category_entries.sort_by(&:amount).reverse.map do |sbce| %>
+                            <% mtd = @branch.get_mtd_sales_per_cat(sbce.category_id, @sale_date) %>
+                            <% ytd = @branch.get_ytd_sales_per_cat(sbce.category_id, @sale_date) %>
+                            <tr>
+                                <td><%= sbce.category.name %></td>
+                                <td style='text-align:right'><%= number_to_currency(sbce.amount, unit: @currency ) %></td>
+                                <td class='center'><%= number_to_percentage(sbce.amount == 0 || @total == 0 ? 0 : (sbce.amount/@total * 100).round(2), precision: 2) %></td>
+                                <td style='text-align:right'><%= number_to_currency(mtd[:total], unit: @currency ) %></td>
+                                <td style='text-align:right'><%= number_to_currency(mtd[:ave], unit: @currency ) %></td>
+                                <td class='center'><%= number_to_percentage(mtd[:total] == 0 || @mtd_total == 0 ? 0 : (mtd[:total]/@mtd_total * 100).round(2), precision: 2) %></td>
+                                <td style='text-align:right'><%= number_to_currency(ytd[:total], unit: @currency ) %></td>
+                                <td style='text-align:right'><%= number_to_currency(ytd[:ave], unit: @currency ) %></td>
+                                <td class='center'><%= number_to_percentage(ytd[:total] == 0 || @ytd_total == 0 ? 0 : (ytd[:total]/@ytd_total * 100).round(2), precision: 2) %></td>
+                            </tr>
+                        <% end %>
+                        <tr class='highlighted'>
+                            <td>TOTAL</td>
+                            <td style='text-align:right'><%= number_to_currency(@total, unit: @currency ) %></td>
+                            <td class='center'>100 %</td>
+                            <td style='text-align:right'><%= number_to_currency(@mtd_total, unit: @currency ) %></td>
+                            <td style='text-align:right'><%= number_to_currency(@mtd_ave, unit: @currency ) %></td>
+                            <td class='center'>100 %</td>
+                            <td style='text-align:right'><%= number_to_currency(@ytd_total, unit: @currency ) %></td>
+                            <td style='text-align:right'><%= number_to_currency(@ytd_ave, unit: @currency ) %></td>
+                            <td class='center'>100 %</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        
+
+            <div class='row mb15'>
+                <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+                    <thead>
+                        <tr>
+                            <th rowspan='2'>Sales by Settlements</th>
+                            <th ><%= @sale_date.strftime("%B %d, %Y") %></th>
+                            <th ><%= "#{@sale_date.beginning_of_month.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                            <th ><%= "#{@sale_date.beginning_of_year.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @sale.sale_by_settlement_entries.map do |sbse| %>
+                            <tr>
+                                <td><%= sbse.settlement.name %></td>
+                                <td style='text-align:right'><%= number_to_currency(sbse.amount, unit: @currency ) %></td>
+                                <td style='text-align:right'><%= number_to_currency(@branch.get_mtd_settlements(sbse.settlement_id, @sale_date), unit: @currency) %></td>
+                                <td style='text-align:right'><%= number_to_currency(@branch.get_ytd_settlements(sbse.settlement_id, @sale_date), unit: @currency) %></td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class='row mb15'>
+                <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+                    <thead>
+                        <tr>
+                            <th rowspan='2'>Statistics</th>
+                            <th colspan='2'><%= @sale_date.strftime("%B %d, %Y") %></th>
+                            <th colspan='2'><%= "#{@sale_date.beginning_of_month.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                            <th colspan='2'><%= "#{@sale_date.beginning_of_year.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                        </tr>
+                        <tr>
+                            <th>Count</th>
+                            <th>Ave</th>
+                            <th>Count</th>
+                            <th>Ave</th>
+                            <th>Count</th>
+                            <th>Ave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @sale.sales_stats.map do |stat| %>
+                            <% stat_mtd = @branch.get_mtd_sales_stats(stat.statistic_id, @sale_date) %>
+                            <% stat_ytd = @branch.get_ytd_sales_stats(stat.statistic_id, @sale_date) %>
+                            <% if stat.statistic.settlement_id.nil? %>   
+                                <tr>
+                                    <td><%= stat.name %></td>
+                                    <td style='text-align:right'><%= number_with_delimiter(stat.count, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= @total == 0 || stat.count == 0 ? 0.0 : number_with_precision((@total / stat.count).round(2), delimiter: ",", precision: 2) %></td>
+                                    <td style='text-align:right'><%= number_with_delimiter(stat_mtd, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= number_with_precision((@mtd_total / stat_mtd).round(2), precision: 2, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= number_with_delimiter(stat_ytd, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= @ytd_total == 0 || stat_ytd == 0 ? 0.0 : number_with_precision((@ytd_total / stat_ytd).round(2), precision: 2, delimiter: ",") %></td>
+                                </tr>
+                            <% else %>
+                                <% stat_td = @branch.get_settlement_stat_ave(stat_mtd, stat_ytd, stat.statistic.settlement.id, @sale_date) %>
+                                <tr>
+                                    <td><%= stat.name %></td>
+                                    <td style='text-align:right'><%= number_with_delimiter(stat.count, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= number_with_precision(@sale.get_settlement_transac_average(stat.statistic.settlement.id, stat.count), precision: 2, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= number_with_delimiter(stat_mtd, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= number_with_precision((@branch.get_mtd_settlements(stat.statistic.settlement_id, @sale_date) / stat_mtd).round(2), precision: 2, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= number_with_delimiter(stat_ytd, delimiter: ",") %></td>
+                                    <td style='text-align:right'><%= number_with_precision((@branch.get_ytd_settlements(stat.statistic.settlement_id, @sale_date) / stat_ytd).round(2), precision: 2, delimiter: ",") %></td>
+                                </tr>
+                            <% end %>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class='row mb15'>
+                <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+                    <thead>
+                        <tr>
+                            <th rowspan='2'>First Time VS Repeat Customers</th>
+                            <th colspan='2'><%= @sale_date.strftime("%B %d, %Y") %></th>
+                            <th colspan='2'><%= "#{@sale_date.beginning_of_month.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                            <th colspan='2'><%= "#{@sale_date.beginning_of_year.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                        </tr>
+                        <tr>
+                            <th>Count</th>
+                            <th>%</th>
+                            <th>Count</th>
+                            <th>%</th>
+                            <th>Count</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% inc = @sale.sales_non_misces.inc %>
+                        <% total_count = inc.present? ? inc.map(&:count).sum : 0 %>
+                        <% inc.map do |nm| %>
+                            <% nm_mtd = @branch.get_mtd_non_misces(nm.non_misce_id, @sale_date) %>
+                            <% nm_ytd = @branch.get_ytd_non_misces(nm.non_misce_id, @sale_date) %>
+                            
+                            <tr>
+                                <td><%= nm.name %></td>
+                                <td class='center'><%= number_with_delimiter(nm.count, delimiter: ",") %></td>
+                                <td class='center'><%= number_to_percentage(nm.count.to_d == 0 || total_count.to_d == 0 ? 0 : (nm.count.to_d/total_count.to_d * 100).round(2), precision: 2) %></td>
+                                <td class='center'><%= number_with_delimiter(nm_mtd, delimiter: ",") %></td>
+                                <td class='center'><%= number_to_percentage(nm_mtd == 0 || @branch.get_total_of_month_inc(@sale_date).to_d == 0 ? 0 : (nm_mtd.to_d/@branch.get_total_of_month_inc(@sale_date).to_d.to_d * 100).round(2), precision: 2) %></td>
+                                <td class='center'><%= number_with_delimiter(nm_ytd, delimiter: ",") %></td>
+                                <td class='center'><%= number_to_percentage(nm_ytd == 0 || @branch.get_total_of_year_inc(@sale_date).to_d == 0 ? 0 : (nm_ytd.to_d/@branch.get_total_of_year_inc(@sale_date).to_d * 100).round(2), precision: 2) %></td>
+                            </tr>
+                        
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class='row mb15'>
+                <table width="100%" cellpadding="0" cellspacing\="0" bgcolor="e4e4e4">
+                    <thead>
+                        <tr>
+                            <th rowspan='2'>Ratio Analysis</th>
+                            <th colspan='2'><%= @sale_date.strftime("%B %d, %Y") %></th>
+                            <th colspan='2'><%= "#{@sale_date.beginning_of_month.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                            <th colspan='2'><%= "#{@sale_date.beginning_of_year.strftime('%B %d, %Y')} - #{@sale_date.strftime('%B %d, %Y')}" %></th>
+                        </tr>
+                        <tr>
+                            <th>Count</th>
+                            <th>Ratio</th>
+                            <th>Count</th>
+                            <th>Ratio</th>
+                            <th>Count</th>
+                            <th>Ratio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @sale.sales_non_misces.exc.map do |nm| %>
+                        <% mtd_count_gt = @branch.get_mtd_non_misces(nm.non_misce_id, @sale_date).to_d %>
+                        <% ytd_count_gt = @branch.get_ytd_non_misces(nm.non_misce_id, @sale_date).to_d  %>
+                            <% nm_mtd = @branch.get_mtd_non_misces(nm.non_misce_id, @sale_date) %>
+                            <% nm_ytd = @branch.get_ytd_non_misces(nm.non_misce_id, @sale_date) %>
+                            
+                            <tr>
+                                <td><%= nm.name %></td>
+                                <td class='center'><%= number_with_delimiter(nm.count, delimiter: ",") %></td>
+                                <td class='center'><%= @sales_stat_gt == 0 || nm.count == 0 ? 0 : (@sales_stat_gt.to_d/nm.count.to_d).round(1) %></td>
+                                <td class='center'><%= number_with_delimiter(mtd_count_gt.to_i, delimiter: ",") %></td>
+                                <td class='center'><%= @mtd_stats_gt == 0 || mtd_count_gt == 0 ? 0 : (@mtd_stats_gt/mtd_count_gt).round(1) %></td>
+                                <td class='center'><%= number_with_delimiter(ytd_count_gt.to_i, delimiter: ",") %></td>
+                                <td class='center'><%= @ytd_stats_gt == 0 || ytd_count_gt == 0 ? 0 : (@ytd_stats_gt/ytd_count_gt).round(1) %></td>
+                            </tr>
+                            <% unless nm.non_misce.is_sub_non_misce? %>
+                                <% @sale.sales_non_misces.sub_exc.map do |non_misce| %>
+                                    <% sub_nm_mtd = @branch.get_mtd_non_misces(non_misce.non_misce_id, @sale_date).to_d %>
+                                    <% sub_nm_ytd = @branch.get_ytd_non_misces(non_misce.non_misce_id, @sale_date).to_d %>
+                                    <% if non_misce.non_misce.is_sub_non_misce? && non_misce.non_misce.parent == nm.non_misce %>    
+                                        <tr style="background-color: #FCFFEA;margin-left: 10px">
+                                            <td><%= non_misce.name %></td>
+                                            <td class='center'><%= number_with_delimiter(non_misce.count, delimiter: ",") %></td>
+                                            <td class='center'><%= nm.count == 0 || non_misce.count == 0 ? 0 : (nm.count.to_d/non_misce.count.to_d).round(1) %></td>
+                                            <td class='center'><%= number_with_delimiter(sub_nm_mtd.to_i, delimiter: ",") %></td>
+                                            <td class='center'><%= sub_nm_mtd == 0 || mtd_count_gt == 0 ? 0 : (mtd_count_gt/sub_nm_mtd).round(1) %></td>
+                                            <td class='center'><%= number_with_delimiter(sub_nm_ytd.to_i, delimiter: ",") %></td>
+                                            <td class='center'><%= sub_nm_ytd || ytd_count_gt == 0 ? 0 : (ytd_count_gt/sub_nm_ytd).round(1) %></td>
+                                        </tr>
+                                    <% end %>
+                                <% end %>
+                            <% end %>
+                        
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </body>
+</html>
