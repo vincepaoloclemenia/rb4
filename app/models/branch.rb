@@ -25,6 +25,10 @@ class Branch < ActiveRecord::Base
   has_many :sale_by_category_entries, through: :sales
   has_many :sale_by_settlement_entries, through: :sales
 
+  #Class Method Queries
+  scope :company_owned, -> { where branch_type: "company_own" }
+  scope :franchisees, -> { where branch_type: "franchise" }
+
   #Nested Models
   accepts_nested_attributes_for :employees, :allow_destroy => :true  
   accepts_nested_attributes_for :branch_tax

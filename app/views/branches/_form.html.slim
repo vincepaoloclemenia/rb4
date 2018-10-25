@@ -41,14 +41,19 @@
         a data-original-title="What's my zip?" data-placement="top" data-tt="tooltip" href="http://zip-codes.philsite.net/" target="_blank"
           text-grey  ?
       = f.number_field :zip, class: "form-control"
-    .col-xs-7.mb10
+    .col-xs-4.mb10
       = f.label :email_address
         | E-mail Address
         small.field-req  *
       = f.text_field :email_address, class: "form-control", placeholder: "E-mail address of branch"
-    
+    .col-xs-4.mb10
+      = f.label :branch_type
+        | Branch Type
+        small.field-req  *
+      = f.select :branch_type, [["Company Own","company_own"],["Franchise","franchise"]], { include_blank: true }, class: "chosen", data: { placeholder: "Type of branch" }, style: "width: 100%;"
+
     = f.fields_for :branch_tax, @branch.branch_tax || @branch.build_branch_tax do |b|
-      .col-xs-5.mb10
+      .col-xs-4.mb10
         = b.label :tax_type_id
           | Tax Type
           small.field-req  *
