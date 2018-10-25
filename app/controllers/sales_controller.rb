@@ -118,7 +118,7 @@ class SalesController < ApplicationController
 			redirect_to sale_path(@sale), alert: "No recipients."	
 		else
 			if @sale.send_through_email(emails)
-				redirect_to sale_path(@sale), notice: @sale.sale_date.strftime("%b %d, %Y")
+				redirect_to sale_path(@sale), notice: "Sale record was successfully sent."
 			else
 				redirect_to sale_path(@sale), alert: @sale.errors.full_messages.join(", ")
 			end
