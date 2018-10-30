@@ -30,11 +30,11 @@ class PurchaseItem < ActiveRecord::Base
 	end
 
 	def item_total_vat
-		return vat_type == "VAT-Exempted" ? 0.00 : (purchase_item_total_amount - (purchase_item_total_amount / (1 + (12 / 100)).to_d).round(2)).round(2) 
+		return vat_type == "VAT-Exempted" ? 0.00 : (purchase_item_total_amount - (purchase_item_total_amount / (1 + (12.0 / 100)).to_d).round(2)).round(2) 
 	end
 
 	def item_total_net
-		return vat_type == "VAT-Exempted" ? item_total_amount : (purchase_item_total_amount / (1 + (12 / 100)).to_d).round(2)
+		return vat_type == "VAT-Exempted" ? item_total_amount : (purchase_item_total_amount / (1 + (12.0 / 100)).to_d).round(2)
 	end
 
 	def self.get_price_movement(date, id)
