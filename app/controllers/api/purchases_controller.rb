@@ -25,7 +25,8 @@ class Api::PurchasesController < ApplicationController
         pp = 15
         page_num = params[:page]
         @items = params[:purchase_items]
-        purchases = @user.purchases.search_purchases(params[:suppliers], params[:branches], @items, params[:invoice_number])                                 
+        branches = branch_admin? ? [current_user.branch] : params[:branches]
+        purchases = Purchase.includes(:brand, :branch, :purchase_items).where( brand_id: current_brand.id).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
         date = params[:date]
         @from = date.present? ? Date.strptime(date[0], "%m/%d/%Y") : purchases.present? ? purchases.last.purchase_date : nil
         @to = date.present? ? Date.strptime(date[1], "%m/%d/%Y") : purchases.present? ? purchases.first.purchase_date : nil
@@ -33,8 +34,8 @@ class Api::PurchasesController < ApplicationController
         temp_purchases = if @from.nil? || @to.nil?
                         purchases
                     else    
-                        if @user.purchases.search_purchases(params[:suppliers], params[:branches], @items, params[:invoice_number]).where(purchase_date: @from..@to).exists?
-                            @user.purchases.search_purchases(params[:suppliers], params[:branches], @items, params[:invoice_number]).where(purchase_date: @from..@to)
+                        if Purchase.includes(:brand, :branch, :purchase_items).where( brand_id: current_brand.id).search_purchases(params[:suppliers], branches, @items, params[:invoice_number]).where(purchase_date: @from..@to).exists?
+                            Purchase.includes(:brand, :branch, :purchase_items).where( brand_id: current_brand.id).search_purchases(params[:suppliers], branches, @items, params[:invoice_number]).where(purchase_date: @from..@to)
                         else
                             []
                         end
