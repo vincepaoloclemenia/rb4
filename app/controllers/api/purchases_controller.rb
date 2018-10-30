@@ -41,7 +41,7 @@ class Api::PurchasesController < ApplicationController
                     end
         @purchases = temp_purchases.paginate(page: page_num, per_page: pp) 
         records = page_num.to_i >= 1 ? page_num.to_i : 1
-        @all_purchases = temp_purchases.first(pp * records)
+        @all_purchases = temp_purchases
         if params[:format] == 'xlsx' && @purchases.present?
             render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/searched_purchases'
         elsif params[:format] == 'pdf' && @purchases.present?
