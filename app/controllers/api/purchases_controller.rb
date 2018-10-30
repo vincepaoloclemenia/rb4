@@ -27,9 +27,9 @@ class Api::PurchasesController < ApplicationController
         @items = params[:purchase_items]
         branches = branch_admin? ? [current_user.branch] : params[:branches]
         purchases = if branch_admin?
-                         Purchase.includes(:brand, :branch, :purchase_items).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
+                         Purchase.includes(:brand, :branch, :purchase_items, :supplier).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
                     else
-                        Purchase.includes(:brand, :branch, :purchase_items).where( brand_id: current_brand.id).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
+                        Purchase.includes(:brand, :branch, :purchase_items, :supplier).where( brand_id: current_brand.id).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
                     end
         date = params[:date]
         @from = date.present? ? Date.strptime(date[0], "%m/%d/%Y") : purchases.present? ? purchases.last.purchase_date : nil
@@ -39,9 +39,9 @@ class Api::PurchasesController < ApplicationController
                         purchases
                     else    
                         if branch_admin?
-                            Purchase.includes(:brand, :branch, :purchase_items).where( purchase_date: @from..@to ).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])
+                            Purchase.includes(:brand, :branch, :purchase_items, :supplier).where( purchase_date: @from..@to ).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])
                         else
-                            Purchase.includes(:brand, :branch, :purchase_items).where( brand_id: current_brand.id, purchase_date: @from..@to ).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])
+                            Purchase.includes(:brand, :branch, :purchase_items, :supplier).where( brand_id: current_brand.id, purchase_date: @from..@to ).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])
                         end
                     end
         @purchases = temp_purchases.paginate(page: page_num, per_page: pp) 
