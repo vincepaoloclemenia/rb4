@@ -94,7 +94,7 @@ class Client < ActiveRecord::Base
 	end
 
 	def self.subscribers
-		all.includes(:subscriptions).where.not( subscriptions: { plan_id: 1, client_id: nil })
+		all.includes(:subscriptions).where.not( subscriptions: { plan_id: 1, client_id: nil, date_subscribed: nil })
 	end
 
 	def self.free_trials
