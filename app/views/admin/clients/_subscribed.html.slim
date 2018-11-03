@@ -18,6 +18,6 @@
                         = link_to "#{client.name}", admin_client_path(client.slug)
                     td data-title='No. of Brands' = client.brands.size
                     td data-title='No. of Branches' = client.branches.subscribers.size
-                    td data-title='Date Subscribed' = client.trial.date_subscribed.strftime("%B %d, %Y")
+                    td data-title='Date Subscribed' = client.subscriptions.find_by_plan_id(2).date_subscribed.strftime("%B %d, %Y")
                     td data-title='Plan' = subs.plan.name + " of ₱ 2,500.00 per branch"
                     td data-title='Recent Subscription' = subs.start_date.strftime("%b %d, %Y") + " - " + subs.end_date.strftime("%b %d, %Y")

@@ -13,9 +13,9 @@ center
             .col-lg-offset-2.col-lg-8.col-md-offset-1.col-md-10.col-xs-12 style='padding: 10px' 
                 .row.p10.mb10 style='border: 1px solid #D3D3D3; margin: 10px'
                     .pull-right
-                        = link_to "<i class='fa icon-glyph'></i>".html_safe, show_branch_subscriptions_admin_clients_path(subscription_id: subs.id), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
+                        = link_to "<i class='fa icon-glyph'></i>".html_safe, show_branch_subscriptions_admin_clients_path(subscription_id: subs.id), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit branch subscription"}, remote: true
                     .pull-right
-                        = link_to "<i class='fa icon-glyph-78'></i>".html_safe, get_subscription_admin_clients_path(subscription_id: subs.id), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit"}, remote: true
+                        = link_to "<i class='fa icon-glyph-78'></i>".html_safe, get_subscription_admin_clients_path(subscription_id: subs.id), class: "btn btn-default btn-xs mb10 mb10 mr2", data: { tt: "tooltip", placement: "top", "original-title" => "Edit subscription"}, remote: true
                     
                     h4 
                         = subs.paypal_recurring_profile_token
@@ -27,20 +27,21 @@ center
                         p style='font-size: 13px' = "#{subs.plan.name} subscription of <b>#{pluralize(subs.branch_count, 'branch')}</b> with a total amount of ₱ #{subs.amount}".html_safe
 
             
-- if @client.subscribed_branches.empty?
+- if @client.unsubscribed_branches.present?
     .panel
         .panel-heading Unsubscribed branches
         .panel-body.ml15.mr15
-            - subscription = @client.subscriptions.find_by_plan_id 1
-            .row.mb10
-                .col-xs-12
-                    h3 = subscription.plan.name
-                    .row.mb10
-                        .col-md-12
-                            h5 
-                                i.icon-glyph-127.f20
-                                span.gap
-                                span class="#{ @client.on_free_trial? ? 'green' : 'red' }" = "#{subscription.start_date.strftime('%b %d, %Y')} - #{subscription.end_date.strftime('%b %d, %Y')} (#{distance_of_time_in_words_to_now(subscription.end_date)})"
+            - subscription = @client.trial
+            - if @client.on_free_trial?
+                .row.mb10
+                    .col-xs-12
+                        h3 = subscription.plan.name
+                        .row.mb10
+                            .col-md-12
+                                h5 
+                                    i.icon-glyph-127.f20
+                                    span.gap
+                                    span class="#{ @client.on_free_trial? ? 'green' : 'red' }" = "#{subscription.start_date.strftime('%b %d, %Y')} - #{subscription.end_date.strftime('%b %d, %Y')} (#{distance_of_time_in_words_to_now(subscription.end_date)})"
 
             .row.mb10
                 .col-xs-12
