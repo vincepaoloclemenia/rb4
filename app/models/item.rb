@@ -15,6 +15,7 @@ class Item < ActiveRecord::Base
   validates :name,           length: { maximum: 50 }
   validates :item_type,      length: { maximum: 50 }
   scope :for_inventory, -> { where(is_active: true, item_type: "Inventory") }
+  scope :active, -> { where is_active: true }
 
   pg_search_scope :search_category, associated_against: { category: [:id] },
                   using: { tsearch: { any_word: true } }

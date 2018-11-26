@@ -11,7 +11,7 @@ class PurchaseItemsController < ApplicationController
 	def new
 		@purchase = Purchase.friendly.find(params[:purchase_id])
 		@purchase_item = @purchase.purchase_items.new
-		@items = current_brand.items.where.not(id: @purchase.purchase_items.pluck(:item_id))		
+		@items = current_brand.items.active.where.not(id: @purchase.purchase_items.pluck(:item_id))		
 	end
 
 	def create
