@@ -87,7 +87,7 @@ javascript:
 					$.each(data, function(index, obj) {   
 						select.append($("<option></option>")
 									.attr("value", obj.id)
-									.text(obj.po_number)); 
+									.text(obj.po_number + " - " + obj.supplier_name)); 
 					});
 					select.trigger("chosen:updated")
 					if(select.val()){

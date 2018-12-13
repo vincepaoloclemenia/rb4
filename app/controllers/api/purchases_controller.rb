@@ -79,8 +79,7 @@ class Api::PurchasesController < ApplicationController
 
     def get_pos_for_purchasing
         @branch = Branch.find params[:branch_id]
-        @purchase_orders = @branch.sent_approved_purchased_orders.select :po_number, :id
-        render json: @purchase_orders
+        @purchase_orders = @branch.sent_approved_purchased_orders.includes(:supplier)
     end
 
     private

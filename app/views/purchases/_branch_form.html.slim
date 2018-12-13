@@ -70,7 +70,7 @@
 		.row.mb10
 			.col-xs-12
 				label List of Purchase Orders
-				= select_tag "purchase_order_id", options_from_collection_for_select(@purchase_orders, "id", "po_number"), include_blank: true, class: 'chosen', id: "pos", data: { placeholder: "Select Purchase Order" }, style: "width: 100%; display: none;"
+				= select_tag "purchase_order_id", @purchase_orders.map { |po| "<option value='#{po.id}'>#{po.po_number} #{po.supplier.name}</option>".html_safe }.join(""), include_blank: true, class: 'chosen', id: "pos", data: { placeholder: "Select Purchase Order" }, style: "width: 100%; display: none;"
 		
 		.row.mb10#purchase_order_lookup_link
 			center

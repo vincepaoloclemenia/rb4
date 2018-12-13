@@ -47,7 +47,7 @@ class PurchasesController < ApplicationController
 	def new
 		@purchase = current_brand.purchases.new
 		@suppliers = (current_client.suppliers.pluck(:name,:id) + current_brand.suppliers.pluck(:name,:id)).uniq		
-		@purchase_orders = current_user.branch.sent_approved_purchased_orders.select :po_number, :id if branch_admin?
+		@purchase_orders = current_user.branch.sent_approved_purchased_orders if branch_admin?
 	end
 
 	def edit
