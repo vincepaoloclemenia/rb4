@@ -29,7 +29,7 @@ class Api::PurchasesController < ApplicationController
         purchases = if branch_admin?
                          Purchase.includes(:brand, :branch, :purchase_items, :supplier).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
                     else
-                        Purchase.includes(:brand, :branch, :purchase_items, :supplier).where( brand_id: current_brand.id).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
+                        current_brand.purchases.includes(:branch, :purchase_items, :supplier).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])                                 
                     end
         date = params[:date]
         @from = date.present? ? Date.strptime(date[0], "%m/%d/%Y") : purchases.present? ? purchases.last.purchase_date : nil
@@ -41,12 +41,12 @@ class Api::PurchasesController < ApplicationController
                         if branch_admin?
                             Purchase.includes(:brand, :branch, :purchase_items, :supplier).where( purchase_date: @from..@to ).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])
                         else
-                            Purchase.includes(:brand, :branch, :purchase_items, :supplier).where( brand_id: current_brand.id, purchase_date: @from..@to ).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])
+                            current_brand.purchases.includes(:brand, :branch, :purchase_items, :supplier).where( purchase_date: @from..@to ).search_purchases(params[:suppliers], branches, @items, params[:invoice_number])
                         end
                     end
         @purchases = temp_purchases.paginate(page: page_num, per_page: pp) 
         records = page_num.to_i >= 1 ? page_num.to_i : 1
-        @all_purchases = temp_purchases
+        @all_purchases = temp_purchases.first(records * pp)
         if params[:format] == 'xlsx'
             render xlsx: "Purchase List #{@purchases.last.purchase_date.strftime('%b %d, %Y')} - #{@purchases.first.purchase_date.strftime('%b %d, %Y')}", template: 'api/purchases/searched_purchases'
         elsif params[:format] == 'pdf'

@@ -14,7 +14,9 @@ class PurchaseOrders extends React.Component{
             fetching: false,
             item: [],
             searching: false,
-            totalAmount: null
+            totalAmount: null,
+            nextPage: null,
+            loading: false,
         }
         this.items = []
     }
@@ -38,7 +40,8 @@ class PurchaseOrders extends React.Component{
                 this.setState({ 
                     purchaseOrders: data.purchase_orders, fetching: false, 
                     searching: true,
-                    totalAmount: data.total_amount
+                    totalAmount: data.total_amount,
+                    nextPage: data.next_page
                 })
             }
         })                  
@@ -52,6 +55,57 @@ class PurchaseOrders extends React.Component{
         this.fetchPurchaseOrders()
     }
 
+    handleNextPurchaseOrders() {
+        this.setState({ loading: true })
+        if( $('#date_range').val() === '' && this.state.poNumber === '' && this.state.status === '' && this.state.creator === '' && this.state.branch.length === 0 && this.state.supplier.length === 0 && this.state.item.length === 0 ){ 
+            $.ajax({
+                url: `/api/purchase_orders.json?page=${this.state.nextPage}`,
+                method: 'GET',
+                success: (data) => {    
+                    this.setState({
+                        purchaseOrders: [...this.state.purchaseOrders, ...data.purchase_orders], nextPage: data.next_page, loading: false
+                    })
+                }
+            })
+        }else{
+            $.ajax({
+                url: `/api/purchase_orders/get_pos.json?page=${this.state.nextPage}`,
+                method: 'GET',
+                data: {
+                    po_number: this.state.poNumber,
+                    status: this.state.status,
+                    creator: this.state.creator,
+                    branches: this.state.branch.map( x => x.value ),
+                    suppliers: this.state.supplier.map( x => x.value ),
+                    items: this.state.item.map( x => x.value ),
+                    date: $("#date_range").val() === '' ? [] : $("#date_range").val().split(" - ")
+                },
+                success: (data) => {
+                    this.setState({ 
+                        purchaseOrders: [...this.state.purchaseOrders, ...data.purchase_orders], fetching: false, 
+                        searching: true,
+                        totalAmount: data.total_amount,
+                        nextPage: data.next_page,
+                        loading: false 
+                    })
+                }
+            })    
+        }
+    }
+    downloadExcel(event){    
+        var items = this.state.item.map( x => `&items%5B%5D=${x.value}` ).toString()
+        var branches = this.state.branch.map( x => `&branches%5B%5D=${x.value}`).toString()
+        var suppliers = this.state.supplier.map ( x => `&suppliers%5B%5D=${x.value}`).toString()
+        var dates = $("#date_range").val().split(" - ").map( x => `&date%5B%5D=${x}` ).toString()
+        if(this.state.searching){
+            event.target.target = "_blank"
+            event.target.href = `/api/purchase_orders/get_pos.xlsx?po_number=${this.state.poNumber}&status=${this.state.status}&creator=${this.state.creator}${$("#date_range").val() === '' ? [] : dates.replace(/,/, '') }${this.state.item.length === 0 ? '' : items.replace(/,/, '') }${this.state.branch.length === 0 ? '' : branches.replace(/,/,'')}${this.state.supplier.length === 0 ? '' : suppliers.replace(/,/,'')}&page=${this.state.nextPage ? this.state.nextPage - 1 : 1}` 
+        }else{
+            event.target.target = "_blank"
+            event.target.href = '/api/purchase_orders.xlsx'
+        }
+    }
+
 
     componentDidMount(){
         $('.drp').daterangepicker({ });
@@ -61,7 +115,7 @@ class PurchaseOrders extends React.Component{
             method: 'GET',
             success: (data) => {    
                 this.setState({
-                    purchaseOrders: data.purchase_orders, items: data.items, branches: data.branches, suppliers: data.suppliers, fetching: false,
+                    purchaseOrders: data.purchase_orders, items: data.items, branches: data.branches, suppliers: data.suppliers, fetching: false, nextPage: data.next_page
                 })
             }
         })
@@ -166,6 +220,7 @@ class PurchaseOrders extends React.Component{
                             </div>
                             <div className='row mb10' style={{ marginRight: '15px' }}>
                                 <div className='col-xs-12'>
+                                   
                                     <div className='pull-right'>
                                         <button onClick={this.searchPurchaseOrder.bind(this)} className='btn btn-primary' type='button'><i className='fa fa-search' aria-hidden='true'></i><span className='gap1'></span>Search</button>
                                         {this.displayResetButton()}
@@ -209,7 +264,7 @@ class PurchaseOrders extends React.Component{
                 <div className='panel-heading border pb45'>
                     <div className='pull-left mt7'>Purchase Orders List</div>
                     <div className='pull-right'>
-                        <button className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download PDF </button>
+                        {this.renderDownloadButton()}
                     </div>
                 </div>
                 <div className='panel-body'>
@@ -233,6 +288,9 @@ class PurchaseOrders extends React.Component{
                                 {this.renderInformation()}
                                 {this.renderSum()}
                         </table>
+                        <ul>
+                            <li><center>{this.renderButton()}</center></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -248,6 +306,27 @@ class PurchaseOrders extends React.Component{
                         <td className='text-pull-right' colSpan='2' data-title='Total Amount'>{this.state.totalAmount}</td>
                     </tr>     
                 </tbody>
+            )
+        }
+    }
+
+    renderDownloadButton(){
+        if(this.state.purchaseOrders){
+            return(
+                <a onClick={this.downloadExcel.bind(this)} className='btn btn-success btn-round btn-outline'><i className='icon-glyph-162 f14 mr5'></i> Download Excel File </a>
+            )
+        }
+    }
+
+    renderButton(){
+        if (this.state.loading){
+            return(
+                <i className="fa fa-spinner fa-spin fa-lg fa-fw"></i>
+            )
+        }
+        if (this.state.nextPage){
+            return(          
+                <a className='view-more' onClick={this.handleNextPurchaseOrders.bind(this)}>See more..</a>              
             )
         }
     }
@@ -323,7 +402,7 @@ class PurchaseOrders extends React.Component{
             method: 'GET',
             success: (data) => {
                 this.setState({
-                    purchaseOrders: data.purchase_orders, fetching: false
+                    purchaseOrders: data.purchase_orders, fetching: false, nextPage: data.next_page
                 })
             }
         })

@@ -1,3 +1,4 @@
+json.next_page @purchase_orders.next_page if @purchase_orders.present?
 if @items.present?
     json.purchase_orders do |json|
         json.array! @purchase_orders do |po|
@@ -22,7 +23,7 @@ if @items.present?
             end
         end
     end
-    json.total_amount to_peso(@purchase_orders.get_sum_of_poitems(@items))
+    json.total_amount to_peso(@all_purchase_orders.get_sum_of_poitems(@items))
 else
     json.purchase_orders do |json|
         json.array! @purchase_orders do |po|
@@ -48,5 +49,5 @@ else
             json.total_amount to_peso(po.total_amount)
         end
     end
-    json.total_amount @purchase_orders.present? ? to_peso(@purchase_orders.map { |pur| pur.purchase_order_items.present? ? pur.total_amount : 0.00 }.sum.round(2)) : 0.00
+    json.total_amount @purchase_orders.present? ? to_peso(@all_purchase_orders.map { |pur| pur.purchase_order_items.present? ? pur.total_amount : 0.00 }.sum.round(2)) : 0.00
 end

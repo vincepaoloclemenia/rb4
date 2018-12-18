@@ -1,0 +1,73 @@
+wb = xlsx_package.workbook
+
+wb.styles do |s|
+    headers = s.add_style b: true, alignment: { vertical: :center, horizontal: :center }
+
+    wb.add_worksheet(name: "Purchase Orders") do |sheet|
+        sheet.add_row [
+            "Order Date",
+            "Shipping Date",
+            "SalesOrder Number",
+            "Status",
+            "Customer Name",
+            "PurchaseOrder",
+            "Template Name",
+            "Currency Code",
+            "Exchange Rate",
+            "Discount Type",
+            "Is Discount BeforeTax",
+            "Entty Discoount Percent",
+            "Item Name",
+            "Quantity",
+            "Usage Unit",
+            "Is Inclusive Tax",
+            "Discount",
+            "Discount Amount",
+            "Item Tax",
+            "Item Tax %",
+            "Item Tax Type",
+            "Shipping Charge",
+            "Adjustment",
+            "Adjustment Description",
+            "Sales Person",
+            "Notes",
+            "Terms & Conditions",
+            "Delivery Method",
+        ] + 1.upto(10).map { |x| "Custom Field Value#{x}" } + ["Warehouse name"], style: headers
+        
+        @all_purchase_orders.each do |po|
+            po.purchase_order_items.each do |poi|
+                sheet.add_row [
+                    po.po_date,
+                    po.delivery_date,
+                    po.po_number.gsub(/PO/, "SO"),
+                    "Confirmed",
+                    po.branch.name,
+                    po.pr_number.gsub(/PR/, "PO"),
+                    "Standard Template",
+                    "PHP",
+                    1,
+                    "item_level",
+                    "TRUE",
+                    0,
+                    poi.item.name,
+                    poi.item.name,
+                    poi.quantity,
+                    poi.unit.symbol.downcase,
+                    poi.price_selected,
+                    0,
+                    0,
+                    "VAT",
+                    12,
+                    "ItemAmount",
+                    0,
+                    0,
+                    "Adjustment",
+                    "NA",
+                    "to be decided",
+                    "to be decided"
+                ] + 10.times.map { |x| "NA" } + [ "masterdata mapping" ]
+            end
+        end
+    end
+end

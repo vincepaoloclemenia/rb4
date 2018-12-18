@@ -4,25 +4,30 @@ class Api::PurchaseOrdersController < ApplicationController
     
     def index
         @suppliers = current_brand.suppliers.map { |x| { label: x.name, value: x.id } }.to_a
-        @purchase_orders = current_brand.purchase_orders.includes(:purchase_order_items).where.not( purchase_order_items: { purchase_order_id: nil } ).where( po_date: Date.today.beginning_of_week..Date.today.end_of_week )
+        @purchase_orders = current_brand.purchase_orders.approved_pos.includes(:purchase_order_items).where.not( purchase_order_items: { purchase_order_id: nil } ).where( po_date: Date.today.beginning_of_week..Date.today.end_of_week ).paginate(page: params[:page], per_page: 30)
         @items = current_brand.items.all.map { |x| { label: x.name, value: x.id } }.to_a
+        if params[:format] == 'xlsx'
+            render xlsx: "Purchase Orders", template: "api/purchase_orders/index"
+        end  
     end
 
     def get_pos    
+        pp = 30
+        page_num = params[:page]
         @items  = params[:items]
-        if params[:date].present?
+        pos = if params[:date].present?
             from = Date.strptime(params[:date][0], "%m/%d/%Y")
             to = Date.strptime(params[:date][1], "%m/%d/%Y") 
-            @purchase_orders = current_brand.purchase_orders.where(po_date: from..to).dynamic_search(
+            current_brand.purchase_orders.approved_pos.where(po_date: from..to).dynamic_search(
                 params[:po_number],
                 params[:suppliers],
                 params[:branches],
                 params[:items],
                 params[:status],
                 params[:creator]     
-            )
+            )   
         else
-            @purchase_orders = current_brand.purchase_orders.dynamic_search(
+            current_brand.purchase_orders.approved_pos.dynamic_search(
                 params[:po_number],
                 params[:suppliers],
                 params[:branches],
@@ -30,6 +35,14 @@ class Api::PurchaseOrdersController < ApplicationController
                 params[:status],
                 params[:creator]     
             )
+        end
+        @purchase_orders = pos.paginate(page: page_num, per_page: pp)
+        batch = page_num.present? ? page_num.to_i * pp : 1 * pp
+        @all_purchase_orders = pos.first(batch)
+        @suppliers = params[:suppliers]
+        respond_to do |format|
+            format.json
+            format.xlsx { render xlsx: "Purchase Orders", template: 'api/purchase_orders/get_pos' }
         end
     end
 
