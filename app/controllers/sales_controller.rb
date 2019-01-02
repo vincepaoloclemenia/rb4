@@ -59,7 +59,8 @@ class SalesController < ApplicationController
 							flash[:notice] = "Sale successfully created" 
 						}
 			else
-				format.json { render json: @sale.errors, status: :unprocessable_entity }
+				format.js { flash[:alert] = "#{@sale.errors.full_messages.join(', ')}"
+				}
 				#redirect_to new_sale_path, alert: @sale.errors.full_messages.join(", "), params: sale_params
 			end
 		end
