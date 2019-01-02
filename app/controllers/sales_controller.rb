@@ -10,7 +10,6 @@ class SalesController < ApplicationController
 	end
 
 	def show
-		@sale = current_brand.sales.find(params[:id])
 		@branch = @sale.branch
 		@total = @sale.sale_by_category_entries.map(&:amount).sum
 		mtd_total = @branch.get_total_mtd_sales_all_cat(@sale.sale_date)
@@ -51,11 +50,11 @@ class SalesController < ApplicationController
 		@sale.sale_date = Date.strptime(params[:sale][:sale_date], "%m/%d/%Y").to_s if params[:sale][:sale_date].present?
 		respond_to do |format|
 			if @sale.save
-				current_brand.activities.create(
-					user_id: current_user.id,
-					action: " created Sales record for #{@sale.branch.name}, #{@sale.sale_date.strftime('%B %d, %Y')}",
-					recordable: @sale
-				)
+				#current_brand.activities.create(
+				#	user_id: current_user.id,
+				#	action: " created Sales record for #{@sale.branch.name}, #{@sale.sale_date.strftime('%B %d, %Y')}",
+				#	recordable: @sale
+				#)
 				format.js { render js: "window.location='#{sale_path(@sale)}'"
 							flash[:notice] = "Sale successfully created" 
 						}
@@ -150,7 +149,8 @@ class SalesController < ApplicationController
 		end
 
 		def get_off_non_branch_user
-			if branch_admin? && current_user.branch.id != params[:id]
+			@sale = Sale.find(params[:id])
+			if branch_admin? && current_user.branch.id != @sale.branch.id
 				redirect_to sales_path, alert: "No record found"
 			end
 		end
